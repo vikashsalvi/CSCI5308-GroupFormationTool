@@ -40,10 +40,6 @@ deploy_dev:
   environment:
     name: dev
     url: $HEROKU_APP_HOST
-  only:
-    - master
-  tags:
-    - docker
 
 
 #For staging development
