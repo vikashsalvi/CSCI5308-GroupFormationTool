@@ -27,9 +27,9 @@ build:
 test:
   stage: test
   script:
-    - ./gradlew clean test -info
+    - ./gradlew test -info
 
-deploy_dev:
+deploy:
   stage: deploy
   image: ruby:2.3
   script:
