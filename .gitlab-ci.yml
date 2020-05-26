@@ -29,7 +29,7 @@ test:
   script:
     - ./gradlew test -info
 
-deploy:
+deploy_dev:
   stage: deploy
   image: ruby:2.3
   script:
