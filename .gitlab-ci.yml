@@ -18,8 +18,8 @@ cache:
 build:
   stage: build
   script:
-    #- ./gradlew build -info
-    - gradle build -info
+    - ./gradlew build -info
+    #- gradle build -info
   artifacts:
     paths:
       - build/libs/*.jar
@@ -27,7 +27,7 @@ build:
 test:
   stage: test
   script:
-    - gradle clean test -info
+    - ./gradlew clean test -info
 
 deploy_dev:
   stage: deploy
