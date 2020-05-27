@@ -3,7 +3,6 @@ image: gradle:4.6-jdk8-alpine
 stages:
   - build
   - test
-  - deploy
 
 before_script:
   #  - echo `pwd` # debug
@@ -15,45 +14,48 @@ cache:
     - .gradle/wrapper
     - .gradle/caches
 
-#Gradle build
 build:
   stage: build
   script:
-    - chmod +x ./gradle
     - ./gradlew build -info
     #- gradle build -info
   artifacts:
     paths:
       - build/libs/*.jar
 
-#For testing the build
 test:
   stage: test
   script:
     - ./gradlew test -info
 
+#For staging development
+#Development:
+## image: ruby: 2.4
+## stage: deploy
+## before_script:
+## - gem install dpl
+## - wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
+## script:
+## - dpl --provider = heroku --app = $ HEROKU_APPNAME --api-key = $ HEROKU_APIKEY
+## - export HEROKU_API_KEY = $ HEROKU_APIKEY
+## - heroku run --app $ HEROKU_APPNAME migrate
+## environment:
+## name: development
+## url: https://admodb-dev.herokuapp.com
 
-#For deploying in test server
-deploy_dev:
-  stage: deploy
-  image: ruby:2.3
-  script:
-    #- apt-get update -qy
-    #- apt-get install -y ruby-dev
-    #- gem install dpl
-    - sudo -S dpl --provider=heroku --app=$HEROKU_APPNAME_TEST --api-key=$HEROKU_API_KEY
-  environment:
-    name: dev
-    url: $HEROKU_APP_HOST_TEST
+# The part that is integrated with heroku when deployment
 
-#For deploying in production
-deploy_production:
-  stage: deploy
-  image: ruby:2.3
-  script:
-    - sudo -S dpl --provider=heroku --app=$HEROKU_APPNAME_PRODUCTION --api-key=$HEROKU_API_KEY
-  environment:
-    name: dev
-    url: $HEROKU_APP_HOST_PRODUCTION
-  #only:
-  #  - release
+
+#Production:
+#  image: ruby:2.3
+#  stage: deploy
+#  before_script:
+#    - gem install dpl
+#    - wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
+#  script:
+#    - asl --provider = Heroku --app = $ HEROKU_APPNAME --api-key = $ HEROKU_APIKEY
+#    - export HEROKU_API_KEY = $ HEROKU_APIKEY
+#    - Heroku run --app $ HEROKU_APPNAME migrate
+#  environment:
+#    name: production
+#    url: $HEROKU_APP_HOST
