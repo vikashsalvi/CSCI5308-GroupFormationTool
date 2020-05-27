@@ -15,19 +15,19 @@ cache:
     - .gradle/wrapper
     - .gradle/caches
 
-build:
-  stage: build
-  script:
-    - ./gradlew build -info
-    #- gradle build -info
-  artifacts:
-    paths:
-      - build/libs/*.jar
+#build:
+#  stage: build
+#  script:
+#    - ./gradlew build -info
+#    #- gradle build -info
+#  artifacts:
+#    paths:
+#      - build/libs/*.jar
 
-test:
-  stage: test
-  script:
-    - ./gradlew test -info
+#test:
+#  stage: test
+#  script:
+#    - ./gradlew test -info
 
 deploy_dev:
   stage: deploy
