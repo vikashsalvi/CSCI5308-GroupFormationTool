@@ -45,8 +45,6 @@ deploy_stagging:
   environment:
     name: dev
     url: $HEROKU_APP_HOST_TEST
-  after_script:
-    - sudo rm -R *
 
 #For deploying in production
 deploy_production:
