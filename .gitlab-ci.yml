@@ -41,7 +41,7 @@ deploy_stagging:
     #- apt-get update -qy
     #- apt-get install -y ruby-dev
     #- gem install dpl
-    - sudo -S dpl --provider=heroku --app=$HEROKU_APPNAME_TEST --api-key=$HEROKU_API_KEY
+    - echo "deployment" | sudo -S dpl --provider=heroku --app=$HEROKU_APPNAME_TEST --api-key=$HEROKU_API_KEY
   environment:
     name: dev
     url: $HEROKU_APP_HOST_TEST
