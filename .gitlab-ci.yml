@@ -20,8 +20,8 @@ build:
   stage: build
   script:
     - chmod +x ./gradle
-    #- ./gradlew build -info
-    - gradle build -info
+    - ./gradlew build -info
+    #- gradle build -info
   artifacts:
     paths:
       - build/libs/*.jar
@@ -30,7 +30,7 @@ build:
 test:
   stage: test
   script:
-    - gradle test -info
+    - ./gradlew test -info
 
 
 #For deploying in test server
