@@ -37,11 +37,11 @@ deploy_dev:
   #  - get -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
   script:
     #- apt-get update -qy
-    - apt-get install -y ruby-dev
-    - gem install dpl
+    #- apt-get install -y ruby-dev
+    #- gem install dpl
     - ls
     - ls -lart
-    - dpl --provider=heroku --app=$HEROKU_APPNAME --api-key=$HEROKU_API_KEY
+    - sudo -S dpl --provider=heroku --app=$HEROKU_APPNAME --api-key=$HEROKU_API_KEY
     #- heroku run --app $HEROKU_APPNAME migrate
   environment:
     name: dev
