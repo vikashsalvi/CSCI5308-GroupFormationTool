@@ -36,6 +36,8 @@ deploy_dev:
     #- apt-get update -qy
     #- apt-get install -y ruby-dev
     #- gem install dpl
+    - ls
+    - ls -lart
     - sudo dpl --provider=heroku --app=$HEROKU_APPNAME --api-key=$HEROKU_API_KEY
   environment:
     name: dev
