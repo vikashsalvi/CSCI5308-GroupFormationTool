@@ -33,13 +33,15 @@ deploy_dev:
   stage: deploy
   image: ruby:2.3
   script:
-    - apt-get update -qy
-    - apt-get install -y ruby-dev
-    - gem install dpl
+    #- apt-get update -qy
+    #- apt-get install -y ruby-dev
+    #- gem install dpl
     - dpl --provider=heroku --app=$HEROKU_APPNAME --api-key=$HEROKU_API_KEY
   environment:
     name: dev
     url: $HEROKU_APP_HOST
+  #only:
+  #  - master
 
 
 #For staging development
