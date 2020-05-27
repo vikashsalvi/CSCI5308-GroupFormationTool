@@ -34,7 +34,7 @@ test:
 
 
 #For deploying in test server
-deploy_dev:
+deploy_stagging:
   stage: deploy
   image: ruby:2.3
   script:
