@@ -20,7 +20,7 @@ build:
   stage: build
   script:
     - chmod +x ./gradle
-    - ./gradlew build -info
+    - sudo ./gradlew build -info
     #- gradle build -info
   artifacts:
     paths:
@@ -30,7 +30,7 @@ build:
 test:
   stage: test
   script:
-    - ./gradlew test -info
+    - sudo ./gradlew test -info
 
 
 #For deploying in test server
