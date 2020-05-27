@@ -56,4 +56,4 @@ deploy_production:
     name: dev
     url: $HEROKU_APP_HOST_PRODUCTION
   only:
-    - release
+    - release,master
