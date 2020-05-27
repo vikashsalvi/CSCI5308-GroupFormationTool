@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/")
 public class RESTController {
 
-    @GetMapping(path = "/yo")
+    @GetMapping(path = "/")
     public @ResponseBody
     String helloWorld() {
         return "Hello";
