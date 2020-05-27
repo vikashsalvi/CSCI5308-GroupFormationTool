@@ -55,5 +55,5 @@ deploy_production:
   environment:
     name: dev
     url: $HEROKU_APP_HOST_PRODUCTION
-  #only:
-  #  - release
+  only:
+    - release
