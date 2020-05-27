@@ -11,27 +11,27 @@ before_script:
   #- sudo rm -R ./group15
   - export GRADLE_USER_HOME=`pwd`/.gradle
 
-#Gradle build
-build:
-  stage: build
-  script:
-    - chmod +x ./gradle
-    #- ./gradlew build -info
-    - gradle build -info
-  artifacts:
-    paths:
-      - build/libs/*.jar
-
 cache:
   paths:
     - .gradle/wrapper
     - .gradle/caches
 
+#Gradle build
+build:
+  stage: build
+  script:
+    - chmod +x ./gradle
+    - bash ./gradlew build -info
+    #- gradle build -info
+  artifacts:
+    paths:
+      - build/libs/*.jar
+
 #For testing the build
 test:
   stage: test
   script:
-    - ./gradlew test -info
+    - bash ./gradlew test -info
 
 
 #For deploying in test server
@@ -59,4 +59,4 @@ deploy_production:
     name: production
     url: $HEROKU_APP_HOST_PRODUCTION
   only:
-    - release,master
+    - master
