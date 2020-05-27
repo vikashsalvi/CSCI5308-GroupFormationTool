@@ -1,14 +1,14 @@
 image: gradle:4.6-jdk8-alpine
 
+before_script:
+  #  - echo `pwd` # debug
+  #  - echo "$CI_BUILD_NAME, $CI_BUILD_REF_NAME $CI_BUILD_STAGE" # debug
+  - sudo rm -R ./group15
+  - export GRADLE_USER_HOME=`pwd`/.gradle
 stages:
   - build
   - test
   - deploy
-
-before_script:
-  #  - echo `pwd` # debug
-  #  - echo "$CI_BUILD_NAME, $CI_BUILD_REF_NAME $CI_BUILD_STAGE" # debug
-  - export GRADLE_USER_HOME=`pwd`/.gradle
 
 cache:
   paths:
