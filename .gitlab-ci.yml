@@ -16,6 +16,7 @@ before_script:
 build:
   stage: build
   script:
+    - git update-index --chmod=+x gradlew
     - chmod +x ./gradle
     - ./gradlew build -info
     #- gradle build -info
