@@ -45,7 +45,7 @@ deploy_stagging:
     #- gem install dpl
     - sudo -S dpl --provider=heroku --app=$HEROKU_APPNAME_TEST --api-key=$HEROKU_API_KEY
   environment:
-    name: dev
+    name: test
     url: $HEROKU_APP_HOST_TEST
 
 #For deploying in production
@@ -55,7 +55,7 @@ deploy_production:
   script:
     - sudo -S dpl --provider=heroku --app=$HEROKU_APPNAME_PRODUCTION --api-key=$HEROKU_API_KEY
   environment:
-    name: dev
+    name: production
     url: $HEROKU_APP_HOST_PRODUCTION
   only:
     - release,master
