@@ -36,7 +36,7 @@ deploy_dev:
   #  - gem install dpl
   #  - get -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
   script:
-    - apt-get update -qy
+    #- apt-get update -qy
     - apt-get install -y ruby-dev
     - gem install dpl
     - ls
