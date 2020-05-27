@@ -42,13 +42,12 @@ deploy_stagging:
     #- apt-get update -qy
     #- apt-get install -y ruby-dev
     #- gem install dpl
-    - sudo -S dpl heroku config:set spring.profiles.active=test
     - sudo -S dpl --provider=heroku --app=$HEROKU_APPNAME_TEST --api-key=$HEROKU_API_KEY
   environment:
     name: test
     url: $HEROKU_APP_HOST_TEST
-  #only:
-  #  - develop
+  only:
+    - develop
 
 #For deploying in production
 deploy_production:
