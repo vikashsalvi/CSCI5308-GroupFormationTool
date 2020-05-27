@@ -1,14 +1,16 @@
 image: gradle:4.6-jdk8-alpine
 
+stages:
+  - build
+  - test
+  - deploy
+
 before_script:
   #  - echo `pwd` # debug
   #  - echo "$CI_BUILD_NAME, $CI_BUILD_REF_NAME $CI_BUILD_STAGE" # debug
   #- sudo rm -R ./group15
   - export GRADLE_USER_HOME=`pwd`/.gradle
-stages:
-  - build
-  - test
-  - deploy
+
 
 cache:
   paths:
@@ -41,7 +43,7 @@ deploy_stagging:
     #- apt-get update -qy
     #- apt-get install -y ruby-dev
     #- gem install dpl
-    - echo "deployment" | sudo -S dpl --provider=heroku --app=$HEROKU_APPNAME_TEST --api-key=$HEROKU_API_KEY
+    - sudo -S dpl --provider=heroku --app=$HEROKU_APPNAME_TEST --api-key=$HEROKU_API_KEY
   environment:
     name: dev
     url: $HEROKU_APP_HOST_TEST
