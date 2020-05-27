@@ -32,17 +32,17 @@ cache:
 deploy_dev:
   stage: deploy
   image: ruby:2.3
-  before_script:
-    - sudo gem install dpl
-    - sudo wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
+  #before_script:
+  #  - gem install dpl
+  #  - get -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
   script:
-    #- apt-get update -qy
-    #- apt-get install -y ruby-dev
-    #- gem install dpl
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
     - ls
     - ls -lart
     - dpl --provider=heroku --app=$HEROKU_APPNAME --api-key=$HEROKU_API_KEY
-    - heroku run --app $HEROKU_APPNAME migrate
+    #- heroku run --app $HEROKU_APPNAME migrate
   environment:
     name: dev
     url: $HEROKU_APP_HOST
