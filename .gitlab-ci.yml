@@ -10,16 +10,14 @@ before_script:
   #  - echo "$CI_BUILD_NAME, $CI_BUILD_REF_NAME $CI_BUILD_STAGE" # debug
   #- sudo rm -R ./group15
   - export GRADLE_USER_HOME=`pwd`/.gradle
-  - git update-index --chmod=+x gradlew
 
 #Gradle build
 build:
   stage: build
   script:
-    - git update-index --chmod=+x gradlew
     - chmod +x ./gradle
-    - ./gradlew build -info
-    #- gradle build -info
+    #- ./gradlew build -info
+    - gradle build -info
   artifacts:
     paths:
       - build/libs/*.jar
