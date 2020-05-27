@@ -47,8 +47,8 @@ deploy_stagging:
   environment:
     name: test
     url: $HEROKU_APP_HOST_TEST
-  only:
-    - develop
+  #only:
+  #  - develop
 
 #For deploying in production
 deploy_production:
