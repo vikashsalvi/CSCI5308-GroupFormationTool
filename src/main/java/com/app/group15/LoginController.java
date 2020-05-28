@@ -18,9 +18,20 @@ public class LoginController {
 	}
 
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
-	public String signup(@ModelAttribute User user) {
-		System.out.println(user);
+	public String signupPost() {
+		return "redirect:login";
+//		System.out.println(user);
+//		ModelAndView modelAndView = new ModelAndView();
+//		modelAndView.setViewName("user-data-temp");
+//		modelAndView.addObject("user_1", user);
+//		System.out.print(modelAndView);
+//		return modelAndView;
 //		call dao for saving the user
-		return "";
 	}
+
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String login() {
+		return "login";
+	}
+
 }
