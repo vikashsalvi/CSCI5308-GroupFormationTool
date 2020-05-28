@@ -34,9 +34,19 @@ public class User {
         this.last_name = last_name;
     }
 
-    String banner_id;
-    String first_name;
-    String last_name;
-    String email;
+    private String banner_id;
+    private String first_name;
+    private String last_name;
+    private String email;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    private String password;
 
 }
