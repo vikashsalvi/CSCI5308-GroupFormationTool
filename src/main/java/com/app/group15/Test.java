@@ -21,8 +21,9 @@
 //
 //	public static void main(String[] args) {
 //
-//			
+//
 //		// TODO Auto-generated method stub
+// Ask Krutarth how to create injector instance.
 //		UserRoleDao userRoleDao = new UserRoleDaoInjectorService().getUserRoleDao();
 //		System.out.println(userRoleDao.get(2).getRole());
 //		System.out.println(userRoleDao.getRoleId(UserRoleConstants.ROLE_ADMIN));
@@ -41,7 +42,7 @@
 //		//System.out.println(userId);
 //		userDao.update(user, 6);
 //		userDao.updateUserRole(10, UserRoleConstants.ROLE_INSTRUCTOR);
-//		userDao.updateUserPassword(9, "pass5");	
+//		userDao.updateUserPassword(9, "pass5");
 //		System.out.println(userRoleDao.get(1).getRole());
 //		System.out.println(userRoleDao.getRoleId(UserRoleConstants.ROLE_ADMIN));
 //		userRoleDao.updateRole(5, UserRoleConstants.ROLE_INSTRUCTOR);
