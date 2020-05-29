@@ -59,6 +59,7 @@ public class UserDao implements Dao, UserRoleDaoInjectorInterface {
 					user.setFirstName(result.getString("first_name"));
 					user.setLastName(result.getString("last_name"));
 					user.setId(result.getInt("id"));
+					user.setPassword(result.getString("password"));
 				}
 			}
 		} catch (Exception e) {
