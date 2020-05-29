@@ -10,14 +10,7 @@ public class LoginController {
 
     @PostMapping(value = "/login")
     public ModelAndView loginPost(@RequestParam(required=false, value = "bannerId") String bannerId, @RequestParam(required=false, value = "password") String password) {
-
         LoginService loginService = new LoginService();
-
-//        if (bannerId==null && bannerId.length() != 9)
-//        {
-//
-//        }
-
 
         if (loginService.validateLogin(bannerId,password))
         {
@@ -34,5 +27,4 @@ public class LoginController {
     public String loginGet() {
         return "login";
     }
-
 }

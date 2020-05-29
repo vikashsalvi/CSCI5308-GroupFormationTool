@@ -10,7 +10,6 @@ public class LoginService {
     public boolean validateLogin(String bannerId, String password)
     {
         UserEntity user = userDao.getUserByBannerId(bannerId);
-
         if (user.getBannerId() != null && user.getPassword()!=null)
         {
             if (bannerId.equals(user.getBannerId()) && password.equals(user.getPassword()))
@@ -22,7 +21,6 @@ public class LoginService {
         }else {
             return false;
         }
-
     }
 
 }
