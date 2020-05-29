@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.app.group15.CustomExceptions.AdminNotAllowedException;
-import com.app.group15.persistence.UserRoleConstants;
+import com.app.group15.persistence.UserRole;
 import com.app.group15.persistence.entity.PersistenceEntity;
 import com.app.group15.persistence.entity.UserRolesEntity;
 
@@ -72,7 +72,7 @@ public class UserRoleDao implements Dao {
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
 			connection.setAutoCommit(false);
 			statement.setInt(1, userId);
-			if (role.equals(UserRoleConstants.ROLE_ADMIN)) {
+			if (role.equals(UserRole.ADMIN.getRole())) {
 				throw new AdminNotAllowedException("Admin User Cannot be created");
 			}
 			statement.setInt(2, getRoleId(role));
@@ -92,7 +92,7 @@ public class UserRoleDao implements Dao {
 		String query = "UPDATE table_user_role_mapper SET role_id=? WHERE user_id=?";
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
 			connection.setAutoCommit(false);
-			if (role.equals(UserRoleConstants.ROLE_ADMIN)) {
+			if (role.equals(UserRole.ADMIN.getRole())) {
 				throw new AdminNotAllowedException("Admin User Cannot be created");
 			}
 			statement.setInt(1, getRoleId(role));
