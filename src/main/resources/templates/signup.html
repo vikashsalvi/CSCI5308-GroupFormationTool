@@ -26,18 +26,18 @@
 			<div class="card-body">
 				<form action="/signup" method="POST">
 					<div class="form-group">
-						<div th:if="${not error or username_error==null}">
+						<div th:if="${not error or bannerId_error==null}">
 							<label for="bannerId">Banner Id</label>
 							<input type="text" class="form-control" id="bannerId" placeholder="B00XXXXXX"
 								   name="bannerId">
 						</div>
-						<div th:if="${error and username_error!=null}">
+						<div th:if="${error and bannerId_error!=null}">
 							<label for="bannerIdError">Banner Id</label>
 							<input type="text" class="form-control is-invalid" id="bannerIdError"
 								   placeholder="B00XXXXXX"
 								   name="bannerId">
 							<div class="invalid-feedback">
-								<span th:text="${username_error}"></span>
+								<span th:text="${bannerId_error}"></span>
 							</div>
 						</div>
 					</div>

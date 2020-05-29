@@ -33,9 +33,6 @@ public class SignupController {
 
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
 	public ModelAndView signup(@ModelAttribute UserEntity userEntity, @RequestParam("cPassword") String cPassword) {
-		System.out.println("Creating user dao");
-		System.out.println(cPassword + " " + userEntity.getPassword());
-		System.out.println(cPassword.equals(userEntity.getPassword()));
 		UserDao userDao = new UserDaoInjectorService().getUserDao();
 		String bannerId = userEntity.getBannerId();
 		boolean response = signupService.checkUserExists(bannerId);
@@ -43,19 +40,16 @@ public class SignupController {
 			ModelAndView modelAndView = new ModelAndView();
 			modelAndView.setViewName("signup");
 			modelAndView.addObject("error", true);
-			modelAndView.addObject("username_error", "Username already exists");
-			System.out.print(modelAndView);
+			modelAndView.addObject("bannerId_error", "Banner Id already registered!");
 			return modelAndView;
 		} else if (!cPassword.equals(userEntity.getPassword())) {
 			ModelAndView modelAndView = new ModelAndView();
 			modelAndView.setViewName("signup");
 			modelAndView.addObject("error", true);
 			modelAndView.addObject("password_error", "Password and confirm password did not match!");
-			System.out.print(modelAndView);
 			return modelAndView;
 		} else {
 			int userId = signupService.createUser(userEntity, "GUEST");
-			System.out.println(userId);
 			return new ModelAndView("redirect:login");
 		}
 
