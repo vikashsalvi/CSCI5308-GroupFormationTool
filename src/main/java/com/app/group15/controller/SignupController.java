@@ -8,13 +8,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 
 @Controller
 public class SignupController {
 
-	private SignupService signupService;
+	private SignupService signupService = new SignupService();
 
 	@RequestMapping("/")
 	public String index() {
@@ -31,43 +32,32 @@ public class SignupController {
 	}
 
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
-	public String signup(@ModelAttribute UserEntity userEntity) {
+	public ModelAndView signup(@ModelAttribute UserEntity userEntity, @RequestParam("cPassword") String cPassword) {
 		System.out.println("Creating user dao");
+		System.out.println(cPassword + " " + userEntity.getPassword());
+		System.out.println(cPassword.equals(userEntity.getPassword()));
 		UserDao userDao = new UserDaoInjectorService().getUserDao();
-//		System.out.println("checking if user exists");
-//		System.out.println(userEntity.getEmail());
-//		System.out.println(userEntity.getPassword());
-//		System.out.println(userEntity.getBannerId());
-//		System.out.println(userEntity.getFirstName());
-//		System.out.println(userEntity.getLastName());
-//		String bannerId=userEntity.getBannerId();
-//		System.out.println("line 44");
-//		boolean response = signupService.checkUserExists(bannerId);
-//		if (response) {
-//			ModelAndView modelAndView = new ModelAndView();
-//			modelAndView.setViewName("signup");
-//			modelAndView.addObject("error", true);
-//			modelAndView.addObject("username_error", "Username already exists");
-//			System.out.print(modelAndView);
-//			return modelAndView;
-//		} else {
-//			ModelAndView modelAndView = new ModelAndView();
-//			modelAndView.setViewName("login");
-//			return modelAndView;
-//		}
-		return "redirect:login";
-//		System.out.println(user);
-//		ModelAndView modelAndView = new ModelAndView();
-//		modelAndView.setViewName("user-data-temp");
-//		modelAndView.addObject("user_1", user);
-//		System.out.print(modelAndView);
-//		return modelAndView;
-//		call dao for saving the user
-	}
+		String bannerId = userEntity.getBannerId();
+		boolean response = signupService.checkUserExists(bannerId);
+		if (response) {
+			ModelAndView modelAndView = new ModelAndView();
+			modelAndView.setViewName("signup");
+			modelAndView.addObject("error", true);
+			modelAndView.addObject("username_error", "Username already exists");
+			System.out.print(modelAndView);
+			return modelAndView;
+		} else if (!cPassword.equals(userEntity.getPassword())) {
+			ModelAndView modelAndView = new ModelAndView();
+			modelAndView.setViewName("signup");
+			modelAndView.addObject("error", true);
+			modelAndView.addObject("password_error", "Password and confirm password did not match!");
+			System.out.print(modelAndView);
+			return modelAndView;
+		} else {
+			int userId = signupService.createUser(userEntity, "GUEST");
+			System.out.println(userId);
+			return new ModelAndView("redirect:login");
+		}
 
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login() {
-		return "login";
 	}
-
 }

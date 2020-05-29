@@ -26,11 +26,20 @@
 			<div class="card-body">
 				<form action="/signup" method="POST">
 					<div class="form-group">
-						<label for="bannerId">Banner Id</label>
-						<input type="text" class="form-control" id="bannerId" placeholder="B00XXXXXX" name="bannerId">
-					</div>
-					<div th:if='${error && username_error!=""}' class="invalid-feedback">
-						<span th:text="${username_error}"></span>
+						<div th:if="${not error or username_error==null}">
+							<label for="bannerId">Banner Id</label>
+							<input type="text" class="form-control" id="bannerId" placeholder="B00XXXXXX"
+								   name="bannerId">
+						</div>
+						<div th:if="${error and username_error!=null}">
+							<label for="bannerIdError">Banner Id</label>
+							<input type="text" class="form-control is-invalid" id="bannerIdError"
+								   placeholder="B00XXXXXX"
+								   name="bannerId">
+							<div class="invalid-feedback">
+								<span th:text="${username_error}"></span>
+							</div>
+						</div>
 					</div>
 					<div class="form-row">
 						<div class="form-group col-md-6">
@@ -40,7 +49,7 @@
 						</div>
 						<div class="form-group col-md-6">
 							<label for="lastName">Last Name</label>
-							<input type="text" class="form-control" id="lastName" placeholder="Eg: Dow"
+							<input type="text" class="form-control" id="lastName" placeholder="Eg: Doe"
 								   name="lastName">
 						</div>
 					</div>
@@ -48,10 +57,37 @@
 						<label for="email">Email</label>
 						<input type="email" class="form-control" id="email" placeholder="johndoe@xyz.com" name="email">
 					</div>
-					<div class="form-group">
-						<label for="password">Password</label>
-						<input type="password" class="form-control" id="password" placeholder="Password"
-							   name="password">
+					<div th:if="${not error or password_error==null}">
+						<div class="form-group">
+							<label for="password">Password</label>
+							<input type="password" class="form-control" id="password" placeholder="Password"
+								   name="password">
+						</div>
+						<div class="form-group">
+							<label for="cPassword">Confirm Password</label>
+							<input type="password" class="form-control" id="cPassword" placeholder="Confirm Password"
+								   name="cPassword">
+						</div>
+					</div>
+					<div th:if="${error and password_error!=null}">
+						<div>
+							<label for="password_error">Password</label>
+							<input type="password" class="form-control is-invalid" id="password_error"
+								   placeholder="Password"
+								   name="password">
+							<div class="invalid-feedback">
+								<span th:text="${password_error}"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="cPassword_error">Confirm Password</label>
+							<input type="password" class="form-control is-invalid" id="cPassword_error"
+								   placeholder="Confirm Password"
+								   name="cPassword">
+							<div class="invalid-feedback">
+								<span th:text="${password_error}"></span>
+							</div>
+						</div>
 					</div>
 					<button type="submit" class="btn btn-primary">Sign up</button>
 				</form>
