@@ -1,10 +1,8 @@
 package com.app.group15.utility;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.logging.*;
+import org.apache.log4j.Logger;
+
+import java.util.logging.Level;
 
 public class GroupFormationToolLogger {
 
@@ -13,7 +11,7 @@ public class GroupFormationToolLogger {
     String logPath = "logs/";
 
     public GroupFormationToolLogger() {
-        Handler logFileHandler;
+        /*Handler logFileHandler;
         Formatter plainText;
         try {
             //FileUtility.createFileIfNotExist(logPath);
@@ -31,7 +29,8 @@ public class GroupFormationToolLogger {
         }
         catch (Exception e){
             e.printStackTrace();
-        }
+        }*/
+        logger = Logger.getLogger(GroupFormationToolLogger.class);
     }
 
     private static Logger getLogger() {
@@ -39,6 +38,6 @@ public class GroupFormationToolLogger {
     }
 
     public static void log(Level level, String msg, Exception e) {
-        getLogger().log(level, msg, e);
+        getLogger().info(e);
     }
 }
