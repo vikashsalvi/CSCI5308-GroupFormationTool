@@ -1,0 +1,54 @@
+package com.app.group15.notifications;
+
+import com.app.group15.config.AppConfig;
+import com.app.group15.utility.GroupFormationToolLogger;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+
+import java.util.Properties;
+import java.util.logging.Level;
+
+public class EmailNotifierImpl implements Notifier {
+
+    static Properties springProperties;
+    private JavaMailSenderImpl javaMailSender;
+
+    static {
+        springProperties= AppConfig.getInstance().getProperties();
+    }
+
+    @Override
+    public boolean setCredentials() {
+        javaMailSender = new JavaMailSenderImpl();
+        javaMailSender.setHost(springProperties.getProperty("mail.host"));
+        javaMailSender.setPort(Integer.parseInt(springProperties.getProperty("mail.port")));
+        javaMailSender.setUsername(springProperties.getProperty("mail.username"));
+        javaMailSender.setPassword(springProperties.getProperty("mail.password"));
+
+        Properties props = javaMailSender.getJavaMailProperties();
+        props.put("mail.transport.protocol", springProperties.getProperty("mail.transport.protocol"));
+        props.put("mail.smtp.auth", springProperties.getProperty("mail.smtp.auth"));
+        props.put("mail.smtp.starttls.enable", springProperties.getProperty("mail.smtp.starttls.enable"));
+        props.put("mail.debug", springProperties.getProperty("mail.debug"));
+        return true;
+    }
+
+    @Override
+    public boolean sendMessage(String receiptEmail,String subject, String message) {
+        setCredentials();
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setTo(receiptEmail);
+        simpleMailMessage.setSubject(subject);
+        simpleMailMessage.setText(message);
+        try {
+            javaMailSender.send(simpleMailMessage);
+        } catch (MailException ex) {
+            GroupFormationToolLogger.log(Level.SEVERE, ex.getMessage(), ex);
+        }catch (Exception e){
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+        }
+
+        return true;
+    }
+}
