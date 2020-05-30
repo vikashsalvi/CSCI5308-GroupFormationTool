@@ -79,7 +79,7 @@ public class AppConfig {
     }
 
 
-    public static AppConfig instance() {
+    public static AppConfig getInstance() {
         if(null == AppConfig.getUniqueInstance() ){
             singletonAppConfig = new AppConfig();
         }
