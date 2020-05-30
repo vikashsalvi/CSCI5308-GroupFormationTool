@@ -21,7 +21,7 @@ public class DatabaseManager {
 
 	}
 
-	private static MysqlDataSource getDataSource() {
+	public static MysqlDataSource getDataSource() {
 
 		try {
 			dataSource = new MysqlDataSource();
