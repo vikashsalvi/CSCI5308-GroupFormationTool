@@ -4,8 +4,6 @@ import com.app.group15.persistence.dao.UserDaoMock;
 import com.app.group15.persistence.entity.UserEntity;
 import org.junit.jupiter.api.Test;
 
-import javax.jws.soap.SOAPBinding;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class SignupServiceTest {

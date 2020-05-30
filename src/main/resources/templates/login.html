@@ -24,8 +24,8 @@
 				Login Form
 			</div>
 			<div class="card-body">
-				<div th:if="${error}">
-					<p class="bg-danger text-light">Banner ID or Password Incorrect</p>
+				<div th:if="${error}" class="alert alert-danger" role="alert">
+					<strong>Oh snap!</strong> Invalid BannerID or Password
 				</div>
 				<form action="/login" method="POST">
 					<div class="form-group">
@@ -42,7 +42,6 @@
 			<div class="card-footer">
 				<a href="/signup">Click here</a> to sign up
 			</div>
-
 		</div>
 	</div>
 
