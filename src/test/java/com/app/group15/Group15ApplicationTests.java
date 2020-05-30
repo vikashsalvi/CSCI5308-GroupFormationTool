@@ -11,7 +11,7 @@ class Group15ApplicationTests {
 
 	@Test
 	void contextLoads() {
-		AppConfig.instance();
+		AppConfig.getInstance();
 
 		assertEquals(true,true);
 	}
