@@ -19,7 +19,7 @@ public class AppConfig {
 
     private static AppConfig singletonAppConfig = null;
 
-    private Notifier emailNotifier;
+    private EmailNotifierImpl emailNotifier;
     private GroupFormationToolLogger groupFormationToolLogger;
     private static Properties properties;
     private static String propertyFilePath = "src/main/resources/application.properties";
@@ -51,7 +51,7 @@ public class AppConfig {
         return singletonAppConfig == null ?  singletonAppConfig = new AppConfig() : singletonAppConfig;
     }
 
-    public Notifier getEmailNotifier() {
+    public EmailNotifierImpl getEmailNotifier() {
         return emailNotifier;
     }
 

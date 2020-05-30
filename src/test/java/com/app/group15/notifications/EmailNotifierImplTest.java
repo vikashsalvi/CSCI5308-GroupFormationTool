@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 public class EmailNotifierImplTest {
 
-    Notifier emailNotifier = AppConfig.getInstance().getEmailNotifier();
+    EmailNotifierImpl emailNotifier = AppConfig.getInstance().getEmailNotifier();
 
     @Test
     void sendMessageTest(){

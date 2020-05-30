@@ -16,13 +16,9 @@ public class DatabaseManager {
 	final static String URL = "db.url";
 	final static String PSWD = "db.password";
 	final static String USER_NAME = "db.user";
-	private static Properties properties;
 
 	private final static Logger LOGGER = Logger.getLogger(DatabaseManager.class.getName());
 
-	static{
-		properties = AppConfig.getInstance().getProperties();
-	}
 
 	public DatabaseManager() {
 
