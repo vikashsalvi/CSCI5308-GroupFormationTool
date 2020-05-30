@@ -15,7 +15,7 @@ public class EmailNotifierImpl implements Notifier {
     private JavaMailSenderImpl javaMailSender;
 
     static {
-        springProperties= AppConfig.getInstance().getProperties();
+        springProperties= AppConfig.instance().getProperties();
     }
 
     @Override

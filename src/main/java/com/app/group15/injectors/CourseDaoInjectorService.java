@@ -10,9 +10,10 @@ public class CourseDaoInjectorService {
 
 	public CourseDaoInjectorService() {
 		courseDao=new CourseDao();
-		courseDao.injectConnection(AppConfig.getInstance().getDatabaseManager().getConnection());
-		courseDao.injectCourseInstructorMapperDao(AppConfig.getInstance().getCourseInstructorMapperDaoInjectorService().getCourseInstructorMapperDao());
-		courseDao.injectCourseStudentMapperDao(AppConfig.getInstance().getCourseStudentMapperDaoInjectorService().getCourseStudentMapperDao());
+		courseDao.injectConnection(DatabaseManager.getConnection());
+		courseDao.injectCourseInstructorMapperDao(AppConfig.instance().getCourseInstructorMapperDaoInjectorService().getCourseInstructorMapperDao());
+		courseDao.injectCourseStudentMapperDao(AppConfig.instance().getCourseStudentMapperDaoInjectorService().getCourseStudentMapperDao());
+
 	}
 
 	public CourseDao getCourseDao() {

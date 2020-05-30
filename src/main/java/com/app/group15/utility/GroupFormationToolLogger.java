@@ -13,7 +13,7 @@ public class GroupFormationToolLogger {
     String logPath = "logs/";
 
     public GroupFormationToolLogger() {
-        Handler logFileHandler;
+       /* Handler logFileHandler;
         Formatter plainText;
         try {
             //FileUtility.createFileIfNotExist(logPath);
@@ -31,7 +31,7 @@ public class GroupFormationToolLogger {
         }
         catch (Exception e){
             e.printStackTrace();
-        }
+        }*/
     }
 
     private static Logger getLogger() {
@@ -39,6 +39,7 @@ public class GroupFormationToolLogger {
     }
 
     public static void log(Level level, String msg, Exception e) {
-        getLogger().log(level, msg, e);
+        //getLogger().log(level, msg, e);
+        e.printStackTrace();
     }
 }

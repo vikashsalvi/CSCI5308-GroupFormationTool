@@ -10,9 +10,10 @@ public class UserDaoInjectorService {
 	private UserDao userDao;
 	
 	public UserDaoInjectorService() {
-		userDao=new UserDao();
-		userDao.injectConnection(AppConfig.getInstance().getDatabaseManager().getConnection());
-		userDao.injectUserRoleDao(AppConfig.getInstance().getUserRoleDaoInjectorService().getUserRoleDao());
+
+		userDao = AppConfig.instance().getUserDao();
+		userDao.injectConnection(DatabaseManager.getConnection());
+		userDao.injectUserRoleDao(AppConfig.instance().getUserRoleDaoInjectorService().getUserRoleDao());
 	}
 
 	public UserDao getUserDao() {
