@@ -11,16 +11,11 @@ public class SignupService {
 		UserEntity user = userDao.getUserByBannerId(bannerId);
 		boolean response;
 
-		if (user.getBannerId() == null) {
-			response = false;
-		} else {
-			response = true;
-		}
+		response = user.getBannerId() != null;
 		return response;
 	}
 
 	public int createUser(UserEntity user, String role) {
-		int userId = userDao.saveUser(user, role);
-		return userId;
+		return userDao.saveUser(user, role);
 	}
 }

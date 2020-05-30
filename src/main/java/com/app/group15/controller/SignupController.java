@@ -24,7 +24,6 @@ public class SignupController {
 
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
 	public ModelAndView signup() {
-//		Returns signup page
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("error", false);
 		modelAndView.setViewName("signup");
