@@ -11,8 +11,9 @@ public class UserDaoMock {
 			userEntity.setLastName("Patel");
 			userEntity.setEmail("daksh.patel@dal.ca");
 			userEntity.setBannerId("B00843468");
+			userEntity.setBannerId("passwordTest");
 			return userEntity;
-		} else {
+		}else {
 			return userEntity;
 		}
 	}
