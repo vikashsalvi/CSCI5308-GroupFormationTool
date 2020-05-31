@@ -3,6 +3,7 @@ package com.app.group15.controller;
 import com.app.group15.persistence.dao.UserDao;
 import com.app.group15.persistence.entity.UserEntity;
 import com.app.group15.persistence.injectors.UserDaoInjectorService;
+import com.app.group15.services.AuthorizationService;
 import com.app.group15.services.SignupService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,6 +21,11 @@ public class SignupController {
 	@RequestMapping("/")
 	public String index() {
 		return "index";
+	}
+
+	@RequestMapping("/admin")
+	public String admin() {
+		return "<h1>Admin</h1>";
 	}
 
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)

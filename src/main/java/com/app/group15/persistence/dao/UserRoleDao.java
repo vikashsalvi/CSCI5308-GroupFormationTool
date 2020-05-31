@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -67,18 +69,19 @@ public class UserRoleDao implements Dao {
 
 	}
 
-	public ArrayList<String> getRolesByBannerId(String bannerId) {
+	public Set<String> getRolesByBannerId(String bannerId) {
 		String query = "SELECT role FROM table_users tu\n" +
 			"JOIN table_user_role_mapper trm ON tu.id=trm.user_id\n" +
 			"JOIN table_user_roles tr ON trm.role_id=tr.id\n" +
 			"WHERE tu.banner_id=?";
-		ArrayList<String> roles = new ArrayList<String>();
-		try (PreparedStatement statement = connection.prepareStatement(query);
-			 ResultSet result = statement.executeQuery()) {
-
-			while (result.next()) {
-				String role=result.getString("role");
-				roles.add(role);
+		Set<String> roles = new HashSet<String>();
+		try (PreparedStatement statement = connection.prepareStatement(query)) {
+			statement.setString(1, bannerId);
+			try (ResultSet result = statement.executeQuery()) {
+				while (result.next()) {
+					String role = result.getString("role");
+					roles.add(role);
+				}
 			}
 		} catch (Exception e) {
 
