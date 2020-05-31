@@ -37,6 +37,8 @@ public class SessionService {
 			redirect= "redirect:/admin/home";
 		} else if (roles.contains("STUDENT")|| roles.contains("TA")){
 			redirect= "redirect:/student/home";
+		}else if (roles.contains("INSTRUCTOR")){
+			redirect= "redirect:/instructor/home";
 		} else {
 			redirect= "redirect:/user/home";
 		}

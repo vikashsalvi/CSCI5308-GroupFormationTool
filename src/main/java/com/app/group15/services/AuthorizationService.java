@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class AuthorizationService {
+
 	private Set<String> allowedRoles=new HashSet<>();
 
 	public void setAllowedRoles(String[] args) {

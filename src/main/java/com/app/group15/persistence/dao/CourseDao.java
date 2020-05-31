@@ -38,10 +38,8 @@ public class CourseDao
 			statement.setInt(1, id);
 			try (ResultSet result = statement.executeQuery()) {
 				while (result.next()) {
-
 					course.setId(result.getInt("id"));
 					course.setName(result.getString("name"));
-
 				}
 			}
 		} catch (SQLException e) {
