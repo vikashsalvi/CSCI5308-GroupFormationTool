@@ -2,6 +2,7 @@ package com.app.group15.controller;
 
 import com.app.group15.persistence.entity.CourseEntity;
 import com.app.group15.persistence.entity.UserEntity;
+import com.app.group15.services.AssignTAService;
 import com.app.group15.services.AuthorizationService;
 import com.app.group15.services.CourseService;
 import com.app.group15.services.SessionService;
@@ -54,7 +55,6 @@ public class InstructorController {
                 modelAndView = new ModelAndView();
                 modelAndView.setViewName("instructor/ta-assignment");
                 modelAndView.addObject("courseId", courseId);
-                modelAndView.addObject("error_invalid_banner", true);
                 modelAndView.addObject("userEntity", userEntity);
                 modelAndView.addObject("courseEntities", courseEntities);
                 return modelAndView;
@@ -71,18 +71,34 @@ public class InstructorController {
 
 
     @RequestMapping(value = "/instructor/assign-ta", method = RequestMethod.POST)
-    public ModelAndView assignTAPOST(HttpServletRequest request, @RequestParam(required = false, value = "bannerId") String bannerId) {
+    public ModelAndView assignTAPOST(HttpServletRequest request, @RequestParam(required = false, value = "bannerId") String bannerId, @RequestParam  String courseId) {
         authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
         ModelAndView modelAndView;
+        AssignTAService assignTAService = new AssignTAService();
         if (SessionService.isUserSignedIn(request)) {
             if (authorizationService.isAuthorized(request)) {
                 UserEntity userEntity = SessionService.getSessionUser(request);
-                ArrayList<CourseEntity> courseEntities= CourseService.getCoursesList();
+
                 modelAndView = new ModelAndView();
                 modelAndView.setViewName("instructor/ta-assignment");
-                modelAndView.addObject("success_ta_changed",true);
+
+                if (assignTAService.validateBannerID(bannerId))
+                {
+                    modelAndView.addObject("error_invalid_banner",false);
+
+                }else {
+                    modelAndView.addObject("error_invalid_banner",true);
+                }
+
+                if (assignTAService.performTAUpdate(bannerId,courseId))
+                {
+                    modelAndView.addObject("success_ta_changed",true);
+                }else {
+                    modelAndView.addObject("success_ta_changed",false);
+                }
+
                 modelAndView.addObject("userEntity", userEntity);
-                modelAndView.addObject("courseEntities", courseEntities);
+
                 return modelAndView;
             } else {
                 System.out.println("----------------Unauthorized access for instructor/assign-ta !!!----------------");
