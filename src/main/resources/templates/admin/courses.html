@@ -26,7 +26,7 @@
 		<hr class="sidebar-divider my-0">
 		<div class="sidebar-heading">Home</div>
 		<!-- Nav Item - Dashboard -->
-		<li class="nav-item active">
+		<li class="nav-item ">
 			<a class="nav-link" href="#">
 				<i class="fas fa-fw fa-tachometer-alt"></i>
 				<span>Dashboard</span></a>
@@ -34,7 +34,7 @@
 		<!-- Divider -->
 		<hr class="sidebar-divider">
 		<div class="sidebar-heading"><i class="fas fa-book"></i><sub><i class="fas fa-cog"></i></sub>Course Management</div>
-		<li class="nav-item">
+		<li class="nav-item active">
 			<a class="nav-link" href="/admin/courses">
 				<i class="fas fa-fw fa-book-open"></i>
 				<span>Courses</span></a>
@@ -125,12 +125,29 @@
 										<td>
 											Course name
 										</td>
+										<td>
+											Instructor
+										</td>
+										<td>
+											Edit
+										</td>
 									</tr>
 									</thead>
 									<tbody>
 									<tr th:each="course, iterstat: ${courseEntities}">
 										<td th:text="${course.getId()}"></td>
-										<td><a th:text="${course.getName()}" th:href='${"#"}'></a></td>
+										<td th:text="${course.getName()}"></td>
+										<td
+											th:if="${instructorEntities[iterstat.index].getFirstName()==null}">
+											<span>Not Assigned</span>
+										</td>
+										<td
+											th:if="${instructorEntities[iterstat.index].getFirstName()!=null}">
+											<span
+												th:text='${instructorEntities[iterstat.index].getFirstName()  + " " + instructorEntities[iterstat.index].getLastName()}'></span>
+										</td>
+										<td><a th:href='${"/admin/courses/edit?courseId="+course.getId()}'
+													 class="btn btn-outline-primary"><i class="fa fa-edit"></i>&nbsp; Edit</a></td>
 									</tr>
 									</tbody>
 									<tfoot></tfoot>
