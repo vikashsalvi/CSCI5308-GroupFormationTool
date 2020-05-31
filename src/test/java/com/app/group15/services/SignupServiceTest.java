@@ -1,10 +1,11 @@
 package com.app.group15.services;
 
+import com.app.group15.model.User;
 import com.app.group15.persistence.dao.UserDaoMock;
-import com.app.group15.persistence.entity.UserEntity;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class SignupServiceTest {
 
@@ -12,7 +13,7 @@ class SignupServiceTest {
 
 	@Test
 	public void checkUserExistsTest() {
-		UserEntity userEntity = userDaoMock.getUserByBannerIdMock("B00843468");
+		User userEntity = userDaoMock.getUserByBannerIdMock("B00843468");
 		assertEquals(userEntity.getFirstName(), "Daksh");
 
 		userEntity = userDaoMock.getUserByBannerIdMock("B00843469");
@@ -21,7 +22,7 @@ class SignupServiceTest {
 
 	@Test
 	public void createUserTest() {
-		UserEntity user = new UserEntity();
+		User user = new User();
 		int userId = userDaoMock.saveUserMock(user, "GUEST");
 		assertEquals(userId, 0);
 	}

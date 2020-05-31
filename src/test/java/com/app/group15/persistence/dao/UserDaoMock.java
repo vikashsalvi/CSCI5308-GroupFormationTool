@@ -1,11 +1,11 @@
 package com.app.group15.persistence.dao;
 
-import com.app.group15.persistence.entity.UserEntity;
+import com.app.group15.model.User;
 
 public class UserDaoMock {
 
-	public UserEntity getUserByBannerIdMock(String bannerId) {
-		UserEntity userEntity = new UserEntity();
+	public User getUserByBannerIdMock(String bannerId) {
+		User userEntity = new User();
 		if (bannerId.equals("B00843468")) {
 			userEntity.setFirstName("Daksh");
 			userEntity.setLastName("Patel");
@@ -13,12 +13,12 @@ public class UserDaoMock {
 			userEntity.setBannerId("B00843468");
 			userEntity.setBannerId("passwordTest");
 			return userEntity;
-		}else {
+		} else {
 			return userEntity;
 		}
 	}
 
-	public int saveUserMock(UserEntity user, String role) {
+	public int saveUserMock(User user, String role) {
 		return 0;
 	}
 }

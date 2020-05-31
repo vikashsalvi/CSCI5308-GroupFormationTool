@@ -6,8 +6,8 @@ public enum UserRole {
 	TA("TA"),
 	GUEST("GUEST"),
 	ADMIN("ADMIN");
-	
-	UserRole(String role) {
+
+    UserRole(String role) {
 		this.role=role;
 	}
 

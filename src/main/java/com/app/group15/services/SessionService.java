@@ -1,10 +1,10 @@
 package com.app.group15.services;
 
-import com.app.group15.persistence.dao.UserDao;
-import com.app.group15.persistence.dao.UserRoleDao;
-import com.app.group15.persistence.entity.UserEntity;
-import com.app.group15.persistence.injectors.UserDaoInjectorService;
-import com.app.group15.persistence.injectors.UserRoleDaoInjectorService;
+import com.app.group15.dao.UserDao;
+import com.app.group15.dao.UserRoleDao;
+import com.app.group15.injectors.UserDaoInjectorService;
+import com.app.group15.injectors.UserRoleDaoInjectorService;
+import com.app.group15.model.User;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Set;
@@ -15,16 +15,17 @@ public class SessionService {
 		return sessionBannerId != null;
 	}
 
-	public static UserEntity getSessionUser(HttpServletRequest request) {
+	public static User getSessionUser(HttpServletRequest request) {
 		UserDao userDao = new UserDaoInjectorService().getUserDao();
 		String sessionBannerId = (String) request.getSession().getAttribute("BANNER_ID_SESSION");
 		return userDao.getUserByBannerId(sessionBannerId);
 	}
 
-	public static void destroySession(HttpServletRequest request){
+	public static void destroySession(HttpServletRequest request) {
 		request.getSession().invalidate();
 	}
-	public static void setSession(HttpServletRequest request, String name, String value){
+
+	public static void setSession(HttpServletRequest request, String name, String value) {
 		request.getSession().setAttribute(name, value);
 	}
 
