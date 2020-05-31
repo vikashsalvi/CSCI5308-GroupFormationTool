@@ -46,12 +46,34 @@ public class UserDao implements Dao, UserRoleDaoInjectorInterface {
 		return user;
 	}
 
+	public UserEntity getUserByBannerId(String bannerId) {
+		String query = "SELECT * FROM table_users WHERE banner_id=?";
+		UserEntity user = new UserEntity();
+		try (PreparedStatement statement = connection.prepareStatement(query)) {
+			statement.setString(1, bannerId);
+			try (ResultSet result = statement.executeQuery()) {
+				System.out.println(result);
+				while (result.next()) {
+					user.setBannerId(result.getString("banner_id"));
+					user.setEmail(result.getString("email"));
+					user.setFirstName(result.getString("first_name"));
+					user.setLastName(result.getString("last_name"));
+					user.setId(result.getInt("id"));
+					user.setPassword(result.getString("password"));
+				}
+			}
+		} catch (Exception e) {
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		}
+		return user;
+	}
+
 	@Override
 	public ArrayList<UserEntity> getAll() {
 		String query = "SELECT * FROM table_users";
 		ArrayList<UserEntity> usersList = new ArrayList<>();
 		try (PreparedStatement statement = connection.prepareStatement(query);
-				ResultSet result = statement.executeQuery()) {
+			 ResultSet result = statement.executeQuery()) {
 			while (result.next()) {
 				UserEntity user = new UserEntity();
 				user.setBannerId(result.getString("banner_id"));

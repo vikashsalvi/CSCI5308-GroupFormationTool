@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -67,6 +69,30 @@ public class UserRoleDao implements Dao {
 
 	}
 
+	public Set<String> getRolesByBannerId(String bannerId) {
+		String query = "SELECT role FROM table_users tu\n" +
+			"JOIN table_user_role_mapper trm ON tu.id=trm.user_id\n" +
+			"JOIN table_user_roles tr ON trm.role_id=tr.id\n" +
+			"WHERE tu.banner_id=?";
+		Set<String> roles = new HashSet<String>();
+		try (PreparedStatement statement = connection.prepareStatement(query)) {
+			statement.setString(1, bannerId);
+			try (ResultSet result = statement.executeQuery()) {
+				while (result.next()) {
+					String role = result.getString("role");
+					roles.add(role);
+				}
+			}
+		} catch (Exception e) {
+
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		}
+
+		return roles;
+
+
+	}
+
 	public void addRole(int userId, String role) {
 		String query = "INSERT INTO table_user_role_mapper(user_id,role_id) VALUES(?,?)";
 		try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -99,9 +125,7 @@ public class UserRoleDao implements Dao {
 			statement.setInt(2, userId);
 			statement.executeUpdate();
 			connection.commit();
-		}
-
-		catch (Exception e) {
+		} catch (Exception e) {
 			try {
 				connection.rollback();
 			} catch (SQLException e1) {
@@ -118,7 +142,7 @@ public class UserRoleDao implements Dao {
 		String query = "SELECT * FROM table_user_roles";
 		ArrayList<UserRolesEntity> userRolesList = new ArrayList<UserRolesEntity>();
 		try (PreparedStatement statement = connection.prepareStatement(query);
-				ResultSet result = statement.executeQuery()) {
+			 ResultSet result = statement.executeQuery()) {
 
 			while (result.next()) {
 				UserRolesEntity role = new UserRolesEntity();
