@@ -22,24 +22,25 @@
 //
 //	public static void main(String[] args) {
 //
-//			
+//
 //		// TODO Auto-generated method stub
 //		UserRoleDao userRoleDao = new UserRoleDaoInjectorService().getUserRoleDao();
+//		System.out.println(userRoleDao.getRolesByBannerId("B00843468"));
 //		System.out.println(userRoleDao.get(2).getRole());
 //		System.out.println(userRoleDao.getRoleId(UserRole.ADMIN.getRole()));
 //		UserDao userDao=new UserDaoInjectorService().getUserDao();
 //		CourseDao courseDao=new CourseDaoInjectorService().getCourseDao();
-////		CourseInstructorMapperDao courseInstructorMapperDao=new CourseInstructorMapperDaoInjectorService().getCourseInstructorMapperDao();
-////		CourseStudentMapperDao courseStudentMapperDao=new CourseStudentMapperDaoInjectorService().getCourseStudentMapperDao();
-////		System.out.println(userDao.get(5).getFirstName());
-////		UserEntity user=new UserEntity();
-////		user.setBannerId("B10854477");
-////		user.setEmail("sdagxvc@gmail.com");
-////		user.setFirstName("rock2");
-////		user.setLastName("mi");
-////		user.setPassword("pass");
-//		//int userId=userDao.saveUser(user,UserRoleConstants.ROLE_GUEST);
-//		//System.out.println(userId);
+//		CourseInstructorMapperDao courseInstructorMapperDao=new CourseInstructorMapperDaoInjectorService().getCourseInstructorMapperDao();
+//		CourseStudentMapperDao courseStudentMapperDao=new CourseStudentMapperDaoInjectorService().getCourseStudentMapperDao();
+//		System.out.println(userDao.get(5).getFirstName());
+//		UserEntity user=new UserEntity();
+//		user.setBannerId("B10854477");
+//		user.setEmail("sdagxvc@gmail.com");
+//		user.setFirstName("rock2");
+//		user.setLastName("mi");
+//		user.setPassword("pass");
+//		int userId=userDao.saveUser(user,UserRoleConstants.ROLE_GUEST);
+//		System.out.println(userId);
 //	}
 //
 //}

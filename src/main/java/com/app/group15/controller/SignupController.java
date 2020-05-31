@@ -32,6 +32,7 @@ public class SignupController {
 
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
 	public ModelAndView signup(@ModelAttribute UserEntity userEntity, @RequestParam("cPassword") String cPassword) {
+//		TODO Add the following two lines to checkUserExists and change the argument type
 		UserDao userDao = new UserDaoInjectorService().getUserDao();
 		String bannerId = userEntity.getBannerId();
 		boolean response = signupService.checkUserExists(bannerId);

@@ -1,7 +1,6 @@
 package com.app.group15.config;
 
 import com.app.group15.persistence.DatabaseManager;
-import com.mysql.cj.jdbc.MysqlDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity
 //@EnableGlobalMethodSecurity(securedEnabled = true, proxyTargetClass = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-	MysqlDataSource dataSource=DatabaseManager.getDataSource();
+//	DatabaseManager.getDataSource();
 
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -34,7 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.csrf()
 			.disable()
 			.authorizeRequests()
-			.antMatchers("/", "/signup","/login").permitAll()
+			.antMatchers("/**").permitAll()
 				.anyRequest().authenticated();
 	}
 
