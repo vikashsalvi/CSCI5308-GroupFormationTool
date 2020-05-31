@@ -97,6 +97,7 @@ public class InstructorController {
                     modelAndView.addObject("success_ta_changed",false);
                 }
 
+                modelAndView.addObject("courseId",courseId);
                 modelAndView.addObject("userEntity", userEntity);
 
                 return modelAndView;

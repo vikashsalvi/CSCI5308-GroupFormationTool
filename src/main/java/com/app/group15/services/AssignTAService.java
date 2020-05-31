@@ -24,6 +24,7 @@ public class AssignTAService {
     public boolean performTAUpdate(String bannerId, String courseId)
     {
         if (validateBannerID(bannerId) && validateCourseID(courseId)) {
+            //TA info
             UserEntity userEntity= userDao.getUserByBannerId(bannerId);
             courseInstructorMapperDao.addTaToACourse(Integer.parseInt(courseId),userEntity.getId());
             return true;
