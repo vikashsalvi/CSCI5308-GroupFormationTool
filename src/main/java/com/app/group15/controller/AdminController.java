@@ -46,19 +46,21 @@ public class AdminController {
 	}
 
 	@RequestMapping(value = "/admin/courses", method = RequestMethod.GET)
-	public ModelAndView adminCourses(HttpServletRequest request) {
+	public ModelAndView adminCourses(HttpServletRequest request,
+									 @RequestParam(required = false, value = "feedback") String feedback) {
 		authorizationService.setAllowedRoles(new String[]{"ADMIN"});
 		ModelAndView modelAndView;
 		if (SessionService.isUserSignedIn(request)) {
 			if (authorizationService.isAuthorized(request)) {
 				UserEntity userEntity = SessionService.getSessionUser(request);
 				ArrayList<CourseEntity> courseEntities = CourseService.getCoursesList();
-				ArrayList<UserEntity> userEntitiesInstructors=CourseService.getAllCourseInstructors(courseEntities);
+				ArrayList<UserEntity> userEntitiesInstructors = CourseService.getAllCourseInstructors(courseEntities);
 				modelAndView = new ModelAndView();
 				modelAndView.setViewName("admin/courses");
 				modelAndView.addObject("userEntity", userEntity);
 				modelAndView.addObject("courseEntities", courseEntities);
 				modelAndView.addObject("instructorEntities", userEntitiesInstructors);
+				modelAndView.addObject("feedback", feedback);
 				return modelAndView;
 			} else {
 				System.out.println("----------------Unauthorized access for /admin/home !!!----------------");
@@ -81,7 +83,7 @@ public class AdminController {
 				UserEntity userEntity = SessionService.getSessionUser(request);
 				CourseEntity courseEntity = CourseService.getCourseDetails(id);
 				UserEntity courseInstructor = CourseService.getCourseInstructor(id);
-				ArrayList<UserEntity> allUsers= UserService.getAllUsers();
+				ArrayList<UserEntity> allUsers = UserService.getAllUsers();
 				modelAndView = new ModelAndView();
 				modelAndView.setViewName("admin/courseEdit");
 				modelAndView.addObject("userEntity", userEntity);
@@ -99,6 +101,7 @@ public class AdminController {
 		}
 		return modelAndView;
 	}
+
 	@RequestMapping(value = "/admin/courses/edit", method = RequestMethod.POST)
 	public ModelAndView adminCourseEdit(HttpServletRequest request,
 										@RequestParam(required = true, value = "courseId") int courseId,
@@ -107,16 +110,9 @@ public class AdminController {
 		ModelAndView modelAndView;
 		if (SessionService.isUserSignedIn(request)) {
 			if (authorizationService.isAuthorized(request)) {
-				UserEntity userEntity = SessionService.getSessionUser(request);
-				CourseEntity courseEntity = CourseService.getCourseDetails(courseId);
-				UserEntity courseInstructor = CourseService.getCourseInstructor(courseId);
-				ArrayList<UserEntity> allUsers= UserService.getAllUsers();
-				modelAndView = new ModelAndView();
-				modelAndView.setViewName("admin/courseEdit");
-				modelAndView.addObject("userEntity", userEntity);
-				modelAndView.addObject("courseEntity", courseEntity);
-				modelAndView.addObject("courseInstructor", courseInstructor);
-				modelAndView.addObject("allUsers", allUsers);
+				CourseService.addOrUpdateInstructor(courseId, instructorId);
+				UserService.updateUserRole(instructorId, "INSTRUCTOR");
+				modelAndView = new ModelAndView("redirect:/admin/courses?feedback=success");
 				return modelAndView;
 			} else {
 				System.out.println("----------------Unauthorized access for /admin/home !!!----------------");

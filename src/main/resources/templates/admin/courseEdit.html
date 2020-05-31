@@ -141,7 +141,7 @@
 													<input type="hidden" name="courseId" th:value="${courseEntity.getId()}">
 													<div class="form-row">
 														<label for="inst-if">Select Instructor:</label>
-														<select class="form-control" id="inst-if" name="instructor">
+														<select class="form-control" id="inst-if" name="instructorId">
 															<div th:each="user, iterstat: ${allUsers}">
 																<option th:if="${user.getId()==courseInstructor.getId()}" selected="selected"
 																				th:value="${user.getId()}">

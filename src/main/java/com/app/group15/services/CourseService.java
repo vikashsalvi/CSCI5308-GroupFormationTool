@@ -30,4 +30,7 @@ public class CourseService {
 		courseEntities.forEach(courseEntity -> userEntitiesInstructors.add(getCourseInstructor(courseEntity.getId())));
 		return userEntitiesInstructors;
 	}
+	public static void addOrUpdateInstructor(int courseId, int instructorId){
+		courseInstructorMapperDao.addInstructorToACourse(courseId, instructorId);
+	}
 }
