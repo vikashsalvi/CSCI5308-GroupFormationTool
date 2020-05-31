@@ -21,26 +21,27 @@ public class SessionService {
 		return userDao.getUserByBannerId(sessionBannerId);
 	}
 
-	public static void destroySession(HttpServletRequest request){
+	public static void destroySession(HttpServletRequest request) {
 		request.getSession().invalidate();
 	}
-	public static void setSession(HttpServletRequest request, String name, String value){
+
+	public static void setSession(HttpServletRequest request, String name, String value) {
 		request.getSession().setAttribute(name, value);
 	}
 
-	public static String getUserHome(HttpServletRequest request){
+	public static String getUserHome(HttpServletRequest request) {
 		String sessionBannerId = (String) request.getSession().getAttribute("BANNER_ID_SESSION");
 		UserRoleDao userRoleDao = new UserRoleDaoInjectorService().getUserRoleDao();
 		Set<String> roles = userRoleDao.getRolesByBannerId(sessionBannerId);
 		String redirect;
-		if (roles.contains("ADMIN")){
-			redirect= "redirect:/admin/home";
-		} else if (roles.contains("STUDENT")|| roles.contains("TA")){
-			redirect= "redirect:/student/home";
-		}else if (roles.contains("INSTRUCTOR")){
-			redirect= "redirect:/instructor/home";
+		if (roles.contains("ADMIN")) {
+			redirect = "/admin/home";
+		} else if (roles.contains("STUDENT") || roles.contains("TA")) {
+			redirect = "/student/home";
+		} else if (roles.contains("INSTRUCTOR")) {
+			redirect = "/instructor/home";
 		} else {
-			redirect= "redirect:/user/home";
+			redirect = "/user/home";
 		}
 		return redirect;
 	}
