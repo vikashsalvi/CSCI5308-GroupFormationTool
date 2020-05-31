@@ -34,11 +34,11 @@ public class SessionService {
 		Set<String> roles = userRoleDao.getRolesByBannerId(sessionBannerId);
 		String redirect;
 		if (roles.contains("ADMIN")){
-			redirect= "redirect:/admin/home";
+			redirect= "/admin/home";
 		} else if (roles.contains("STUDENT")|| roles.contains("TA")){
-			redirect= "redirect:/student/home";
+			redirect= "/student/home";
 		} else {
-			redirect= "redirect:/user/home";
+			redirect= "/user/home";
 		}
 		return redirect;
 	}

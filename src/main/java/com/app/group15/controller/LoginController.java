@@ -16,7 +16,7 @@ public class LoginController {
 		LoginService loginService = new LoginService();
 		if (loginService.validateLogin(bannerId, password)) {
 			SessionService.setSession(request, "BANNER_ID_SESSION", bannerId);
-			String redirect = SessionService.getUserHome(request);
+			String redirect = "redirect:"+SessionService.getUserHome(request);
 			return new ModelAndView(redirect);
 		} else {
 			ModelAndView modelAndView = new ModelAndView();
