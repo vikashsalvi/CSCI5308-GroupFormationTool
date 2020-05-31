@@ -1,11 +1,10 @@
 package com.app.group15.services;
 
-import com.app.group15.persistence.dao.UserRoleDao;
-import com.app.group15.persistence.injectors.UserRoleDaoInjectorService;
+import com.app.group15.dao.UserRoleDao;
+import com.app.group15.injectors.UserRoleDaoInjectorService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 

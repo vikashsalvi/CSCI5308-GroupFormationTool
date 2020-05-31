@@ -1,21 +1,21 @@
 package com.app.group15.services;
 
-import com.app.group15.persistence.dao.UserDao;
-import com.app.group15.persistence.entity.UserEntity;
-import com.app.group15.persistence.injectors.UserDaoInjectorService;
+import com.app.group15.dao.UserDao;
+import com.app.group15.injectors.UserDaoInjectorService;
+import com.app.group15.model.User;
 
 public class SignupService {
 	private UserDao userDao = new UserDaoInjectorService().getUserDao();
 
 	public boolean checkUserExists(String bannerId) {
-		UserEntity user = userDao.getUserByBannerId(bannerId);
+		User user = userDao.getUserByBannerId(bannerId);
 		boolean response;
 
 		response = user.getBannerId() != null;
 		return response;
 	}
 
-	public int createUser(UserEntity user, String role) {
+	public int createUser(User user, String role) {
 		return userDao.saveUser(user, role);
 	}
 }

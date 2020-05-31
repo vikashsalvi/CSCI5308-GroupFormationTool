@@ -1,11 +1,10 @@
 package com.app.group15.persistence;
 
-import java.sql.Connection;
+import com.mysql.cj.jdbc.MysqlDataSource;
 
+import java.sql.Connection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.mysql.cj.jdbc.MysqlDataSource;
 
 public class DatabaseManager {
 
@@ -17,17 +16,21 @@ public class DatabaseManager {
 
 	private final static Logger LOGGER = Logger.getLogger(DatabaseManager.class.getName());
 
+
 	public DatabaseManager() {
 
 	}
 
-	public static MysqlDataSource getDataSource() {
+	private static MysqlDataSource getDataSource() {
 
 		try {
-			dataSource = new MysqlDataSource();
-			dataSource.setUrl(JdbcProperties.getConnectionData().getProperty(URL));
-			dataSource.setPassword(JdbcProperties.getConnectionData().getProperty(PSWD));
-			dataSource.setUser(JdbcProperties.getConnectionData().getProperty(USER_NAME));
+
+			if (dataSource == null) {
+				dataSource = new MysqlDataSource();
+				dataSource.setUrl(JDBCProperties.getConnectionData().getProperty(URL));
+				dataSource.setPassword(JDBCProperties.getConnectionData().getProperty(PSWD));
+				dataSource.setUser(JDBCProperties.getConnectionData().getProperty(USER_NAME));
+			}
 
 		}
 
@@ -41,8 +44,9 @@ public class DatabaseManager {
 
 	public static Connection getConnection() {
 		try {
-			connection = getDataSource().getConnection();
-
+			if (connection == null) {
+				connection = getDataSource().getConnection();
+			}
 		}
 
 		catch (Exception e) {

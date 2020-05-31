@@ -1,9 +1,8 @@
 package com.app.group15.controller;
 
-import com.app.group15.persistence.dao.UserDao;
-import com.app.group15.persistence.entity.UserEntity;
-import com.app.group15.persistence.injectors.UserDaoInjectorService;
-import com.app.group15.services.AuthorizationService;
+import com.app.group15.dao.UserDao;
+import com.app.group15.injectors.UserDaoInjectorService;
+import com.app.group15.model.User;
 import com.app.group15.services.SignupService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -28,6 +27,7 @@ public class SignupController {
 		return "<h1>Admin</h1>";
 	}
 
+
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
 	public ModelAndView signup() {
 		ModelAndView modelAndView = new ModelAndView();
@@ -37,7 +37,7 @@ public class SignupController {
 	}
 
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
-	public ModelAndView signup(@ModelAttribute UserEntity userEntity, @RequestParam("cPassword") String cPassword) {
+	public ModelAndView signup(@ModelAttribute User userEntity, @RequestParam("cPassword") String cPassword) {
 //		TODO Add the following two lines to checkUserExists and change the argument type
 		UserDao userDao = new UserDaoInjectorService().getUserDao();
 		String bannerId = userEntity.getBannerId();

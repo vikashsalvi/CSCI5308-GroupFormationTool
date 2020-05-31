@@ -1,7 +1,7 @@
 package com.app.group15.controller;
 
-import com.app.group15.persistence.entity.CourseEntity;
-import com.app.group15.persistence.entity.UserEntity;
+import com.app.group15.model.Course;
+import com.app.group15.model.User;
 import com.app.group15.services.AuthorizationService;
 import com.app.group15.services.CourseService;
 import com.app.group15.services.SessionService;
@@ -23,8 +23,8 @@ public class GuestController {
 		ModelAndView modelAndView;
 		if (SessionService.isUserSignedIn(request)) {
 			if (authorizationService.isAuthorized(request)) {
-				UserEntity userEntity = SessionService.getSessionUser(request);
-				ArrayList<CourseEntity> courseEntities= CourseService.getCoursesList();
+				User userEntity = SessionService.getSessionUser(request);
+				ArrayList<Course> courseEntities = CourseService.getCoursesList();
 				modelAndView = new ModelAndView();
 				modelAndView.setViewName("home");
 				modelAndView.addObject("userEntity", userEntity);
