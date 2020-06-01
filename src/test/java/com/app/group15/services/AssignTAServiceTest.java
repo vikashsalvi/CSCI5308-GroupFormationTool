@@ -1,9 +1,8 @@
 package com.app.group15.services;
 
-import com.app.group15.persistence.dao.CourseDao;
-import com.app.group15.persistence.dao.CourseDaoMock;
-import com.app.group15.persistence.dao.UserDaoMock;
+import com.app.group15.persistence.dao.*;
 import com.app.group15.persistence.entity.CourseEntity;
+import com.app.group15.persistence.entity.CourseInstructorMapperEntity;
 import com.app.group15.persistence.entity.UserEntity;
 import org.junit.jupiter.api.Test;
 
@@ -13,10 +12,15 @@ class AssignTAServiceTest {
 
     private UserDaoMock userDaoMock = new UserDaoMock();
     private CourseDaoMock courseDaoMock = new CourseDaoMock();
+    private CourseInstructorMapperDaoMock courseInstructorMapperDaoMock = new CourseInstructorMapperDaoMock();
 
     @Test
     void performTAUpdate() {
-
+        CourseInstructorMapperEntity courseInstructorMapperEntity = courseInstructorMapperDaoMock.getCourseInstructorMapperEntity(6);
+        // 0 means TA not assigned
+        assertEquals(courseInstructorMapperEntity.getTaId(), 0);
+        courseInstructorMapperDaoMock.setTA(6);
+        assertNotNull(courseInstructorMapperEntity.getTaId());
     }
 
     @Test
@@ -29,6 +33,6 @@ class AssignTAServiceTest {
     @Test
     void validateCourseID() {
         CourseEntity courseEntity = courseDaoMock.getCourseByCourseIdMock("6");
-        assertEquals(courseEntity.getName(),"CSCI5");
+        assertEquals(courseEntity.getName(),"CSCI5409");
     }
 }
