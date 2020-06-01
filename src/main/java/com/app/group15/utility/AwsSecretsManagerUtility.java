@@ -28,12 +28,12 @@ public class AwsSecretsManagerUtility {
 	
 	private static DatabaseDetails databaseDetails;
 	private static String getKeyFromEnvProperties() {
-		if(JDBCProperties.getConnectionData().get("app.env").equals(Environments.DEV.getEnvironment())) {
+		if(JDBCProperties.getConnectionData().get("spring.profiles.active").equals(Environments.DEV.getEnvironment())) {
 			return AwsSecretKey.DEVINT.getKey();
-		} else if(JDBCProperties.getConnectionData().get("app.env").equals(Environments.TEST.getEnvironment())) {
+		} else if(JDBCProperties.getConnectionData().get("spring.profiles.active").equals(Environments.TEST.getEnvironment())) {
 			return AwsSecretKey.TEST.getKey();
 		}
-		else if(JDBCProperties.getConnectionData().get("app.env").equals(Environments.PROD.getEnvironment())) {
+		else if(JDBCProperties.getConnectionData().get("spring.profiles.active").equals(Environments.PROD.getEnvironment())) {
 			return AwsSecretKey.PROD.getKey();
 		}
 		return null;
