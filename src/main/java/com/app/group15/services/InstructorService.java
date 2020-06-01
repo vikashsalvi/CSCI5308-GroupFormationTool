@@ -2,13 +2,9 @@ package com.app.group15.services;
 
 import com.app.group15.persistence.dao.CourseInstructorMapperDao;
 import com.app.group15.persistence.entity.CourseEntity;
-import com.app.group15.persistence.entity.CourseInstructorMapperEntity;
 import com.app.group15.persistence.entity.UserEntity;
 import com.app.group15.persistence.injectors.CourseInstructorMapperDaoInjectorService;
-
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.TreeSet;
 
 public class InstructorService {
 

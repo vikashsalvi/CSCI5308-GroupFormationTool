@@ -42,19 +42,11 @@ public class AssignTAService {
     }
 
     public boolean validateCourseID(String courseId) {
-        if (courseDao.get(Integer.parseInt(courseId)) != null)
-        {
+        if (courseDao.get(Integer.parseInt(courseId)) != null) {
             return true;
         }else {
             return false;
         }
     }
-
-//    public boolean validateTAisNotTakingSameSubject(String bannerId)
-//    {
-//        return
-//    }
-
-
 
 }

@@ -101,7 +101,7 @@
                 <div class="row">
                     <div class="card">
                         <div class="card-header">
-                            <h1 class="h4 text-gray-800">Selecting TA for <span th:text='${ courseId }'></span></h1>
+                            <h1 class="h4 text-gray-800">Selecting TA for <span th:text='${ courseEntity.getName() }'></span></h1>
                         </div>
                         <div class="card-body w-100">
                             <div th:if="${error_invalid_banner}" class="alert alert-danger" role="alert">

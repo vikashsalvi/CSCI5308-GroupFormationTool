@@ -1,10 +1,12 @@
 package com.app.group15.controller;
 
+import com.app.group15.persistence.dao.CourseDao;
 import com.app.group15.persistence.dao.UserDao;
 import com.app.group15.persistence.entity.CourseEntity;
 import com.app.group15.persistence.entity.CourseInstructorMapperEntity;
 import com.app.group15.persistence.entity.CourseStudentMapperEntity;
 import com.app.group15.persistence.entity.UserEntity;
+import com.app.group15.persistence.injectors.CourseDaoInjectorService;
 import com.app.group15.persistence.injectors.UserDaoInjectorService;
 import com.app.group15.services.*;
 import org.springframework.stereotype.Controller;
@@ -20,29 +22,32 @@ import java.util.ArrayList;
 public class InstructorController {
     private AuthorizationService authorizationService = new AuthorizationService();
 
-
     @RequestMapping(value = "/instructor/home", method = RequestMethod.GET)
     public ModelAndView adminHome(HttpServletRequest request) {
         authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
         ModelAndView modelAndView;
         if (SessionService.isUserSignedIn(request)) {
             if (authorizationService.isAuthorized(request)) {
+
                 InstructorService instructorService = new InstructorService();
+
                 UserEntity userEntity = SessionService.getSessionUser(request);
                 ArrayList<CourseEntity> courseEntities = instructorService.getCourseOfInstructor((userEntity.getId()));
                 ArrayList<UserEntity> userEntitiesTA=InstructorService.getAllCourseTA(courseEntities);
+
                 modelAndView = new ModelAndView();
                 modelAndView.setViewName("instructor/home");
                 modelAndView.addObject("userEntity", userEntity);
                 modelAndView.addObject("courseEntities", courseEntities);
                 modelAndView.addObject("userEntitiesTA", userEntitiesTA);
+
                 return modelAndView;
             } else {
-                System.out.println("----------------Unauthorized access for /instructor/home !!!----------------");
+                //Unauthorized access for /instructor/home
                 modelAndView = new ModelAndView("redirect:/login");
             }
         } else {
-            System.out.println("----------------User not logged in !!!----------------");
+            // User not logged in !!!
             modelAndView = new ModelAndView("redirect:/login");
         }
         return modelAndView;
@@ -54,20 +59,24 @@ public class InstructorController {
         ModelAndView modelAndView;
         if (SessionService.isUserSignedIn(request)) {
             if (authorizationService.isAuthorized(request)) {
+
                 UserEntity userEntity = SessionService.getSessionUser(request);
-                ArrayList<CourseEntity> courseEntities = CourseService.getCoursesList();
+                CourseDao courseDao = new CourseDaoInjectorService().getCourseDao();
+                CourseEntity courseEntity =  courseDao.get(Integer.parseInt(courseId));
+
                 modelAndView = new ModelAndView();
                 modelAndView.setViewName("instructor/ta-assignment");
                 modelAndView.addObject("courseId", courseId);
                 modelAndView.addObject("userEntity", userEntity);
-                modelAndView.addObject("courseEntities", courseEntities);
+                modelAndView.addObject("courseEntity", courseEntity);
+
                 return modelAndView;
             } else {
-                System.out.println("----------------Unauthorized access for instructor/assign-ta !!!----------------");
+                //Unauthorized access for instructor/assign-ta
                 modelAndView = new ModelAndView("redirect:/login");
             }
         } else {
-            System.out.println("----------------User not logged in !!!----------------");
+            // User not logged in
             modelAndView = new ModelAndView("redirect:/login");
         }
         return modelAndView;
@@ -81,6 +90,7 @@ public class InstructorController {
         AssignTAService assignTAService = new AssignTAService();
         if (SessionService.isUserSignedIn(request)) {
             if (authorizationService.isAuthorized(request)) {
+
                 UserEntity userEntity = SessionService.getSessionUser(request);
                 InstructorService instructorService = new InstructorService();
                 ArrayList<CourseEntity> courseEntities = instructorService.getCourseOfInstructor((userEntity.getId()));
@@ -110,11 +120,11 @@ public class InstructorController {
 
                 return modelAndView;
             } else {
-                System.out.println("----------------Unauthorized access for instructor/assign-ta !!!----------------");
+                //Unauthorized access for instructor/assign-ta
                 modelAndView = new ModelAndView("redirect:/login");
             }
         } else {
-            System.out.println("----------------User not logged in !!!----------------");
+            // User not logged in !
             modelAndView = new ModelAndView("redirect:/login");
         }
         return modelAndView;
