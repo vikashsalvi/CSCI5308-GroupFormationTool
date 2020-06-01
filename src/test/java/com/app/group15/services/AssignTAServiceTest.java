@@ -40,5 +40,7 @@ class AssignTAServiceTest {
     @Test
     void checkIntructorPermissionTest() {
 
+       CourseInstructorMapperEntity courseInstructorMapperEntity = courseInstructorMapperDaoMock.getCourseInstructorMapperEntity(6);
+       assertEquals(courseInstructorMapperEntity.getInstructorId(), 17);
     }
 }
