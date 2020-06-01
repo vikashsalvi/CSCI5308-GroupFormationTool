@@ -21,12 +21,12 @@ public class AssignTAService {
     private CourseInstructorMapperDao courseInstructorMapperDao = new CourseInstructorMapperDaoInjectorService().getCourseInstructorMapperDao();
 
 
-    public boolean performTAUpdate(String bannerId, String courseId)
+    public boolean performTAUpdate(String bannerId, int courseId)
     {
+        System.out.println(bannerId + courseId);
         if (validateBannerID(bannerId) && validateCourseID(courseId)) {
-            //TA info
             UserEntity userEntity= userDao.getUserByBannerId(bannerId);
-            courseInstructorMapperDao.addTaToACourse(Integer.parseInt(courseId),userEntity.getId());
+            courseInstructorMapperDao.addTaToACourse(courseId,userEntity.getId());
             return true;
         }else {
             return false;
@@ -41,8 +41,8 @@ public class AssignTAService {
             return false; }
     }
 
-    public boolean validateCourseID(String courseId) {
-        if (courseDao.get(Integer.parseInt(courseId)) != null) {
+    public boolean validateCourseID(int courseId) {
+        if (courseDao.get(courseId) != null) {
             return true;
         }else {
             return false;

@@ -84,7 +84,7 @@ public class InstructorController {
 
 
     @RequestMapping(value = "/instructor/assign-ta", method = RequestMethod.POST)
-    public ModelAndView assignTAPOST(HttpServletRequest request, @RequestParam(required = false, value = "bannerId") String bannerId, @RequestParam(required = false, value = "courseId") String courseId) {
+    public ModelAndView assignTAPOST(HttpServletRequest request, @RequestParam(required = true, value = "bannerId") String bannerId, @RequestParam(required = true, value = "courseId") int courseId) {
         authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
         ModelAndView modelAndView;
         AssignTAService assignTAService = new AssignTAService();
@@ -95,30 +95,29 @@ public class InstructorController {
                 InstructorService instructorService = new InstructorService();
                 ArrayList<CourseEntity> courseEntities = instructorService.getCourseOfInstructor((userEntity.getId()));
                 ArrayList<UserEntity> userEntitiesTA=InstructorService.getAllCourseTA(courseEntities);
-
+                CourseDao courseDao = new CourseDaoInjectorService().getCourseDao();
+                CourseEntity courseEntity =  courseDao.get(courseId);
                 modelAndView = new ModelAndView();
-                modelAndView.setViewName("instructor/ta-assignment");
 
                 if (assignTAService.validateBannerID(bannerId)) {
-                    modelAndView.addObject("error_invalid_banner", false);
-                } else {
-                    modelAndView.addObject("error_invalid_banner", true);
+                    modelAndView.addObject("error", false);
+                    if (assignTAService.performTAUpdate(bannerId,courseId))
+                    {
+                        modelAndView.setViewName("redirect:/instructor/home");
+                        return modelAndView;
+                    }
+                }
+                else {
+                    modelAndView.addObject("error", true);
                 }
 
-                if (assignTAService.performTAUpdate(bannerId, courseId)) {
-                    modelAndView.addObject("success_ta_changed", true);
-                    modelAndView.setViewName("instructor/home");
-                } else {
-                    modelAndView.addObject("success_ta_changed", false);
-
-                }
-
+                modelAndView.setViewName("instructor/ta-assignment");
                 modelAndView.addObject("courseId", courseId);
                 modelAndView.addObject("userEntity", userEntity);
-                modelAndView.addObject("courseEntities", courseEntities);
+                modelAndView.addObject("courseEntity", courseEntity);
                 modelAndView.addObject("userEntitiesTA", userEntitiesTA);
-
                 return modelAndView;
+
             } else {
                 //Unauthorized access for instructor/assign-ta
                 modelAndView = new ModelAndView("redirect:/login");

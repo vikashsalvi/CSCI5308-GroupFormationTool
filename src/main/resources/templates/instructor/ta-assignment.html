@@ -104,14 +104,9 @@
                             <h1 class="h4 text-gray-800">Selecting TA for <span th:text='${ courseEntity.getName() }'></span></h1>
                         </div>
                         <div class="card-body w-100">
-                            <div th:if="${error_invalid_banner}" class="alert alert-danger" role="alert">
+                            <div th:if="${ error }" class="alert alert-danger" role="alert">
                                 <strong>Oh snap!</strong> Invalid Banner ID
                             </div>
-
-                            <div th:if="${success_ta_changed}" class="alert alert-success" role="alert">
-                                <strong>Heads up!</strong> TA successfully assigned
-                            </div>
-
                             <form action="/instructor/assign-ta"  method="POST">
                                 <div class="form-group">
                                     <label for="bannerId">Banner ID</label>
