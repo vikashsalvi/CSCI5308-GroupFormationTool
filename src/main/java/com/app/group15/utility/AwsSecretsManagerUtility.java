@@ -16,10 +16,11 @@ import com.amazonaws.services.secretsmanager.model.InternalServiceErrorException
 import com.amazonaws.services.secretsmanager.model.InvalidParameterException;
 import com.amazonaws.services.secretsmanager.model.InvalidRequestException;
 import com.amazonaws.services.secretsmanager.model.ResourceNotFoundException;
+import com.app.group15.config.AppConfig;
 import com.app.group15.model.DatabaseDetails;
 import com.app.group15.persistence.AwsSecretKey;
 import com.app.group15.persistence.Environments;
-import com.app.group15.persistence.JDBCProperties;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,12 +29,13 @@ public class AwsSecretsManagerUtility {
 	
 	private static DatabaseDetails databaseDetails;
 	private static String getKeyFromEnvProperties() {
-		if(JDBCProperties.getConnectionData().get("spring.profiles.active").equals(Environments.DEV.getEnvironment())) {
+		
+		if(AppConfig.getSingletonAppConfig().getProperties().get("spring.profiles.active").equals(Environments.DEV.getEnvironment())) {
 			return AwsSecretKey.DEVINT.getKey();
-		} else if(JDBCProperties.getConnectionData().get("spring.profiles.active").equals(Environments.TEST.getEnvironment())) {
+		} else if(AppConfig.getSingletonAppConfig().getProperties().get("spring.profiles.active").equals(Environments.TEST.getEnvironment())) {
 			return AwsSecretKey.TEST.getKey();
 		}
-		else if(JDBCProperties.getConnectionData().get("spring.profiles.active").equals(Environments.PROD.getEnvironment())) {
+		else if(AppConfig.getSingletonAppConfig().getProperties().get("spring.profiles.active").equals(Environments.PROD.getEnvironment())) {
 			return AwsSecretKey.PROD.getKey();
 		}
 		return null;

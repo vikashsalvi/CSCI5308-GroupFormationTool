@@ -4,6 +4,9 @@ package com.app.group15.dao;
 import com.app.group15.injectors.UserRoleDaoInjectorInterface;
 import com.app.group15.model.Persistence;
 import com.app.group15.model.User;
+import com.app.group15.persistence.DatabaseManager;
+
+import com.app.group15.utility.GroupFormationToolLogger;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -12,12 +15,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 @SuppressWarnings("rawtypes")
 public class UserDao implements Dao, UserRoleDaoInjectorInterface {
-	private final static Logger LOGGER = Logger.getLogger(UserDao.class.getName());
-	private Connection connection;
+	
 	private UserRoleDao userRoleDao;
 
 	public UserDao() {
@@ -28,7 +30,9 @@ public class UserDao implements Dao, UserRoleDaoInjectorInterface {
 	public User get(int id) {
 		String query = "SELECT * FROM table_users WHERE id=?";
 		User user = new User();
-		try (PreparedStatement statement = connection.prepareStatement(query)) {
+		try (Connection connection = DatabaseManager
+				.getConnection();
+				PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setInt(1, id);
 			try (ResultSet result = statement.executeQuery()) {
 				while (result.next()) {
@@ -41,7 +45,7 @@ public class UserDao implements Dao, UserRoleDaoInjectorInterface {
 				}
 			}
 		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return user;
 	}
@@ -49,7 +53,8 @@ public class UserDao implements Dao, UserRoleDaoInjectorInterface {
 	public User getUserByBannerId(String bannerId) {
 		String query = "SELECT * FROM table_users WHERE banner_id=?";
 		User user = new User();
-		try (PreparedStatement statement = connection.prepareStatement(query)) {
+		try (Connection connection=DatabaseManager.getConnection();
+				PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setString(1, bannerId);
 			try (ResultSet result = statement.executeQuery()) {
 				System.out.println(result);
@@ -63,7 +68,7 @@ public class UserDao implements Dao, UserRoleDaoInjectorInterface {
 				}
 			}
 		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return user;
 	}
@@ -72,7 +77,8 @@ public class UserDao implements Dao, UserRoleDaoInjectorInterface {
 	public ArrayList<User> getAll() {
 		String query = "SELECT * FROM table_users";
 		ArrayList<User> usersList = new ArrayList<>();
-		try (PreparedStatement statement = connection.prepareStatement(query);
+		try (Connection connection=DatabaseManager.getConnection();
+			PreparedStatement statement = connection.prepareStatement(query);
 			 ResultSet result = statement.executeQuery()) {
 			while (result.next()) {
 				User user = new User();
@@ -85,16 +91,12 @@ public class UserDao implements Dao, UserRoleDaoInjectorInterface {
 			}
 
 		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return usersList;
 	}
 
-	@Override
-	public void injectConnection(Connection connection) {
-		this.connection = connection;
-
-	}
+	
 
 	@Override
 	public int save(Persistence user) {
@@ -105,41 +107,50 @@ public class UserDao implements Dao, UserRoleDaoInjectorInterface {
 	public int saveUser(User user, String role) {
 		String query = "INSERT INTO table_users(first_name,last_name,email, banner_id,password) " + "VALUES(?,?,?,?,?)";
 		int userId = 0;
-		try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-			connection.setAutoCommit(false);
-			statement.setString(1, user.getFirstName());
-			statement.setString(2, user.getLastName());
-			statement.setString(3, user.getEmail());
-			statement.setString(4, user.getBannerId());
-			statement.setString(5, user.getPassword());
-			statement.executeUpdate();
-			connection.commit();
-			try (ResultSet result = statement.getGeneratedKeys()) {
+		try(Connection connection=DatabaseManager.getConnection()){
+			try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+					connection.setAutoCommit(false);
+					statement.setString(1, user.getFirstName());
+					statement.setString(2, user.getLastName());
+					statement.setString(3, user.getEmail());
+					statement.setString(4, user.getBannerId());
+					statement.setString(5, user.getPassword());
+					statement.executeUpdate();
+					connection.commit();
+					try (ResultSet result = statement.getGeneratedKeys()) {
 
-				if (result.first()) {
+						if (result.first()) {
 
-					userId = result.getInt(1);
+							userId = result.getInt(1);
+						}
+					}
+					userRoleDao.addRole(userId, role);
+
+				} catch (Exception e) {
+					try {
+						connection.rollback();
+					} catch (SQLException e1) {
+						GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+					}
+					GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 				}
-			}
-			userRoleDao.addRole(userId, role);
 
-		} catch (Exception e) {
-			try {
-				connection.rollback();
-			} catch (SQLException e1) {
-				LOGGER.log(Level.SEVERE, e.getMessage(), e);
-			}
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+				
+			
+		} catch (SQLException e) {
+			
+			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		}
-
 		return userId;
+		
 	}
 
 	@Override
 	public void update(Persistence user, int id) {
 		User userEntity = (User) user;
 		String query = "UPDATE table_users SET first_name=?,last_name=?,email=? WHERE id=?";
-		try (PreparedStatement statement = connection.prepareStatement(query)) {
+		try (Connection connection=DatabaseManager.getConnection();
+			PreparedStatement statement = connection.prepareStatement(query)) {
 			connection.setAutoCommit(false);
 			statement.setString(1, userEntity.getFirstName());
 			statement.setString(2, userEntity.getLastName());
@@ -148,47 +159,57 @@ public class UserDao implements Dao, UserRoleDaoInjectorInterface {
 			statement.executeUpdate();
 			connection.commit();
 		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		}
 
 	}
 
 	public void updateUserRole(int userId, String role) {
 		String query = "UPDATE table_user_role_mapper SET role_id=? WHERE user_id=?";
-		try (PreparedStatement statement = connection.prepareStatement(query)) {
-			connection.setAutoCommit(false);
-			statement.setInt(1, userRoleDao.getRoleId(role));
-			statement.setInt(2, userId);
-			statement.executeUpdate();
-			connection.commit();
+		try(Connection connection=DatabaseManager.getConnection()){
+			try (PreparedStatement statement = connection.prepareStatement(query)) {
+				connection.setAutoCommit(false);
+				statement.setInt(1, userRoleDao.getRoleId(role));
+				statement.setInt(2, userId);
+				statement.executeUpdate();
+				connection.commit();
 
-		} catch (Exception e) {
-			try {
-				connection.rollback();
-			} catch (SQLException e1) {
-				LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			} catch (Exception e) {
+				try {
+					connection.rollback();
+				} catch (SQLException e1) {
+					GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+				}
+				GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 			}
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		} catch (SQLException e) {
+			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		}
+		
 	}
 
 	public boolean updateUserPassword(int userId, String password) {
 		String query = "UPDATE table_users SET password=? WHERE id=?";
-		try (PreparedStatement statement = connection.prepareStatement(query)) {
-			connection.setAutoCommit(false);
-			statement.setString(1, password);
-			statement.setInt(2, userId);
-			statement.executeUpdate();
-			connection.commit();
-			return true;
-		} catch (Exception e) {
-			try {
-				connection.rollback();
-			} catch (SQLException e1) {
-				LOGGER.log(Level.SEVERE, e.getMessage(), e);
-			}
+		try(Connection connection=DatabaseManager.getConnection()){
+			try (PreparedStatement statement = connection.prepareStatement(query)) {
+				connection.setAutoCommit(false);
+				statement.setString(1, password);
+				statement.setInt(2, userId);
+				statement.executeUpdate();
+				connection.commit();
+				return true;
+			} catch (Exception e) {
+				try {
+					connection.rollback();
+				} catch (SQLException e1) {
+					GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+				}
 
+			}
+		} catch (SQLException e) {
+			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		}
+		
 		return false;
 
 	}
@@ -206,7 +227,8 @@ public class UserDao implements Dao, UserRoleDaoInjectorInterface {
 	public User getUserByEmailId(String emailId) {
 		String query = "SELECT * FROM table_users WHERE email like ?";
 		User user = new User();
-		try (PreparedStatement statement = connection.prepareStatement(query)) {
+		try (Connection connection=DatabaseManager.getConnection();
+				PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setString(1, emailId);
 			try (ResultSet result = statement.executeQuery()) {
 				while (result.next()) {
@@ -218,7 +240,7 @@ public class UserDao implements Dao, UserRoleDaoInjectorInterface {
 				}
 			}
 		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return user;
 	}
@@ -230,29 +252,37 @@ public class UserDao implements Dao, UserRoleDaoInjectorInterface {
 		SimpleDateFormat sdf =
 				new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String currentDateTime = sdf.format(date);
-		try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-			connection.setAutoCommit(false);
-			statement.setInt(1, id);
-			statement.setString(2, token);
-			statement.setString(3, currentDateTime);
-			statement.executeUpdate();
-			connection.commit();
-		} catch (Exception e) {
-			try {
-				connection.rollback();
-			} catch (SQLException e1) {
-				LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		try(Connection connection=DatabaseManager.getConnection()){
+			try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+				connection.setAutoCommit(false);
+				statement.setInt(1, id);
+				statement.setString(2, token);
+				statement.setString(3, currentDateTime);
+				statement.executeUpdate();
+				connection.commit();
+			} catch (Exception e) {
+				try {
+					connection.rollback();
+				} catch (SQLException e1) {
+					GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+				}
+				GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 			}
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			
+			
+		} catch (SQLException e) {
+			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return true;
+		
 	}
 
 	public boolean checkIfTokenAlreadyExists(int id) {
 		boolean exist = false;
 		String query = "SELECT id FROM table_forgot_password_tokens WHERE id=?";
 
-		try (PreparedStatement statement = connection.prepareStatement(query)) {
+		try (Connection connection=DatabaseManager.getConnection();
+			PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setInt(1, id);
 			try (ResultSet result = statement.executeQuery()) {
 				while (result.next()) {
@@ -262,37 +292,40 @@ public class UserDao implements Dao, UserRoleDaoInjectorInterface {
 				}
 			}
 		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return exist;
 	}
 
 	public boolean deleteForgotPasswordToken(int id) {
 		String query = "delete from table_forgot_password_tokens where id=?";
-		try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-			connection.setAutoCommit(false);
-			statement.setInt(1, id);
-			statement.executeUpdate();
-			connection.commit();
-			return true;
-		} catch (Exception e) {
-			try {
-				connection.rollback();
-			} catch (SQLException e1) {
-				LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		try(Connection connection=DatabaseManager.getConnection()){
+			try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+				connection.setAutoCommit(false);
+				statement.setInt(1, id);
+				statement.executeUpdate();
+				connection.commit();
+				return true;
+			} catch (Exception e) {
+				try {
+					connection.rollback();
+				} catch (SQLException e1) {
+					GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+				}
+				GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 			}
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		} catch (SQLException e) {
+			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		}
+		
 		return false;
 	}
 
 	public Map<String, String> getUserFromToken(String token) {
 		String query = "SELECT * FROM table_forgot_password_tokens WHERE token like ?";
-		String dateTime = "";
 		HashMap<String, String> row = new HashMap<>();
-		try (PreparedStatement statement = connection.prepareStatement(query)) {
-
-
+		try ( Connection connection=DatabaseManager.getConnection();
+				PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setString(1, token);
 			try (ResultSet result = statement.executeQuery()) {
 				while (result.next()) {
@@ -301,7 +334,7 @@ public class UserDao implements Dao, UserRoleDaoInjectorInterface {
 				}
 			}
 		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return row;
 	}
