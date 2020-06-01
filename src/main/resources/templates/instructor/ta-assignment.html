@@ -27,19 +27,12 @@
         <div class="sidebar-heading">Home</div>
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="/instructor/home">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Dashboard</span></a>
         </li>
         <!-- Divider -->
         <hr class="sidebar-divider">
-        <div class="sidebar-heading"><i class="fas fa-book"></i><sub><i class="fas fa-cog"></i></sub>Course Management</div>
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="fas fa-fw fa-book-open"></i>
-                <span>Courses</span></a>
-        </li>
-
         <hr class="sidebar-divider">
         <li class="nav-item">
             <a class="nav-link" href="/logout">
@@ -119,10 +112,11 @@
                                 <strong>Heads up!</strong> TA successfully assigned
                             </div>
 
-                            <form th:action='${"/instructor/assign-ta?courseId="+ courseId}'  method="POST">
+                            <form action="/instructor/assign-ta"  method="POST">
                                 <div class="form-group">
                                     <label for="bannerId">Banner ID</label>
                                     <input type="text" class="form-control" id="bannerId" placeholder="B00XXXXXX" name="bannerId">
+                                    <input type="hidden" id="courseId" name="courseId" th:value="${courseId}">
                                 </div>
 
                                 <button type="submit" class="btn btn-success">Assign TA</button>

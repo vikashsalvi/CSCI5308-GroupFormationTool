@@ -1,11 +1,12 @@
 package com.app.group15.controller;
 
+import com.app.group15.persistence.dao.UserDao;
 import com.app.group15.persistence.entity.CourseEntity;
+import com.app.group15.persistence.entity.CourseInstructorMapperEntity;
+import com.app.group15.persistence.entity.CourseStudentMapperEntity;
 import com.app.group15.persistence.entity.UserEntity;
-import com.app.group15.services.AssignTAService;
-import com.app.group15.services.AuthorizationService;
-import com.app.group15.services.CourseService;
-import com.app.group15.services.SessionService;
+import com.app.group15.persistence.injectors.UserDaoInjectorService;
+import com.app.group15.services.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,12 +27,15 @@ public class InstructorController {
         ModelAndView modelAndView;
         if (SessionService.isUserSignedIn(request)) {
             if (authorizationService.isAuthorized(request)) {
+                InstructorService instructorService = new InstructorService();
                 UserEntity userEntity = SessionService.getSessionUser(request);
-                ArrayList<CourseEntity> courseEntities= CourseService.getCoursesList();
+                ArrayList<CourseEntity> courseEntities = instructorService.getCourseOfInstructor((userEntity.getId()));
+                ArrayList<UserEntity> userEntitiesTA=InstructorService.getAllCourseTA(courseEntities);
                 modelAndView = new ModelAndView();
                 modelAndView.setViewName("instructor/home");
                 modelAndView.addObject("userEntity", userEntity);
                 modelAndView.addObject("courseEntities", courseEntities);
+                modelAndView.addObject("userEntitiesTA", userEntitiesTA);
                 return modelAndView;
             } else {
                 System.out.println("----------------Unauthorized access for /instructor/home !!!----------------");
@@ -45,13 +49,13 @@ public class InstructorController {
     }
 
     @RequestMapping(value = "/instructor/assign-ta", method = RequestMethod.GET)
-    public ModelAndView assignTAGET(HttpServletRequest request, @RequestParam  String courseId) {
+    public ModelAndView assignTAGET(HttpServletRequest request, @RequestParam String courseId) {
         authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
         ModelAndView modelAndView;
         if (SessionService.isUserSignedIn(request)) {
             if (authorizationService.isAuthorized(request)) {
                 UserEntity userEntity = SessionService.getSessionUser(request);
-                ArrayList<CourseEntity> courseEntities= CourseService.getCoursesList();
+                ArrayList<CourseEntity> courseEntities = CourseService.getCoursesList();
                 modelAndView = new ModelAndView();
                 modelAndView.setViewName("instructor/ta-assignment");
                 modelAndView.addObject("courseId", courseId);
@@ -71,34 +75,38 @@ public class InstructorController {
 
 
     @RequestMapping(value = "/instructor/assign-ta", method = RequestMethod.POST)
-    public ModelAndView assignTAPOST(HttpServletRequest request, @RequestParam(required = false, value = "bannerId") String bannerId, @RequestParam  String courseId) {
+    public ModelAndView assignTAPOST(HttpServletRequest request, @RequestParam(required = false, value = "bannerId") String bannerId, @RequestParam(required = false, value = "courseId") String courseId) {
         authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
         ModelAndView modelAndView;
         AssignTAService assignTAService = new AssignTAService();
         if (SessionService.isUserSignedIn(request)) {
             if (authorizationService.isAuthorized(request)) {
                 UserEntity userEntity = SessionService.getSessionUser(request);
+                InstructorService instructorService = new InstructorService();
+                ArrayList<CourseEntity> courseEntities = instructorService.getCourseOfInstructor((userEntity.getId()));
+                ArrayList<UserEntity> userEntitiesTA=InstructorService.getAllCourseTA(courseEntities);
 
                 modelAndView = new ModelAndView();
                 modelAndView.setViewName("instructor/ta-assignment");
 
-                if (assignTAService.validateBannerID(bannerId))
-                {
-                    modelAndView.addObject("error_invalid_banner",false);
-
-                }else {
-                    modelAndView.addObject("error_invalid_banner",true);
+                if (assignTAService.validateBannerID(bannerId)) {
+                    modelAndView.addObject("error_invalid_banner", false);
+                } else {
+                    modelAndView.addObject("error_invalid_banner", true);
                 }
 
-                if (assignTAService.performTAUpdate(bannerId,courseId))
-                {
-                    modelAndView.addObject("success_ta_changed",true);
-                }else {
-                    modelAndView.addObject("success_ta_changed",false);
+                if (assignTAService.performTAUpdate(bannerId, courseId)) {
+                    modelAndView.addObject("success_ta_changed", true);
+                    modelAndView.setViewName("instructor/home");
+                } else {
+                    modelAndView.addObject("success_ta_changed", false);
+
                 }
 
-                modelAndView.addObject("courseId",courseId);
+                modelAndView.addObject("courseId", courseId);
                 modelAndView.addObject("userEntity", userEntity);
+                modelAndView.addObject("courseEntities", courseEntities);
+                modelAndView.addObject("userEntitiesTA", userEntitiesTA);
 
                 return modelAndView;
             } else {
@@ -111,9 +119,6 @@ public class InstructorController {
         }
         return modelAndView;
     }
-
-
-
 
 
 }

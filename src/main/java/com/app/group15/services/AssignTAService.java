@@ -34,9 +34,7 @@ public class AssignTAService {
     }
 
     public  boolean validateBannerID(String bannerId) {
-
         Set roleSet = userRoleDao.getRolesByBannerId(bannerId);
-
         if (roleSet.contains("STUDENT")) {
             return true;
         }else {
