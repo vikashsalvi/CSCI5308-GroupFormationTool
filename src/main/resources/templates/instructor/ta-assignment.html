@@ -107,6 +107,9 @@
                             <div th:if="${ error }" class="alert alert-danger" role="alert">
                                 <strong>Oh snap!</strong> Invalid Banner ID
                             </div>
+                            <div th:if="${ error_invalid_permission }" class="alert alert-danger" role="alert">
+                                <strong>Oh snap!</strong> You don't have permission to change the TA for this course!
+                            </div>
                             <form action="/instructor/assign-ta"  method="POST">
                                 <div class="form-group">
                                     <label for="bannerId">Banner ID</label>

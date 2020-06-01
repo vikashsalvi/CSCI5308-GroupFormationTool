@@ -15,7 +15,7 @@ class AssignTAServiceTest {
     private CourseInstructorMapperDaoMock courseInstructorMapperDaoMock = new CourseInstructorMapperDaoMock();
 
     @Test
-    void performTAUpdate() {
+    void performTAUpdateTest() {
         CourseInstructorMapperEntity courseInstructorMapperEntity = courseInstructorMapperDaoMock.getCourseInstructorMapperEntity(6);
         // 0 means TA not assigned
         assertEquals(courseInstructorMapperEntity.getTaId(), 0);
@@ -24,15 +24,21 @@ class AssignTAServiceTest {
     }
 
     @Test
-    void validateBannerID() {
+    void validateBannerIDTest() {
         // checks that user is registered with system
         UserEntity userEntity = userDaoMock.getUserByBannerIdMock("B00843468");
         assertNotNull(userEntity.getId());
     }
 
     @Test
-    void validateCourseID() {
+    void validateCourseIDTest() {
         CourseEntity courseEntity = courseDaoMock.getCourseByCourseIdMock("6");
         assertEquals(courseEntity.getName(),"CSCI5409");
+    }
+
+
+    @Test
+    void checkIntructorPermissionTest() {
+
     }
 }

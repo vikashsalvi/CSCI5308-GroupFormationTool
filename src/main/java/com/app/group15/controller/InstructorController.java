@@ -99,6 +99,12 @@ public class InstructorController {
                 CourseEntity courseEntity =  courseDao.get(courseId);
                 modelAndView = new ModelAndView();
 
+
+                if (!assignTAService.checkIntructorPermission(userEntity.getId(),courseId))
+                {
+                    modelAndView.addObject("error_invalid_permission", true);
+                }
+
                 if (assignTAService.validateBannerID(bannerId)) {
                     modelAndView.addObject("error", false);
                     if (assignTAService.performTAUpdate(bannerId,courseId))

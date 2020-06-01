@@ -4,6 +4,7 @@ import com.app.group15.persistence.dao.CourseDao;
 import com.app.group15.persistence.dao.CourseInstructorMapperDao;
 import com.app.group15.persistence.dao.UserDao;
 import com.app.group15.persistence.dao.UserRoleDao;
+import com.app.group15.persistence.entity.CourseEntity;
 import com.app.group15.persistence.entity.UserEntity;
 import com.app.group15.persistence.entity.UserRoleMapperEntity;
 import com.app.group15.persistence.injectors.CourseDaoInjectorService;
@@ -11,6 +12,7 @@ import com.app.group15.persistence.injectors.CourseInstructorMapperDaoInjectorSe
 import com.app.group15.persistence.injectors.UserDaoInjectorService;
 import com.app.group15.persistence.injectors.UserRoleDaoInjectorService;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 public class AssignTAService {
@@ -23,9 +25,9 @@ public class AssignTAService {
 
     public boolean performTAUpdate(String bannerId, int courseId)
     {
-        System.out.println(bannerId + courseId);
-        if (validateBannerID(bannerId) && validateCourseID(courseId)) {
-            UserEntity userEntity= userDao.getUserByBannerId(bannerId);
+        UserEntity userEntity= userDao.getUserByBannerId(bannerId);
+
+        if (validateBannerID(bannerId) && validateCourseID(courseId) && checkIntructorPermission(userEntity.getId(),courseId)) {
             courseInstructorMapperDao.addTaToACourse(courseId,userEntity.getId());
             return true;
         }else {
@@ -47,6 +49,22 @@ public class AssignTAService {
         }else {
             return false;
         }
+    }
+
+    public boolean checkIntructorPermission(int instructorId, int courseId)
+    {
+        boolean returnVar =false;
+
+          ArrayList<CourseEntity> courseEntitiesList = courseInstructorMapperDao.getCourseByInstructor(instructorId);
+          for (int i=0; i < courseEntitiesList.size(); i++)
+          {
+              CourseEntity courseEntity = courseEntitiesList.get(i);
+              if (courseEntity.getId() == courseId)
+              {
+                  returnVar = true;
+              }
+          }
+          return returnVar;
     }
 
 }
