@@ -5,16 +5,16 @@ import com.app.group15.model.User;
 public class UserDaoMock {
 
 	public User getUserByBannerIdMock(String bannerId) {
-		User userEntity = new User();
+		User user = new User();
 		if (bannerId.equals("B00843468")) {
-			userEntity.setFirstName("Daksh");
-			userEntity.setLastName("Patel");
-			userEntity.setEmail("daksh.patel@dal.ca");
-			userEntity.setBannerId("B00843468");
-			userEntity.setBannerId("passwordTest");
-			return userEntity;
+			user.setFirstName("Daksh");
+			user.setLastName("Patel");
+			user.setEmail("daksh.patel@dal.ca");
+			user.setBannerId("B00843468");
+			user.setBannerId("passwordTest");
+			return user;
 		} else {
-			return userEntity;
+			return user;
 		}
 	}
 

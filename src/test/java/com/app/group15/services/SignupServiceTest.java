@@ -13,11 +13,11 @@ class SignupServiceTest {
 
 	@Test
 	public void checkUserExistsTest() {
-		User userEntity = userDaoMock.getUserByBannerIdMock("B00843468");
-		assertEquals(userEntity.getFirstName(), "Daksh");
+		User user = userDaoMock.getUserByBannerIdMock("B00843468");
+		assertEquals(user.getFirstName(), "Daksh");
 
-		userEntity = userDaoMock.getUserByBannerIdMock("B00843469");
-		assertNull(userEntity.getFirstName());
+		user = userDaoMock.getUserByBannerIdMock("B00843469");
+		assertNull(user.getFirstName());
 	}
 
 	@Test

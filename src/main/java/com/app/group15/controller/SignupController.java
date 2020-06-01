@@ -1,7 +1,5 @@
 package com.app.group15.controller;
 
-import com.app.group15.dao.UserDao;
-import com.app.group15.injectors.UserDaoInjectorService;
 import com.app.group15.model.User;
 import com.app.group15.services.SignupService;
 import org.springframework.stereotype.Controller;
@@ -17,17 +15,6 @@ public class SignupController {
 
 	private SignupService signupService = new SignupService();
 
-	@RequestMapping("/")
-	public String index() {
-		return "index";
-	}
-
-	@RequestMapping("/admin")
-	public String admin() {
-		return "<h1>Admin</h1>";
-	}
-
-
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
 	public ModelAndView signup() {
 		ModelAndView modelAndView = new ModelAndView();
@@ -37,10 +24,8 @@ public class SignupController {
 	}
 
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
-	public ModelAndView signup(@ModelAttribute User userEntity, @RequestParam("cPassword") String cPassword) {
-//		TODO Add the following two lines to checkUserExists and change the argument type
-		UserDao userDao = new UserDaoInjectorService().getUserDao();
-		String bannerId = userEntity.getBannerId();
+	public ModelAndView signup(@ModelAttribute User user, @RequestParam("cPassword") String cPassword) {
+		String bannerId = user.getBannerId();
 		boolean response = signupService.checkUserExists(bannerId);
 		if (response) {
 			ModelAndView modelAndView = new ModelAndView();
@@ -48,14 +33,14 @@ public class SignupController {
 			modelAndView.addObject("error", true);
 			modelAndView.addObject("bannerId_error", "Banner Id already registered!");
 			return modelAndView;
-		} else if (!cPassword.equals(userEntity.getPassword())) {
+		} else if (!cPassword.equals(user.getPassword())) {
 			ModelAndView modelAndView = new ModelAndView();
 			modelAndView.setViewName("signup");
 			modelAndView.addObject("error", true);
 			modelAndView.addObject("password_error", "Password and confirm password did not match!");
 			return modelAndView;
 		} else {
-			int userId = signupService.createUser(userEntity, "GUEST");
+			int userId = signupService.createUser(user, "GUEST");
 			return new ModelAndView("redirect:login");
 		}
 

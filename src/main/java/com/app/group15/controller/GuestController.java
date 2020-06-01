@@ -23,12 +23,12 @@ public class GuestController {
 		ModelAndView modelAndView;
 		if (SessionService.isUserSignedIn(request)) {
 			if (authorizationService.isAuthorized(request)) {
-				User userEntity = SessionService.getSessionUser(request);
-				ArrayList<Course> courseEntities = CourseService.getCoursesList();
+				User user = SessionService.getSessionUser(request);
+				ArrayList<Course> courses = CourseService.getCoursesList();
 				modelAndView = new ModelAndView();
 				modelAndView.setViewName("home");
-				modelAndView.addObject("userEntity", userEntity);
-				modelAndView.addObject("courseEntities", courseEntities);
+				modelAndView.addObject("user", user);
+				modelAndView.addObject("courses", courses);
 				return modelAndView;
 			} else {
 //				System.out.println("----------------Unauthorized access for /user/home !!!----------------");
