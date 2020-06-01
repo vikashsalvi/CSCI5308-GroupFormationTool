@@ -13,10 +13,10 @@ class LoginServiceTest {
 
     @Test
     public void validateLoginTest() {
-        User userEntity = userDaoMock.getUserByBannerIdMock("B00843468");
-        assertEquals(userEntity.getFirstName(), "Daksh");
+        User user = userDaoMock.getUserByBannerIdMock("B00843468");
+        assertEquals(user.getFirstName(), "Daksh");
 
-        userEntity = userDaoMock.getUserByBannerIdMock("B00843468");
-        assertNull(userEntity.getPassword());
+        user = userDaoMock.getUserByBannerIdMock("B00843468");
+        assertNull(user.getPassword());
     }
 }

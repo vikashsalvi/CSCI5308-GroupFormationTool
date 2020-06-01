@@ -24,14 +24,28 @@
 		</a>
 		<!-- Divider -->
 		<hr class="sidebar-divider my-0">
+		<div class="sidebar-heading">Home</div>
 		<!-- Nav Item - Dashboard -->
-		<li class="nav-item active">
+		<li class="nav-item ">
 			<a class="nav-link" href="#">
 				<i class="fas fa-fw fa-tachometer-alt"></i>
 				<span>Dashboard</span></a>
 		</li>
 		<!-- Divider -->
 		<hr class="sidebar-divider">
+		<div class="sidebar-heading"><i class="fas fa-book"></i><sub><i class="fas fa-cog"></i></sub>Course Management</div>
+		<li class="nav-item active">
+			<a class="nav-link" href="/admin/courses">
+				<i class="fas fa-fw fa-book-open"></i>
+				<span>Courses</span></a>
+		</li>
+		<hr class="sidebar-divider">
+		<div class="sidebar-heading"><i class="fas fa-users-cog"></i>&nbsp;User Management</div>
+		<li class="nav-item">
+			<a class="nav-link" href="#">
+				<i class="fas fa-fw fa-users"></i>
+				<span>Users</span></a>
+		</li>
 		<li class="nav-item">
 			<a class="nav-link" href="/logout">
 				<i class="fas fa-fw fa-sign-out-alt"></i>
@@ -104,19 +118,75 @@
 							<div class="table">
 								<table class="table table-responsive table-hover w-100 table-bordered">
 									<thead class="thead-dark">
-									<tr>
-										<td>
-											Course id
-										</td>
-										<td>
-											Course name
-										</td>
-									</tr>
 									</thead>
 									<tbody>
-									<tr th:each="course, iterstat: ${courses}">
+									<tr>
+										<td>Course ID:</td>
 										<td th:text="${course.getId()}"></td>
+									</tr>
+									<tr>
+										<td>Course Name:</td>
 										<td th:text="${course.getName()}"></td>
+									</tr>
+
+									<tr th:if="${courseInstructor.getFirstName()!=null}">
+										<td>Current Instructor</td>
+										<td th:text='${courseInstructor.getFirstName() + " " + courseInstructor.getLastName()}'></td>
+									</tr>
+									<tr th:if="${courseInstructor.getFirstName()!=null}">
+										<td>Change Instructor</td>
+										<td>
+											<div class="form-group">
+												<form action="/admin/courses/edit" method="POST">
+													<input type="hidden" name="courseId" th:value="${course.getId()}">
+													<div class="form-row">
+														<label for="inst-if">Select Instructor:</label>
+														<select class="form-control" id="inst-if" name="instructorId">
+															<div th:each="user_i, iterstat: ${allUsers}">
+																<option th:if="${user_i.getId()==courseInstructor.getId()}" selected="selected"
+																				th:value="${user_i.getId()}">
+															<span
+																th:text='${user_i.getFirstName() + " " + user_i.getLastName() + " (current instructor)"}'>
+															</span>
+																</option>
+																<option th:if="${user_i.getId()!=courseInstructor.getId()}"
+																				th:value="${user_i.getId()}">
+																<span th:if="${user_i.getId()!=courseInstructor.getId()}"
+																			th:text='${user_i.getFirstName() + " " + user_i.getLastName()}'>
+															</span>
+																</option>
+															</div>
+														</select>
+													</div>
+													<div class="form-row  mt-3">
+														<button class="btn btn-outline-success  w-100">Change Instructor</button>
+													</div>
+												</form>
+											</div>
+										</td>
+									</tr>
+									<tr th:if="${courseInstructor.getFirstName()==null}">
+										<td>Add Instructor</td>
+										<td>
+											<div class="form-group">
+												<form action="/admin/courses/edit" method="POST">
+													<input type="hidden" name="courseId" th:value="${course.getId()}">
+													<div class="form-row">
+														<label for="inst-else">Select Instructor:</label>
+														<select class="form-control" id="inst-else" name="instructor">
+															<div th:each="user_i, iterstat: ${allUsers}">
+																<option th:value="${user_i.getId()}">
+																	<span th:text='${user_i.getFirstName() + " " + user_i.getLastName()}'></span>
+																</option>
+															</div>
+														</select>
+													</div>
+													<div class="form-row mt-3">
+														<button class="btn btn-outline-success w-100">Add Instructor</button>
+													</div>
+												</form>
+											</div>
+										</td>
 									</tr>
 									</tbody>
 									<tfoot></tfoot>
