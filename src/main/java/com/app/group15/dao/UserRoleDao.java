@@ -154,7 +154,7 @@ public class UserRoleDao extends UserRoleAbstractDao {
 	public ArrayList<UserRoles> getAll() {
 		String query = "SELECT * FROM table_user_roles";
 		ArrayList<UserRoles> userRolesList = new ArrayList<UserRoles>();
-		try (Connection connection = DatabaseManager.getDataSource().getConnection();
+		try (Connection connection = DatabaseManager.getConnection();
 				PreparedStatement statement = connection.prepareStatement(query);
 				ResultSet result = statement.executeQuery()) {
 

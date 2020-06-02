@@ -29,7 +29,8 @@ public class UserDao extends UserAbstractDao implements UserRoleDaoInjectorInter
     public User get(int id) {
         String query = "SELECT * FROM table_users WHERE id=?";
 		User user = new User();
-		try (Connection connection = DatabaseManager.getDataSource().getConnection();
+		try (Connection connection = DatabaseManager
+				.getConnection();
 				PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setInt(1, id);
 			try (ResultSet result = statement.executeQuery()) {

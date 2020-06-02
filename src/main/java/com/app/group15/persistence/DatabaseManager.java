@@ -29,7 +29,7 @@ public class DatabaseManager {
 		USER_NAME = databaseDetails.getUserName();
 	}
 
-	public static MysqlDataSource getDataSource() {
+	private static MysqlDataSource getDataSource() {
 
 		try {
 

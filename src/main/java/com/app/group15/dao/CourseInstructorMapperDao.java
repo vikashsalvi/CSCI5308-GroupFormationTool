@@ -19,7 +19,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
 	public ArrayList<CourseInstructorMapper> getAll() {
 		String query = "SELECT * from table_course_instructor_mapper";
 		ArrayList<CourseInstructorMapper> allList = new ArrayList<CourseInstructorMapper>();
-		try (Connection connection = DatabaseManager.getDataSource().getConnection();
+		try (Connection connection = DatabaseManager.getConnection();
 				PreparedStatement statement = connection.prepareStatement(query);
 			 ResultSet result = statement.executeQuery()) {
 			while (result.next()) {
