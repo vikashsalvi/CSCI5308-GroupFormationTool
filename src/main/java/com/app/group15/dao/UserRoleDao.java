@@ -27,7 +27,7 @@ public class UserRoleDao extends UserRoleAbstractDao {
     public UserRoles get(int id) {
         String query = "SELECT * FROM table_user_roles WHERE id=?";
         UserRoles roleEntity = new UserRoles();
-        try (Connection connection = DatabaseManager.getConnection();
+        try (Connection connection = DatabaseManager.getDataSource().getConnection();
 				PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setInt(1, id);
 			try (ResultSet result = statement.executeQuery()) {
@@ -51,7 +51,7 @@ public class UserRoleDao extends UserRoleAbstractDao {
     public int getRoleId(String role) {
         String query = "SELECT * FROM table_user_roles WHERE role=?";
         int roleId = 0;
-        try (Connection connection = DatabaseManager.getConnection();
+        try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, role);
             try (ResultSet result = statement.executeQuery()) {
@@ -74,7 +74,7 @@ public class UserRoleDao extends UserRoleAbstractDao {
         String query = "SELECT role FROM table_users tu\n" + "JOIN table_user_role_mapper trm ON tu.id=trm.user_id\n"
                 + "JOIN table_user_roles tr ON trm.role_id=tr.id\n" + "WHERE tu.banner_id=?";
         Set<String> roles = new HashSet<String>();
-        try (Connection connection = DatabaseManager.getConnection();
+        try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, bannerId);
             try (ResultSet result = statement.executeQuery()) {
@@ -95,7 +95,7 @@ public class UserRoleDao extends UserRoleAbstractDao {
     @Override
     public void addRole(int userId, String role) {
         String query = "INSERT INTO table_user_role_mapper(user_id,role_id) VALUES(?,?)";
-        try (Connection connection = DatabaseManager.getConnection()) {
+        try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 connection.setAutoCommit(false);
                 statement.setInt(1, userId);
@@ -123,7 +123,7 @@ public class UserRoleDao extends UserRoleAbstractDao {
     @Override
     public void updateRole(int userId, String role) {
         String query = "UPDATE table_user_role_mapper SET role_id=? WHERE user_id=?";
-        try (Connection connection = DatabaseManager.getConnection()) {
+        try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 connection.setAutoCommit(false);
                 if (role.equals(UserRole.ADMIN.getRole())) {
@@ -154,7 +154,7 @@ public class UserRoleDao extends UserRoleAbstractDao {
 	public ArrayList<UserRoles> getAll() {
 		String query = "SELECT * FROM table_user_roles";
 		ArrayList<UserRoles> userRolesList = new ArrayList<UserRoles>();
-		try (Connection connection = DatabaseManager.getConnection();
+		try (Connection connection = DatabaseManager.getDataSource().getConnection();
 				PreparedStatement statement = connection.prepareStatement(query);
 				ResultSet result = statement.executeQuery()) {
 

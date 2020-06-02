@@ -29,7 +29,7 @@ public class DatabaseManager {
 		USER_NAME = databaseDetails.getUserName();
 	}
 
-	private static MysqlDataSource getDataSource() {
+	public static MysqlDataSource getDataSource() {
 
 		try {
 
@@ -51,19 +51,5 @@ public class DatabaseManager {
 
 	}
 
-	public static Connection getConnection() {
-		Connection connection = null;
-		try {
-
-			if (connection == null) {
-				connection = getDataSource().getConnection();
-			}
-		}
-
-		catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage());
-		}
-		return connection;
-	}
-
+	
 }
