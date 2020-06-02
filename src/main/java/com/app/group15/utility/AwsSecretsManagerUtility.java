@@ -41,22 +41,9 @@ public class AwsSecretsManagerUtility {
 		return null;
 		
 	}
-	
-	public static String getSmtpEmail() {
-		JsonNode secretsJson=getSecretNode("smtp_email");
-		return secretsJson.get("smptp_email").textValue();
-		
-		
-	}
-	public static String getSmtpPassword() {
-		JsonNode secretsJson=getSecretNode("smtp_password");
-		return secretsJson.get("smtp_password").textValue();
-		
-		
-	}
-	
-	public static JsonNode getSecretNode(String key) {
-		final String secretName = key;
+	public static DatabaseDetails getDatabaseDetails() {
+
+	    final String secretName = getKeyFromEnvProperties();
 	    final String region = "us-east-2";
 	    final String endPoints="secretsmanager.us-east-2.amazonaws.com";
 	    BasicAWSCredentials basic=new BasicAWSCredentials("AKIAIFGQZFS4BYYNVAAQ","5cMkTXomxQkEAN3j9uGNFJm4OSMjR9iW19S9Cdjs");
@@ -100,12 +87,7 @@ public class AwsSecretsManagerUtility {
 	    else {
 	        decodedBinarySecret = new String(Base64.getDecoder().decode(getSecretValueResult.getSecretBinary()).array());
 	    }
-	    return secretsJson;
-		
-	}
-	public static DatabaseDetails getDatabaseDetails() {
-
-		JsonNode secretsJson=getSecretNode(getKeyFromEnvProperties());
+	    
 	    databaseDetails=new DatabaseDetails();
 	    databaseDetails.setDbName(secretsJson.get("dbname").textValue());
 	    databaseDetails.setHost(secretsJson.get("host").textValue());
