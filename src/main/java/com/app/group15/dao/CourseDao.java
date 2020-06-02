@@ -14,8 +14,8 @@ import java.util.logging.Level;
 
 
 @SuppressWarnings("rawtypes")
-public class CourseDao
-		implements Dao, CourseInstructorMapperInjectorInterface, CourseStudentMapperDaoInjectorInterface {
+public class CourseDao extends CourseAbstractDao
+		implements CourseInstructorMapperInjectorInterface, CourseStudentMapperDaoInjectorInterface {
 
 
 	private CourseInstructorMapperDao courseInstructorMapperDao;
@@ -23,7 +23,6 @@ public class CourseDao
 
 	//private final static Logger LOGGER = Logger.getLogger(CourseDao.class.getName());
 
-	
 
 	@Override
 	public Course get(int id) {

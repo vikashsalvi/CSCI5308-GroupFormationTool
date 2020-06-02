@@ -2,7 +2,6 @@ package com.app.group15.dao;
 
 
 import com.app.group15.model.CourseInstructorMapper;
-import com.app.group15.model.Persistence;
 import com.app.group15.model.User;
 import com.app.group15.persistence.DatabaseManager;
 import com.app.group15.utility.GroupFormationToolLogger;
@@ -13,21 +12,14 @@ import java.util.logging.Level;
 
 
 @SuppressWarnings("rawtypes")
-public class CourseInstructorMapperDao implements Dao {
+public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao {
 
-	
-
-	@Override
-	public Persistence get(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public ArrayList<CourseInstructorMapper> getAll() {
 		String query = "SELECT * from table_course_instructor_mapper";
 		ArrayList<CourseInstructorMapper> allList = new ArrayList<CourseInstructorMapper>();
-		try (Connection connection=DatabaseManager.getConnection();
+		try (Connection connection = DatabaseManager.getConnection();
 				PreparedStatement statement = connection.prepareStatement(query);
 			 ResultSet result = statement.executeQuery()) {
 			while (result.next()) {
@@ -46,13 +38,14 @@ public class CourseInstructorMapperDao implements Dao {
 		return allList;
 	}
 
+	@Override
 	public User getCourseInstructor(int id) {
 		String query = "SELECT * FROM table_users tu\n" +
-			"JOIN table_course_instructor_mapper tcm ON tu.id=tcm.instructor_id\n" +
-			"WHERE tcm.course_id=?";
+				"JOIN table_course_instructor_mapper tcm ON tu.id=tcm.instructor_id\n" +
+				"WHERE tcm.course_id=?";
 		User userEntity = new User();
-		try (Connection connection=DatabaseManager.getConnection();
-				PreparedStatement statement = connection.prepareStatement(query)) {
+		try (Connection connection = DatabaseManager.getConnection();
+			 PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setInt(1, id);
 			try (ResultSet result = statement.executeQuery()) {
 				while (result.next()) {
@@ -70,23 +63,6 @@ public class CourseInstructorMapperDao implements Dao {
 	}
 
 	@Override
-	public int save(Persistence t) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void update(Persistence t, int id) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void delete(int id) {
-		// TODO Auto-generated method stub
-
-	}
-
 	public void deleteByCourseId(int courseId) {
 		String query = "DELETE FROM table_course_instructor_mapper WHERE course_id=?";
 		try (Connection connection=DatabaseManager.getConnection();
@@ -102,10 +78,11 @@ public class CourseInstructorMapperDao implements Dao {
 
 	}
 
-	private boolean doesCourseIdExistInThisMapper(int courseId) {
+	@Override
+	protected boolean doesCourseIdExistInThisMapper(int courseId) {
 		String query = "SELECT * FROM table_course_instructor_mapper WHERE course_id=?";
-		try (Connection connection=DatabaseManager.getConnection();
-				PreparedStatement statement = connection.prepareStatement(query)) {
+		try (Connection connection = DatabaseManager.getConnection();
+			 PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setInt(1, courseId);
 			try (ResultSet result = statement.executeQuery()) {
 				while (result.next()) {
@@ -121,9 +98,10 @@ public class CourseInstructorMapperDao implements Dao {
 
 	}
 
-	private void addInstructorForCourseWithTa(int courseId, int instructorId) {
+	@Override
+	protected void addInstructorForCourseWithTa(int courseId, int instructorId) {
 		String query = "UPDATE table_course_instructor_mapper SET instructor_id=? WHERE course_id=?";
-		try(Connection connection=DatabaseManager.getConnection()){
+		try (Connection connection = DatabaseManager.getConnection()) {
 			try (PreparedStatement statement = connection.prepareStatement(query)) {
 				connection.setAutoCommit(false);
 				statement.setInt(1, instructorId);
@@ -142,12 +120,13 @@ public class CourseInstructorMapperDao implements Dao {
 		} catch (SQLException e) {
 			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		}
-		
+
 	}
 
-	private void addTaForCourseWithInstructor(int courseId, int taId) {
+	@Override
+	protected void addTaForCourseWithInstructor(int courseId, int taId) {
 		String query = "UPDATE table_course_instructor_mapper SET ta_id=? WHERE course_id=?";
-		try(Connection connection=DatabaseManager.getConnection()){
+		try (Connection connection = DatabaseManager.getConnection()) {
 			try (PreparedStatement statement = connection.prepareStatement(query)) {
 				connection.setAutoCommit(false);
 				statement.setInt(1, taId);
@@ -166,11 +145,12 @@ public class CourseInstructorMapperDao implements Dao {
 		} catch (SQLException e) {
 			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		}
-		
+
 	}
 
+	@Override
 	public void addInstructorToACourse(int courseId, int instructorId) {
-		try(Connection connection=DatabaseManager.getConnection()){
+		try (Connection connection = DatabaseManager.getConnection()) {
 			if (doesCourseIdExistInThisMapper(courseId)) {
 				addInstructorForCourseWithTa(courseId, instructorId);
 
@@ -196,12 +176,13 @@ public class CourseInstructorMapperDao implements Dao {
 		} catch (SQLException e) {
 			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		}
-		
+
 
 	}
 
+	@Override
 	public void addTaToACourse(int courseId, int taId) {
-		try(Connection connection=DatabaseManager.getConnection()){
+		try (Connection connection = DatabaseManager.getConnection()) {
 			if (doesCourseIdExistInThisMapper(courseId)) {
 				addTaForCourseWithInstructor(courseId, taId);
 
