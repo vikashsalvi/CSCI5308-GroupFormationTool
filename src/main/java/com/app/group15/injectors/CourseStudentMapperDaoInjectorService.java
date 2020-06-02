@@ -1,7 +1,7 @@
 package com.app.group15.injectors;
 
 import com.app.group15.dao.CourseStudentMapperDao;
-import com.app.group15.persistence.DatabaseManager;
+
 
 public class CourseStudentMapperDaoInjectorService {
 	
@@ -9,7 +9,7 @@ public class CourseStudentMapperDaoInjectorService {
 	
 	public CourseStudentMapperDaoInjectorService() {
 		courseStudentMapperDao = new CourseStudentMapperDao();
-		courseStudentMapperDao.injectConnection(DatabaseManager.getConnection());
+		
 	}
 
 	public CourseStudentMapperDao getCourseStudentMapperDao() {

@@ -1,6 +1,7 @@
 package com.app.group15.notifications;
 
 import com.app.group15.config.AppConfig;
+import com.app.group15.utility.AwsSecretsManagerUtility;
 import com.app.group15.utility.GroupFormationToolLogger;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -24,8 +25,8 @@ public class EmailNotifierImpl implements Notifier {
         javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setHost(springProperties.getProperty("mail.host"));
         javaMailSender.setPort(Integer.parseInt(springProperties.getProperty("mail.port")));
-        javaMailSender.setUsername(springProperties.getProperty("mail.username"));
-        javaMailSender.setPassword(springProperties.getProperty("mail.password"));
+        javaMailSender.setUsername(AwsSecretsManagerUtility.getSmtpEmail());
+        javaMailSender.setPassword(AwsSecretsManagerUtility.getSmtpPassword());
 
         Properties props = javaMailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", springProperties.getProperty("mail.transport.protocol"));

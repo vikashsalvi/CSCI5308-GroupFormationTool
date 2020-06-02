@@ -8,6 +8,7 @@ import com.app.group15.injectors.CourseInstructorMapperDaoInjectorService;
 import com.app.group15.injectors.CourseStudentMapperDaoInjectorService;
 import com.app.group15.injectors.UserRoleDaoInjectorService;
 import com.app.group15.notifications.EmailNotifierImpl;
+import com.app.group15.services.AuthorizationService;
 import com.app.group15.utility.GroupFormationToolLogger;
 
 import java.io.FileInputStream;
@@ -28,6 +29,7 @@ public class AppConfig {
     private CourseStudentMapperDao courseStudentMapperDao;
     private CourseInstructorMapperDao courseInstructorMapperDao;
     private UserDao userDao;
+    private AuthorizationService authorizationService;
 
 
     private AppConfig() {
@@ -49,6 +51,7 @@ public class AppConfig {
         courseStudentMapperDao = new CourseStudentMapperDao();
         courseInstructorMapperDao = new CourseInstructorMapperDao();
         userDao = new UserDao();
+        authorizationService = new AuthorizationService();
 
 
     }
@@ -145,5 +148,14 @@ public class AppConfig {
     public void setCourseStudentMapperDao(CourseStudentMapperDao courseStudentMapperDao) {
         this.courseStudentMapperDao = courseStudentMapperDao;
     }
+
+    public AuthorizationService getAuthorizationService() {
+        return authorizationService;
+    }
+
+    public void setAuthorizationService(AuthorizationService authorizationService) {
+        this.authorizationService = authorizationService;
+    }
+
 
 }

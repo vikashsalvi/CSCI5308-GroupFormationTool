@@ -16,10 +16,11 @@ import com.amazonaws.services.secretsmanager.model.InternalServiceErrorException
 import com.amazonaws.services.secretsmanager.model.InvalidParameterException;
 import com.amazonaws.services.secretsmanager.model.InvalidRequestException;
 import com.amazonaws.services.secretsmanager.model.ResourceNotFoundException;
+import com.app.group15.config.AppConfig;
 import com.app.group15.model.DatabaseDetails;
 import com.app.group15.persistence.AwsSecretKey;
 import com.app.group15.persistence.Environments;
-import com.app.group15.persistence.JDBCProperties;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,20 +29,34 @@ public class AwsSecretsManagerUtility {
 	
 	private static DatabaseDetails databaseDetails;
 	private static String getKeyFromEnvProperties() {
-		if(JDBCProperties.getConnectionData().get("spring.profiles.active").equals(Environments.DEV.getEnvironment())) {
+		
+		if(AppConfig.getSingletonAppConfig().getProperties().get("spring.profiles.active").equals(Environments.DEV.getEnvironment())) {
 			return AwsSecretKey.DEVINT.getKey();
-		} else if(JDBCProperties.getConnectionData().get("spring.profiles.active").equals(Environments.TEST.getEnvironment())) {
+		} else if(AppConfig.getSingletonAppConfig().getProperties().get("spring.profiles.active").equals(Environments.TEST.getEnvironment())) {
 			return AwsSecretKey.TEST.getKey();
 		}
-		else if(JDBCProperties.getConnectionData().get("spring.profiles.active").equals(Environments.PROD.getEnvironment())) {
+		else if(AppConfig.getSingletonAppConfig().getProperties().get("spring.profiles.active").equals(Environments.PROD.getEnvironment())) {
 			return AwsSecretKey.PROD.getKey();
 		}
 		return null;
 		
 	}
-	public static DatabaseDetails getDatabaseDetails() {
-
-	    final String secretName = getKeyFromEnvProperties();
+	
+	public static String getSmtpEmail() {
+		JsonNode secretsJson=getSecretNode("smtp_email");
+		return secretsJson.get("smptp_email").textValue();
+		
+		
+	}
+	public static String getSmtpPassword() {
+		JsonNode secretsJson=getSecretNode("smtp_password");
+		return secretsJson.get("smtp_password").textValue();
+		
+		
+	}
+	
+	public static JsonNode getSecretNode(String key) {
+		final String secretName = key;
 	    final String region = "us-east-2";
 	    final String endPoints="secretsmanager.us-east-2.amazonaws.com";
 	    BasicAWSCredentials basic=new BasicAWSCredentials("AKIAIFGQZFS4BYYNVAAQ","5cMkTXomxQkEAN3j9uGNFJm4OSMjR9iW19S9Cdjs");
@@ -85,7 +100,12 @@ public class AwsSecretsManagerUtility {
 	    else {
 	        decodedBinarySecret = new String(Base64.getDecoder().decode(getSecretValueResult.getSecretBinary()).array());
 	    }
-	    
+	    return secretsJson;
+		
+	}
+	public static DatabaseDetails getDatabaseDetails() {
+
+		JsonNode secretsJson=getSecretNode(getKeyFromEnvProperties());
 	    databaseDetails=new DatabaseDetails();
 	    databaseDetails.setDbName(secretsJson.get("dbname").textValue());
 	    databaseDetails.setHost(secretsJson.get("host").textValue());

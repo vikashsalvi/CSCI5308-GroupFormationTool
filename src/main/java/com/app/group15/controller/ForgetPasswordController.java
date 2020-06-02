@@ -2,10 +2,9 @@ package com.app.group15.controller;
 
 import com.app.group15.config.AppConfig;
 import com.app.group15.dao.UserDao;
-import com.app.group15.injectors.UserDaoInjectorService;
 import com.app.group15.model.User;
+import com.app.group15.utility.ForgetPasswordUtility;
 import com.app.group15.utility.GroupFormationToolLogger;
-import com.app.group15.utility.ServiceUtility;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,9 +37,9 @@ public class ForgetPasswordController {
     @RequestMapping(value = "/forgetPassword", method = RequestMethod.POST)
     public ModelAndView getUserAndGenerateToken(@RequestParam(required = true, value = "bannerId") String bannerId, HttpServletRequest request) throws UnsupportedEncodingException {
 
-        UserDao userDao = new UserDaoInjectorService().getUserDao();
+        UserDao userDao = AppConfig.getInstance().getUserDao();
         User user = userDao.getUserByBannerId(bannerId);
-        String token = ServiceUtility.generateForgotPasswordToken();
+        String token = ForgetPasswordUtility.generateForgotPasswordToken();
         if (userDao.checkIfTokenAlreadyExists(user.getId())) {
             userDao.deleteForgotPasswordToken(user.getId());
         }
@@ -67,13 +66,13 @@ public class ForgetPasswordController {
     @RequestMapping("/auth/validateToken")
     public ModelAndView verifyToken(@RequestParam("to") String token) {
         boolean validated = false;
-        UserDao userDao = new UserDaoInjectorService().getUserDao();
+        UserDao userDao = AppConfig.getInstance().getUserDao();
         Map<String, String> user = userDao.getUserFromToken(token);
         String tokenGenerationDateTime = user.get("dateTime");
         Date tokenGenerationDate = null;
         try {
             tokenGenerationDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(tokenGenerationDateTime);
-            long minutes = ServiceUtility.getTimeDifference(tokenGenerationDate);
+            long minutes = ForgetPasswordUtility.getTimeDifference(tokenGenerationDate);
             if (minutes > 60) {
                 userDao.deleteForgotPasswordToken(Integer.parseInt(user.get("id")));
                 validated = false;
@@ -107,7 +106,7 @@ public class ForgetPasswordController {
             modelAndView.addObject("password_error", "Password did not match!");
             return modelAndView;
         }
-        UserDao userDao = new UserDaoInjectorService().getUserDao();
+        UserDao userDao = AppConfig.getInstance().getUserDao();
         Map<String, String> user = userDao.getUserFromToken(token);
         boolean passed = false;
         if (userDao.updateUserPassword(Integer.parseInt(user.get("id")), newPassword)) {
