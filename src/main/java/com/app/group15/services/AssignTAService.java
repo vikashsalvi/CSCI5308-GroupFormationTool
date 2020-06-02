@@ -28,7 +28,7 @@ public class AssignTAService {
     {
         User userEntity= userDao.getUserByBannerId(bannerId);
 
-        if (validateBannerID(bannerId) && validateCourseID(courseId) ) {
+        if (validateBannerID(bannerId) && validateCourseID(courseId)) {
             System.out.println("HERE");
             courseInstructorMapperDao.addTaToACourse(courseId,userEntity.getId());
             return true;
@@ -64,7 +64,7 @@ public class AssignTAService {
               Course courseEntity = courseEntitiesList.get(i);
               if (courseEntity.getId() == courseId) {
                   returnVar = true;
-                  return returnVar;
+                  break;
               }
           }
           return returnVar;
