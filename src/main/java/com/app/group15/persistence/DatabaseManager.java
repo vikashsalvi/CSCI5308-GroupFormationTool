@@ -11,8 +11,6 @@ import java.util.logging.Logger;
 public class DatabaseManager {
 
 	private static MysqlDataSource dataSource;
-	private static Connection connection;
-	
 	private static String URL;
 	private static String PSWD;
 	private static String USER_NAME;
@@ -22,12 +20,12 @@ public class DatabaseManager {
 	public DatabaseManager() {
 
 	}
-	
+
 	private static void getDetails() {
 		DatabaseDetails databaseDetails = AwsSecretsManagerUtility.getDatabaseDetails();
-		URL = "jdbc:mysql://" + databaseDetails.getHost() + ":" + databaseDetails.getPort()+"/"
+		URL = "jdbc:mysql://" + databaseDetails.getHost() + ":" + databaseDetails.getPort() + "/"
 				+ databaseDetails.getDbName() + "?useSSL=false";
-	    PSWD = databaseDetails.getPassword();
+		PSWD = databaseDetails.getPassword();
 		USER_NAME = databaseDetails.getUserName();
 	}
 
@@ -54,7 +52,9 @@ public class DatabaseManager {
 	}
 
 	public static Connection getConnection() {
+		Connection connection = null;
 		try {
+
 			if (connection == null) {
 				connection = getDataSource().getConnection();
 			}

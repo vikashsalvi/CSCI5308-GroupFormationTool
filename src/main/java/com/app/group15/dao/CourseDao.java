@@ -5,33 +5,31 @@ import com.app.group15.injectors.CourseInstructorMapperInjectorInterface;
 import com.app.group15.injectors.CourseStudentMapperDaoInjectorInterface;
 import com.app.group15.model.Course;
 import com.app.group15.model.Persistence;
+import com.app.group15.persistence.DatabaseManager;
+import com.app.group15.utility.GroupFormationToolLogger;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 @SuppressWarnings("rawtypes")
-public class CourseDao
-		implements Dao, CourseInstructorMapperInjectorInterface, CourseStudentMapperDaoInjectorInterface {
+public class CourseDao extends CourseAbstractDao
+		implements CourseInstructorMapperInjectorInterface, CourseStudentMapperDaoInjectorInterface {
 
-	private Connection connection;
+
 	private CourseInstructorMapperDao courseInstructorMapperDao;
 	private CourseStudentMapperDao courseStudentMapperDao;
 
-	private final static Logger LOGGER = Logger.getLogger(CourseDao.class.getName());
+	//private final static Logger LOGGER = Logger.getLogger(CourseDao.class.getName());
 
-	@Override
-	public void injectConnection(Connection connection) {
-		this.connection = connection;
-
-	}
 
 	@Override
 	public Course get(int id) {
 		String query = "SELECT * FROM table_course WHERE id=?";
 		Course course = new Course();
-		try (PreparedStatement statement = connection.prepareStatement(query)) {
+		try (Connection connection=DatabaseManager.getConnection();
+			PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setInt(1, id);
 			try (ResultSet result = statement.executeQuery()) {
 				while (result.next()) {
@@ -43,7 +41,7 @@ public class CourseDao
 			}
 		} catch (SQLException e) {
 
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return course;
 	}
@@ -52,7 +50,8 @@ public class CourseDao
 	public ArrayList<Course> getAll() {
 		String query = "SELECT * FROM table_course";
 		ArrayList<Course> coursesList = new ArrayList<Course>();
-		try (PreparedStatement statement = connection.prepareStatement(query);
+		try (Connection connection=DatabaseManager.getConnection();
+				PreparedStatement statement = connection.prepareStatement(query);
 			 ResultSet result = statement.executeQuery()) {
 			while (result.next()) {
 				Course course = new Course();
@@ -63,7 +62,7 @@ public class CourseDao
 
 		} catch (SQLException e) {
 
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		}
 
 		return coursesList;
@@ -74,27 +73,32 @@ public class CourseDao
 		Course courseEntity = (Course) course;
 		String query = "INSERT INTO table_course(name) VALUES(?)";
 		int courseId = 0;
-		try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-			connection.setAutoCommit(false);
-			statement.setString(1, courseEntity.getName());
-			statement.executeUpdate();
-			connection.commit();
-			try (ResultSet result = statement.getGeneratedKeys()) {
+		try(Connection connection=DatabaseManager.getConnection()){
+			try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+				connection.setAutoCommit(false);
+				statement.setString(1, courseEntity.getName());
+				statement.executeUpdate();
+				connection.commit();
+				try (ResultSet result = statement.getGeneratedKeys()) {
 
-				if (result.first()) {
+					if (result.first()) {
 
-					courseId = result.getInt(1);
+						courseId = result.getInt(1);
+					}
 				}
+			} catch (SQLException e) {
+				try {
+					connection.rollback();
+				} catch (SQLException e1) {
+					GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+				}
+
+				GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 			}
 		} catch (SQLException e) {
-			try {
-				connection.rollback();
-			} catch (SQLException e1) {
-				LOGGER.log(Level.SEVERE, e.getMessage(), e);
-			}
-
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		}
+		
 		return courseId;
 
 	}
@@ -103,43 +107,55 @@ public class CourseDao
 	public void update(Persistence course, int id) {
 		Course courseEntity = (Course) course;
 		String query = "UPDATE table_course SET name=? WHERE id=?";
-		try (PreparedStatement statement = connection.prepareStatement(query)) {
-			connection.setAutoCommit(false);
-			statement.setString(1, courseEntity.getName());
-			statement.setInt(2, id);
-			statement.executeUpdate();
-			connection.commit();
-		} catch (SQLException e) {
-			try {
-				connection.rollback();
-			} catch (SQLException e1) {
-				LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		try(Connection connection=DatabaseManager.getConnection()){
+			try (PreparedStatement statement = connection.prepareStatement(query)) {
+				connection.setAutoCommit(false);
+				statement.setString(1, courseEntity.getName());
+				statement.setInt(2, id);
+				statement.executeUpdate();
+				connection.commit();
+			} catch (SQLException e) {
+				try {
+					connection.rollback();
+				} catch (SQLException e1) {
+					GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+				}
+				GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 			}
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
-		}
 
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+		}
+		
 	}
 
 	@Override
 	public void delete(int id) {
 		String query = "DELETE FROM table_course WHERE id=?";
-		try (PreparedStatement statement = connection.prepareStatement(query)) {
-			connection.setAutoCommit(false);
-			courseInstructorMapperDao.deleteByCourseId(id);
-			courseStudentMapperDao.deletByCourseId(id);
-			statement.setInt(1, id);
-			statement.executeUpdate();
-			connection.commit();
-		} catch (SQLException e) {
-			try {
-				connection.rollback();
-			} catch (SQLException e1) {
-				LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		try(Connection connection=DatabaseManager.getConnection()){
+			try (PreparedStatement statement = connection.prepareStatement(query)) {
+				connection.setAutoCommit(false);
+				courseInstructorMapperDao.deleteByCourseId(id);
+				courseStudentMapperDao.deletByCourseId(id);
+				statement.setInt(1, id);
+				statement.executeUpdate();
+				connection.commit();
+			} catch (SQLException e) {
+				try {
+					connection.rollback();
+				} catch (SQLException e1) {
+					GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+				}
+
+				GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 			}
 
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		}
-
+		
 	}
 
 	@Override

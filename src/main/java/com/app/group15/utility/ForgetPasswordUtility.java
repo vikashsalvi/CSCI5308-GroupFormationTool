@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-public class ServiceUtility {
+public class ForgetPasswordUtility {
 
 
     public static String generateForgotPasswordToken() {

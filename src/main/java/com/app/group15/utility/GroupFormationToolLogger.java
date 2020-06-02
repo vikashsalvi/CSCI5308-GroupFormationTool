@@ -1,7 +1,12 @@
 package com.app.group15.utility;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.springframework.boot.logging.java.SimpleFormatter;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.logging.*;
 
 public class GroupFormationToolLogger {
 
@@ -10,10 +15,9 @@ public class GroupFormationToolLogger {
     String logPath = "logs/";
 
     public GroupFormationToolLogger() {
-       /* Handler logFileHandler;
+        Handler logFileHandler;
         Formatter plainText;
         try {
-            //FileUtility.createFileIfNotExist(logPath);
             if (!Files.exists(Paths.get(logPath))) {
                 Files.createDirectories(Paths.get(logPath));
             }
@@ -28,7 +32,7 @@ public class GroupFormationToolLogger {
         }
         catch (Exception e){
             e.printStackTrace();
-        }*/
+        }
     }
 
     private static Logger getLogger() {
@@ -36,7 +40,6 @@ public class GroupFormationToolLogger {
     }
 
     public static void log(Level level, String msg, Exception e) {
-        //getLogger().log(level, msg, e);
-        e.printStackTrace();
+        getLogger().log(level, msg, e);
     }
 }

@@ -1,5 +1,6 @@
 package com.app.group15.controller;
 
+import com.app.group15.config.AppConfig;
 import com.app.group15.model.Course;
 import com.app.group15.model.User;
 import com.app.group15.services.AuthorizationService;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 
 @Controller
 public class GuestController {
-	private AuthorizationService authorizationService = new AuthorizationService();
+	private AuthorizationService authorizationService = AppConfig.getInstance().getAuthorizationService();
 
 	@RequestMapping(value = "/user/home", method = RequestMethod.GET)
 	public ModelAndView guestHome(HttpServletRequest request) {
