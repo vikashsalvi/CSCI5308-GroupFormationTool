@@ -19,7 +19,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
 	public ArrayList<CourseInstructorMapper> getAll() {
 		String query = "SELECT * from table_course_instructor_mapper";
 		ArrayList<CourseInstructorMapper> allList = new ArrayList<CourseInstructorMapper>();
-		try (Connection connection = DatabaseManager.getConnection();
+		try (Connection connection = DatabaseManager.getDataSource().getConnection();
 				PreparedStatement statement = connection.prepareStatement(query);
 			 ResultSet result = statement.executeQuery()) {
 			while (result.next()) {
@@ -44,7 +44,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
 				"JOIN table_course_instructor_mapper tcm ON tu.id=tcm.instructor_id\n" +
 				"WHERE tcm.course_id=?";
 		User userEntity = new User();
-		try (Connection connection = DatabaseManager.getConnection();
+		try (Connection connection = DatabaseManager.getDataSource().getConnection();
 			 PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setInt(1, id);
 			try (ResultSet result = statement.executeQuery()) {
@@ -65,7 +65,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
 	@Override
 	public void deleteByCourseId(int courseId) {
 		String query = "DELETE FROM table_course_instructor_mapper WHERE course_id=?";
-		try (Connection connection=DatabaseManager.getConnection();
+		try (Connection connection=DatabaseManager.getDataSource().getConnection();
 			PreparedStatement statement = connection.prepareStatement(query)) {
 			connection.setAutoCommit(false);
 			statement.setInt(1, courseId);
@@ -81,7 +81,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
 	@Override
 	protected boolean doesCourseIdExistInThisMapper(int courseId) {
 		String query = "SELECT * FROM table_course_instructor_mapper WHERE course_id=?";
-		try (Connection connection = DatabaseManager.getConnection();
+		try (Connection connection = DatabaseManager.getDataSource().getConnection();
 			 PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setInt(1, courseId);
 			try (ResultSet result = statement.executeQuery()) {
@@ -101,7 +101,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
 	@Override
 	protected void addInstructorForCourseWithTa(int courseId, int instructorId) {
 		String query = "UPDATE table_course_instructor_mapper SET instructor_id=? WHERE course_id=?";
-		try (Connection connection = DatabaseManager.getConnection()) {
+		try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
 			try (PreparedStatement statement = connection.prepareStatement(query)) {
 				connection.setAutoCommit(false);
 				statement.setInt(1, instructorId);
@@ -126,7 +126,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
 	@Override
 	protected void addTaForCourseWithInstructor(int courseId, int taId) {
 		String query = "UPDATE table_course_instructor_mapper SET ta_id=? WHERE course_id=?";
-		try (Connection connection = DatabaseManager.getConnection()) {
+		try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
 			try (PreparedStatement statement = connection.prepareStatement(query)) {
 				connection.setAutoCommit(false);
 				statement.setInt(1, taId);
@@ -150,7 +150,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
 
 	@Override
 	public void addInstructorToACourse(int courseId, int instructorId) {
-		try (Connection connection = DatabaseManager.getConnection()) {
+		try (Connection connection =DatabaseManager.getDataSource().getConnection()) {
 			if (doesCourseIdExistInThisMapper(courseId)) {
 				addInstructorForCourseWithTa(courseId, instructorId);
 
@@ -182,7 +182,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
 
 	@Override
 	public void addTaToACourse(int courseId, int taId) {
-		try (Connection connection = DatabaseManager.getConnection()) {
+		try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
 			if (doesCourseIdExistInThisMapper(courseId)) {
 				addTaForCourseWithInstructor(courseId, taId);
 

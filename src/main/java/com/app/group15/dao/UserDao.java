@@ -29,8 +29,7 @@ public class UserDao extends UserAbstractDao implements UserRoleDaoInjectorInter
     public User get(int id) {
         String query = "SELECT * FROM table_users WHERE id=?";
 		User user = new User();
-		try (Connection connection = DatabaseManager
-				.getConnection();
+		try (Connection connection = DatabaseManager.getDataSource().getConnection();
 				PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setInt(1, id);
 			try (ResultSet result = statement.executeQuery()) {
@@ -53,7 +52,7 @@ public class UserDao extends UserAbstractDao implements UserRoleDaoInjectorInter
     public User getUserByBannerId(String bannerId) {
         String query = "SELECT * FROM table_users WHERE banner_id=?";
         User user = new User();
-        try (Connection connection = DatabaseManager.getConnection();
+        try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, bannerId);
             try (ResultSet result = statement.executeQuery()) {
@@ -77,7 +76,7 @@ public class UserDao extends UserAbstractDao implements UserRoleDaoInjectorInter
 	public ArrayList<User> getAll() {
 		String query = "SELECT * FROM table_users";
 		ArrayList<User> usersList = new ArrayList<>();
-		try (Connection connection=DatabaseManager.getConnection();
+		try (Connection connection=DatabaseManager.getDataSource().getConnection();
 			PreparedStatement statement = connection.prepareStatement(query);
 			 ResultSet result = statement.executeQuery()) {
 			while (result.next()) {
@@ -102,7 +101,7 @@ public class UserDao extends UserAbstractDao implements UserRoleDaoInjectorInter
 	public int saveUser(User user, String role) {
 		String query = "INSERT INTO table_users(first_name,last_name,email, banner_id,password) " + "VALUES(?,?,?,?,?)";
 		int userId = 0;
-		try(Connection connection=DatabaseManager.getConnection()){
+		try(Connection connection=DatabaseManager.getDataSource().getConnection()){
 			try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 					connection.setAutoCommit(false);
 					statement.setString(1, user.getFirstName());
@@ -144,7 +143,7 @@ public class UserDao extends UserAbstractDao implements UserRoleDaoInjectorInter
 	public void update(Persistence user, int id) {
 		User userEntity = (User) user;
 		String query = "UPDATE table_users SET first_name=?,last_name=?,email=? WHERE id=?";
-		try (Connection connection=DatabaseManager.getConnection();
+		try (Connection connection=DatabaseManager.getDataSource().getConnection();
 			PreparedStatement statement = connection.prepareStatement(query)) {
 			connection.setAutoCommit(false);
 			statement.setString(1, userEntity.getFirstName());
@@ -162,7 +161,7 @@ public class UserDao extends UserAbstractDao implements UserRoleDaoInjectorInter
     @Override
     public void updateUserRole(int userId, String role) {
         String query = "UPDATE table_user_role_mapper SET role_id=? WHERE user_id=?";
-        try (Connection connection = DatabaseManager.getConnection()) {
+        try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 connection.setAutoCommit(false);
                 statement.setInt(1, userRoleDao.getRoleId(role));
@@ -187,7 +186,7 @@ public class UserDao extends UserAbstractDao implements UserRoleDaoInjectorInter
     @Override
     public boolean updateUserPassword(int userId, String password) {
         String query = "UPDATE table_users SET password=? WHERE id=?";
-        try (Connection connection = DatabaseManager.getConnection()) {
+        try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 connection.setAutoCommit(false);
                 statement.setString(1, password);
@@ -221,7 +220,7 @@ public class UserDao extends UserAbstractDao implements UserRoleDaoInjectorInter
     public User getUserByEmailId(String emailId) {
         String query = "SELECT * FROM table_users WHERE email like ?";
         User user = new User();
-        try (Connection connection = DatabaseManager.getConnection();
+        try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, emailId);
             try (ResultSet result = statement.executeQuery()) {
@@ -247,7 +246,7 @@ public class UserDao extends UserAbstractDao implements UserRoleDaoInjectorInter
         SimpleDateFormat sdf =
                 new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentDateTime = sdf.format(date);
-        try (Connection connection = DatabaseManager.getConnection()) {
+        try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 connection.setAutoCommit(false);
 				statement.setInt(1, id);
@@ -277,7 +276,7 @@ public class UserDao extends UserAbstractDao implements UserRoleDaoInjectorInter
         boolean exist = false;
         String query = "SELECT id FROM table_forgot_password_tokens WHERE id=?";
 
-        try (Connection connection = DatabaseManager.getConnection();
+        try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
             try (ResultSet result = statement.executeQuery()) {
@@ -296,7 +295,7 @@ public class UserDao extends UserAbstractDao implements UserRoleDaoInjectorInter
     @Override
     public boolean deleteForgotPasswordToken(int id) {
         String query = "delete from table_forgot_password_tokens where id=?";
-        try (Connection connection = DatabaseManager.getConnection()) {
+        try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 connection.setAutoCommit(false);
                 statement.setInt(1, id);
@@ -322,7 +321,7 @@ public class UserDao extends UserAbstractDao implements UserRoleDaoInjectorInter
     public Map<String, String> getUserFromToken(String token) {
         String query = "SELECT * FROM table_forgot_password_tokens WHERE token like ?";
         HashMap<String, String> row = new HashMap<>();
-        try (Connection connection = DatabaseManager.getConnection();
+        try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, token);
             try (ResultSet result = statement.executeQuery()) {
