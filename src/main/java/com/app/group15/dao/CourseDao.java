@@ -14,8 +14,8 @@ import java.util.logging.Level;
 
 
 @SuppressWarnings("rawtypes")
-public class CourseDao
-		implements Dao, CourseInstructorMapperInjectorInterface, CourseStudentMapperDaoInjectorInterface {
+public class CourseDao extends CourseAbstractDao
+		implements CourseInstructorMapperInjectorInterface, CourseStudentMapperDaoInjectorInterface {
 
 
 	private CourseInstructorMapperDao courseInstructorMapperDao;
@@ -23,13 +23,12 @@ public class CourseDao
 
 	//private final static Logger LOGGER = Logger.getLogger(CourseDao.class.getName());
 
-	
 
 	@Override
 	public Course get(int id) {
 		String query = "SELECT * FROM table_course WHERE id=?";
 		Course course = new Course();
-		try (Connection connection = DatabaseManager.getDataSource().getConnection();
+		try (Connection connection=DatabaseManager.getDataSource().getConnection();
 			PreparedStatement statement = connection.prepareStatement(query)) {
 			statement.setInt(1, id);
 			try (ResultSet result = statement.executeQuery()) {
@@ -51,7 +50,7 @@ public class CourseDao
 	public ArrayList<Course> getAll() {
 		String query = "SELECT * FROM table_course";
 		ArrayList<Course> coursesList = new ArrayList<Course>();
-		try (Connection connection = DatabaseManager.getDataSource().getConnection();
+		try (Connection connection=DatabaseManager.getDataSource().getConnection();
 				PreparedStatement statement = connection.prepareStatement(query);
 			 ResultSet result = statement.executeQuery()) {
 			while (result.next()) {
@@ -74,7 +73,7 @@ public class CourseDao
 		Course courseEntity = (Course) course;
 		String query = "INSERT INTO table_course(name) VALUES(?)";
 		int courseId = 0;
-		try(Connection connection = DatabaseManager.getDataSource().getConnection()){
+		try(Connection connection=DatabaseManager.getDataSource().getConnection()){
 			try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 				connection.setAutoCommit(false);
 				statement.setString(1, courseEntity.getName());
@@ -108,7 +107,7 @@ public class CourseDao
 	public void update(Persistence course, int id) {
 		Course courseEntity = (Course) course;
 		String query = "UPDATE table_course SET name=? WHERE id=?";
-		try(Connection connection = DatabaseManager.getDataSource().getConnection()){
+		try(Connection connection=DatabaseManager.getDataSource().getConnection()){
 			try (PreparedStatement statement = connection.prepareStatement(query)) {
 				connection.setAutoCommit(false);
 				statement.setString(1, courseEntity.getName());
@@ -134,7 +133,7 @@ public class CourseDao
 	@Override
 	public void delete(int id) {
 		String query = "DELETE FROM table_course WHERE id=?";
-		try(Connection connection = DatabaseManager.getDataSource().getConnection()){
+		try(Connection connection=DatabaseManager.getDataSource().getConnection()){
 			try (PreparedStatement statement = connection.prepareStatement(query)) {
 				connection.setAutoCommit(false);
 				courseInstructorMapperDao.deleteByCourseId(id);

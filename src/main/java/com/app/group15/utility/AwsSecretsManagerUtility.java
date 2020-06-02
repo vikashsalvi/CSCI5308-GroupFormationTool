@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class AwsSecretsManagerUtility {
 	
 	private static DatabaseDetails databaseDetails;
+	
 	private static String getKeyFromEnvProperties() {
 		
 		if(AppConfig.getSingletonAppConfig().getProperties().get("spring.profiles.active").equals(Environments.DEV.getEnvironment())) {

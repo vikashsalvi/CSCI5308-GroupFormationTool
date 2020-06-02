@@ -19,6 +19,7 @@ public class EmailNotifierImpl implements Notifier {
     }
 
     private JavaMailSenderImpl javaMailSender;
+    
 
     @Override
     public boolean setCredentials() {
