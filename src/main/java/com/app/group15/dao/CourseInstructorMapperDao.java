@@ -1,6 +1,7 @@
 package com.app.group15.dao;
 
 
+import com.app.group15.model.Course;
 import com.app.group15.model.CourseInstructorMapper;
 import com.app.group15.model.Persistence;
 import com.app.group15.model.User;
@@ -212,6 +213,51 @@ public class CourseInstructorMapperDao implements Dao {
 
 		}
 
+	}
+
+
+	public ArrayList<Course> getCourseByInstructor(int id) {
+		String query = "select * from table_course_instructor_mapper tim\n" +
+				"Join table_course tc on tc.id = tim.course_id \n" +
+				"where tim.instructor_id = ?";
+		ArrayList<Course> arrayListCourse = new ArrayList<Course>();
+		try (PreparedStatement statement = connection.prepareStatement(query)) {
+			statement.setInt(1, id);
+			try (ResultSet result = statement.executeQuery()) {
+				while (result.next()) {
+					Course courseEntity = new Course();
+					courseEntity.setId(result.getInt("course_id"));
+					courseEntity.setName(result.getString("name"));
+					arrayListCourse.add(courseEntity);
+				}
+			}
+		} catch (SQLException e) {
+
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		}
+		return arrayListCourse;
+	}
+
+	public User getCourseTA(int id) {
+		String query = "SELECT * FROM table_users tu\n" +
+				"JOIN table_course_instructor_mapper tcm ON tu.id=tcm.ta_id\n" +
+				"WHERE tcm.course_id=?";
+		User userEntity = new User();
+		try (PreparedStatement statement = connection.prepareStatement(query)) {
+			statement.setInt(1, id);
+			try (ResultSet result = statement.executeQuery()) {
+				while (result.next()) {
+					userEntity.setFirstName(result.getString("first_name"));
+					userEntity.setLastName(result.getString("last_name"));
+					userEntity.setId(result.getInt("ta_id"));
+				}
+
+			}
+		} catch (SQLException e) {
+
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+		}
+		return userEntity;
 	}
 
 }
