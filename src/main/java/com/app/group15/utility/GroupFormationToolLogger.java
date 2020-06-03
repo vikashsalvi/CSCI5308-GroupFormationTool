@@ -42,4 +42,8 @@ public class GroupFormationToolLogger {
     public static void log(Level level, String msg, Exception e) {
         getLogger().log(level, msg, e);
     }
+
+    public static void log(Level level, String msg) {
+		getLogger().log(level, msg);
+	}
 }

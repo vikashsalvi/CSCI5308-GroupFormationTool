@@ -24,7 +24,7 @@ public class DatabaseManager {
 	private static void getDetails() {
 		DatabaseDetails databaseDetails = AwsSecretsManagerUtility.getDatabaseDetails();
 		URL = "jdbc:mysql://" + databaseDetails.getHost() + ":" + databaseDetails.getPort() + "/"
-				+ databaseDetails.getDbName() + "?useSSL=false";
+				+ databaseDetails.getDbName() + "?useSSL=false&serverTimezone=UTC";
 		PSWD = databaseDetails.getPassword();
 		USER_NAME = databaseDetails.getUserName();
 	}
@@ -51,5 +51,5 @@ public class DatabaseManager {
 
 	}
 
-	
+
 }

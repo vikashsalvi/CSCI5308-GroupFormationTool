@@ -6,8 +6,10 @@ import com.app.group15.injectors.CourseDaoInjectorService;
 import com.app.group15.injectors.CourseInstructorMapperDaoInjectorService;
 import com.app.group15.model.Course;
 import com.app.group15.model.User;
+import com.app.group15.utility.GroupFormationToolLogger;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 public class CourseService {
 	private static CourseDao courseDao = new CourseDaoInjectorService().getCourseDao();
@@ -42,8 +44,22 @@ public class CourseService {
 		int courseId = courseDao.save(course);
 		return courseId;
 	}
+
 	public static void deleteCourse(int courseId){
 		courseInstructorMapperDao.deleteByCourseId(courseId);
 		courseDao.delete(courseId);
+	}
+
+	public static boolean isUserCourseAdmin(int courseId, int userId){
+		User userTa=courseInstructorMapperDao.getCourseTA(courseId);
+		User userInstructor=courseInstructorMapperDao.getCourseInstructor(courseId);
+		GroupFormationToolLogger.log(Level.INFO, String.valueOf(courseId));
+		GroupFormationToolLogger.log(Level.INFO, userTa.getBannerId()+" "+userInstructor.getBannerId());
+		if (userId==userTa.getId() || userId==userInstructor.getId()){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 }
