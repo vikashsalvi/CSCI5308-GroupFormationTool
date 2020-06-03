@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.util.ArrayList;
+
 class SignupServiceTest {
 
 	private UserDaoMock userDaoMock = new UserDaoMock();
@@ -26,4 +28,6 @@ class SignupServiceTest {
 		int userId = userDaoMock.saveUserMock(user, "GUEST");
 		assertEquals(userId, 0);
 	}
+	
+	
 }
