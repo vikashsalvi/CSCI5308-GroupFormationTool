@@ -1,6 +1,8 @@
 package com.app.group15.services;
 
+import com.app.group15.dao.CourseAbstractDao;
 import com.app.group15.dao.CourseDao;
+import com.app.group15.dao.CourseInstructorMapperAbstractDao;
 import com.app.group15.dao.CourseInstructorMapperDao;
 import com.app.group15.injectors.CourseDaoInjectorService;
 import com.app.group15.injectors.CourseInstructorMapperDaoInjectorService;
@@ -10,15 +12,15 @@ import com.app.group15.model.User;
 import java.util.ArrayList;
 
 public class CourseService {
-	private static CourseDao courseDao = new CourseDaoInjectorService().getCourseDao();
-	private static CourseInstructorMapperDao courseInstructorMapperDao = new CourseInstructorMapperDaoInjectorService().getCourseInstructorMapperDao();
+	private static CourseAbstractDao courseDao = new CourseDaoInjectorService().getCourseDao();
+	private static CourseInstructorMapperAbstractDao courseInstructorMapperDao = new CourseInstructorMapperDaoInjectorService().getCourseInstructorMapperDao();
 
 	public static ArrayList<Course> getCoursesList() {
 		return courseDao.getAll();
 	}
 
 	public static Course getCourseDetails(int id) {
-		return courseDao.get(id);
+		return (Course) courseDao.get(id);
 	}
 
 	public static User getCourseInstructor(int id) {

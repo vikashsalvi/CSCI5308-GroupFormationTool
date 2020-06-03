@@ -1,11 +1,12 @@
 package com.app.group15.services;
 
+import com.app.group15.dao.UserAbstractDao;
 import com.app.group15.dao.UserDao;
 import com.app.group15.injectors.UserDaoInjectorService;
 import com.app.group15.model.User;
 
 public class LoginService {
-    private UserDao userDao = new UserDaoInjectorService().getUserDao();
+    private UserAbstractDao userDao = new UserDaoInjectorService().getUserDao();
 
     public boolean validateLogin(String bannerId, String password)
     {
