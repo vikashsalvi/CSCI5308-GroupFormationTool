@@ -58,7 +58,7 @@ public class AssignTAService {
     public boolean checkIntructorPermission(int instructorId, int courseId) {
 
         boolean returnVar = false;
-        ArrayList<Course> courseEntitiesList = courseInstructorMapperDao.getCourseByInstructor(instructorId);
+        ArrayList<Course> courseEntitiesList = courseInstructorMapperDao.getCoursesByInstructor(instructorId);
 
         for (int i = 0; i < courseEntitiesList.size(); i++) {
             Course courseEntity = courseEntitiesList.get(i);

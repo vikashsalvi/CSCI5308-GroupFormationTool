@@ -71,8 +71,9 @@ public class UserRoleDao extends UserRoleAbstractDao {
 
     @Override
     public Set<String> getRolesByBannerId(String bannerId) {
-        String query = "SELECT role FROM table_users tu\n" + "JOIN table_user_role_mapper trm ON tu.id=trm.user_id\n"
-                + "JOIN table_user_roles tr ON trm.role_id=tr.id\n" + "WHERE tu.banner_id=?";
+        String query = "SELECT role FROM table_users tu\n" +
+			"JOIN table_user_role_mapper trm ON tu.id=trm.user_id\n" +
+			"JOIN table_user_roles tr ON trm.role_id=tr.id\n" + "WHERE tu.banner_id=?";
         Set<String> roles = new HashSet<String>();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {

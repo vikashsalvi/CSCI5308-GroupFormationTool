@@ -17,7 +17,6 @@ import com.app.group15.utility.GroupFormationToolLogger;
 import org.springframework.web.multipart.MultipartFile;
 
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -30,7 +29,7 @@ public class InstructorService {
 	private static CourseDao courseDao = new CourseDaoInjectorService().getCourseDao();
 
 	public ArrayList<Course> getCourseOfInstructor(int instructorId) {
-		ArrayList<Course> arrayListCourses = courseInstructorMapperDao.getCourseByInstructor(instructorId);
+		ArrayList<Course> arrayListCourses = courseInstructorMapperDao.getCoursesByInstructor(instructorId);
 		return arrayListCourses;
 	}
 

@@ -215,8 +215,34 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
 
 	}
 
+	@Override
+	public Course getCourseByTa(int taId){
+		String query = "select * from table_course_instructor_mapper tim\n" +
+			"Join table_course tc on tc.id = tim.course_id \n" +
+			"where tim.ta_id = ?";
+		Course course=new Course();
 
-	public ArrayList<Course> getCourseByInstructor(int id) {
+		try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
+
+			try (PreparedStatement statement = connection.prepareStatement(query)) {
+				statement.setInt(1, taId);
+				try (ResultSet result = statement.executeQuery()) {
+					while (result.next()) {
+						course.setId(result.getInt("course_id"));
+						course.setName(result.getString("name"));
+					}
+				}
+			} catch (SQLException e) {
+				GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+			}
+		} catch (SQLException e) {
+			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+		}
+		return course;
+	}
+
+	@Override
+	public ArrayList<Course> getCoursesByInstructor(int id) {
 		String query = "select * from table_course_instructor_mapper tim\n" +
 			"Join table_course tc on tc.id = tim.course_id \n" +
 			"where tim.instructor_id = ?";

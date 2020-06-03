@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
-	<title>Assign TA</title>
+	<title>Home</title>
 	<link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
 	<link
 		href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
@@ -24,15 +24,13 @@
 		</a>
 		<!-- Divider -->
 		<hr class="sidebar-divider my-0">
-		<div class="sidebar-heading">Home</div>
 		<!-- Nav Item - Dashboard -->
 		<li class="nav-item active">
-			<a class="nav-link" href="/instructor/home">
+			<a class="nav-link" href="#">
 				<i class="fas fa-fw fa-tachometer-alt"></i>
 				<span>Dashboard</span></a>
 		</li>
 		<!-- Divider -->
-		<hr class="sidebar-divider">
 		<hr class="sidebar-divider">
 		<li class="nav-item">
 			<a class="nav-link" href="/logout">
@@ -97,30 +95,12 @@
 						th:text='${user.getFirstName()+ " "+ user.getLastName()}'></span></h1>
 				</div>
 				<hr class="text-gray-800">
-
-				<div class="row">
-					<div class="card">
-						<div class="card-header">
-							<h1 class="h4 text-gray-800">Import students Using CSV for <span th:text='${ course.getName() }'></span></h1>
-						</div>
-						<div class="card-body w-100">
-							<form action="/instructor/importCSV" method="POST" enctype="multipart/form-data">
-								<div class="custom-file">
-									<input type="hidden" id="courseId" name="courseId" th:value="${course.getId()}">
-									<input type="file" class="custom-file-input" id="csvFile" name="csvFile" required>
-									<label class="custom-file-label" for="csvFile">Choose file to upload list of students... (CSV only)</label>
-								</div>
-								<button type="submit" class="btn btn-success w-100 mt-1"><i class="fa fa-upload"></i>&nbsp;Upload</button>
-							</form>
-
-						</div>
-					</div>
-				</div>
+				<h1 class="h5">Welcome to <span th:text="${course.getName()}"></span><small class="text-sm">&nbsp;by&nbsp;<span
+					th:text='${courseInstructor.getFirstName()+" "+courseInstructor.getLastName()}'></span></small></h1>
 			</div>
 		</div>
 	</div>
 </div>
-
 
 <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
 <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
@@ -130,11 +110,5 @@
 
 <!-- Custom scripts for all pages-->
 <script th:src="@{/js/sb-admin-2.min.js}"></script>
-<script>
-    $(".custom-file-input").on("change", function () {
-        var fileName = $(this).val().split("\\").pop();
-        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-    });
-</script>
 </body>
 </html>

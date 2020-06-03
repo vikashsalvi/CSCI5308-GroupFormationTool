@@ -1,13 +1,19 @@
 package com.app.group15.dao;
 
+import com.app.group15.model.Course;
 import com.app.group15.model.Persistence;
 import com.app.group15.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class CourseInstructorMapperAbstractDao<T> implements Dao {
 
     public abstract User getCourseInstructor(int id);
+
+    public abstract ArrayList<Course> getCoursesByInstructor(int taId);
+
+	public abstract Course getCourseByTa(int id);
 
     public abstract void deleteByCourseId(int courseId);
 
