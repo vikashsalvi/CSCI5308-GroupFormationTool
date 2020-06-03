@@ -19,7 +19,7 @@ import java.util.logging.Level;
 @SuppressWarnings("rawtypes")
 public class UserDao extends UserAbstractDao implements UserRoleDaoInjectorInterface {
 
-    private UserRoleDao userRoleDao;
+    private UserRoleAbstractDao userRoleDao;
 
     public UserDao() {
 

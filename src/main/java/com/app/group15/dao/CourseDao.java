@@ -18,10 +18,8 @@ public class CourseDao extends CourseAbstractDao
 		implements CourseInstructorMapperInjectorInterface, CourseStudentMapperDaoInjectorInterface {
 
 
-	private CourseInstructorMapperDao courseInstructorMapperDao;
-	private CourseStudentMapperDao courseStudentMapperDao;
-
-	//private final static Logger LOGGER = Logger.getLogger(CourseDao.class.getName());
+	private CourseInstructorMapperAbstractDao courseInstructorMapperDao;
+	private CourseStudentMapperAbstractDao courseStudentMapperDao;
 
 
 	@Override

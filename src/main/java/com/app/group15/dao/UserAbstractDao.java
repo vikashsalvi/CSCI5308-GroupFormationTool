@@ -3,6 +3,7 @@ package com.app.group15.dao;
 import com.app.group15.model.Persistence;
 import com.app.group15.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ public abstract class UserAbstractDao<T> implements Dao {
     public abstract User getUserByBannerId(String bannerId);
 
     @Override
-    public abstract List<T> getAll();
+    public abstract ArrayList<User> getAll();
 
     public abstract int saveUser(User user, String role);
 
