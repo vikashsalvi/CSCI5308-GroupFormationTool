@@ -1,16 +1,15 @@
 package com.app.group15.utility;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import com.app.group15.persistence.AwsSecretKey;
+import com.app.group15.persistence.Environments;
+import org.junit.jupiter.api.Test;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Level;
 
-import org.junit.jupiter.api.Test;
-
-import com.app.group15.persistence.AwsSecretKey;
-import com.app.group15.persistence.Environments;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AwsSecretsManagerUtilityTest {
 
@@ -19,17 +18,23 @@ public class AwsSecretsManagerUtilityTest {
 
 		Properties prop = new Properties();
 		String propertyFilePath = "src/main/resources/application.properties";
+
 		try (FileInputStream in = new FileInputStream(propertyFilePath)) {
 			prop.load(in);
 		} catch (IOException ex) {
 			GroupFormationToolLogger.log(Level.SEVERE, ex.getMessage(), ex);
 		}
+		String springPropertyEnv = System.getProperty("spring.profiles.active");
+		;
+		if (null == springPropertyEnv) {
+			springPropertyEnv = "DEVINT";
+		}
 
-		if (prop.get("spring.profiles.active").equals(Environments.DEV.getEnvironment())) {
+		if (springPropertyEnv.equals(Environments.DEV.getEnvironment())) {
 			assertEquals(AwsSecretKey.DEVINT.getKey(), "qa-dev-secret");
-		} else if (prop.get("spring.profiles.active").equals(Environments.TEST.getEnvironment())) {
+		} else if (springPropertyEnv.equals(Environments.TEST.getEnvironment())) {
 			assertEquals(AwsSecretKey.TEST.getKey(), "qa-test-secret");
-		} else if (prop.get("spring.profiles.active").equals(Environments.PROD.getEnvironment())) {
+		} else if (springPropertyEnv.equals(Environments.PROD.getEnvironment())) {
 			assertEquals(AwsSecretKey.PROD.getKey(), "qa-prod-secret");
 		}
 
