@@ -2,6 +2,7 @@ package com.app.group15.utility;
 
 import com.app.group15.ExceptionHandler.InvalidFileFormatException;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -45,6 +46,9 @@ public class FileUtility {
 				String completeData = new String(bytes);
 				String[] rows = completeData.split("\n");
 				String[] fileCols = rows[0].toLowerCase().split(",");
+				for (int i = 0; i < fileCols.length; i++) {
+					fileCols[i] = fileCols[i].trim();
+				}
 				int i, j;
 				if (Arrays.equals(fileCols, cols)) {
 					for (i = 1; i < rows.length; i++) {
@@ -52,7 +56,7 @@ public class FileUtility {
 						String[] cells = rows[i].split(",");
 						dataRow = new HashMap<String, String>();
 						for (String cell : cells) {
-							dataRow.put(cols[j], cell);
+							dataRow.put(cols[j], cell.trim());
 							j++;
 						}
 						data.add(dataRow);
