@@ -26,6 +26,7 @@ public class InstructorController {
 	@RequestMapping(value = "/instructor/home", method = RequestMethod.GET)
 	public ModelAndView adminHome(HttpServletRequest request) {
 		authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
+		System.out.println(authorizationService.getAllowedRoles().toString());
 		ModelAndView modelAndView;
 		if (SessionService.isUserSignedIn(request)) {
 			if (authorizationService.isAuthorized(request)) {
@@ -106,20 +107,25 @@ public class InstructorController {
 				// if instructor has no right to change the TA
 				if (!assignTAService.checkIntructorPermission(userEntity.getId(), courseId)) {
 					modelAndView.addObject("error_invalid_permission", true);
+				} else {
+					modelAndView.addObject("error_invalid_permission", false);
 				}
 
 				// performing change TA
 				if (assignTAService.validateBannerID(bannerId)) {
 
-					modelAndView.addObject("error", false);
 					if (assignTAService.performTAUpdate(bannerId, courseId)) {
+						modelAndView.addObject("error", false);
 						System.out.println("Performing UPDATE");
 						modelAndView.setViewName("redirect:/instructor/home");
 						return modelAndView;
+					}  else {
+						modelAndView.addObject("error", true);
+						modelAndView.addObject("errorMessage", String.format("Student with Banner ID \"%s\" is enrolled in your course!",bannerId));
 					}
 				} else {
-
 					modelAndView.addObject("error", true);
+					modelAndView.addObject("errorMessage", "Invalid Banner ID!");
 				}
 
 				modelAndView.setViewName("instructor/ta-assignment");
@@ -143,7 +149,7 @@ public class InstructorController {
 
 	@RequestMapping(value = "/instructor/importCSV", method = RequestMethod.GET)
 	public ModelAndView importCSV(HttpServletRequest request, @RequestParam(required = true, value = "courseId") int courseId) {
-		authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR", "TA"});
+		authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR", "TA", "STUDENT"});
 		ModelAndView modelAndView;
 		if (SessionService.isUserSignedIn(request)) {
 			if (authorizationService.isAuthorized(request)) {

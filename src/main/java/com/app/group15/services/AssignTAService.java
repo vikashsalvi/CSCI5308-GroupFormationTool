@@ -30,8 +30,13 @@ public class AssignTAService {
 
         if (validateBannerID(bannerId) && validateCourseID(courseId)) {
             System.out.println("HERE");
-            courseInstructorMapperDao.addTaToACourse(courseId,userEntity.getId());
-            return true;
+            if (InstructorService.validateUserToAddAsTa(userEntity,courseId)){
+				InstructorService.addOrUpdateStudentRole(userEntity,"TA");
+				courseInstructorMapperDao.addTaToACourse(courseId,userEntity.getId());
+				return true;
+			} else {
+            	return false;
+			}
         }else {
             return false;
         }

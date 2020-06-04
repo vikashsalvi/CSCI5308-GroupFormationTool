@@ -1,14 +1,8 @@
 package com.app.group15.services;
 
 import com.app.group15.config.AppConfig;
-import com.app.group15.dao.CourseDao;
-import com.app.group15.dao.CourseInstructorMapperDao;
-import com.app.group15.dao.CourseStudentMapperDao;
-import com.app.group15.dao.UserDao;
-import com.app.group15.injectors.CourseDaoInjectorService;
-import com.app.group15.injectors.CourseInstructorMapperDaoInjectorService;
-import com.app.group15.injectors.CourseStudentMapperDaoInjectorService;
-import com.app.group15.injectors.UserDaoInjectorService;
+import com.app.group15.dao.*;
+import com.app.group15.injectors.*;
 import com.app.group15.model.Course;
 import com.app.group15.model.User;
 import com.app.group15.utility.FileUtility;
@@ -19,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.logging.Level;
 
 public class InstructorService {
@@ -26,6 +21,7 @@ public class InstructorService {
 	private static CourseInstructorMapperDao courseInstructorMapperDao = new CourseInstructorMapperDaoInjectorService().getCourseInstructorMapperDao();
 	private static CourseStudentMapperDao courseStudentMapperDao = new CourseStudentMapperDaoInjectorService().getCourseStudentMapperDao();
 	private static UserDao userDao = new UserDaoInjectorService().getUserDao();
+	private static UserRoleDao userRoleDao = new UserRoleDaoInjectorService().getUserRoleDao();
 	private static CourseDao courseDao = new CourseDaoInjectorService().getCourseDao();
 
 	public ArrayList<Course> getCourseOfInstructor(int instructorId) {
@@ -44,6 +40,42 @@ public class InstructorService {
 		return userEntitiesTa;
 	}
 
+	public static boolean validateUserToAddAsStudent(User user) {
+		Set<String> userRoles = userRoleDao.getRolesByBannerId(user.getBannerId());
+		boolean valid;
+		if (userRoles.contains("INSTRUCTOR")) {
+			GroupFormationToolLogger.log(Level.INFO, String.format("User with banner id %s is INSTRUCTOR", user.getBannerId()));
+			valid = false;
+		} else if (userRoles.contains("TA")) {
+			Course course = courseInstructorMapperDao.getCourseByTa(user.getId());
+			if (course.getName() != null) {
+				GroupFormationToolLogger.log(Level.INFO, String.format("User with banner id %s is TA for this course (course id %d)", user.getBannerId(), course.getId()));
+				valid = false;
+			} else {
+				valid = true;
+			}
+		} else {
+			valid = true;
+		}
+		return valid;
+	}
+
+	public static boolean validateUserToAddAsTa(User user, int courseId) {
+		boolean valid;
+		ArrayList<Integer> courseIdsOfAStudent = courseStudentMapperDao.getCourseIdsOfAStudent(user.getId());
+		valid = !courseIdsOfAStudent.contains(courseId);
+		return valid;
+	}
+
+	public static void addOrUpdateStudentRole(User user, String role) {
+		Set<String> userRoles = userRoleDao.getRolesByBannerId(user.getBannerId());
+		if (!userRoles.contains(role)) {
+			userRoleDao.addRole(user.getId(), role);
+		} else {
+			GroupFormationToolLogger.log(Level.INFO, String.format("User with banner id %s is already a student", user.getBannerId()));
+		}
+	}
+
 	public static int addStudentsFromCSV(MultipartFile file, int courseId) {
 		String[] cols;
 		cols = new String[]{"name", "email", "banner_id"};
@@ -51,30 +83,40 @@ public class InstructorService {
 		String name, bannerId, email;
 		Course course = courseDao.get(courseId);
 		String emailSubject = new String("Update on your courses");
-		String emailBody = new String(String.format("Welcome to the course %s.", course.getName()));
 		int insertCount = 0;
 		User user;
-		if (data.size()>0 && data.get(0).get("error") != null) {
+		if (data.size() > 0 && data.get(0).get("error") != null) {
 			return -1;
 		}
 		if (data.size() == 0) {
 			return 0;
 		} else {
 			for (HashMap<String, String> dataRow : data) {
+				String emailBody = String.format("Welcome to the course %s.", course.getName());
 				name = dataRow.get("name");
 				bannerId = dataRow.get("banner_id");
 				email = dataRow.get("email");
 				user = userDao.getUserByBannerId(bannerId);
+				GroupFormationToolLogger.log(Level.INFO, "Getting user by banner id");
 				if (user.getBannerId() != null) {
-					ArrayList<Integer> courseIdsOfAStudent = courseStudentMapperDao.getCourseIdsOfAStudent(user.getId());
-					if (!courseIdsOfAStudent.contains(courseId)) {
-						int courseStudentMapperId = courseStudentMapperDao.addStudentToACourse(courseId, user.getId());
-						userDao.updateUserRole(user.getId(), "STUDENT");
-						AppConfig.getInstance().getEmailNotifier().sendMessage(email, emailSubject, emailBody);
+//							GroupFormationToolLogger.log(Level.INFO, String.format("%s already exists!", user.getBannerId()));
+					if (validateUserToAddAsStudent(user)) {
+						ArrayList<Integer> courseIdsOfAStudent = courseStudentMapperDao.getCourseIdsOfAStudent(user.getId());
+//							GroupFormationToolLogger.log(Level.INFO, "Checking if student is already enrolled");
+						if (!courseIdsOfAStudent.contains(courseId)) {
+//							GroupFormationToolLogger.log(Level.INFO, String.format("%s not enrolled!", user.getBannerId()));
+							int courseStudentMapperId = courseStudentMapperDao.addStudentToACourse(courseId, user.getId());
+//							GroupFormationToolLogger.log(Level.INFO, String.format("%d is CourseStudentMapperId for %s!", courseStudentMapperId, user.getBannerId()));
+							addOrUpdateStudentRole(user, "STUDENT");
+							AppConfig.getInstance().getEmailNotifier().sendMessage(email, emailSubject, emailBody);
+						} else {
+							GroupFormationToolLogger.log(Level.INFO, String.format("%s is already registered to the course id %d", user.getFirstName(), courseId));
+						}
 					} else {
-						GroupFormationToolLogger.log(Level.INFO, String.format("%s is already registered to the course id %d", user.getFirstName(), courseId));
+						GroupFormationToolLogger.log(Level.INFO, String.format("%s is an Instructor", user.getFirstName()));
 					}
 				} else {
+//					GroupFormationToolLogger.log(Level.INFO, String.format("%s not registered in system!", user.getBannerId()));
 					String[] firstLast = name.split(" ");
 					user.setFirstName(firstLast[0]);
 					user.setLastName(firstLast[1]);
@@ -82,8 +124,12 @@ public class InstructorService {
 					user.setEmail(email);
 					String tempPassword = ForgetPasswordUtility.generateForgotPasswordToken();
 					user.setPassword(tempPassword);
-					userDao.saveUser(user, "STUDENT");
-					int courseStudentMapperId = courseStudentMapperDao.addStudentToACourse(courseId, user.getId());
+					int userId = userDao.saveUser(user, "STUDENT");
+					user.setId(userId);
+//					GroupFormationToolLogger.log(Level.INFO, String.format("%s registered with id %d!", user.getBannerId(), userId));
+					int courseStudentMapperId = courseStudentMapperDao.addStudentToACourse(courseId, userId);
+//					GroupFormationToolLogger.log(Level.INFO, String.format("%d is CourseStudentMapperId for %s!", courseStudentMapperId, user.getBannerId()));
+					addOrUpdateStudentRole(user, "STUDENT");
 					userDao.updateUserRole(user.getId(), "STUDENT");
 					emailBody += String.format("Your temporary password is %s.\nPlease change the password once by clicking on Forgot password on login page", tempPassword);
 					AppConfig.getInstance().getEmailNotifier().sendMessage(email, emailSubject, emailBody);

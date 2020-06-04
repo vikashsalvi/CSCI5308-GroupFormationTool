@@ -94,13 +94,15 @@ public class AdminController {
 	@RequestMapping(value = "/admin/courses/add", method = RequestMethod.POST)
 	public ModelAndView adminCourseAdd(HttpServletRequest request,
 									   @RequestParam(required = true, value = "courseName") String courseName,
-									   @RequestParam(required = true, value = "instructorId") int instructorId) {
+									   @RequestParam(required = false, value = "instructorId") int instructorId) {
 		authorizationService.setAllowedRoles(new String[]{"ADMIN"});
 		ModelAndView modelAndView;
 		if (SessionService.isUserSignedIn(request)) {
 			if (authorizationService.isAuthorized(request)) {
 				int courseId = CourseService.addCourse(courseName);
-				CourseService.addOrUpdateInstructor(courseId, instructorId);
+				if (instructorId!=-1){
+					CourseService.addOrUpdateInstructor(courseId, instructorId);
+				}
 				UserService.updateUserRole(instructorId, "INSTRUCTOR");
 				modelAndView = new ModelAndView("redirect:/admin/courses?feedback=courseAdded");
 			} else {
