@@ -1,8 +1,8 @@
 package com.app.group15.persistence.dao;
 
-import java.util.ArrayList;
-
 import com.app.group15.model.User;
+
+import java.util.ArrayList;
 
 public class UserDaoMock {
 
@@ -13,7 +13,7 @@ public class UserDaoMock {
 			user.setLastName("Patel");
 			user.setEmail("daksh.patel@dal.ca");
 			user.setBannerId("B00843468");
-			user.setBannerId("passwordTest");
+			user.setPassword("passwordTest");
 			return user;
 		} else {
 			return user;
