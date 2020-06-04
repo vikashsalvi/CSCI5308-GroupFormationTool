@@ -50,7 +50,7 @@ deploy_stagging:
     - develop
 
 #For deploying in production
-deploy_production:
+deploy_production_from_release:
   stage: deploy
   image: ruby:2.3
   script:
@@ -60,3 +60,15 @@ deploy_production:
     url: $HEROKU_APP_HOST_PRODUCTION
   only:
     - release
+
+#For deploying in production
+deploy_production_from_master:
+  stage: deploy
+  image: ruby:2.3
+  script:
+    - sudo -S dpl --provider=heroku --app=$HEROKU_APPNAME_PRODUCTION --api-key=$HEROKU_API_KEY
+  environment:
+    name: production
+    url: $HEROKU_APP_HOST_PRODUCTION
+  only:
+    - master
