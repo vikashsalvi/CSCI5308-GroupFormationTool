@@ -126,6 +126,7 @@
 									<div class="form-row">
 										<label for="inst-else">Select Instructor:</label>
 										<select class="form-control" id="inst-else" name="instructorId">
+											<option value="-1">------- SELECT Instructor -------</option>
 											<div th:each="user_i, iterstat: ${allUsers}">
 												<option th:value="${user_i.getId()}">
 													<span th:text='${user_i.getFirstName() + " " + user_i.getLastName()}'></span>

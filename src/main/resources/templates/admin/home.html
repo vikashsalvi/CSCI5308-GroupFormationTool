@@ -130,7 +130,7 @@
 									<tbody>
 									<tr th:each="course_i, iterstat: ${courses}">
 										<td th:text="${course_i.getId()}"></td>
-										<td><a th:text="${course_i.getName()}" th:href='${"#"}'></a></td>
+										<td><a th:text="${course_i.getName()}" href="/admin/courses"></a></td>
 									</tr>
 									</tbody>
 									<tfoot></tfoot>

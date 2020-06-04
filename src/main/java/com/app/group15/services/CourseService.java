@@ -4,16 +4,21 @@ import com.app.group15.dao.CourseAbstractDao;
 import com.app.group15.dao.CourseDao;
 import com.app.group15.dao.CourseInstructorMapperAbstractDao;
 import com.app.group15.dao.CourseInstructorMapperDao;
+import com.app.group15.dao.CourseStudentMapperDao;
 import com.app.group15.injectors.CourseDaoInjectorService;
 import com.app.group15.injectors.CourseInstructorMapperDaoInjectorService;
+import com.app.group15.injectors.CourseStudentMapperDaoInjectorService;
 import com.app.group15.model.Course;
 import com.app.group15.model.User;
+import com.app.group15.utility.GroupFormationToolLogger;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 public class CourseService {
-	private static CourseAbstractDao courseDao = new CourseDaoInjectorService().getCourseDao();
-	private static CourseInstructorMapperAbstractDao courseInstructorMapperDao = new CourseInstructorMapperDaoInjectorService().getCourseInstructorMapperDao();
+	private static CourseDao courseDao = new CourseDaoInjectorService().getCourseDao();
+	private static CourseInstructorMapperDao courseInstructorMapperDao = new CourseInstructorMapperDaoInjectorService().getCourseInstructorMapperDao();
+	private static CourseStudentMapperDao courseStudentMapperDao = new CourseStudentMapperDaoInjectorService().getCourseStudentMapperDao();
 
 	public static ArrayList<Course> getCoursesList() {
 		return courseDao.getAll();
@@ -44,8 +49,35 @@ public class CourseService {
 		int courseId = courseDao.save(course);
 		return courseId;
 	}
-	public static void deleteCourse(int courseId){
+
+	public static void deleteCourse(int courseId) {
 		courseInstructorMapperDao.deleteByCourseId(courseId);
 		courseDao.delete(courseId);
+	}
+
+	public static boolean isUserCourseAdmin(int courseId, int userId) {
+		User userTa = courseInstructorMapperDao.getCourseTA(courseId);
+		User userInstructor = courseInstructorMapperDao.getCourseInstructor(courseId);
+		GroupFormationToolLogger.log(Level.INFO, String.valueOf(courseId));
+		GroupFormationToolLogger.log(Level.INFO, userTa.getBannerId() + " " + userInstructor.getBannerId());
+		if (userId == userTa.getId() || userId == userInstructor.getId()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public static ArrayList<Course> getStudentCourses(int studentId) {
+		ArrayList<Integer> courseIdsOfAStudent = courseStudentMapperDao.getCourseIdsOfAStudent(studentId);
+		ArrayList<Course> courses = new ArrayList<>();
+
+		for (Integer courseId : courseIdsOfAStudent) {
+			courses.add(getCourseDetails(courseId));
+		}
+		return courses;
+	}
+
+	public static Course getStudentCourseAsTa(int taId) {
+		return courseInstructorMapperDao.getCourseByTa(taId);
 	}
 }

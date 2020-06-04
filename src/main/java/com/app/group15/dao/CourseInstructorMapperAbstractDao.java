@@ -13,6 +13,10 @@ public abstract class CourseInstructorMapperAbstractDao<T> implements Dao {
     
     public abstract ArrayList<Course> getCourseByInstructor(int id);
 
+    public abstract ArrayList<Course> getCoursesByInstructor(int taId);
+
+	public abstract Course getCourseByTa(int id);
+
     public abstract void deleteByCourseId(int courseId);
 
     protected abstract boolean doesCourseIdExistInThisMapper(int courseId);

@@ -30,6 +30,9 @@ public class AwsSecretsManagerUtility {
 
 	private static String getKeyFromEnvProperties() {
 		String springActiveProfile = springProperties.getProperty("spring.profiles.active");
+		if (springActiveProfile == null) {
+			springActiveProfile = System.getProperty("spring.profiles.active");
+		}
 		if (springActiveProfile.equals(Environments.DEV.getEnvironment())) {
 			return AwsSecretKey.DEVINT.getKey();
 		} else if (springActiveProfile.equals(Environments.TEST.getEnvironment())) {

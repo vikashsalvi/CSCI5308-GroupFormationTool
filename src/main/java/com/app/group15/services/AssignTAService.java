@@ -1,15 +1,10 @@
 package com.app.group15.services;
 
 
-
 import com.app.group15.dao.CourseAbstractDao;
-import com.app.group15.dao.CourseDao;
 import com.app.group15.dao.CourseInstructorMapperAbstractDao;
-import com.app.group15.dao.CourseInstructorMapperDao;
 import com.app.group15.dao.UserAbstractDao;
-import com.app.group15.dao.UserDao;
 import com.app.group15.dao.UserRoleAbstractDao;
-import com.app.group15.dao.UserRoleDao;
 import com.app.group15.injectors.CourseDaoInjectorService;
 import com.app.group15.injectors.CourseInstructorMapperDaoInjectorService;
 import com.app.group15.injectors.UserDaoInjectorService;
@@ -34,8 +29,13 @@ public class AssignTAService {
 
         if (validateBannerID(bannerId) && validateCourseID(courseId)) {
             System.out.println("HERE");
-            courseInstructorMapperDao.addTaToACourse(courseId,userEntity.getId());
-            return true;
+            if (InstructorService.validateUserToAddAsTa(userEntity,courseId)){
+				InstructorService.addOrUpdateStudentRole(userEntity,"TA");
+				courseInstructorMapperDao.addTaToACourse(courseId,userEntity.getId());
+				return true;
+			} else {
+            	return false;
+			}
         }else {
             return false;
         }
@@ -43,7 +43,7 @@ public class AssignTAService {
 
     public  boolean validateBannerID(String bannerId) {
 
-        Set roleSet = userRoleDao.getRolesByBannerId(bannerId);
+        Set<String> roleSet = userRoleDao.getRolesByBannerId(bannerId);
         if (roleSet.contains("STUDENT")) {
             return true;
         }else {
@@ -62,11 +62,10 @@ public class AssignTAService {
     public boolean checkIntructorPermission(int instructorId, int courseId) {
 
         boolean returnVar = false;
-        ArrayList<Course> courseEntitiesList = courseInstructorMapperDao.getCourseByInstructor(instructorId);
+        ArrayList<Course> courseEntitiesList = courseInstructorMapperDao.getCoursesByInstructor(instructorId);
 
-        for (int i = 0; i < courseEntitiesList.size(); i++) {
-            Course courseEntity = courseEntitiesList.get(i);
-            if (courseEntity.getId() == courseId ) {
+        for (Course courseEntity : courseEntitiesList) {
+            if (courseEntity.getId() == courseId) {
                 returnVar = true;
                 break;
             }

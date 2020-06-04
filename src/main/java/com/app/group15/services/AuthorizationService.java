@@ -12,6 +12,7 @@ public class AuthorizationService {
 	private Set<String> allowedRoles=new HashSet<>();
 
 	public void setAllowedRoles(String[] args) {
+		this.allowedRoles.clear();
 		this.allowedRoles.addAll(Arrays.asList(args));
 	}
 
