@@ -13,6 +13,7 @@ class LoginServiceTest {
 
     @Test
     public void validateLoginTest() {
+
         User user = userDaoMock.getUserByBannerIdMock("B00843468");
         assertEquals(user.getFirstName(), "Daksh");
 
