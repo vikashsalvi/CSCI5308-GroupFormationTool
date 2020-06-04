@@ -51,7 +51,7 @@ public class ForgetPasswordController {
         urlGenerated += "/auth/validateToken/?to=" + token;
 
         String subject = "CATME Password Change request";
-        String body = "Click this link to cahnge password: " + urlGenerated;
+        String body = "Click this link to change password: " + urlGenerated;
         AppConfig.getInstance().getEmailNotifier().sendMessage(user.getEmail(), subject, body);
 
         ModelAndView modelAndView = new ModelAndView();

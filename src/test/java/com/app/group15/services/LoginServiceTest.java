@@ -17,7 +17,7 @@ class LoginServiceTest {
         User user = userDaoMock.getUserByBannerIdMock("B00843468");
         assertEquals(user.getFirstName(), "Daksh");
 
-        user = userDaoMock.getUserByBannerIdMock("B0084368");
+        user = userDaoMock.getUserByBannerIdMock("B00843467");
         assertNull(user.getPassword());
     }
 }
