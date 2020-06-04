@@ -9,8 +9,7 @@ import com.app.group15.persistence.dao.UserDaoMock;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class AssignTAServiceTest {
 
@@ -32,19 +31,28 @@ class AssignTAServiceTest {
         // checks that user is registered with system
         User userEntity = userDaoMock.getUserByBannerIdMock("B00843468");
         assertNotNull(userEntity.getId());
+
+        userEntity = userDaoMock.getUserByBannerIdMock("B003468");
+        assertEquals(userEntity.getId(),0);
     }
 
     @Test
     void validateCourseIDTest() {
         Course courseEntity = courseDaoMock.getCourseByCourseIdMock("6");
         assertEquals(courseEntity.getName(),"CSCI5409");
+
+        courseEntity = courseDaoMock.getCourseByCourseIdMock("7");
+        assertNull(courseEntity.getName(), (String) null);
+
     }
 
 
     @Test
     void checkIntructorPermissionTest() {
-
        CourseInstructorMapper courseInstructorMapperEntity = courseInstructorMapperDaoMock.getCourseInstructorMapperEntity(6);
        assertEquals(courseInstructorMapperEntity.getInstructorId(), 17);
+
+        courseInstructorMapperEntity = courseInstructorMapperDaoMock.getCourseInstructorMapperEntity(6);
+        assertNotEquals(courseInstructorMapperEntity.getInstructorId(), 16);
     }
 }
