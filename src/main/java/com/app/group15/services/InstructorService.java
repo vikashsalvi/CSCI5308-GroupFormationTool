@@ -24,6 +24,7 @@ public class InstructorService {
 	private static UserRoleDao userRoleDao = new UserRoleDaoInjectorService().getUserRoleDao();
 	private static CourseDao courseDao = new CourseDaoInjectorService().getCourseDao();
 
+
 	public ArrayList<Course> getCourseOfInstructor(int instructorId) {
 		ArrayList<Course> arrayListCourses = courseInstructorMapperDao.getCoursesByInstructor(instructorId);
 		return arrayListCourses;

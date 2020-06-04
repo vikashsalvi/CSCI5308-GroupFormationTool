@@ -1,6 +1,8 @@
 package com.app.group15.services;
 
+import com.app.group15.dao.CourseAbstractDao;
 import com.app.group15.dao.CourseDao;
+import com.app.group15.dao.CourseInstructorMapperAbstractDao;
 import com.app.group15.dao.CourseInstructorMapperDao;
 import com.app.group15.dao.CourseStudentMapperDao;
 import com.app.group15.injectors.CourseDaoInjectorService;
@@ -23,7 +25,7 @@ public class CourseService {
 	}
 
 	public static Course getCourseDetails(int id) {
-		return courseDao.get(id);
+		return (Course) courseDao.get(id);
 	}
 
 	public static User getCourseInstructor(int id) {

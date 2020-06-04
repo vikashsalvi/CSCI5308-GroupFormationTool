@@ -10,6 +10,8 @@ import java.util.List;
 public abstract class CourseInstructorMapperAbstractDao<T> implements Dao {
 
     public abstract User getCourseInstructor(int id);
+    
+    public abstract ArrayList<Course> getCourseByInstructor(int id);
 
     public abstract ArrayList<Course> getCoursesByInstructor(int taId);
 
@@ -53,6 +55,8 @@ public abstract class CourseInstructorMapperAbstractDao<T> implements Dao {
         // TODO Auto-generated method stub
         return null;
     }
+
+	public abstract User getCourseTA(int id);
 
 
 }

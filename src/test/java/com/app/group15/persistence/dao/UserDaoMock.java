@@ -1,5 +1,7 @@
 package com.app.group15.persistence.dao;
 
+import java.util.ArrayList;
+
 import com.app.group15.model.User;
 
 public class UserDaoMock {
@@ -20,5 +22,26 @@ public class UserDaoMock {
 
 	public int saveUserMock(User user, String role) {
 		return 0;
+	}
+	
+	public ArrayList<User> getUserList(){
+		ArrayList<User> userList=new ArrayList<>();
+		User user1=new User();
+		user1.setFirstName("Daksh");
+		user1.setLastName("Patel");
+		user1.setEmail("daksh.patel@dal.ca");
+		user1.setBannerId("B00843468");
+		user1.setBannerId("passwordTest");
+		User user2=new User();
+		user2.setFirstName("Daksh");
+		user2.setLastName("Patel");
+		user2.setEmail("daksh.patel@dal.ca");
+		user2.setBannerId("B00843468");
+		user2.setBannerId("admin");
+		
+		userList.add(user2);
+		userList.add(user1);
+		return userList;
+		
 	}
 }

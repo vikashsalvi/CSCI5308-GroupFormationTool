@@ -2,9 +2,13 @@ package com.app.group15.services;
 
 
 
+import com.app.group15.dao.CourseAbstractDao;
 import com.app.group15.dao.CourseDao;
+import com.app.group15.dao.CourseInstructorMapperAbstractDao;
 import com.app.group15.dao.CourseInstructorMapperDao;
+import com.app.group15.dao.UserAbstractDao;
 import com.app.group15.dao.UserDao;
+import com.app.group15.dao.UserRoleAbstractDao;
 import com.app.group15.dao.UserRoleDao;
 import com.app.group15.injectors.CourseDaoInjectorService;
 import com.app.group15.injectors.CourseInstructorMapperDaoInjectorService;
@@ -18,10 +22,10 @@ import java.util.Set;
 
 public class AssignTAService {
 
-    private UserDao userDao = new UserDaoInjectorService().getUserDao();
-    private CourseDao courseDao = new CourseDaoInjectorService().getCourseDao();
-    private UserRoleDao userRoleDao = new UserRoleDaoInjectorService().getUserRoleDao();
-    private CourseInstructorMapperDao courseInstructorMapperDao = new CourseInstructorMapperDaoInjectorService().getCourseInstructorMapperDao();
+    private UserAbstractDao userDao = new UserDaoInjectorService().getUserDao();
+    private CourseAbstractDao courseDao = new CourseDaoInjectorService().getCourseDao();
+    private UserRoleAbstractDao userRoleDao = new UserRoleDaoInjectorService().getUserRoleDao();
+    private CourseInstructorMapperAbstractDao courseInstructorMapperDao = new CourseInstructorMapperDaoInjectorService().getCourseInstructorMapperDao();
 
 
     public boolean performTAUpdate(String bannerId, int courseId)
