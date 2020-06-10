@@ -2,19 +2,20 @@ package com.app.group15.controller;
 
 import com.app.group15.config.AppConfig;
 import com.app.group15.model.Course;
+import com.app.group15.model.Policy;
 import com.app.group15.model.User;
 import com.app.group15.services.AuthorizationService;
 import com.app.group15.services.CourseService;
 import com.app.group15.services.SessionService;
 import com.app.group15.services.UserService;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class AdminController {
@@ -178,5 +179,121 @@ public class AdminController {
 		}
 		return modelAndView;
 	}
+
+
+	@RequestMapping(value = "/admin/passwordPolicy", method = RequestMethod.GET)
+	public ModelAndView passwordPolicyGET(HttpServletRequest request) {
+		authorizationService.setAllowedRoles(new String[]{"ADMIN"});
+		ModelAndView modelAndView;
+		if (SessionService.isUserSignedIn(request)) {
+			if (authorizationService.isAuthorized(request)) {
+				User user = SessionService.getSessionUser(request);
+				modelAndView = new ModelAndView();
+				modelAndView.setViewName("admin/managePasswordPolicy");
+				modelAndView.addObject("user", user);
+				modelAndView.addObject("policyList",populateList());
+				return modelAndView;
+			} else {
+				modelAndView = new ModelAndView("redirect:/login");
+			}
+		} else {
+			modelAndView = new ModelAndView("redirect:/login");
+		}
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/admin/passwordPolicy", method = RequestMethod.POST)
+	public ModelAndView passwordPolicyPOST(HttpServletRequest request,
+									 @RequestParam(required = false, value = "policyState") boolean policyState,
+									 @RequestParam(required = false, value = "policyValue") String policyValue,
+									 @RequestParam(required = false, value = "hidden_policyID") String policyID) {
+		authorizationService.setAllowedRoles(new String[]{"ADMIN"});
+		ModelAndView modelAndView;
+
+		System.out.println("Policy ID :" + policyID);
+		System.out.println("Policy State :"+ policyState);
+		System.out.println("Policy Value :" + policyValue);
+
+		if (SessionService.isUserSignedIn(request)) {
+			if (authorizationService.isAuthorized(request)) {
+				User user = SessionService.getSessionUser(request);
+				modelAndView = new ModelAndView();
+				modelAndView.setViewName("admin/managePasswordPolicy");
+				modelAndView.addObject("user", user);
+				modelAndView.addObject("policyList",populateList());
+				return modelAndView;
+			} else {
+				modelAndView = new ModelAndView("redirect:/login");
+			}
+		} else {
+			modelAndView = new ModelAndView("redirect:/login");
+		}
+		return modelAndView;
+	}
+
+
+	public ArrayList<Policy> populateList() {
+		ArrayList<Policy> policyArrayList = new ArrayList<>();
+
+		Policy policy = new Policy();
+
+		policy.setId(1);
+		policy.setPolicy_state(true);
+		policy.setPolicy_name("Minimum length");
+		policy.setPolicy_value("8");
+		policyArrayList.add(policy);
+
+		policy = new Policy();
+
+		policy.setId(2);
+		policy.setPolicy_state(true);
+		policy.setPolicy_name("Maximum length");
+		policy.setPolicy_value("16");
+		policyArrayList.add(policy);
+
+		policy = new Policy();
+
+		policy.setId(3);
+		policy.setPolicy_state(false);
+		policy.setPolicy_name("Minimum number of uppercase characters");
+		policy.setPolicy_value("2");
+		policyArrayList.add(policy);
+
+		policy = new Policy();
+
+		policy.setId(4);
+		policy.setPolicy_state(false);
+		policy.setPolicy_name("Minimum number of lowercase characters");
+		policy.setPolicy_value("10");
+		policyArrayList.add(policy);
+
+		policy = new Policy();
+
+		policy.setId(5);
+		policy.setPolicy_state(true);
+		policy.setPolicy_name("Minimum number of symbols or special characters");
+		policy.setPolicy_value("1");
+		policyArrayList.add(policy);
+
+		policy = new Policy();
+
+		policy.setId(6);
+		policy.setPolicy_state(true);
+		policy.setPolicy_name("A set of characters that are not allowed");
+		policy.setPolicy_value("$ * & %");
+		policyArrayList.add(policy);
+
+		policy = new Policy();
+
+		policy.setId(7);
+		policy.setPolicy_state(false);
+		policy.setPolicy_name("Password history constraint");
+		policy.setPolicy_value("3");
+		policyArrayList.add(policy);
+
+		return policyArrayList;
+
+	}
+
 
 }
