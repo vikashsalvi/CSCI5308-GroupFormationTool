@@ -1,14 +1,35 @@
 package com.app.group15.config;
 
 
+import com.app.group15.dao.CourseAbstractDao;
+import com.app.group15.dao.CourseInstructorMapperAbstractDao;
 import com.app.group15.dao.CourseInstructorMapperDao;
+import com.app.group15.dao.CourseStudentMapperAbstractDao;
 import com.app.group15.dao.CourseStudentMapperDao;
+import com.app.group15.dao.UserAbstractDao;
 import com.app.group15.dao.UserDao;
-import com.app.group15.injectors.CourseInstructorMapperDaoInjectorService;
-import com.app.group15.injectors.CourseStudentMapperDaoInjectorService;
-import com.app.group15.injectors.UserRoleDaoInjectorService;
+import com.app.group15.injectors.dao.CourseDaoInjectorService;
+import com.app.group15.injectors.dao.CourseInstructorMapperDaoInjectorService;
+import com.app.group15.injectors.dao.CourseStudentMapperDaoInjectorService;
+import com.app.group15.injectors.dao.UserDaoInjectorService;
+import com.app.group15.injectors.dao.UserRoleDaoInjectorService;
 import com.app.group15.notifications.EmailNotifierImpl;
+import com.app.group15.services.AssignTAService;
 import com.app.group15.services.AuthorizationService;
+import com.app.group15.services.CourseService;
+import com.app.group15.services.IAssignTAService;
+import com.app.group15.services.IAuthorizationService;
+import com.app.group15.services.ICourseService;
+import com.app.group15.services.IInstructorService;
+import com.app.group15.services.ILoginService;
+import com.app.group15.services.ISessionService;
+import com.app.group15.services.ISignupService;
+import com.app.group15.services.IUserService;
+import com.app.group15.services.InstructorService;
+import com.app.group15.services.LoginService;
+import com.app.group15.services.SessionService;
+import com.app.group15.services.SignupService;
+import com.app.group15.services.UserService;
 import com.app.group15.utility.GroupFormationToolLogger;
 
 import java.io.FileInputStream;
@@ -26,10 +47,13 @@ public class AppConfig {
     private CourseStudentMapperDaoInjectorService courseStudentMapperDaoInjectorService;
     private CourseInstructorMapperDaoInjectorService courseInstructorMapperDaoInjectorService;
     private UserRoleDaoInjectorService userRoleDaoInjectorService;
-    private CourseStudentMapperDao courseStudentMapperDao;
-    private CourseInstructorMapperDao courseInstructorMapperDao;
-    private UserDao userDao;
-    private AuthorizationService authorizationService;
+    private CourseStudentMapperAbstractDao courseStudentMapperDao;
+    private CourseInstructorMapperAbstractDao courseInstructorMapperDao;
+    private UserAbstractDao userDao;
+    private CourseAbstractDao courseDao;
+    
+    
+    
 
 
     private AppConfig() {
@@ -50,13 +74,19 @@ public class AppConfig {
         userRoleDaoInjectorService = new UserRoleDaoInjectorService();
         courseStudentMapperDao = new CourseStudentMapperDao();
         courseInstructorMapperDao = new CourseInstructorMapperDao();
-        userDao = new UserDao();
-        authorizationService = new AuthorizationService();
-
-
+        userDao = new UserDaoInjectorService().getUserDao();
+       
+        
+        courseDao=new CourseDaoInjectorService().getCourseDao();
+		
+      
     }
 
-    public static AppConfig getSingletonAppConfig() {
+    public CourseAbstractDao getCourseDao() {
+		return courseDao;
+	}
+
+	public static AppConfig getSingletonAppConfig() {
         return singletonAppConfig;
     }
 
@@ -75,7 +105,7 @@ public class AppConfig {
         return singletonAppConfig;
     }
 
-    public UserDao getUserDao() {
+    public UserAbstractDao getUserDao() {
         return userDao;
     }
 
@@ -83,7 +113,7 @@ public class AppConfig {
         this.userDao = userDao;
     }
 
-    public CourseInstructorMapperDao getCourseInstructorMapperDao() {
+    public CourseInstructorMapperAbstractDao getCourseInstructorMapperDao() {
         return courseInstructorMapperDao;
     }
 
@@ -141,7 +171,7 @@ public class AppConfig {
     }
 
 
-    public CourseStudentMapperDao getCourseStudentMapperDao() {
+    public CourseStudentMapperAbstractDao getCourseStudentMapperDao() {
         return courseStudentMapperDao;
     }
 
@@ -149,13 +179,9 @@ public class AppConfig {
         this.courseStudentMapperDao = courseStudentMapperDao;
     }
 
-    public AuthorizationService getAuthorizationService() {
-        return authorizationService;
-    }
+   
 
-    public void setAuthorizationService(AuthorizationService authorizationService) {
-        this.authorizationService = authorizationService;
-    }
+	
 
 
 }

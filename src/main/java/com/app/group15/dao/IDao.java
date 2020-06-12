@@ -7,7 +7,7 @@ import com.app.group15.model.Persistence;
 import java.util.List;
 
 @SuppressWarnings("hiding")
-public interface Dao<T> {
+public interface IDao<T> {
 
 	<T extends Persistence> T get(int id);
 

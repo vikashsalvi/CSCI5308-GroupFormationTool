@@ -6,7 +6,7 @@ import com.app.group15.model.Persistence;
 import java.util.ArrayList;
 
 
-public abstract class CourseAbstractDao<T> implements Dao {
+public abstract class CourseAbstractDao<T> implements IDao {
     @Override
     public abstract Persistence get(int id);
 

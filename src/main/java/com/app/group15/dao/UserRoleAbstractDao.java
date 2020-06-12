@@ -5,7 +5,7 @@ import com.app.group15.model.Persistence;
 import java.util.List;
 import java.util.Set;
 
-public abstract class UserRoleAbstractDao<T> implements Dao {
+public abstract class UserRoleAbstractDao<T> implements IDao {
 
 
     @Override

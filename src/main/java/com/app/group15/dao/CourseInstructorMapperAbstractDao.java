@@ -7,7 +7,7 @@ import com.app.group15.model.User;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CourseInstructorMapperAbstractDao<T> implements Dao {
+public abstract class CourseInstructorMapperAbstractDao<T> implements IDao {
 
     public abstract User getCourseInstructor(int id);
     

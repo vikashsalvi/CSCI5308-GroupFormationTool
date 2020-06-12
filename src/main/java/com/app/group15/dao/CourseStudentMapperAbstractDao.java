@@ -5,7 +5,7 @@ import com.app.group15.model.Persistence;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CourseStudentMapperAbstractDao<T> implements Dao {
+public abstract class CourseStudentMapperAbstractDao<T> implements IDao {
 
 
     @Override

@@ -1,6 +1,8 @@
 package com.app.group15.controller;
 
+import com.app.group15.config.ServiceConfig;
 import com.app.group15.model.User;
+import com.app.group15.services.ISignupService;
 import com.app.group15.services.SignupService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -13,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class SignupController {
 
-	private SignupService signupService = new SignupService();
+	private ISignupService signupService = ServiceConfig.getInstance().getSignUpService();
 
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
 	public ModelAndView signup() {

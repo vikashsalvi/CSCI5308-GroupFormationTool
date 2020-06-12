@@ -10,7 +10,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import java.util.Properties;
 import java.util.logging.Level;
 
-public class EmailNotifierImpl implements Notifier {
+public class EmailNotifierImpl implements INotifier {
 
     static Properties springProperties;
 

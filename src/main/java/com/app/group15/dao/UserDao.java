@@ -1,7 +1,7 @@
 package com.app.group15.dao;
 
 
-import com.app.group15.injectors.UserRoleDaoInjectorInterface;
+import com.app.group15.injectors.dao.IUserRoleDaoInjector;
 import com.app.group15.model.Persistence;
 import com.app.group15.model.User;
 import com.app.group15.persistence.DatabaseManager;
@@ -17,7 +17,7 @@ import java.util.logging.Level;
 
 
 @SuppressWarnings("rawtypes")
-public class UserDao extends UserAbstractDao implements UserRoleDaoInjectorInterface {
+public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
 
     private UserRoleAbstractDao userRoleDao;
 
@@ -212,7 +212,7 @@ public class UserDao extends UserAbstractDao implements UserRoleDaoInjectorInter
 
 
     @Override
-    public void injectUserRoleDao(Dao userRoleDao) {
+    public void injectUserRoleDao(IDao userRoleDao) {
         this.userRoleDao = (UserRoleDao) userRoleDao;
     }
 
