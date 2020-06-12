@@ -1,7 +1,9 @@
 package com.app.group15.controller;
 
-import com.app.group15.dao.CourseDao;
-import com.app.group15.injectors.CourseDaoInjectorService;
+import com.app.group15.config.AppConfig;
+import com.app.group15.config.ServiceConfig;
+import com.app.group15.dao.CourseAbstractDao;
+
 import com.app.group15.model.Course;
 import com.app.group15.model.User;
 import com.app.group15.services.*;
@@ -15,27 +17,29 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
+
+import java.util.List;
 import java.util.logging.Level;
 
 @Controller
 public class InstructorController {
-	private AuthorizationService authorizationService = new AuthorizationService();
-	private CourseDao courseDao = new CourseDaoInjectorService().getCourseDao();
-
+	private IAuthorizationService authorizationService = ServiceConfig.getInstance().getAuthorizationService();
+	private CourseAbstractDao courseDao = AppConfig.getInstance().getCourseDao();
+	private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
+	private ICourseService courseService = ServiceConfig.getInstance().getCourseService();
+	private IInstructorService instructorService=ServiceConfig.getInstance().getInstructorService();
+	private IAssignTAService assignTaService=ServiceConfig.getInstance().getAssignTaService();
 	@RequestMapping(value = "/instructor/home", method = RequestMethod.GET)
 	public ModelAndView adminHome(HttpServletRequest request) {
 		authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
 		System.out.println(authorizationService.getAllowedRoles().toString());
 		ModelAndView modelAndView;
-		if (SessionService.isUserSignedIn(request)) {
+		if (sessionService.isUserSignedIn(request)) {
 			if (authorizationService.isAuthorized(request)) {
 
-				InstructorService instructorService = new InstructorService();
-
-				User userEntity = SessionService.getSessionUser(request);
-				ArrayList<Course> courseEntities = instructorService.getCourseOfInstructor((userEntity.getId()));
-				ArrayList<User> userEntitiesTA = InstructorService.getAllCourseTA(courseEntities);
+				User userEntity = sessionService.getSessionUser(request);
+				List<Course> courseEntities = instructorService.getCourseOfInstructor((userEntity.getId()));
+				List<User> userEntitiesTA = instructorService.getAllCourseTA(courseEntities);
 
 				modelAndView = new ModelAndView();
 				modelAndView.setViewName("instructor/home");
@@ -59,12 +63,11 @@ public class InstructorController {
 	public ModelAndView assignTAGET(HttpServletRequest request, @RequestParam String courseId) {
 		authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
 		ModelAndView modelAndView;
-		if (SessionService.isUserSignedIn(request)) {
+		if (sessionService.isUserSignedIn(request)) {
 			if (authorizationService.isAuthorized(request)) {
 
-				User userEntity = SessionService.getSessionUser(request);
-				CourseDao courseDao = new CourseDaoInjectorService().getCourseDao();
-				Course courseEntity = courseDao.get(Integer.parseInt(courseId));
+				User userEntity = sessionService.getSessionUser(request);
+				Course courseEntity = (Course) courseDao.get(Integer.parseInt(courseId));
 
 				modelAndView = new ModelAndView();
 				modelAndView.setViewName("instructor/ta-assignment");
@@ -89,32 +92,30 @@ public class InstructorController {
 	public ModelAndView assignTAPOST(HttpServletRequest request, @RequestParam(required = true, value = "bannerId") String bannerId, @RequestParam(required = true, value = "courseId") int courseId) {
 		authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
 		ModelAndView modelAndView;
-		AssignTAService assignTAService = new AssignTAService();
-		if (SessionService.isUserSignedIn(request)) {
+		if (sessionService.isUserSignedIn(request)) {
 			if (authorizationService.isAuthorized(request)) {
 
 
-				User userEntity = SessionService.getSessionUser(request);
-				InstructorService instructorService = new InstructorService();
-				ArrayList<Course> courseEntities = instructorService.getCourseOfInstructor((userEntity.getId()));
-				ArrayList<User> userEntitiesTA = InstructorService.getAllCourseTA(courseEntities);
+				User userEntity = sessionService.getSessionUser(request);
+				List<Course> courseEntities = instructorService.getCourseOfInstructor((userEntity.getId()));
+				List<User> userEntitiesTA = instructorService.getAllCourseTA(courseEntities);
 //				CourseDao courseDao = new CourseDaoInjectorService().getCourseDao();
-				Course courseEntity = courseDao.get(courseId);
+				Course courseEntity = (Course) courseDao.get(courseId);
 
 
 				modelAndView = new ModelAndView();
 
 				// if instructor has no right to change the TA
-				if (!assignTAService.checkIntructorPermission(userEntity.getId(), courseId)) {
+				if (!assignTaService.checkIntructorPermission(userEntity.getId(), courseId)) {
 					modelAndView.addObject("error_invalid_permission", true);
 				} else {
 					modelAndView.addObject("error_invalid_permission", false);
 				}
 
 				// performing change TA
-				if (assignTAService.validateBannerID(bannerId)) {
+				if (assignTaService.validateBannerID(bannerId)) {
 
-					if (assignTAService.performTAUpdate(bannerId, courseId)) {
+					if (assignTaService.performTAUpdate(bannerId, courseId)) {
 						modelAndView.addObject("error", false);
 						System.out.println("Performing UPDATE");
 						modelAndView.setViewName("redirect:/instructor/home");
@@ -151,13 +152,13 @@ public class InstructorController {
 	public ModelAndView importCSV(HttpServletRequest request, @RequestParam(required = true, value = "courseId") int courseId) {
 		authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR", "TA", "STUDENT"});
 		ModelAndView modelAndView;
-		if (SessionService.isUserSignedIn(request)) {
+		if (sessionService.isUserSignedIn(request)) {
 			if (authorizationService.isAuthorized(request)) {
-				User user = SessionService.getSessionUser(request);
+				User user = sessionService.getSessionUser(request);
 				GroupFormationToolLogger.log(Level.INFO, "User authorized 147");
-				if (CourseService.isUserCourseAdmin(courseId, user.getId())) {
+				if (courseService.isUserCourseAdmin(courseId, user.getId())) {
 					GroupFormationToolLogger.log(Level.INFO, "User Course admin");
-					Course course = courseDao.get(courseId);
+					Course course = (Course) courseDao.get(courseId);
 					modelAndView = new ModelAndView();
 					modelAndView.setViewName("instructor/import_csv");
 					modelAndView.addObject("user", user);
@@ -184,13 +185,13 @@ public class InstructorController {
 								  @RequestParam(required = true, value = "csvFile") MultipartFile csvFile) {
 		authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR", "TA"});
 		ModelAndView modelAndView;
-		if (SessionService.isUserSignedIn(request)) {
+		if (sessionService.isUserSignedIn(request)) {
 			if (authorizationService.isAuthorized(request)) {
-				User user = SessionService.getSessionUser(request);
+				User user = sessionService.getSessionUser(request);
 //				GroupFormationToolLogger.log(Level.INFO, "User authorized 147");
-				if (CourseService.isUserCourseAdmin(courseId, user.getId())) {
+				if (courseService.isUserCourseAdmin(courseId, user.getId())) {
 					GroupFormationToolLogger.log(Level.INFO, "User authorized");
-					int insertCount = InstructorService.addStudentsFromCSV(csvFile, courseId);
+					int insertCount = instructorService.addStudentsFromCSV(csvFile, courseId);
 					if (insertCount==-1){
 						redirectAttributes.addFlashAttribute("error",
 						"Invalid file structure!");

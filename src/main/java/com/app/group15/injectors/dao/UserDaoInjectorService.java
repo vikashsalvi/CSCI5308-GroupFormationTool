@@ -1,7 +1,8 @@
-package com.app.group15.injectors;
+package com.app.group15.injectors.dao;
 
 import com.app.group15.config.AppConfig;
 import com.app.group15.dao.UserDao;
+import com.app.group15.dao.UserRoleDao;
 
 
 
@@ -11,8 +12,8 @@ public class UserDaoInjectorService {
 	
 	public UserDaoInjectorService() {
 
-		userDao = AppConfig.getInstance().getUserDao();
-		userDao.injectUserRoleDao(AppConfig.getInstance().getUserRoleDaoInjectorService().getUserRoleDao());
+		userDao = new UserDao();
+		userDao.injectUserRoleDao(new UserRoleDao());
 	}
 
 	public UserDao getUserDao() {

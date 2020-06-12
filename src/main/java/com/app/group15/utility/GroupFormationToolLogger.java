@@ -15,19 +15,18 @@ public class GroupFormationToolLogger {
     String logPath = "logs/";
 
     public GroupFormationToolLogger() {
-        Handler logFileHandler;
-        Formatter plainText;
-        try {
+      Handler logFileHandler;
+       Formatter plainText;
+       try {
             if (!Files.exists(Paths.get(logPath))) {
                 Files.createDirectories(Paths.get(logPath));
-            }
+           }
             logger = Logger.getLogger(GroupFormationToolLogger.class.getName());
             LocalDate date = LocalDate.now();
-            String logFileName = DateTimeFormatter.ofPattern("dd.MM.yyyy").format(date);
-            logFileHandler = new FileHandler(logPath + logFileName + ".log", true);
-            logFileHandler.setLevel(Level.parse(logLevel));
+           String logFileName = DateTimeFormatter.ofPattern("dd.MM.yyyy").format(date);
+            logFileHandler = new FileHandler(logPath + logFileName + ".log", true);            logFileHandler.setLevel(Level.parse(logLevel));
             plainText = new SimpleFormatter();
-            logFileHandler.setFormatter(plainText);
+           logFileHandler.setFormatter(plainText);
             logger.addHandler(logFileHandler);
         }
         catch (Exception e){

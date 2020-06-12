@@ -3,6 +3,12 @@ package com.app.group15.services;
 import com.app.group15.config.AppConfig;
 import com.app.group15.dao.*;
 import com.app.group15.injectors.*;
+import com.app.group15.injectors.dao.CourseDaoInjectorService;
+import com.app.group15.injectors.dao.CourseInstructorMapperDaoInjectorService;
+import com.app.group15.injectors.dao.CourseStudentMapperDaoInjectorService;
+import com.app.group15.injectors.dao.UserDaoInjectorService;
+import com.app.group15.injectors.dao.UserRoleDaoInjectorService;
+import com.app.group15.injectors.service.IInstructorServiceInjector;
 import com.app.group15.model.Course;
 import com.app.group15.model.User;
 import com.app.group15.utility.FileUtility;
@@ -13,35 +19,36 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 
-public class InstructorService {
+public class InstructorService implements IInstructorService,IInstructorServiceInjector{
 
-	private static CourseInstructorMapperDao courseInstructorMapperDao = new CourseInstructorMapperDaoInjectorService().getCourseInstructorMapperDao();
-	private static CourseStudentMapperDao courseStudentMapperDao = new CourseStudentMapperDaoInjectorService().getCourseStudentMapperDao();
-	private static UserDao userDao = new UserDaoInjectorService().getUserDao();
-	private static UserRoleDao userRoleDao = new UserRoleDaoInjectorService().getUserRoleDao();
-	private static CourseDao courseDao = new CourseDaoInjectorService().getCourseDao();
+	private  CourseInstructorMapperAbstractDao courseInstructorMapperDao ;
+	private  CourseStudentMapperAbstractDao courseStudentMapperDao ;
+	private  UserAbstractDao userDao;
+	private  UserRoleAbstractDao userRoleDao ;
+	private  CourseAbstractDao courseDao ;
 
 
-	public ArrayList<Course> getCourseOfInstructor(int instructorId) {
+	public List<Course> getCourseOfInstructor(int instructorId) {
 		ArrayList<Course> arrayListCourses = courseInstructorMapperDao.getCoursesByInstructor(instructorId);
 		return arrayListCourses;
 	}
 
-	public static User getCourseTA(int id) {
+	public  User getCourseTA(int id) {
 		User userEntity = courseInstructorMapperDao.getCourseTA(id);
 		return userEntity;
 	}
 
-	public static ArrayList<User> getAllCourseTA(ArrayList<Course> courseEntities) {
+	public List<User> getAllCourseTA(List<Course> courseEntities) {
 		ArrayList<User> userEntitiesTa = new ArrayList<>();
 		courseEntities.forEach(courseEntity -> userEntitiesTa.add(getCourseTA(courseEntity.getId())));
 		return userEntitiesTa;
 	}
 
-	public static boolean validateUserToAddAsStudent(User user) {
+	public boolean validateUserToAddAsStudent(User user) {
 		Set<String> userRoles = userRoleDao.getRolesByBannerId(user.getBannerId());
 		boolean valid;
 		if (userRoles.contains("INSTRUCTOR")) {
@@ -61,14 +68,14 @@ public class InstructorService {
 		return valid;
 	}
 
-	public static boolean validateUserToAddAsTa(User user, int courseId) {
+	public  boolean validateUserToAddAsTa(User user, int courseId) {
 		boolean valid;
 		ArrayList<Integer> courseIdsOfAStudent = courseStudentMapperDao.getCourseIdsOfAStudent(user.getId());
 		valid = !courseIdsOfAStudent.contains(courseId);
 		return valid;
 	}
 
-	public static void addOrUpdateStudentRole(User user, String role) {
+	public void addOrUpdateStudentRole(User user, String role) {
 		Set<String> userRoles = userRoleDao.getRolesByBannerId(user.getBannerId());
 		if (!userRoles.contains(role)) {
 			userRoleDao.addRole(user.getId(), role);
@@ -77,12 +84,12 @@ public class InstructorService {
 		}
 	}
 
-	public static int addStudentsFromCSV(MultipartFile file, int courseId) {
+	public  int addStudentsFromCSV(MultipartFile file, int courseId) {
 		String[] cols;
 		cols = new String[]{"name", "email", "banner_id"};
 		ArrayList<HashMap<String, String>> data = FileUtility.readCSV(file, cols);
 		String name, bannerId, email;
-		Course course = courseDao.get(courseId);
+		Course course = (Course) courseDao.get(courseId);
 		String emailSubject = new String("Update on your courses");
 		int insertCount = 0;
 		User user;
@@ -139,5 +146,35 @@ public class InstructorService {
 			}
 		}
 		return insertCount;
+	}
+
+	@Override
+	public void injectUserDao(UserAbstractDao userDao) {
+		this.userDao=userDao;
+		
+	}
+
+	@Override
+	public void injectUserRoleDao(UserRoleAbstractDao userRoleDao) {
+		this.userRoleDao=userRoleDao;
+		
+	}
+
+	@Override
+	public void injectCourseDao(CourseAbstractDao courseDao) {
+		this.courseDao=courseDao;
+		
+	}
+
+	@Override
+	public void injectCourseInstructorMapper(CourseInstructorMapperAbstractDao courseInstructorMapperDao) {
+		this.courseInstructorMapperDao=courseInstructorMapperDao;
+		
+	}
+
+	@Override
+	public void injectCourseStudentMapper(CourseStudentMapperAbstractDao courseStudentMapperDao) {
+		this.courseStudentMapperDao=courseStudentMapperDao;
+		
 	}
 }

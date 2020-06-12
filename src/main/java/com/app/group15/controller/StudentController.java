@@ -1,10 +1,14 @@
 package com.app.group15.controller;
 
 import com.app.group15.config.AppConfig;
+import com.app.group15.config.ServiceConfig;
 import com.app.group15.model.Course;
 import com.app.group15.model.User;
 import com.app.group15.services.AuthorizationService;
 import com.app.group15.services.CourseService;
+import com.app.group15.services.IAuthorizationService;
+import com.app.group15.services.ICourseService;
+import com.app.group15.services.ISessionService;
 import com.app.group15.services.SessionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,22 +21,25 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class StudentController {
-	private AuthorizationService authorizationService = AppConfig.getInstance().getAuthorizationService();
-
+	private IAuthorizationService authorizationService = ServiceConfig.getInstance().getAuthorizationService();
+	private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
+	private ICourseService courseService = ServiceConfig.getInstance().getCourseService();
+	
 	@RequestMapping(value = "/student/home", method = RequestMethod.GET)
 	public ModelAndView studentHome(HttpServletRequest request) {
 		authorizationService.setAllowedRoles(new String[]{"STUDENT", "TA"});
 		ModelAndView modelAndView;
-		if (SessionService.isUserSignedIn(request)) {
+		if (sessionService.isUserSignedIn(request)) {
 			if (authorizationService.isAuthorized(request)) {
-				User user = SessionService.getSessionUser(request);
-				ArrayList<Course> coursesAsStudent = CourseService.getStudentCourses(user.getId());
-				ArrayList<User> coursesAsStudentInstructors = CourseService.getAllCourseInstructors(coursesAsStudent);
-				Course courseAsTa = CourseService.getStudentCourseAsTa(user.getId());
-				User courseAsTaInstructor = CourseService.getCourseInstructor(courseAsTa.getId());
+				User user = sessionService.getSessionUser(request);
+				List<Course> coursesAsStudent = courseService.getStudentCourses(user.getId());
+				List<User> coursesAsStudentInstructors = courseService.getAllCourseInstructors(coursesAsStudent);
+				Course courseAsTa = courseService.getStudentCourseAsTa(user.getId());
+				User courseAsTaInstructor = courseService.getCourseInstructor(courseAsTa.getId());
 				modelAndView = new ModelAndView();
 				modelAndView.setViewName("student/home");
 				modelAndView.addObject("user", user);
@@ -54,11 +61,11 @@ public class StudentController {
 									  @RequestParam(required = true, value = "courseId") int courseId) {
 		authorizationService.setAllowedRoles(new String[]{"STUDENT", "TA"});
 		ModelAndView modelAndView;
-		if (SessionService.isUserSignedIn(request)) {
+		if (sessionService.isUserSignedIn(request)) {
 			if (authorizationService.isAuthorized(request)) {
-				User user = SessionService.getSessionUser(request);
-				Course course = CourseService.getCourseDetails(courseId);
-				User courseInstructor = CourseService.getCourseInstructor(courseId);
+				User user = sessionService.getSessionUser(request);
+				Course course = courseService.getCourseDetails(courseId);
+				User courseInstructor = courseService.getCourseInstructor(courseId);
 				if (course.getName()!=null){
 					modelAndView = new ModelAndView();
 					modelAndView.setViewName("student/courseInfo");

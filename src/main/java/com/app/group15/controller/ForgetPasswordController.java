@@ -1,7 +1,8 @@
 package com.app.group15.controller;
 
 import com.app.group15.config.AppConfig;
-import com.app.group15.dao.UserDao;
+import com.app.group15.dao.UserAbstractDao;
+
 import com.app.group15.model.User;
 import com.app.group15.utility.ForgetPasswordUtility;
 import com.app.group15.utility.GroupFormationToolLogger;
@@ -25,6 +26,7 @@ import java.util.logging.Level;
 @RequestMapping("/")
 public class ForgetPasswordController {
 
+	private UserAbstractDao userDao=AppConfig.getInstance().getUserDao();
 
     @RequestMapping(value = "/forgetPassword", method = RequestMethod.GET)
     public ModelAndView returnModel() {
@@ -37,7 +39,6 @@ public class ForgetPasswordController {
     @RequestMapping(value = "/forgetPassword", method = RequestMethod.POST)
     public ModelAndView getUserAndGenerateToken(@RequestParam(required = true, value = "bannerId") String bannerId, HttpServletRequest request) throws UnsupportedEncodingException {
 
-        UserDao userDao = AppConfig.getInstance().getUserDao();
         User user = userDao.getUserByBannerId(bannerId);
         String token = ForgetPasswordUtility.generateForgotPasswordToken();
         if (userDao.checkIfTokenAlreadyExists(user.getId())) {
@@ -66,7 +67,7 @@ public class ForgetPasswordController {
     @RequestMapping("/auth/validateToken")
     public ModelAndView verifyToken(@RequestParam("to") String token) {
         boolean validated = false;
-        UserDao userDao = AppConfig.getInstance().getUserDao();
+       
         Map<String, String> user = userDao.getUserFromToken(token);
         String tokenGenerationDateTime = user.get("dateTime");
         Date tokenGenerationDate = null;
@@ -106,7 +107,6 @@ public class ForgetPasswordController {
             modelAndView.addObject("password_error", "Password did not match!");
             return modelAndView;
         }
-        UserDao userDao = AppConfig.getInstance().getUserDao();
         Map<String, String> user = userDao.getUserFromToken(token);
         boolean passed = false;
         if (userDao.updateUserPassword(Integer.parseInt(user.get("id")), newPassword)) {

@@ -1,8 +1,8 @@
-package com.app.group15.injectors;
+package com.app.group15.injectors.dao;
 
 
 import com.app.group15.dao.CourseStudentMapperDao;
 
-public interface CourseStudentMapperDaoInjectorInterface {
+public interface ICourseStudentMapperDaoInjector {
 	public void injectCourseStudentMapperDao(CourseStudentMapperDao courseStudentMapperDaos);
 }

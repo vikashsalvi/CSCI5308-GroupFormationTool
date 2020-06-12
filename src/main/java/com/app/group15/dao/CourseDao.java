@@ -1,8 +1,8 @@
 package com.app.group15.dao;
 
 
-import com.app.group15.injectors.CourseInstructorMapperInjectorInterface;
-import com.app.group15.injectors.CourseStudentMapperDaoInjectorInterface;
+import com.app.group15.injectors.dao.ICourseInstructorMapperInjector;
+import com.app.group15.injectors.dao.ICourseStudentMapperDaoInjector;
 import com.app.group15.model.Course;
 import com.app.group15.model.Persistence;
 import com.app.group15.persistence.DatabaseManager;
@@ -15,7 +15,7 @@ import java.util.logging.Level;
 
 @SuppressWarnings("rawtypes")
 public class CourseDao extends CourseAbstractDao
-		implements CourseInstructorMapperInjectorInterface, CourseStudentMapperDaoInjectorInterface {
+		implements ICourseInstructorMapperInjector, ICourseStudentMapperDaoInjector {
 
 
 	private CourseInstructorMapperAbstractDao courseInstructorMapperDao;

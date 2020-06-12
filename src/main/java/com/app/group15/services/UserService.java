@@ -5,22 +5,24 @@ import com.app.group15.dao.UserAbstractDao;
 import com.app.group15.dao.UserDao;
 import com.app.group15.dao.UserRoleAbstractDao;
 import com.app.group15.dao.UserRoleDao;
-import com.app.group15.injectors.UserDaoInjectorService;
-import com.app.group15.injectors.UserRoleDaoInjectorService;
+import com.app.group15.injectors.dao.UserDaoInjectorService;
+import com.app.group15.injectors.dao.UserRoleDaoInjectorService;
+import com.app.group15.injectors.service.IUserServiceInjector;
 import com.app.group15.model.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-public class UserService {
+public class UserService implements IUserService,IUserServiceInjector {
 
-	private static UserDao userDao = new UserDaoInjectorService().getUserDao();
-	private static UserRoleDao userRoleDao = new UserRoleDaoInjectorService().getUserRoleDao();
+	private UserAbstractDao userDao ;
+	private UserRoleAbstractDao userRoleDao;
 
 
-	public static ArrayList<User> getAllUsers() {
+	public  List<User> getAllUsers() {
 		ArrayList<User> users = new ArrayList<>();
 		users = userDao.getAll();
 //		Set<String> allowedRoles = new HashSet<>(Arrays.asList("GUEST", "INSTRUCTOR"));
@@ -32,8 +34,20 @@ public class UserService {
 		return users;
 	}
 
-	public static void updateUserRole(int userId, String role) {
+	public  void updateUserRole(int userId, String role) {
 		userRoleDao.updateRole(userId, role);
+	}
+
+	@Override
+	public void injectUserDao(UserAbstractDao userDao) {
+		this.userDao=userDao;
+		
+	}
+
+	@Override
+	public void injectUserRoleDao(UserRoleAbstractDao userRoleAbstractDao) {
+		this.userRoleDao=userRoleAbstractDao;
+		
 	}
 
 }

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public abstract class UserAbstractDao<T> implements Dao {
+public abstract class UserAbstractDao<T> implements IDao {
     @Override
     public void delete(int id) {
         // TODO Auto-generated method stub
