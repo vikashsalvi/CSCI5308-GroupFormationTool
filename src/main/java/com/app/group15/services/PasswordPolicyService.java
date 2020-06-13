@@ -14,9 +14,8 @@ public class PasswordPolicyService implements IPasswordPolicyServiceInjector,IPa
 	}
 	@Override
 	public boolean validatePassword(String password) {
-		// TODO Auto-generated method stub
-		passwordPolicy.isPasswordValid(password);
-		return false;
+		return passwordPolicy.isPasswordValid(password);
+		
 	}
 
 }
