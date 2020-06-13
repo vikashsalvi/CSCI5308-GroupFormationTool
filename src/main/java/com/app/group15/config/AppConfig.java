@@ -1,35 +1,9 @@
 package com.app.group15.config;
 
 
-import com.app.group15.dao.CourseAbstractDao;
-import com.app.group15.dao.CourseInstructorMapperAbstractDao;
-import com.app.group15.dao.CourseInstructorMapperDao;
-import com.app.group15.dao.CourseStudentMapperAbstractDao;
-import com.app.group15.dao.CourseStudentMapperDao;
-import com.app.group15.dao.UserAbstractDao;
-import com.app.group15.dao.UserDao;
-import com.app.group15.injectors.dao.CourseDaoInjectorService;
-import com.app.group15.injectors.dao.CourseInstructorMapperDaoInjectorService;
-import com.app.group15.injectors.dao.CourseStudentMapperDaoInjectorService;
-import com.app.group15.injectors.dao.UserDaoInjectorService;
-import com.app.group15.injectors.dao.UserRoleDaoInjectorService;
+import com.app.group15.dao.*;
+import com.app.group15.injectors.dao.*;
 import com.app.group15.notifications.EmailNotifierImpl;
-import com.app.group15.services.AssignTAService;
-import com.app.group15.services.AuthorizationService;
-import com.app.group15.services.CourseService;
-import com.app.group15.services.IAssignTAService;
-import com.app.group15.services.IAuthorizationService;
-import com.app.group15.services.ICourseService;
-import com.app.group15.services.IInstructorService;
-import com.app.group15.services.ILoginService;
-import com.app.group15.services.ISessionService;
-import com.app.group15.services.ISignupService;
-import com.app.group15.services.IUserService;
-import com.app.group15.services.InstructorService;
-import com.app.group15.services.LoginService;
-import com.app.group15.services.SessionService;
-import com.app.group15.services.SignupService;
-import com.app.group15.services.UserService;
 import com.app.group15.utility.GroupFormationToolLogger;
 
 import java.io.FileInputStream;
@@ -51,6 +25,7 @@ public class AppConfig {
     private CourseInstructorMapperAbstractDao courseInstructorMapperDao;
     private UserAbstractDao userDao;
     private CourseAbstractDao courseDao;
+    private PasswordPolicyDao passwordPolicyDao;
     
     
     
@@ -75,11 +50,12 @@ public class AppConfig {
         courseStudentMapperDao = new CourseStudentMapperDao();
         courseInstructorMapperDao = new CourseInstructorMapperDao();
         userDao = new UserDaoInjectorService().getUserDao();
-       
-        
-        courseDao=new CourseDaoInjectorService().getCourseDao();
-		
-      
+
+
+        courseDao = new CourseDaoInjectorService().getCourseDao();
+        passwordPolicyDao = new PasswordPolicyDaoInjector().getPasswordPolicyDao();
+
+
     }
 
     public CourseAbstractDao getCourseDao() {
@@ -179,9 +155,11 @@ public class AppConfig {
         this.courseStudentMapperDao = courseStudentMapperDao;
     }
 
-   
+    public PasswordPolicyDao getPasswordPolicyDao() {
+        return passwordPolicyDao;
+    }
 
-	
-
-
+    public void setPasswordPolicyDao(PasswordPolicyDao passwordPolicyDao) {
+        this.passwordPolicyDao = passwordPolicyDao;
+    }
 }
