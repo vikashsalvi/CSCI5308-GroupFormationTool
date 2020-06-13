@@ -4,14 +4,7 @@ import com.app.group15.config.AppConfig;
 import com.app.group15.config.ServiceConfig;
 import com.app.group15.model.Course;
 import com.app.group15.model.User;
-import com.app.group15.services.AuthorizationService;
-import com.app.group15.services.CourseService;
-import com.app.group15.services.IAuthorizationService;
-import com.app.group15.services.ICourseService;
-import com.app.group15.services.ISessionService;
-import com.app.group15.services.IUserService;
-import com.app.group15.services.SessionService;
-import com.app.group15.services.UserService;
+import com.app.group15.services.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -186,5 +179,56 @@ public class AdminController {
 		}
 		return modelAndView;
 	}
+
+	@RequestMapping(value = "/admin/passwordPolicy", method = RequestMethod.GET)
+	public ModelAndView passwordPolicyGET(HttpServletRequest request) {
+		authorizationService.setAllowedRoles(new String[]{"ADMIN"});
+		ModelAndView modelAndView;
+		if (sessionService.isUserSignedIn(request)) {
+			if (authorizationService.isAuthorized(request)) {
+				User user = sessionService.getSessionUser(request);
+				modelAndView = new ModelAndView();
+				modelAndView.setViewName("admin/managePasswordPolicy");
+				modelAndView.addObject("user", user);
+				//modelAndView.addObject("policyList",populateList());
+				return modelAndView;
+			} else {
+				modelAndView = new ModelAndView("redirect:/login");
+			}
+		} else {
+			modelAndView = new ModelAndView("redirect:/login");
+		}
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/admin/passwordPolicy", method = RequestMethod.POST)
+	public ModelAndView passwordPolicyPOST(HttpServletRequest request,
+										   @RequestParam(required = false, value = "policyState") boolean policyState,
+										   @RequestParam(required = false, value = "policyValue") String policyValue,
+										   @RequestParam(required = false, value = "hidden_policyID") String policyID) {
+		authorizationService.setAllowedRoles(new String[]{"ADMIN"});
+		ModelAndView modelAndView;
+
+		System.out.println("Policy ID :" + policyID);
+		System.out.println("Policy State :"+ policyState);
+		System.out.println("Policy Value :" + policyValue);
+
+		if (sessionService.isUserSignedIn(request)) {
+			if (authorizationService.isAuthorized(request)) {
+				User user = sessionService.getSessionUser(request);
+				modelAndView = new ModelAndView();
+				modelAndView.setViewName("admin/managePasswordPolicy");
+				modelAndView.addObject("user", user);
+				//modelAndView.addObject("policyList",populateList());
+				return modelAndView;
+			} else {
+				modelAndView = new ModelAndView("redirect:/login");
+			}
+		} else {
+			modelAndView = new ModelAndView("redirect:/login");
+		}
+		return modelAndView;
+	}
+
 
 }
