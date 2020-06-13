@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class PasswordPolicyService implements IPasswordPolicyServiceInjector,IPasswordPolicyService {
 
 	private IPasswordPolicyValidator passwordPolicy;
+
 	@Override
 	public void injectPasswordPolicy(IPasswordPolicyValidator passwordPolicy) {
 		this.passwordPolicy=passwordPolicy;
