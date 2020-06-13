@@ -43,7 +43,7 @@ public class PasswordPolicyDao extends PasswordPolicyAbstractDao {
 
         InvokeStoredProcedure invokeStoredProcedure = null;
         try {
-            invokeStoredProcedure = new InvokeStoredProcedure("spFindAllPasswordPolicy()");
+            invokeStoredProcedure = new InvokeStoredProcedure("spFindActivePasswordPolicy()");
             ResultSet results = invokeStoredProcedure.executeWithResults();
             List<PasswordPolicy> listOfPolicy = new ArrayList<>();
             if (results != null) {
@@ -60,6 +60,8 @@ public class PasswordPolicyDao extends PasswordPolicyAbstractDao {
             return listOfPolicy;
         } catch (Exception e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+        } finally {
+            invokeStoredProcedure.closeConnection();
         }
         return null;
     }
