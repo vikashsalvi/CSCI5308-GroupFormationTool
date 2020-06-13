@@ -4,8 +4,10 @@ import com.app.group15.injectors.service.AssignTaServiceInjector;
 import com.app.group15.injectors.service.CourseServiceInjector;
 import com.app.group15.injectors.service.InstructorServiceInjector;
 import com.app.group15.injectors.service.LoginServiceInjector;
+import com.app.group15.injectors.service.PasswordPolicyServiceInjector;
 import com.app.group15.injectors.service.SignUpServiceInjector;
 import com.app.group15.injectors.service.UserServiceInjector;
+import com.app.group15.passwordPolicy.IPasswordPolicyValidator;
 import com.app.group15.services.AssignTAService;
 import com.app.group15.services.AuthorizationService;
 import com.app.group15.services.CourseService;
@@ -14,6 +16,7 @@ import com.app.group15.services.IAuthorizationService;
 import com.app.group15.services.ICourseService;
 import com.app.group15.services.IInstructorService;
 import com.app.group15.services.ILoginService;
+import com.app.group15.services.IPasswordPolicyService;
 import com.app.group15.services.ISessionService;
 import com.app.group15.services.ISignupService;
 import com.app.group15.services.IUserService;
@@ -34,9 +37,11 @@ public class ServiceConfig {
     private ISessionService sessionService;
     private ISignupService signUpService;
     private IUserService userService;
+    private IPasswordPolicyService passwordPolicyService;
     
     
-    private ServiceConfig() {
+
+	private ServiceConfig() {
     	assignTaService=new AssignTaServiceInjector().getAssignTaService();
         courseService=new CourseServiceInjector().getCourseService();
         instructorService=new InstructorServiceInjector().getInstructorService();
@@ -45,6 +50,7 @@ public class ServiceConfig {
         signUpService=new SignUpServiceInjector().getSignUpService();
         userService=new UserServiceInjector().getUserService();
         authorizationService = new AuthorizationService();
+        passwordPolicyService=new PasswordPolicyServiceInjector().getPasswordPolicyService();
     }
     
     public IAuthorizationService getAuthorizationService() {
@@ -90,5 +96,8 @@ public class ServiceConfig {
 		return userService;
 	}
     
+	public IPasswordPolicyService getPasswordPolicy() {
+		return passwordPolicyService;
+	}
     
 }
