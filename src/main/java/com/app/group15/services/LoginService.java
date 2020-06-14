@@ -6,6 +6,7 @@ import com.app.group15.injectors.dao.UserDaoInjectorService;
 import com.app.group15.injectors.service.ILoginServiceInjector;
 import com.app.group15.model.User;
 
+
 public class LoginService implements ILoginService,ILoginServiceInjector{
     private UserAbstractDao userDao;
 
@@ -16,6 +17,7 @@ public class LoginService implements ILoginService,ILoginServiceInjector{
         {
             if (bannerId.equals(user.getBannerId()) && password.equals(user.getPassword()))
             {
+            	
                 return true;
             }else {
                 return false;

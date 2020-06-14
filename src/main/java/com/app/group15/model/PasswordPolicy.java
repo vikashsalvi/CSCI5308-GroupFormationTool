@@ -4,7 +4,9 @@ import java.io.Serializable;
 
 public class PasswordPolicy extends Persistence implements Serializable {
 
-    private int policyId;
+    
+	private static final long serialVersionUID = 1L;
+	private int policyId;
     private String policyName;
     private String policyDescription;
     private boolean is_active;

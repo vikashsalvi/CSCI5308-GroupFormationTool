@@ -25,7 +25,7 @@ public class AppConfig {
 	private UserAbstractDao userDao;
 	private CourseAbstractDao courseDao;
 	private PasswordPolicyAbstractDao passwordPolicyDao;
-
+	private UserPasswordHistoryAbstractDao userPasswordHistoryDao;
 	private AppConfig() {
 
 		properties = new Properties();
@@ -48,6 +48,7 @@ public class AppConfig {
 
 		courseDao = new CourseDaoInjectorService().getCourseDao();
 		passwordPolicyDao = new PasswordPolicyDao();
+		userPasswordHistoryDao=new UserPasswordHistoryDao();
 
 	}
 
@@ -151,5 +152,13 @@ public class AppConfig {
 	public PasswordPolicyAbstractDao getPasswordPolicyDao() {
 		return passwordPolicyDao;
 	}
+
+	public UserPasswordHistoryAbstractDao getUserPasswordHistoryDao() {
+		return userPasswordHistoryDao;
+	}
+
+	
+	
+	
 
 }

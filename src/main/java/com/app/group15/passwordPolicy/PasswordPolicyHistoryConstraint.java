@@ -1,10 +1,16 @@
 package com.app.group15.passwordPolicy;
 
-public class PasswordPolicyHistoryConstraint implements IPasswordPolicyValidator {
+import com.app.group15.config.AppConfig;
+import com.app.group15.dao.UserPasswordHistoryAbstractDao;
 
+public class PasswordPolicyHistoryConstraint implements IPasswordPolicyValidator {
+	
+	private UserPasswordHistoryAbstractDao passwordHistoryDao=AppConfig.getInstance().getUserPasswordHistoryDao();
+	
 	@Override
 	public boolean isPasswordValid(String password) {
-		// TODO Auto-generated method stub
+		
+		
 		return false;
 	}
 
