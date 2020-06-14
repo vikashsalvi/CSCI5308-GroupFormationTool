@@ -21,7 +21,6 @@ public class PasswordPolicyCharNotAllowed implements IPasswordPolicyValidator{
 		String bannedCharString = passwordPolicyList.get(5).getPolicyValue();
 		List<String> bannedCharList = Arrays.asList(bannedCharString.split(" ")) ;
 
-
 		for (int i=0; i< bannedCharList.size(); i++)
 		{
 			if (password.contains(bannedCharList.get(i)))
