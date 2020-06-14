@@ -1,6 +1,5 @@
 package com.app.group15.controller;
 
-import com.app.group15.config.AppConfig;
 import com.app.group15.config.ServiceConfig;
 import com.app.group15.model.Course;
 import com.app.group15.model.User;
@@ -229,6 +228,5 @@ public class AdminController {
 		}
 		return modelAndView;
 	}
-
 
 }
