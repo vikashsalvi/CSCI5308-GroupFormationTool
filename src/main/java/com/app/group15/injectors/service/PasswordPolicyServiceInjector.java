@@ -15,7 +15,7 @@ public class PasswordPolicyServiceInjector {
 
 	public PasswordPolicyServiceInjector() {
 
-		passwordPolicyDao = AppConfig.getInstance().getPasswordPolicyDao();
+		passwordPolicyDao = new PasswordPolicyDao();
 		List<PasswordPolicy> activePasswordPolicy = passwordPolicyDao.getActivePasswordPolicy();
 		passwordPolicyService = new PasswordPolicyService();
 

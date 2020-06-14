@@ -25,7 +25,7 @@ public class AppConfig {
     private CourseInstructorMapperAbstractDao courseInstructorMapperDao;
     private UserAbstractDao userDao;
     private CourseAbstractDao courseDao;
-    private PasswordPolicyDao passwordPolicyDao;
+    
     
     
     
@@ -53,7 +53,7 @@ public class AppConfig {
 
 
         courseDao = new CourseDaoInjectorService().getCourseDao();
-        passwordPolicyDao = new PasswordPolicyDaoInjector().getPasswordPolicyDao();
+       
 
 
     }
@@ -155,11 +155,5 @@ public class AppConfig {
         this.courseStudentMapperDao = courseStudentMapperDao;
     }
 
-    public PasswordPolicyDao getPasswordPolicyDao() {
-        return passwordPolicyDao;
-    }
-
-    public void setPasswordPolicyDao(PasswordPolicyDao passwordPolicyDao) {
-        this.passwordPolicyDao = passwordPolicyDao;
-    }
+    
 }
