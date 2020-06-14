@@ -24,7 +24,6 @@ public class PasswordPolicyService implements IPasswordPolicyServiceInjector,IPa
 	@Override
 	public boolean validatePassword(String password) {
 		return passwordPolicy.isPasswordValid(password);
-		
 	}
 
 	@Override
@@ -39,16 +38,15 @@ public class PasswordPolicyService implements IPasswordPolicyServiceInjector,IPa
 	{
 		InvokeStoredProcedure invokeStoredProcedure = null;
 		try {
-			invokeStoredProcedure = new InvokeStoredProcedure("spUpdatePolicy()");
+			invokeStoredProcedure = new InvokeStoredProcedure("spUpdatePolicy(?,?,?)");
 			invokeStoredProcedure.setParameter(1,policyID);
-			invokeStoredProcedure.setParameter(2, policyState);
+			invokeStoredProcedure.setParameter(2,policyState);
 			invokeStoredProcedure.setParameter(3,policyValue);
-
 			invokeStoredProcedure.execute();
-
 		} catch (SQLException throwables) {
 			throwables.printStackTrace();
-			System.out.println(throwables.getMessage());
+		}finally {
+			invokeStoredProcedure.closeConnection();
 		}
 	}
 

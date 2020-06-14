@@ -8,7 +8,6 @@ class PasswordPolicyCharNotAllowedTest {
 
     @Test
     void isPasswordValidTest() {
-
         PasswordPolicyCharNotAllowed passwordPolicyCharNotAllowed = new PasswordPolicyCharNotAllowed();
 
         String noBannedChar0 = "abACW";
@@ -18,7 +17,5 @@ class PasswordPolicyCharNotAllowedTest {
         assertFalse(passwordPolicyCharNotAllowed.isPasswordValid(bannedChar1));
         assertTrue(passwordPolicyCharNotAllowed.isPasswordValid(noBannedChar1));
         assertTrue(passwordPolicyCharNotAllowed.isPasswordValid(noBannedChar0));
-
-
     }
 }

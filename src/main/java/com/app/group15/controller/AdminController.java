@@ -3,17 +3,13 @@ package com.app.group15.controller;
 import com.app.group15.config.ServiceConfig;
 import com.app.group15.model.Course;
 import com.app.group15.model.User;
-import com.app.group15.persistence.InvokeStoredProcedure;
 import com.app.group15.services.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -205,7 +201,7 @@ public class AdminController {
 
 	@RequestMapping(value = "/admin/passwordPolicy", method = RequestMethod.POST)
 	public ModelAndView passwordPolicyPOST(HttpServletRequest request,
-										   @RequestParam(required = false, value = "policyState") int policyState,
+										   @RequestParam(required = false, value = "policyState") boolean policyState,
 										   @RequestParam(required = false, value = "policyValue") String policyValue,
 										   @RequestParam(required = false, value = "hidden_policyID") String policyID) {
 		authorizationService.setAllowedRoles(new String[]{"ADMIN"});
@@ -216,7 +212,11 @@ public class AdminController {
 				User user = sessionService.getSessionUser(request);
 				modelAndView = new ModelAndView();
 
-				passwordPolicyService.updatePolicy(policyID,policyState,policyValue);
+				if (policyState) {
+					passwordPolicyService.updatePolicy(policyID,1,policyValue);
+				}else {
+					passwordPolicyService.updatePolicy(policyID,0,policyValue);
+				}
 
 				modelAndView.setViewName("admin/managePasswordPolicy");
 				modelAndView.addObject("user", user);

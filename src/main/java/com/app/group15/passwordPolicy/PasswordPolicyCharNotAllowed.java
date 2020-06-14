@@ -7,6 +7,7 @@ import com.app.group15.dao.PasswordPolicyDao;
 import com.app.group15.dao.UserRoleDao;
 import com.app.group15.model.PasswordPolicy;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,7 +20,14 @@ public class PasswordPolicyCharNotAllowed implements IPasswordPolicyValidator{
 		List<PasswordPolicy> passwordPolicyList = passwordPolicyDao.getAll();
 
 		String bannedCharString = passwordPolicyList.get(5).getPolicyValue();
-		List<String> bannedCharList = Arrays.asList(bannedCharString.split(" ")) ;
+		List<String> bannedCharList = new ArrayList<>();
+
+		bannedCharString.replaceAll(" +","");
+
+		for (int i=0; i<bannedCharString.length();i++)
+		{
+			bannedCharList.add(String.valueOf(bannedCharString.charAt(i)));
+		}
 
 		for (int i=0; i< bannedCharList.size(); i++)
 		{
