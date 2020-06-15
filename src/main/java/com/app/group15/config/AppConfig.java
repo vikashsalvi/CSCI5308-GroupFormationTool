@@ -1,8 +1,22 @@
 package com.app.group15.config;
 
-import com.app.group15.dao.*;
-import com.app.group15.injectors.dao.*;
-import com.app.group15.notifications.EmailNotifierImpl;
+import com.app.group15.courseManagement.CourseAbstractDao;
+import com.app.group15.courseManagement.CourseDaoInjectorService;
+import com.app.group15.courseManagement.CourseInstructorMapperAbstractDao;
+import com.app.group15.courseManagement.CourseInstructorMapperDao;
+import com.app.group15.courseManagement.CourseInstructorMapperDaoInjectorService;
+import com.app.group15.courseManagement.CourseStudentMapperAbstractDao;
+import com.app.group15.courseManagement.CourseStudentMapperDao;
+import com.app.group15.courseManagement.CourseStudentMapperDaoInjectorService;
+import com.app.group15.notificationsManagement.EmailNotifierImpl;
+import com.app.group15.passwordPolicyManagement.PasswordPolicyAbstractDao;
+import com.app.group15.passwordPolicyManagement.PasswordPolicyDao;
+import com.app.group15.passwordPolicyManagement.UserPasswordHistoryAbstractDao;
+import com.app.group15.passwordPolicyManagement.UserPasswordHistoryDao;
+import com.app.group15.userManagement.UserAbstractDao;
+import com.app.group15.userManagement.UserDao;
+import com.app.group15.userManagement.UserDaoInjectorService;
+import com.app.group15.userManagement.UserRoleDaoInjectorService;
 import com.app.group15.utility.GroupFormationToolLogger;
 
 import java.io.FileInputStream;

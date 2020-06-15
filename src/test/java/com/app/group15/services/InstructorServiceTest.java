@@ -1,8 +1,9 @@
 package com.app.group15.services;
 
-import com.app.group15.model.Course;
-import com.app.group15.model.User;
+import com.app.group15.courseManagement.Course;
 import com.app.group15.persistence.dao.CourseInstructorMapperDaoMock;
+import com.app.group15.userManagement.User;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

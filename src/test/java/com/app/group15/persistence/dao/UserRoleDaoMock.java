@@ -1,10 +1,10 @@
 package com.app.group15.persistence.dao;
 
 import com.app.group15.ExceptionHandler.AdminNotAllowedException;
-import com.app.group15.dao.UserRoleAbstractDao;
-import com.app.group15.model.UserRoles;
 import com.app.group15.persistence.DatabaseManager;
-import com.app.group15.persistence.UserRole;
+import com.app.group15.userManagement.UserRole;
+import com.app.group15.userManagement.UserRoleAbstractDao;
+import com.app.group15.userManagement.UserRoles;
 import com.app.group15.utility.GroupFormationToolLogger;
 
 import java.sql.Connection;

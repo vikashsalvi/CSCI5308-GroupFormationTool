@@ -1,8 +1,8 @@
 package com.app.group15.persistence.dao;
 
-import com.app.group15.model.User;
-
 import java.util.ArrayList;
+
+import com.app.group15.userManagement.User;
 
 public class UserDaoMock {
 

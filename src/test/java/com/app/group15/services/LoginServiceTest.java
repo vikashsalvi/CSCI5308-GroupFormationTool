@@ -1,7 +1,8 @@
 package com.app.group15.services;
 
-import com.app.group15.model.User;
 import com.app.group15.persistence.dao.UserDaoMock;
+import com.app.group15.userManagement.User;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

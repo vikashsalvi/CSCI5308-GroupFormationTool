@@ -1,30 +1,23 @@
 package com.app.group15.config;
 
-import com.app.group15.injectors.service.AssignTaServiceInjector;
-import com.app.group15.injectors.service.CourseServiceInjector;
-import com.app.group15.injectors.service.InstructorServiceInjector;
-import com.app.group15.injectors.service.LoginServiceInjector;
-import com.app.group15.injectors.service.PasswordPolicyServiceInjector;
-import com.app.group15.injectors.service.SignUpServiceInjector;
-import com.app.group15.injectors.service.UserServiceInjector;
-import com.app.group15.passwordPolicy.IPasswordPolicyValidator;
-import com.app.group15.services.AssignTAService;
-import com.app.group15.services.AuthorizationService;
-import com.app.group15.services.CourseService;
-import com.app.group15.services.IAssignTAService;
-import com.app.group15.services.IAuthorizationService;
-import com.app.group15.services.ICourseService;
-import com.app.group15.services.IInstructorService;
-import com.app.group15.services.ILoginService;
-import com.app.group15.services.IPasswordPolicyService;
-import com.app.group15.services.ISessionService;
-import com.app.group15.services.ISignupService;
-import com.app.group15.services.IUserService;
-import com.app.group15.services.InstructorService;
-import com.app.group15.services.LoginService;
-import com.app.group15.services.SessionService;
-import com.app.group15.services.SignupService;
-import com.app.group15.services.UserService;
+import com.app.group15.courseManagement.AssignTaServiceInjector;
+import com.app.group15.courseManagement.CourseServiceInjector;
+import com.app.group15.courseManagement.IAssignTAService;
+import com.app.group15.courseManagement.ICourseService;
+import com.app.group15.courseManagement.IInstructorService;
+import com.app.group15.courseManagement.InstructorServiceInjector;
+import com.app.group15.passwordPolicyManagement.IPasswordPolicyService;
+import com.app.group15.passwordPolicyManagement.PasswordPolicyServiceInjector;
+import com.app.group15.userManagement.AuthorizationService;
+import com.app.group15.userManagement.IAuthorizationService;
+import com.app.group15.userManagement.ILoginService;
+import com.app.group15.userManagement.ISessionService;
+import com.app.group15.userManagement.ISignupService;
+import com.app.group15.userManagement.IUserService;
+import com.app.group15.userManagement.LoginServiceInjector;
+import com.app.group15.userManagement.SessionService;
+import com.app.group15.userManagement.SignUpServiceInjector;
+import com.app.group15.userManagement.UserServiceInjector;
 
 public class ServiceConfig {
 	private static ServiceConfig singletonServiceConfig = null;

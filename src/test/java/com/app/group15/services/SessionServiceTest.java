@@ -1,8 +1,9 @@
 package com.app.group15.services;
 
-import com.app.group15.model.User;
 import com.app.group15.persistence.dao.UserDaoMock;
 import com.app.group15.persistence.dao.UserRoleDaoMock;
+import com.app.group15.userManagement.User;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;

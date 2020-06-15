@@ -1,8 +1,8 @@
 package com.app.group15.persistence.dao;
 
-import com.app.group15.model.Course;
-import com.app.group15.model.CourseInstructorMapper;
-import com.app.group15.model.User;
+import com.app.group15.courseManagement.Course;
+import com.app.group15.courseManagement.CourseInstructorMapper;
+import com.app.group15.userManagement.User;
 
 import java.util.ArrayList;
 

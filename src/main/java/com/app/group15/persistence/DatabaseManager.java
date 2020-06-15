@@ -1,10 +1,7 @@
 package com.app.group15.persistence;
 
-import com.app.group15.model.DatabaseDetails;
-import com.app.group15.utility.AwsSecretsManagerUtility;
 import com.mysql.cj.jdbc.MysqlDataSource;
 
-import java.sql.Connection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
