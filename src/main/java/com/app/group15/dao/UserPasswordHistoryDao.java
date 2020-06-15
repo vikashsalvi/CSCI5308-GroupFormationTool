@@ -13,6 +13,7 @@ import com.app.group15.utility.GroupFormationToolLogger;
 
 public class UserPasswordHistoryDao extends UserPasswordHistoryAbstractDao{
 	
+	@Override
 	public List getPasswordHistory(int userId) {
 		InvokeStoredProcedure invokeStoredProcedure = null;
 		try {

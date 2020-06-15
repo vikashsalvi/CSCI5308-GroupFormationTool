@@ -12,6 +12,9 @@ public class UserPasswordHistoryAbstractDao implements IDao{
 		return null;
 	}
 
+	public List getPasswordHistory(int userId) {
+		return null;
+	}
 	@Override
 	public List getAll() {
 		// TODO Auto-generated method stub

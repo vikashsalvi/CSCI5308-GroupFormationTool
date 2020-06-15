@@ -50,7 +50,6 @@ public class ServiceConfig {
         signUpService=new SignUpServiceInjector().getSignUpService();
         userService=new UserServiceInjector().getUserService();
         authorizationService = new AuthorizationService();
-        passwordPolicyService=new PasswordPolicyServiceInjector().getPasswordPolicyService();
     }
     
     public IAuthorizationService getAuthorizationService() {
@@ -97,6 +96,7 @@ public class ServiceConfig {
 	}
     
 	public IPasswordPolicyService getPasswordPolicy() {
+		passwordPolicyService=new PasswordPolicyServiceInjector().getPasswordPolicyService();
 		return passwordPolicyService;
 	}
     

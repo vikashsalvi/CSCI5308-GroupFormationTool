@@ -1,6 +1,8 @@
 package com.app.group15.controller;
 
+import com.app.group15.config.AppConfig;
 import com.app.group15.config.ServiceConfig;
+import com.app.group15.dao.PasswordPolicyAbstractDao;
 import com.app.group15.model.Course;
 import com.app.group15.model.User;
 import com.app.group15.services.*;
@@ -19,7 +21,7 @@ public class AdminController {
 	private ICourseService courseService = ServiceConfig.getInstance().getCourseService();
 	private IUserService userService = ServiceConfig.getInstance().getUserService();
 	private IPasswordPolicyService passwordPolicyService = ServiceConfig.getInstance().getPasswordPolicy();
-
+	private PasswordPolicyAbstractDao passwordPolicyDao=AppConfig.getInstance().getPasswordPolicyDao();
 	@RequestMapping(value = "/admin/home", method = RequestMethod.GET)
 	public ModelAndView adminHome(HttpServletRequest request) {
 		authorizationService.setAllowedRoles(new String[] { "ADMIN" });
@@ -213,9 +215,9 @@ public class AdminController {
 				modelAndView = new ModelAndView();
 
 				if (policyState) {
-					passwordPolicyService.updatePolicy(policyID,1,policyValue);
+					passwordPolicyDao.updatePolicy(policyID,1,policyValue);
 				}else {
-					passwordPolicyService.updatePolicy(policyID,0,policyValue);
+					passwordPolicyDao.updatePolicy(policyID,0,policyValue);
 				}
 
 				modelAndView.setViewName("admin/managePasswordPolicy");

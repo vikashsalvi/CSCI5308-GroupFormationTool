@@ -5,6 +5,7 @@ import com.app.group15.persistence.InvokeStoredProcedure;
 import com.app.group15.utility.GroupFormationToolLogger;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -65,4 +66,22 @@ public class PasswordPolicyDao extends PasswordPolicyAbstractDao {
         }
         return null;
     }
+    
+    
+    @Override
+	public void updatePolicy(String policyID, int policyState, String policyValue)
+	{
+		InvokeStoredProcedure invokeStoredProcedure = null;
+		try {
+			invokeStoredProcedure = new InvokeStoredProcedure("spUpdatePolicy(?,?,?)");
+			invokeStoredProcedure.setParameter(1,policyID);
+			invokeStoredProcedure.setParameter(2,policyState);
+			invokeStoredProcedure.setParameter(3,policyValue);
+			invokeStoredProcedure.execute();
+		} catch (SQLException e) {
+			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+		}finally {
+			invokeStoredProcedure.closeConnection();
+		}
+	}
 }

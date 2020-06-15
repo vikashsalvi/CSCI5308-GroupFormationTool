@@ -6,6 +6,7 @@ import com.app.group15.model.PasswordPolicy;
 import com.app.group15.passwordPolicy.*;
 import com.app.group15.services.PasswordPolicyService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PasswordPolicyServiceInjector {
@@ -18,32 +19,34 @@ public class PasswordPolicyServiceInjector {
 		passwordPolicyDao = new PasswordPolicyDao();
 		List<PasswordPolicy> activePasswordPolicy = passwordPolicyDao.getActivePasswordPolicy();
 		passwordPolicyService = new PasswordPolicyService();
+		List<IPasswordPolicyValidator> activePolicyList=new ArrayList();
 
 		activePasswordPolicy.forEach(policy -> {
 			switch (policy.getPolicyId()) {
 				case 1:
-					passwordPolicyService.injectPasswordPolicy(new PasswordPolicyMinLength());
+					activePolicyList.add(new PasswordPolicyMinLength());
 					break;
 				case 2:
-					passwordPolicyService.injectPasswordPolicy(new PasswordPolicyMaxLength());
+					activePolicyList.add(new PasswordPolicyMaxLength());
 					break;
 				case 3:
-					passwordPolicyService.injectPasswordPolicy(new PasswordPolicyMinUpperCase());
+					activePolicyList.add(new PasswordPolicyMinUpperCase());
 					break;
 				case 4:
-					passwordPolicyService.injectPasswordPolicy(new PasswordPolicyMinLowerCase());
+					activePolicyList.add(new PasswordPolicyMinLowerCase());
 					break;
 				case 5:
-					passwordPolicyService.injectPasswordPolicy(new PasswordPolicyMinSpecialChar());
+					activePolicyList.add(new PasswordPolicyMinSpecialChar());
 					break;
 				case 6:
-					passwordPolicyService.injectPasswordPolicy(new PasswordPolicyCharNotAllowed());
+					activePolicyList.add(new PasswordPolicyCharNotAllowed());
 					break;
 				case 7:
-					passwordPolicyService.injectPasswordPolicy(new PasswordPolicyHistoryConstraint());
+					activePolicyList.add(new PasswordPolicyHistoryConstraint());
 					break;
 			}
 		});
+		passwordPolicyService.injectPasswordPolicy(activePolicyList);
 	}
 
 	public PasswordPolicyService getPasswordPolicyService() {
