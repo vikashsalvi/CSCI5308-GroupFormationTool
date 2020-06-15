@@ -2,24 +2,16 @@ package com.app.group15.controller;
 
 import com.app.group15.config.AppConfig;
 import com.app.group15.config.ServiceConfig;
+import com.app.group15.dao.PasswordPolicyAbstractDao;
 import com.app.group15.model.Course;
 import com.app.group15.model.User;
-import com.app.group15.services.AuthorizationService;
-import com.app.group15.services.CourseService;
-import com.app.group15.services.IAuthorizationService;
-import com.app.group15.services.ICourseService;
-import com.app.group15.services.ISessionService;
-import com.app.group15.services.IUserService;
-import com.app.group15.services.SessionService;
-import com.app.group15.services.UserService;
+import com.app.group15.services.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -28,7 +20,8 @@ public class AdminController {
 	private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
 	private ICourseService courseService = ServiceConfig.getInstance().getCourseService();
 	private IUserService userService = ServiceConfig.getInstance().getUserService();
-
+	private IPasswordPolicyService passwordPolicyService = ServiceConfig.getInstance().getPasswordPolicy();
+	private PasswordPolicyAbstractDao passwordPolicyDao=AppConfig.getInstance().getPasswordPolicyDao();
 	@RequestMapping(value = "/admin/home", method = RequestMethod.GET)
 	public ModelAndView adminHome(HttpServletRequest request) {
 		authorizationService.setAllowedRoles(new String[] { "ADMIN" });
@@ -178,6 +171,59 @@ public class AdminController {
 			if (authorizationService.isAuthorized(request)) {
 				courseService.deleteCourse(courseId);
 				modelAndView = new ModelAndView("redirect:/admin/courses?feedback=courseDeleted");
+			} else {
+				modelAndView = new ModelAndView("redirect:/login");
+			}
+		} else {
+			modelAndView = new ModelAndView("redirect:/login");
+		}
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/admin/passwordPolicy", method = RequestMethod.GET)
+	public ModelAndView passwordPolicyGET(HttpServletRequest request) {
+		authorizationService.setAllowedRoles(new String[]{"ADMIN"});
+		ModelAndView modelAndView;
+		if (sessionService.isUserSignedIn(request)) {
+			if (authorizationService.isAuthorized(request)) {
+				User user = sessionService.getSessionUser(request);
+				modelAndView = new ModelAndView();
+				modelAndView.setViewName("admin/managePasswordPolicy");
+				modelAndView.addObject("user", user);
+				modelAndView.addObject("policyList", passwordPolicyService.getAllPolicy());
+				return modelAndView;
+			} else {
+				modelAndView = new ModelAndView("redirect:/login");
+			}
+		} else {
+			modelAndView = new ModelAndView("redirect:/login");
+		}
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/admin/passwordPolicy", method = RequestMethod.POST)
+	public ModelAndView passwordPolicyPOST(HttpServletRequest request,
+										   @RequestParam(required = false, value = "policyState") boolean policyState,
+										   @RequestParam(required = false, value = "policyValue") String policyValue,
+										   @RequestParam(required = false, value = "hidden_policyID") String policyID) {
+		authorizationService.setAllowedRoles(new String[]{"ADMIN"});
+		ModelAndView modelAndView;
+
+		if (sessionService.isUserSignedIn(request)) {
+			if (authorizationService.isAuthorized(request)) {
+				User user = sessionService.getSessionUser(request);
+				modelAndView = new ModelAndView();
+
+				if (policyState) {
+					passwordPolicyDao.updatePolicy(policyID,1,policyValue);
+				}else {
+					passwordPolicyDao.updatePolicy(policyID,0,policyValue);
+				}
+
+				modelAndView.setViewName("admin/managePasswordPolicy");
+				modelAndView.addObject("user", user);
+				modelAndView.addObject("policyList", passwordPolicyService.getAllPolicy());
+				return modelAndView;
 			} else {
 				modelAndView = new ModelAndView("redirect:/login");
 			}
