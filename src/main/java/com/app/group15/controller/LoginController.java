@@ -17,7 +17,7 @@ public class LoginController {
 	private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
 	private ILoginService loginService=ServiceConfig.getInstance().getLoginService();
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ModelAndView login(@RequestParam(required = false, value = "bannerId") String bannerId, @RequestParam(required = false, value = "password") String password, HttpServletRequest request) {
+	public ModelAndView loginPOST(@RequestParam(required = false, value = "bannerId") String bannerId, @RequestParam(required = false, value = "password") String password, HttpServletRequest request) {
 		
 		if (loginService.validateLogin(bannerId, password)) {
 			sessionService.setSession(request, "BANNER_ID_SESSION", bannerId);
@@ -32,7 +32,7 @@ public class LoginController {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ModelAndView login(HttpServletRequest request) {
+	public ModelAndView loginGET(HttpServletRequest request) {
 		if (sessionService.isUserSignedIn(request)) {
 			String redirect = "redirect:"+sessionService.getUserHome(request);
 

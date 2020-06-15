@@ -29,8 +29,9 @@ public class InstructorController {
 	private ICourseService courseService = ServiceConfig.getInstance().getCourseService();
 	private IInstructorService instructorService=ServiceConfig.getInstance().getInstructorService();
 	private IAssignTAService assignTaService=ServiceConfig.getInstance().getAssignTaService();
+
 	@RequestMapping(value = "/instructor/home", method = RequestMethod.GET)
-	public ModelAndView adminHome(HttpServletRequest request) {
+	public ModelAndView instructorHome(HttpServletRequest request) {
 		authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
 		System.out.println(authorizationService.getAllowedRoles().toString());
 		ModelAndView modelAndView;
