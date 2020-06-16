@@ -12,7 +12,7 @@ class PasswordPolicyMinLowerCaseTest {
 
     @Test
     void isPasswordValid() {
-        PasswordPolicyMinLowerCase passwordPolicyMinLowerCase = new PasswordPolicyMinLowerCase();
+        PasswordPolicyMinLowerCaseMock passwordPolicyMinLowerCase = new PasswordPolicyMinLowerCaseMock();
 
         String lowercase3 = "aaaAAA@";
         String lowercase2 = "aaAAA@";

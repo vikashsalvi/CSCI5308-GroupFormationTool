@@ -10,7 +10,7 @@ class PasswordPolicyMinLengthTest {
 
     @Test
     void isPasswordValid() {
-        PasswordPolicyMinLength passwordPolicyMinLength = new PasswordPolicyMinLength();
+        PasswordPolicyMinLengthMock passwordPolicyMinLength = new PasswordPolicyMinLengthMock();
 
         String length7 = "AAAAAAA";
         String length8 = "AAAAAAAA";

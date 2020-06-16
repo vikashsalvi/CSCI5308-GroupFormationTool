@@ -17,7 +17,6 @@ public class AssignTAService  implements IAssignTAService,IAssignTaServiceInject
     private CourseInstructorMapperAbstractDao courseInstructorMapperDao ;
     private IInstructorService instructorService;
 
-    
 
     public boolean performTAUpdate(String bannerId, int courseId)
     {
