@@ -2,14 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Assign TA</title>
-    <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
+    <title>Question</title>
+    <link rel="stylesheet" th:href="@{/vendor/fontawesome-free/css/all.min.css}" type="text/css">
     <link
             href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
             rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/sb-admin-2.min.css}">
 
 </head>
 <body id="page-top">
@@ -33,6 +33,7 @@
         </li>
         <!-- Divider -->
         <hr class="sidebar-divider">
+
         <hr class="sidebar-divider">
         <li class="nav-item">
             <a class="nav-link" href="/logout">
@@ -50,12 +51,12 @@
             <button class="rounded-circle border-0" id="sidebarToggle"></button>
         </div>
     </ul>
-    <div id="content-wrapper" class="d-flex flex-column">
+    <div class="d-flex flex-column" id="content-wrapper">
         <div id="content">
             <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
                 <!-- Sidebar Toggle (Topbar) -->
-                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                <button class="btn btn-link d-md-none rounded-circle mr-3" id="sidebarToggleTop">
                     <i class="fa fa-bars"></i>
                 </button>
 
@@ -66,9 +67,10 @@
 
                     <!-- Nav Item - User Information -->
                     <li class="nav-item dropdown no-arrow">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                        <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
                            data-toggle="dropdown"
-                           aria-haspopup="true" aria-expanded="false">
+                           href="#"
+                           id="userDropdown" role="button">
 							<span class="mr-2 d-none d-lg-inline text-gray-600 small"
                                   th:text='${userEntity.getFirstName() + " " + userEntity.getLastName()}'></span>
                             <i class="fa fa-user-circle"></i>
@@ -76,7 +78,7 @@
                         <!-- Dropdown - User Information -->
                         <!--
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                             aria-labelledby="userDropdown">
+                                 aria-labelledby="userDropdown">
                             <a class="dropdown-item" href="#">
                                 <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Profile
@@ -104,29 +106,60 @@
                             th:text='${userEntity.getFirstName()+ " "+ userEntity.getLastName()}'></span></h1>
                 </div>
                 <hr class="text-gray-800">
-
                 <div class="row">
-                    <div class="card">
+                    <div class="card" style="width:800px;">
                         <div class="card-header">
-                            <h1 class="h4 text-gray-800">Selecting TA for <span th:text='${ courseEntity.getName() }'></span></h1>
+                            <h1 class="h4 text-gray-800">Add answers </h1>
                         </div>
-                        <div class="card-body w-100">
-                            <div th:if="${ error }" class="alert alert-danger" role="alert">
-															<strong>Oh snap!</strong> <span th:text="${errorMessage}"></span>
-                            </div>
-                            <div th:if="${ error_invalid_permission }" class="alert alert-danger" role="alert">
-                                <strong>Oh snap!</strong> You don't have permission to change the TA for this course!
-                            </div>
-                            <form action="/instructor/assign-ta"  method="POST">
-                                <div class="form-group">
-                                    <label for="bannerId">Banner ID</label>
-                                    <input type="text" class="form-control" id="bannerId" placeholder="B00XXXXXX" name="bannerId">
-                                    <input type="hidden" id="courseId" name="courseId" th:value="${courseId}">
+                        <div class="card-body w-100" id="questionDiv">
+                            <form method="post" th:action="@{/instructor/question/saveQuesAnsData}"
+                                  th:object="${question}">
+                                <h3>Add answers for the question</h3>
+                                <label style="font-weight: bold;"><br/><span th:text="${question.questionTitle}"></span></label>
+                                <br/>
+                                <label style="font-weight: bold;"><br/><span th:text="${question.questionText}"></span></label>
+                                <br/>
+
+                                <div th:if="${question.questionTypeId}=='1'">
+                                    <input class="form-control" name="answer" size="2" style="width:200px"
+                                           type="number">
                                 </div>
 
-                                <button type="submit" class="btn btn-success">Assign TA</button>
+                                <div th:if="${question.questionTypeId}!='1' AND ${question.questionTypeId}!='4'">
+                                    <tr th:each="text, storedAs : *{options}">
+                                        <div class="row">
+                                            <div class="col">
+                                                <td>Display text: <input class="form-control" style="width:500px"
+                                                                         th:field="*{options[__${storedAs.index}__].option}"
+                                                                         type="text"/></td>
+                                            </div>
+                                            <div class="col">
+                                                <td>Stored as:<input class="form-control" style="width:100px"
+                                                                     th:field="*{options[__${storedAs.index}__].value}"
+                                                                     type="number"/><br></td>
+                                            </div>
+                                        </div>
+                                    </tr>
+                                    </tr>
+                                    <button class="btn-success" name="addRow" type="submit">Add answers</button>
+                                </div>
+                                <div th:if="${question.questionTypeId}=='4'">
+                                    <textarea cols="50" id="freeText" rows="4"></textarea>
+                                </div>
+                                <input th:field="*{questionText}" type="hidden">
+                                <input th:field="*{questionTitle}" type="hidden">
+                                <input th:field="*{questionTypeId}" type="hidden">
+                                <br/>
+                                <div class="row">
+                                    <div class="col">
+                                        <input class="btn-success" type="submit" value="SAVE"/>
+                                    </div>
+                                    <div class="col">
+                                        <input class="btn-success" onclick='javascript:window.history.back()'
+                                               type='button' value='Back'/>
+                                    </div>
+                                </div>
                             </form>
-
                         </div>
                     </div>
                 </div>
@@ -134,6 +167,7 @@
         </div>
     </div>
 </div>
+
 
 <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
 <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
