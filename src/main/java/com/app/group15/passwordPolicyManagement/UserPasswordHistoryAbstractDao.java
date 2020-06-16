@@ -40,4 +40,9 @@ public class UserPasswordHistoryAbstractDao implements IDao{
 		
 	}
 
+	public void savePasswordHistory(UserPasswordHistory passwordHistory) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

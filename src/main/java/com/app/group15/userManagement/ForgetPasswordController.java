@@ -1,6 +1,9 @@
 package com.app.group15.userManagement;
 
 import com.app.group15.config.AppConfig;
+import com.app.group15.config.ServiceConfig;
+import com.app.group15.passwordPolicyManagement.IPasswordPolicyService;
+import com.app.group15.passwordPolicyManagement.PasswordPolicyValidationResult;
 import com.app.group15.utility.GroupFormationToolLogger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +26,7 @@ import java.util.logging.Level;
 public class ForgetPasswordController {
 
 	private UserAbstractDao userDao=AppConfig.getInstance().getUserDao();
+	private IPasswordPolicyService passwordPolicyService=ServiceConfig.getInstance().getPasswordPolicy();
 
     @RequestMapping(value = "/forgetPassword", method = RequestMethod.GET)
     public ModelAndView returnModel() {
@@ -93,17 +97,30 @@ public class ForgetPasswordController {
     @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
     public ModelAndView changePassword(@RequestParam(required = false, value = "token") String token,
                                        @RequestParam(required = true, value = "password") String password,
+          
                                        @RequestParam(required = true, value = "cPassword") String newPassword) {
 
-        if (!newPassword.equals(password)) {
+    	Map<String, String> user = userDao.getUserFromToken(token);
+    	PasswordPolicyValidationResult result=passwordPolicyService.validatePassword(password, Integer.parseInt(user.get("id")));
+    	if (!newPassword.equals(password)) {
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.setViewName("resetPassword");
             modelAndView.addObject("error", true);
             modelAndView.addObject("completed", false);
+            modelAndView.addObject("token", token);
+           
             modelAndView.addObject("password_error", "Password did not match!");
             return modelAndView;
+        }else if(!result.getResult()) {
+        	ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("resetPassword");
+            modelAndView.addObject("error", true);
+            modelAndView.addObject("completed", false);
+            modelAndView.addObject("token", token);
+            modelAndView.addObject("password_error", result.isMessage());
+            return modelAndView;
         }
-        Map<String, String> user = userDao.getUserFromToken(token);
+        
         boolean passed = false;
         if (userDao.updateUserPassword(Integer.parseInt(user.get("id")), newPassword)) {
             passed = userDao.deleteForgotPasswordToken(Integer.parseInt(user.get("id")));

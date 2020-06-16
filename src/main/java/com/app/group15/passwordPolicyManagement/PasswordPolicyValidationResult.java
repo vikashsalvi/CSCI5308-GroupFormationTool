@@ -4,6 +4,7 @@ import java.util.List;
 
 public class PasswordPolicyValidationResult {
 	private boolean result;
+	private String message;
 	private List<String> failedPolicyList;
 	public boolean getResult() {
 		return result;
@@ -17,6 +18,14 @@ public class PasswordPolicyValidationResult {
 	public void setFailedPolicyList(List<String> failedPolicyList) {
 		this.failedPolicyList = failedPolicyList;
 	}
+	public String isMessage() {
+		return message;
+	}
+	public void setMessage(String message) {
+		this.message = message;
+	}
+	
+	
 	
 	
 

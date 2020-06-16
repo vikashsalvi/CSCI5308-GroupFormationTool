@@ -1,6 +1,8 @@
 package com.app.group15.userManagement;
 
 import com.app.group15.config.ServiceConfig;
+import com.app.group15.passwordPolicyManagement.IPasswordPolicyService;
+import com.app.group15.passwordPolicyManagement.PasswordPolicyValidationResult;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -14,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class SignupController {
 
 	private ISignupService signupService = ServiceConfig.getInstance().getSignUpService();
-
+	private IPasswordPolicyService passwordPolicyService=ServiceConfig.getInstance().getPasswordPolicy();
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
 	public ModelAndView signup() {
 		ModelAndView modelAndView = new ModelAndView();
@@ -27,6 +29,7 @@ public class SignupController {
 	public ModelAndView signup(@ModelAttribute User user, @RequestParam("cPassword") String cPassword) {
 		String bannerId = user.getBannerId();
 		boolean response = signupService.checkUserExists(bannerId);
+		PasswordPolicyValidationResult result=passwordPolicyService.validatePassword(user.getPassword(), -1);
 		if (response) {
 			ModelAndView modelAndView = new ModelAndView();
 			modelAndView.setViewName("signup");
@@ -39,7 +42,14 @@ public class SignupController {
 			modelAndView.addObject("error", true);
 			modelAndView.addObject("password_error", "Password and confirm password did not match!");
 			return modelAndView;
-		} else {
+		} else if(!result.getResult()){
+			ModelAndView modelAndView = new ModelAndView();
+			modelAndView.setViewName("signup");
+			modelAndView.addObject("error", true);
+			modelAndView.addObject("password_error", result.isMessage());
+			return modelAndView;
+		}
+		else {
 			int userId = signupService.createUser(user, "GUEST");
 			return new ModelAndView("redirect:login");
 		}
