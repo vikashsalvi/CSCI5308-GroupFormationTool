@@ -26,7 +26,6 @@ public class AssignTAService  implements IAssignTAService,IAssignTaServiceInject
         User userEntity= userDao.getUserByBannerId(bannerId);
 
         if (userService.validateBannerID(bannerId) && courseService.validateCourseID(courseId)) {
-
             if (instructorService.validateUserToAddAsTa(userEntity,courseId)){
             	instructorService.addOrUpdateStudentRole(userEntity,"TA");
 				courseInstructorMapperDao.addTaToACourse(courseId,userEntity.getId());
