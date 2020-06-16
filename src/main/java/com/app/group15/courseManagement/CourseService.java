@@ -90,6 +90,13 @@ public class CourseService  implements ICourseService,ICourseServiceInjector{
 		
 	}
 
+	@Override
+	public boolean validateCourseID(int courseId) {
+		if (courseDao.get(courseId) != null) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 
-	
 }

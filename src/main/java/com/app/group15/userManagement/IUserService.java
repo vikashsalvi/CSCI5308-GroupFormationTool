@@ -6,5 +6,6 @@ public interface IUserService {
 
 	public  List<User> getAllUsers() ;
 	public  void updateUserRole(int userId, String role);
+	public boolean validateBannerID(String bannerId);
 	
 }
