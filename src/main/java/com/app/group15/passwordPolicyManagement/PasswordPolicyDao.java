@@ -65,22 +65,5 @@ public class PasswordPolicyDao extends PasswordPolicyAbstractDao {
         }
         return null;
     }
-    
-    
-    @Override
-	public void updatePolicy(String policyID, int policyState, String policyValue)
-	{
-		InvokeStoredProcedure invokeStoredProcedure = null;
-		try {
-			invokeStoredProcedure = new InvokeStoredProcedure("spUpdatePolicy(?,?,?)");
-			invokeStoredProcedure.setParameter(1,policyID);
-			invokeStoredProcedure.setParameter(2,policyState);
-			invokeStoredProcedure.setParameter(3,policyValue);
-			invokeStoredProcedure.execute();
-		} catch (SQLException e) {
-			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
-		}finally {
-			invokeStoredProcedure.closeConnection();
-		}
-	}
+
 }
