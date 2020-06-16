@@ -38,7 +38,8 @@ public class UserPasswordHistoryDao extends UserPasswordHistoryAbstractDao{
 		
 	}
 	
-	public void save(UserPasswordHistory passwordHistory) {
+	@Override
+	public void savePasswordHistory(UserPasswordHistory passwordHistory) {
 		InvokeStoredProcedure invokeStoredProcedure = null;
 		try {
 			invokeStoredProcedure = new InvokeStoredProcedure("spAddUserPasswordHistory(?,?)");
