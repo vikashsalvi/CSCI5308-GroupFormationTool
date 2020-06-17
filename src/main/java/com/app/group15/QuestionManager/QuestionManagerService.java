@@ -4,6 +4,7 @@ import com.app.group15.UserManagement.User;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class QuestionManagerService implements IQuestionManagerInjectorService, IQuestionManagerService {
@@ -86,8 +87,28 @@ public class QuestionManagerService implements IQuestionManagerInjectorService, 
 	}
 
 	@Override
-	public List<Question> getAllQuestionsOfInstructor(int instructorId) {
-		return questionManagerDao.getAllQuestionsOfInstructor(instructorId);
+	public List<Question> getAllQuestionsOfInstructor(int instructorId, String sortColumn) {
+		ArrayList<Question> questionArrayList = (ArrayList<Question>) questionManagerDao.getAllQuestionsOfInstructor(instructorId);
+		switch (sortColumn) {
+			case "questionId":
+				questionArrayList.sort(Comparator.comparingInt(Question::getQuestionId));
+				break;
+			case "questionTitle":
+				questionArrayList.sort(Comparator.comparing(Question::getQuestionTitle));
+				break;
+			case "questionType":
+				questionArrayList.sort(Comparator.comparingInt(Question::getQuestionTypeId));
+				break;
+			case "questionText":
+				questionArrayList.sort(Comparator.comparing(Question::getQuestionText));
+				break;
+			case "questionDate":
+				questionArrayList.sort(Comparator.comparing(Question::getQuestionAddedDate));
+				break;
+			default:
+				throw new IllegalStateException("Unexpected value: " + sortColumn);
+		}
+		return questionArrayList;
 	}
 
 	@Override

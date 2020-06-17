@@ -16,7 +16,7 @@ public interface IQuestionManagerService {
 
 	public boolean insertQuestion(Question question, User user);
 
-	public List<Question> getAllQuestionsOfInstructor(int instructorId);
+	public List<Question> getAllQuestionsOfInstructor(int instructorId, String sortColumn);
 
 	public List<String> getAllQuestionsType(List<Question> questionList);
 

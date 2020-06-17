@@ -70,18 +70,21 @@ public class QuestionController {
 	}
 
 	@RequestMapping(value = "/instructor/questions", method = RequestMethod.GET)
-	public ModelAndView questionPage(HttpServletRequest request) {
+	public ModelAndView questionPage(HttpServletRequest request, @RequestParam(required = false, value = "sortColumn") String sortColumn) {
+
 		authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
 		ModelAndView modelAndView;
 		if (sessionService.isUserSignedIn(request)) {
 			if (authorizationService.isAuthorized(request)) {
 				User user = sessionService.getSessionUser(request);
-				ArrayList<Question> questionsList = (ArrayList<Question>) questionManagerService.getAllQuestionsOfInstructor(user.getId());
+				if (sortColumn == null) {
+					sortColumn = "questionId";
+				}
+				ArrayList<Question> questionsList = (ArrayList<Question>) questionManagerService.getAllQuestionsOfInstructor(user.getId(), sortColumn);
 				modelAndView = new ModelAndView();
 				modelAndView.addObject("userEntity", user);
 				modelAndView.addObject("questionsList", questionsList);
 				modelAndView.setViewName("/question/question");
-
 			} else {
 				//Unauthorized access
 				modelAndView = new ModelAndView("redirect:/login");
