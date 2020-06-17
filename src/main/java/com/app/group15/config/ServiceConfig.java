@@ -12,6 +12,8 @@ import com.app.group15.QuestionManager.IQuestionChoiceMapperService;
 import com.app.group15.QuestionManager.IQuestionManagerService;
 import com.app.group15.QuestionManager.QuestionChoiceMapperServiceInjector;
 import com.app.group15.QuestionManager.QuestionManagerServiceInjector;
+import com.app.group15.UserManagement.ForgetPassword.ForgetPasswordServiceInjector;
+import com.app.group15.UserManagement.ForgetPassword.IForgetPasswordService;
 import com.app.group15.UserManagement.IUserService;
 import com.app.group15.UserManagement.LoginManagement.ILoginService;
 import com.app.group15.UserManagement.LoginManagement.LoginServiceInjector;
@@ -37,7 +39,7 @@ public class ServiceConfig {
 	private IPasswordPolicyService passwordPolicyService;
 	private IQuestionManagerService questionManagerService;
 	private IQuestionChoiceMapperService questionChoiceMapperService;
-
+	private IForgetPasswordService forgetPasswordService;
 
 	private ServiceConfig() {
 		assignTaService = new AssignTaServiceInjector().getAssignTaService();
@@ -50,6 +52,7 @@ public class ServiceConfig {
 		authorizationService = new AuthorizationService();
 		questionManagerService = new QuestionManagerServiceInjector().getQuestionManagerService();
 		questionChoiceMapperService = new QuestionChoiceMapperServiceInjector().getQuestionChoiceMapperService();
+		forgetPasswordService = new ForgetPasswordServiceInjector().getForgetPasswordService();
 	}
 
 	public IAuthorizationService getAuthorizationService() {
@@ -106,6 +109,11 @@ public class ServiceConfig {
 
 	public IQuestionChoiceMapperService getQuestionChoiceMapperService() {
 		return questionChoiceMapperService;
+	}
+
+
+	public IForgetPasswordService getForgetPasswordService() {
+		return forgetPasswordService;
 	}
 
 }

@@ -4,12 +4,10 @@ import com.app.group15.Persistence.IDao;
 import com.app.group15.Persistence.Persistence;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public abstract class UserAbstractDao<T> implements IDao {
     @Override
     public void delete(int id) {
-        // TODO Auto-generated method stub
     }
 
 
@@ -34,15 +32,5 @@ public abstract class UserAbstractDao<T> implements IDao {
 
     public abstract void updateUserRole(int userId, String role);
 
-    public abstract boolean updateUserPassword(int userId, String password);
-
     public abstract User getUserByEmailId(String emailId);
-
-    public abstract boolean insertForgotPasswordToken(int id, String token);
-
-    public abstract boolean checkIfTokenAlreadyExists(int id);
-
-    public abstract boolean deleteForgotPasswordToken(int id);
-
-    public abstract Map<String, String> getUserFromToken(String token);
 }

@@ -16,7 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 public class SignupController {
 
 	private ISignupService signupService = ServiceConfig.getInstance().getSignUpService();
-	private IPasswordPolicyService passwordPolicyService=ServiceConfig.getInstance().getPasswordPolicy();
+	private IPasswordPolicyService passwordPolicyService;
+
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
 	public ModelAndView signup() {
 		ModelAndView modelAndView = new ModelAndView();
@@ -29,7 +30,8 @@ public class SignupController {
 	public ModelAndView signup(@ModelAttribute User user, @RequestParam("cPassword") String cPassword) {
 		String bannerId = user.getBannerId();
 		boolean response = signupService.checkUserExists(bannerId);
-		PasswordPolicyValidationResult result=passwordPolicyService.validatePassword(user.getPassword(), -1);
+		passwordPolicyService = ServiceConfig.getInstance().getPasswordPolicy();
+		PasswordPolicyValidationResult result = passwordPolicyService.validatePassword(user.getPassword(), -1);
 		if (response) {
 			ModelAndView modelAndView = new ModelAndView();
 			modelAndView.setViewName("signup");

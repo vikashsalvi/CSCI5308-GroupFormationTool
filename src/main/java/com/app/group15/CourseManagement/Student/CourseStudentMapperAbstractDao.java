@@ -11,25 +11,20 @@ public abstract class CourseStudentMapperAbstractDao<T> implements IDao {
 
     @Override
     public int save(Persistence t) {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public void update(Persistence t, int id) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void delete(int id) {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public Persistence get(int id) {
-        // TODO Auto-generated method stub
         return null;
     }
 
