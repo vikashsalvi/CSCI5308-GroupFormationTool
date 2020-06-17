@@ -1,9 +1,8 @@
 package com.app.group15.notifications;
 
+import com.app.group15.NotificationManagement.EmailNotifierImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import com.app.group15.notificationsManagement.EmailNotifierImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

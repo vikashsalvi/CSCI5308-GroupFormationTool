@@ -1,7 +1,7 @@
 package com.app.group15.QuestionManager;
 
-import com.app.group15.persistence.IDao;
-import com.app.group15.persistence.Persistence;
+import com.app.group15.Persistence.IDao;
+import com.app.group15.Persistence.Persistence;
 
 import java.util.List;
 
