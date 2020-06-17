@@ -10,7 +10,7 @@ class PasswordPolicyMinSpecialCharTest {
 
     @Test
     void isPasswordValid() {
-        PasswordPolicyMinSpecialChar passwordPolicyMinSpecialChar = new PasswordPolicyMinSpecialChar();
+        PasswordPolicyMinSpecialCharMock passwordPolicyMinSpecialChar = new PasswordPolicyMinSpecialCharMock();
 
         String specialChar0 = "ababab";
         String specialChar1 = "@ababab";

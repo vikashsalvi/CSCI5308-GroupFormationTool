@@ -13,6 +13,7 @@ public class LoginController {
 
 	private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
 	private ILoginService loginService=ServiceConfig.getInstance().getLoginService();
+
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ModelAndView login(@RequestParam(required = false, value = "bannerId") String bannerId, @RequestParam(required = false, value = "password") String password, HttpServletRequest request) {
 		

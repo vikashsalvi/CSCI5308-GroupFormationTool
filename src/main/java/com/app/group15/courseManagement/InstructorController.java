@@ -4,6 +4,7 @@ import com.app.group15.config.AppConfig;
 import com.app.group15.config.ServiceConfig;
 import com.app.group15.userManagement.IAuthorizationService;
 import com.app.group15.userManagement.ISessionService;
+import com.app.group15.userManagement.IUserService;
 import com.app.group15.userManagement.User;
 import com.app.group15.utility.GroupFormationToolLogger;
 import org.springframework.stereotype.Controller;
@@ -26,10 +27,11 @@ public class InstructorController {
 	private ICourseService courseService = ServiceConfig.getInstance().getCourseService();
 	private IInstructorService instructorService=ServiceConfig.getInstance().getInstructorService();
 	private IAssignTAService assignTaService=ServiceConfig.getInstance().getAssignTaService();
+	private IUserService userService = ServiceConfig.getInstance().getUserService();
+
 	@RequestMapping(value = "/instructor/home", method = RequestMethod.GET)
 	public ModelAndView adminHome(HttpServletRequest request) {
 		authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
-		System.out.println(authorizationService.getAllowedRoles().toString());
 		ModelAndView modelAndView;
 		if (sessionService.isUserSignedIn(request)) {
 			if (authorizationService.isAuthorized(request)) {
@@ -86,35 +88,33 @@ public class InstructorController {
 
 
 	@RequestMapping(value = "/instructor/assign-ta", method = RequestMethod.POST)
-	public ModelAndView assignTAPOST(HttpServletRequest request, @RequestParam(required = true, value = "bannerId") String bannerId, @RequestParam(required = true, value = "courseId") int courseId) {
+	public ModelAndView assignTAPOST(HttpServletRequest request, @RequestParam(required = true, value = "bannerId") String bannerId,
+									 @RequestParam(required = true, value = "courseId") int courseId) {
 		authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
 		ModelAndView modelAndView;
 		if (sessionService.isUserSignedIn(request)) {
 			if (authorizationService.isAuthorized(request)) {
-
 
 				User userEntity = sessionService.getSessionUser(request);
 				List<Course> courseEntities = instructorService.getCourseOfInstructor((userEntity.getId()));
 				List<User> userEntitiesTA = instructorService.getAllCourseTA(courseEntities);
 //				CourseDao courseDao = new CourseDaoInjectorService().getCourseDao();
 				Course courseEntity = (Course) courseDao.get(courseId);
-
-
 				modelAndView = new ModelAndView();
 
 				// if instructor has no right to change the TA
-				if (!assignTaService.checkIntructorPermission(userEntity.getId(), courseId)) {
+				if (!instructorService.checkIntructorPermission(userEntity.getId(), courseId)) {
 					modelAndView.addObject("error_invalid_permission", true);
 				} else {
 					modelAndView.addObject("error_invalid_permission", false);
 				}
 
 				// performing change TA
-				if (assignTaService.validateBannerID(bannerId)) {
+				if (userService.validateBannerID(bannerId)) {
 
 					if (assignTaService.performTAUpdate(bannerId, courseId)) {
+
 						modelAndView.addObject("error", false);
-						System.out.println("Performing UPDATE");
 						modelAndView.setViewName("redirect:/instructor/home");
 						return modelAndView;
 					}  else {

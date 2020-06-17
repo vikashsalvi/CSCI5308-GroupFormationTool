@@ -6,7 +6,6 @@ public interface IPasswordPolicyService {
 	
 	public PasswordPolicyValidationResult validatePassword(String password,int userId);
 
-	public List<PasswordPolicy> getAllPolicy();
 	
 
 }

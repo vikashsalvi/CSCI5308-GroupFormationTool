@@ -16,4 +16,6 @@ public interface ICourseService {
 	public boolean isUserCourseAdmin(int courseId, int id);
 	public List<Course> getStudentCourses(int id);
 	public Course getStudentCourseAsTa(int id);
+	public boolean validateCourseID(int courseId);
+
 }

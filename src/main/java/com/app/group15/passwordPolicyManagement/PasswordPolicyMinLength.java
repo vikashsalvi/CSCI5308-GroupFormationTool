@@ -6,10 +6,11 @@ import java.util.List;
 
 public class PasswordPolicyMinLength implements IPasswordPolicyValidator{
 
+	private  PasswordPolicyAbstractDao passwordPolicyDao;
 	@Override
 	public boolean isPasswordValid(String password) {
 
-		PasswordPolicyAbstractDao passwordPolicyDao = AppConfig.getInstance().getPasswordPolicyDao();
+		passwordPolicyDao = AppConfig.getInstance().getPasswordPolicyDao();
 		List<PasswordPolicy> passwordPolicyList = passwordPolicyDao.getAll();
 
 		int minimumLengthAllowed = Integer.parseInt(passwordPolicyList.get(0).getPolicyValue());

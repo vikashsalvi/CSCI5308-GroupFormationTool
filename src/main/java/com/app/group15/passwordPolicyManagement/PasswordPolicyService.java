@@ -77,11 +77,5 @@ public class PasswordPolicyService implements IPasswordPolicyServiceInjector, IP
 		
 	}
 
-	@Override
-	public List<PasswordPolicy> getAllPolicy() {
-		PasswordPolicyAbstractDao passwordPolicyDao = AppConfig.getInstance().getPasswordPolicyDao();
-		List<PasswordPolicy> passwordPolicyList = passwordPolicyDao.getAll();
-		return passwordPolicyList;
-	}
 
 }

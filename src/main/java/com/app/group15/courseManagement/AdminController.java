@@ -183,57 +183,5 @@ public class AdminController {
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "/admin/passwordPolicy", method = RequestMethod.GET)
-	public ModelAndView passwordPolicyGET(HttpServletRequest request) {
-		authorizationService.setAllowedRoles(new String[]{"ADMIN"});
-		ModelAndView modelAndView;
-		if (sessionService.isUserSignedIn(request)) {
-			if (authorizationService.isAuthorized(request)) {
-				User user = sessionService.getSessionUser(request);
-				modelAndView = new ModelAndView();
-				modelAndView.setViewName("admin/managePasswordPolicy");
-				modelAndView.addObject("user", user);
-				modelAndView.addObject("policyList", passwordPolicyService.getAllPolicy());
-				return modelAndView;
-			} else {
-				modelAndView = new ModelAndView("redirect:/login");
-			}
-		} else {
-			modelAndView = new ModelAndView("redirect:/login");
-		}
-		return modelAndView;
-	}
-
-	@RequestMapping(value = "/admin/passwordPolicy", method = RequestMethod.POST)
-	public ModelAndView passwordPolicyPOST(HttpServletRequest request,
-										   @RequestParam(required = false, value = "policyState") boolean policyState,
-										   @RequestParam(required = false, value = "policyValue") String policyValue,
-										   @RequestParam(required = false, value = "hidden_policyID") String policyID) {
-		authorizationService.setAllowedRoles(new String[]{"ADMIN"});
-		ModelAndView modelAndView;
-
-		if (sessionService.isUserSignedIn(request)) {
-			if (authorizationService.isAuthorized(request)) {
-				User user = sessionService.getSessionUser(request);
-				modelAndView = new ModelAndView();
-
-				if (policyState) {
-					passwordPolicyDao.updatePolicy(policyID,1,policyValue);
-				}else {
-					passwordPolicyDao.updatePolicy(policyID,0,policyValue);
-				}
-
-				modelAndView.setViewName("admin/managePasswordPolicy");
-				modelAndView.addObject("user", user);
-				modelAndView.addObject("policyList", passwordPolicyService.getAllPolicy());
-				return modelAndView;
-			} else {
-				modelAndView = new ModelAndView("redirect:/login");
-			}
-		} else {
-			modelAndView = new ModelAndView("redirect:/login");
-		}
-		return modelAndView;
-	}
 
 }
