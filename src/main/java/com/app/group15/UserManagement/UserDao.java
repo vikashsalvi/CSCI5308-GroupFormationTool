@@ -6,6 +6,7 @@ import com.app.group15.Persistence.DatabaseManager;
 import com.app.group15.Persistence.IDao;
 import com.app.group15.Persistence.Persistence;
 import com.app.group15.Utility.GroupFormationToolLogger;
+import com.app.group15.Utility.ServiceUtility;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -234,7 +235,11 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
 
 	@Override
 	public void injectUserRoleDao(IDao userRoleDao) {
-		this.userRoleDao = (UserRoleDao) userRoleDao;
+		if (ServiceUtility.isNotNull(userRoleDao)) {
+			this.userRoleDao = (UserRoleDao) userRoleDao;
+		} else {
+			GroupFormationToolLogger.log(Level.SEVERE, " userRoleDao Not Injected");
+		}
 	}
 
 	@Override
@@ -357,7 +362,11 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
 
 	@Override
 	public void injectPasswordHistoryDao(UserPasswordHistoryAbstractDao passwordHistoryDao) {
-		this.passwordHistoryDao = passwordHistoryDao;
+		if (ServiceUtility.isNotNull(passwordHistoryDao)) {
+			this.passwordHistoryDao = passwordHistoryDao;
+		} else {
+			GroupFormationToolLogger.log(Level.SEVERE, " UserPasswordHistoryAbstractDaoDependency Not Injected");
+		}
 
 	}
 

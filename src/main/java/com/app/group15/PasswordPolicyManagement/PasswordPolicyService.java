@@ -2,6 +2,10 @@ package com.app.group15.PasswordPolicyManagement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+
+import com.app.group15.Utility.GroupFormationToolLogger;
+import com.app.group15.Utility.ServiceUtility;
 
 public class PasswordPolicyService implements IPasswordPolicyServiceInjector, IPasswordPolicyService {
 
@@ -10,71 +14,78 @@ public class PasswordPolicyService implements IPasswordPolicyServiceInjector, IP
 
 	@Override
 	public void injectPasswordPolicy(List<IPasswordPolicyValidator> passwordPolicy) {
-		this.passwordPolicyList = passwordPolicy;
+		if (ServiceUtility.isNotNull(passwordPolicy)) {
+			this.passwordPolicyList = passwordPolicy;
+		} else {
+			GroupFormationToolLogger.log(Level.SEVERE, "Password policy list is null");
+		}
 
 	}
 
 	@Override
 	public PasswordPolicyValidationResult validatePassword(String password, int userId) {
+		if (ServiceUtility.isNotNull(password)) {
+			PasswordPolicyValidationResult result = new PasswordPolicyValidationResult();
+			List<String> failList = new ArrayList<String>();
 
-		PasswordPolicyValidationResult result = new PasswordPolicyValidationResult();
-		List<String> failList = new ArrayList<String>();
+			for (int i = 0; i < passwordPolicyList.size(); i++) {
+				if (passwordPolicyList.get(i).getClass().getSimpleName().equals("PasswordPolicyHistoryConstraint")) {
+					PasswordPolicyHistoryConstraint passwordPolicy = (PasswordPolicyHistoryConstraint) passwordPolicyList
+							.get(i);
+					passwordPolicy.setUserId(userId);
+					passwordPolicyList.set(i, passwordPolicy);
 
-		for (int i = 0; i < passwordPolicyList.size(); i++) {
-			if (passwordPolicyList.get(i).getClass().getSimpleName().equals("PasswordPolicyHistoryConstraint")) {
-				PasswordPolicyHistoryConstraint passwordPolicy = (PasswordPolicyHistoryConstraint) passwordPolicyList
-						.get(i);
-				passwordPolicy.setUserId(userId);
-				passwordPolicyList.set(i, passwordPolicy);
-				
+				}
+				if (passwordPolicyList.get(i).isPasswordValid(password)) {
+					continue;
+				} else {
+					failList.add(passwordPolicyList.get(i).getClass().getSimpleName());
+
+				}
 			}
-			if (passwordPolicyList.get(i).isPasswordValid(password)) {
-				continue;
+			if (failList.size() > 0) {
+				result.setFailedPolicyList(failList);
+				generateFailureMessage(failList);
+				result.setResult(false);
+				result.setMessage(this.message);
 			} else {
-				failList.add(passwordPolicyList.get(i).getClass().getSimpleName());
-
+				result.setResult(true);
 			}
-		}
-		if (failList.size() > 0) {
-			result.setFailedPolicyList(failList);
-			generateFailureMessage(failList);
-			result.setResult(false);
-			result.setMessage(this.message);
+			return result;
 		} else {
-			result.setResult(true);
+			GroupFormationToolLogger.log(Level.SEVERE, "Password is null");
 		}
-		return result;
+		return null;
 	}
-	
+
 	private void generateFailureMessage(List<String> failList) {
-		this.message="Failed Password Policies are: ";
-		failList.forEach((fail)->{
+		this.message = "Failed Password Policies are: ";
+		failList.forEach((fail) -> {
 			switch (fail) {
 			case "PasswordPolicyCharNotAllowed":
-				this.message+=" Char Not Allowed";
+				this.message += " Char Not Allowed";
 				break;
 			case "PasswordPolicyHistoryConstraint":
-				this.message+=" History Constraint";
+				this.message += " History Constraint";
 				break;
 			case "PasswordPolicyMaxLength":
-				this.message+=" Max Length";
+				this.message += " Max Length";
 				break;
 			case "PasswordPolicyMinLength":
-				this.message+=" Min Length";
+				this.message += " Min Length";
 				break;
 			case "PasswordPolicyMinLowerCase":
-				this.message+=" Min Lower Case";
+				this.message += " Min Lower Case";
 				break;
 			case "PasswordPolicyMinSpecialChar":
-				this.message+=" Min Special char";
+				this.message += " Min Special char";
 				break;
 			case "PasswordPolicyMinUpperCase":
-				this.message+=" Min upper case";
+				this.message += " Min upper case";
 				break;
 			}
 		});
-		
-	}
 
+	}
 
 }

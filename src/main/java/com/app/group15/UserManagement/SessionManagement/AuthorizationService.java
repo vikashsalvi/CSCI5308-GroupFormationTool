@@ -3,6 +3,7 @@ package com.app.group15.UserManagement.SessionManagement;
 import com.app.group15.ExceptionHandler.AllowedRolesNotSetException;
 import com.app.group15.UserManagement.UserRoleDao;
 import com.app.group15.Utility.GroupFormationToolLogger;
+import com.app.group15.Utility.ServiceUtility;
 import com.app.group15.config.AppConfig;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,13 +12,17 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 
-public class AuthorizationService implements IAuthorizationService{
+public class AuthorizationService implements IAuthorizationService {
 
-	private Set<String> allowedRoles=new HashSet<>();
+	private Set<String> allowedRoles = new HashSet<>();
 
 	public void setAllowedRoles(String[] args) {
-		this.allowedRoles.clear();
-		this.allowedRoles.addAll(Arrays.asList(args));
+		if (ServiceUtility.isNotNull(args)) {
+			this.allowedRoles.clear();
+			this.allowedRoles.addAll(Arrays.asList(args));
+		} else {
+			GroupFormationToolLogger.log(Level.SEVERE, "Allowed roles are null ");
+		}
 	}
 
 	public Set<String> getAllowedRoles() {
