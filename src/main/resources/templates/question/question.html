@@ -114,42 +114,70 @@
 				<div class="row">
 					<div class="card">
 						<div class="card-header">
-							You questions.
-							<br/>
-							<br/>
-							<a class="btn btn-outline-primary"
-								 href='/instructor/questions/addQuestion'><i class="fa fa-file-import"></i>&nbsp;Add
-								questions</a>
+							<h1 class="h4 text-gray-800">Your questions.</h1>
 						</div>
 
 						<div class="card-body w-100">
+							<div class="row mb-1">
+								<div class="col-auto">
+									<a class="btn btn-outline-primary"
+										 href='/instructor/questions/addQuestion'><i class="fa fa-file-import"></i>&nbsp;Add
+										questions</a>
+								</div>
+								<div class="col-auto">
+									<div class="form-inline">
+										<form action="/instructor/questions" method="GET">
+
+											<select class="form-control" id="inst-if" name="sortColumn">
+												<option value="questionId">
+													---------- Sort Questions by (default ID) ----------
+												</option>
+												<option value="questionId">
+													Question ID
+												</option>
+												<option value="questionTitle">
+													Question Title
+												</option>
+												<option value="questionType">
+													Question Type
+												</option>
+												<option value="questionText">
+													Question Text
+												</option>
+												<option value="questionDate">
+													Question Date
+												</option>
+											</select>
+											<button class="btn btn-outline-success" type="submit"><i class="fa fa-sort"></i>Filter</button>
+										</form>
+									</div>
+								</div>
+							</div>
 							<div class="table">
 								<div class="table">
 									<table class="table table-responsive table-hover w-100 table-bordered">
 										<thead class="thead-dark">
-										<tr>
-											<td>
-												Question ID
-											</td>
-											<td>
-												Question Type
-											</td>
-											<td>
-												Question Title
-											</td>
-											<td>
-												Question Text
-											</td>
-											<td>
-												Create Date
-											</td>
-											<td>
-												View Entire Question
-											</td>
-											<td>
-												Delete Question
-											</td>
-										</tr>
+										<th>
+											Question ID
+										</th>
+										<th>
+											Question Type
+										</th>
+										<th>
+											Question Title
+										</th>
+										<th>
+											Question Text
+										</th>
+										<th>
+											Create Date
+										</th>
+										<th>
+											View Entire Question
+										</th>
+										<th>
+											Delete Question
+										</th>
 										</thead>
 										<tbody>
 										<tr th:each="question, iterstat: ${questionsList}">

@@ -8,12 +8,12 @@ import com.app.group15.userManagement.IAuthorizationService;
 import com.app.group15.userManagement.ISessionService;
 import com.app.group15.userManagement.IUserService;
 import com.app.group15.userManagement.User;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -40,7 +40,6 @@ public class AdminController {
 				return modelAndView;
 			} else {
 				modelAndView = new ModelAndView("redirect:/login");
-				System.out.println("------Redirecting to /login endpoint");
 			}
 		} else {
 			modelAndView = new ModelAndView("redirect:/login");

@@ -74,13 +74,15 @@ public class QuestionController {
 	}
 
 	@RequestMapping(value = "/instructor/questions", method = RequestMethod.GET)
-	public ModelAndView questionPage(HttpServletRequest request) {
+	public ModelAndView questionPage(HttpServletRequest request,
+									 @RequestParam(required = false, value = "sortColumn") String sortColumn) {
 		authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
 		ModelAndView modelAndView;
 		if (sessionService.isUserSignedIn(request)) {
 			if (authorizationService.isAuthorized(request)) {
 				User user = sessionService.getSessionUser(request);
-				ArrayList<Question> questionsList = (ArrayList<Question>) questionManagerService.getAllQuestionsOfInstructor(user.getId());
+				sortColumn = sortColumn == null ? "questionId" : sortColumn;
+				ArrayList<Question> questionsList = (ArrayList<Question>) questionManagerService.getAllQuestionsOfInstructor(user.getId(), sortColumn);
 				modelAndView = new ModelAndView();
 				modelAndView.addObject("userEntity", user);
 				modelAndView.addObject("questionsList", questionsList);
@@ -94,7 +96,6 @@ public class QuestionController {
 			// User not logged in
 			modelAndView = new ModelAndView("redirect:/login");
 		}
-
 		return modelAndView;
 	}
 
@@ -114,11 +115,8 @@ public class QuestionController {
 				Question question = questionManagerService.getQuestion(questionId);
 				modelAndView.addObject("userEntity", user);
 
-				System.out.println(question.toString());
-
 				List<String> options = questionManagerService.getOptions(questionId);
 
-				System.out.println(options.toString());
 				if (options != null) {
 					modelAndView.addObject("options", options);
 				}
