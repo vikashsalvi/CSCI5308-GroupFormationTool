@@ -34,6 +34,8 @@ public class PasswordPolicyDao extends PasswordPolicyAbstractDao {
             return listOfPolicy;
         } catch (Exception e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+        } finally {
+            invokeStoredProcedure.closeConnection();
         }
         return null;
     }

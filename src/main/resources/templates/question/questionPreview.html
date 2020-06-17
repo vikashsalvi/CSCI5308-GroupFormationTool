@@ -2,21 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
-	<title>Home</title>
-	<link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
+	<title>Question</title>
+	<link rel="stylesheet" th:href="@{/vendor/fontawesome-free/css/all.min.css}" type="text/css">
 	<link
-		href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-		rel="stylesheet">
+			href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+			rel="stylesheet">
 
 	<!-- Custom styles for this template-->
-	<link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{/css/sb-admin-2.min.css}">
 
 </head>
 <body id="page-top">
-<script th:if="${message!=null}" th:inline="javascript">
-    let feedback = /*[[${message}]]*/ 'default';
-    alert(feedback);
-</script>
 <div id="wrapper">
 	<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 		<!-- Sidebar - Brand -->
@@ -55,12 +51,12 @@
 			<button class="rounded-circle border-0" id="sidebarToggle"></button>
 		</div>
 	</ul>
-	<div id="content-wrapper" class="d-flex flex-column">
+	<div class="d-flex flex-column" id="content-wrapper">
 		<div id="content">
 			<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
 				<!-- Sidebar Toggle (Topbar) -->
-				<button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+				<button class="btn btn-link d-md-none rounded-circle mr-3" id="sidebarToggleTop">
 					<i class="fa fa-bars"></i>
 				</button>
 
@@ -71,9 +67,10 @@
 
 					<!-- Nav Item - User Information -->
 					<li class="nav-item dropdown no-arrow">
-						<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+						<a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
 							 data-toggle="dropdown"
-							 aria-haspopup="true" aria-expanded="false">
+							 href="#"
+							 id="userDropdown" role="button">
 							<span class="mr-2 d-none d-lg-inline text-gray-600 small"
 										th:text='${userEntity.getFirstName() + " " + userEntity.getLastName()}'></span>
 							<i class="fa fa-user-circle"></i>
@@ -81,20 +78,20 @@
 						<!-- Dropdown - User Information -->
 						<!--
 						<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-								 aria-labelledby="userDropdown">
-							<a class="dropdown-item" href="#">
-								<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-								Profile
-							</a>
-							<a class="dropdown-item" href="#">
-								<i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-								Settings
-							</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="/logout" data-toggle="modal" data-target="#logoutModal">
-								<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-								Logout
-							</a>
+										 aria-labelledby="userDropdown">
+								<a class="dropdown-item" href="#">
+										<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+										Profile
+								</a>
+								<a class="dropdown-item" href="#">
+										<i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+										Settings
+								</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="/logout" data-toggle="modal" data-target="#logoutModal">
+										<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+										Logout
+								</a>
 						</div>
 						-->
 					</li>
@@ -106,63 +103,57 @@
 				</div>
 				<div class="d-sm-flex align-items-center justify-content-between mb-4">
 					<h1 class="h4 text-gray-800">Welcome <span
-						th:text='${userEntity.getFirstName()+ " "+ userEntity.getLastName()}'></span></h1>
+							th:text='${userEntity.getFirstName()+ " "+ userEntity.getLastName()}'></span></h1>
 				</div>
 				<hr class="text-gray-800">
 				<div class="row">
-					<div class="card">
+					<div class="card" style="width:800px;">
 						<div class="card-header">
-							Courses you teach.
+							<h1 th:if="${!viewOnly}" class="h4 text-gray-800">Preview of the added question </h1>
+							<h1 th:if="${viewOnly}" class="h4 text-gray-800">Preview of the Question id: <span
+									th:text="${question.getQuestionId()}"></span></h1>
 						</div>
-						<div class="card-body w-100">
-							<div class="table">
-								<div class="table">
-									<table class="table table-responsive table-hover w-100 table-bordered">
-										<thead class="thead-dark">
-										<tr>
-											<td>
-												Course ID
-											</td>
-											<td>
-												Course Name
-											</td>
-											<td>
-												Current TA
-											</td>
-											<td>
-												Change TA
-											</td>
-											<td>
-												Import Students
-											</td>
-										</tr>
-										</thead>
-										<tbody>
-										<tr th:each="course, iterstat: ${courseEntities}">
-											<td th:text="${course.getId()}"></td>
-											<td th:text="${course.getName()}"></td>
+						<div class="card-body w-100" id="questionDiv">
+							<label style="font-weight: bold;"><br/><span
+									th:text="${question.questionTitle}"></span></label>
+							<br/>
+							<label style="font-weight: bold;"><br/><span
+									th:text="${question.questionText}"></span></label> <br/>
 
-											<td
-												th:if="${userEntitiesTA[iterstat.index].getFirstName()==null}">
-												<span>Not Assigned</span>
-											</td>
-											<td
-												th:if="${userEntitiesTA[iterstat.index].getFirstName()!=null}">
-											<span
-												th:text='${userEntitiesTA[iterstat.index].getFirstName()  + " " + userEntitiesTA[iterstat.index].getLastName()}'></span>
-											</td>
+							<div th:if="${question.questionTypeId}=='1'">
+								<input class="form-control" name="answer" size="2" style="width:200px" type="number">
+							</div>
 
-											<td><a th:href='${"/instructor/assign-ta?courseId="+course.getId()}'
-														 class="btn btn-outline-primary"><i class="fa fa-edit"></i>&nbsp;Edit TA</a></td>
-
-											<td><a th:href='${"/instructor/importCSV?courseId="+course.getId()}'
-														 class="btn btn-outline-primary"><i class="fa fa-file-import"></i>&nbsp;Import Students</a>
-											</td>
-
-										</tr>
-										</tbody>
-										<tfoot></tfoot>
-									</table>
+							<div th:if="${question.questionTypeId}=='2' ">
+								<label>Select one answer :
+									<select class="form-control" name="type">
+										<option value="0">select answer</option>
+										<option th:each="op : ${options}" th:text="${op}"
+														th:value="${op}"></option>
+									</select> </label>
+							</div>
+							<div th:if="${question.questionTypeId}=='3' ">
+								<label>Select answer :
+									<tr th:each="op : ${options}">
+										<br/>
+										<td>
+											<input th:value="${op}"
+														 type="checkbox">
+											<label th:text="${op}"></label>
+										</td>
+									</tr>
+								</label>
+							</div>
+							<div th:if="${question.questionTypeId}=='4'">
+								<textarea cols="50" id="freeText" rows="4"></textarea>
+							</div>
+							<br/>
+							<div class="row">
+								<div class="col">
+									<input class="btn-success" onclick="document.location.href='/instructor/home';"
+												 type="button"
+												 value="Go to question page"
+									/>
 								</div>
 							</div>
 						</div>
@@ -172,6 +163,7 @@
 		</div>
 	</div>
 </div>
+
 
 <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
 <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
