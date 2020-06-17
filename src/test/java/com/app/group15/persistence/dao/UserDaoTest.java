@@ -1,9 +1,10 @@
 package com.app.group15.persistence.dao;
 
 
-import com.app.group15.model.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import com.app.group15.userManagement.User;
 
 import java.text.ParseException;
 

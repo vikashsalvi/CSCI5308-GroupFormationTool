@@ -1,8 +1,8 @@
 package com.app.group15.persistence.dao;
 
-import com.app.group15.model.Course;
-
 import java.util.ArrayList;
+
+import com.app.group15.courseManagement.Course;
 
 public class CourseDaoMock {
 

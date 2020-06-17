@@ -1,8 +1,17 @@
 package com.app.group15.config;
 
-import com.app.group15.dao.*;
-import com.app.group15.injectors.dao.*;
-import com.app.group15.notifications.EmailNotifierImpl;
+import com.app.group15.QuestionManager.QuestionManagerAbstractDao;
+import com.app.group15.QuestionManager.QuestionManagerDao;
+import com.app.group15.courseManagement.*;
+import com.app.group15.notificationsManagement.EmailNotifierImpl;
+import com.app.group15.passwordPolicyManagement.PasswordPolicyAbstractDao;
+import com.app.group15.passwordPolicyManagement.PasswordPolicyDao;
+import com.app.group15.passwordPolicyManagement.UserPasswordHistoryAbstractDao;
+import com.app.group15.passwordPolicyManagement.UserPasswordHistoryDao;
+import com.app.group15.userManagement.UserAbstractDao;
+import com.app.group15.userManagement.UserDao;
+import com.app.group15.userManagement.UserDaoInjectorService;
+import com.app.group15.userManagement.UserRoleDaoInjectorService;
 import com.app.group15.utility.GroupFormationToolLogger;
 
 import java.io.FileInputStream;
@@ -26,6 +35,8 @@ public class AppConfig {
 	private CourseAbstractDao courseDao;
 	private PasswordPolicyAbstractDao passwordPolicyDao;
 	private UserPasswordHistoryAbstractDao userPasswordHistoryDao;
+	private QuestionManagerAbstractDao questionManagerAbstractDao;
+
 	private AppConfig() {
 
 		properties = new Properties();
@@ -48,7 +59,8 @@ public class AppConfig {
 
 		courseDao = new CourseDaoInjectorService().getCourseDao();
 		passwordPolicyDao = new PasswordPolicyDao();
-		userPasswordHistoryDao=new UserPasswordHistoryDao();
+		userPasswordHistoryDao = new UserPasswordHistoryDao();
+		questionManagerAbstractDao = new QuestionManagerDao();
 
 	}
 
@@ -157,8 +169,11 @@ public class AppConfig {
 		return userPasswordHistoryDao;
 	}
 
-	
-	
-	
+	public QuestionManagerAbstractDao getQuestionManagerAbstractDao() {
+		return questionManagerAbstractDao;
+	}
 
+	public void setQuestionManagerAbstractDao(QuestionManagerAbstractDao questionManagerAbstractDao) {
+		this.questionManagerAbstractDao = questionManagerAbstractDao;
+	}
 }

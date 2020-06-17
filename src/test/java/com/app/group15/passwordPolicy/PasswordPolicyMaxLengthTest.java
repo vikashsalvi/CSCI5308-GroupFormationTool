@@ -2,6 +2,8 @@ package com.app.group15.passwordPolicy;
 
 import org.junit.jupiter.api.Test;
 
+import com.app.group15.passwordPolicyManagement.PasswordPolicyMaxLength;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class PasswordPolicyMaxLengthTest {

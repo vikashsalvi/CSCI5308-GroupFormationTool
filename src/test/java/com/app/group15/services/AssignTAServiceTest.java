@@ -1,11 +1,11 @@
 package com.app.group15.services;
 
-import com.app.group15.model.Course;
-import com.app.group15.model.CourseInstructorMapper;
-import com.app.group15.model.User;
+import com.app.group15.courseManagement.Course;
+import com.app.group15.courseManagement.CourseInstructorMapper;
 import com.app.group15.persistence.dao.CourseDaoMock;
 import com.app.group15.persistence.dao.CourseInstructorMapperDaoMock;
 import com.app.group15.persistence.dao.UserDaoMock;
+import com.app.group15.userManagement.User;
 
 import org.junit.jupiter.api.Test;
 

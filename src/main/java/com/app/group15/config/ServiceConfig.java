@@ -1,58 +1,44 @@
 package com.app.group15.config;
 
-import com.app.group15.injectors.service.AssignTaServiceInjector;
-import com.app.group15.injectors.service.CourseServiceInjector;
-import com.app.group15.injectors.service.InstructorServiceInjector;
-import com.app.group15.injectors.service.LoginServiceInjector;
-import com.app.group15.injectors.service.PasswordPolicyServiceInjector;
-import com.app.group15.injectors.service.SignUpServiceInjector;
-import com.app.group15.injectors.service.UserServiceInjector;
-import com.app.group15.passwordPolicy.IPasswordPolicyValidator;
-import com.app.group15.services.AssignTAService;
-import com.app.group15.services.AuthorizationService;
-import com.app.group15.services.CourseService;
-import com.app.group15.services.IAssignTAService;
-import com.app.group15.services.IAuthorizationService;
-import com.app.group15.services.ICourseService;
-import com.app.group15.services.IInstructorService;
-import com.app.group15.services.ILoginService;
-import com.app.group15.services.IPasswordPolicyService;
-import com.app.group15.services.ISessionService;
-import com.app.group15.services.ISignupService;
-import com.app.group15.services.IUserService;
-import com.app.group15.services.InstructorService;
-import com.app.group15.services.LoginService;
-import com.app.group15.services.SessionService;
-import com.app.group15.services.SignupService;
-import com.app.group15.services.UserService;
+import com.app.group15.QuestionManager.IQuestionChoiceMapperService;
+import com.app.group15.QuestionManager.IQuestionManagerService;
+import com.app.group15.QuestionManager.QuestionChoiceMapperServiceInjector;
+import com.app.group15.QuestionManager.QuestionManagerServiceInjector;
+import com.app.group15.courseManagement.*;
+import com.app.group15.passwordPolicyManagement.IPasswordPolicyService;
+import com.app.group15.passwordPolicyManagement.PasswordPolicyServiceInjector;
+import com.app.group15.userManagement.*;
 
 public class ServiceConfig {
 	private static ServiceConfig singletonServiceConfig = null;
-	
+
 	private IAuthorizationService authorizationService;
 	private IAssignTAService assignTaService;
-    private ICourseService courseService;
-    private IInstructorService instructorService;
-    private ILoginService loginService;
-    private ISessionService sessionService;
-    private ISignupService signUpService;
-    private IUserService userService;
-    private IPasswordPolicyService passwordPolicyService;
-    
-    
+	private ICourseService courseService;
+	private IInstructorService instructorService;
+	private ILoginService loginService;
+	private ISessionService sessionService;
+	private ISignupService signUpService;
+	private IUserService userService;
+	private IPasswordPolicyService passwordPolicyService;
+	private IQuestionManagerService questionManagerService;
+	private IQuestionChoiceMapperService questionChoiceMapperService;
+
 
 	private ServiceConfig() {
-    	assignTaService=new AssignTaServiceInjector().getAssignTaService();
-        courseService=new CourseServiceInjector().getCourseService();
-        instructorService=new InstructorServiceInjector().getInstructorService();
-        loginService=new LoginServiceInjector().getLoginService();
-        sessionService=new SessionService();
-        signUpService=new SignUpServiceInjector().getSignUpService();
-        userService=new UserServiceInjector().getUserService();
-        authorizationService = new AuthorizationService();
-    }
-    
-    public IAuthorizationService getAuthorizationService() {
+		assignTaService = new AssignTaServiceInjector().getAssignTaService();
+		courseService = new CourseServiceInjector().getCourseService();
+		instructorService = new InstructorServiceInjector().getInstructorService();
+		loginService = new LoginServiceInjector().getLoginService();
+		sessionService = new SessionService();
+		signUpService = new SignUpServiceInjector().getSignUpService();
+		userService = new UserServiceInjector().getUserService();
+		authorizationService = new AuthorizationService();
+		questionManagerService = new QuestionManagerServiceInjector().getQuestionManagerService();
+		questionChoiceMapperService = new QuestionChoiceMapperServiceInjector().getQuestionChoiceMapperService();
+	}
+
+	public IAuthorizationService getAuthorizationService() {
 		return authorizationService;
 	}
 
@@ -62,8 +48,8 @@ public class ServiceConfig {
         }
         return ServiceConfig.singletonServiceConfig;
     }
-    
-    private static ServiceConfig getUniqueInstance() {
+
+	private static ServiceConfig getUniqueInstance() {
         return singletonServiceConfig;
     }
 
@@ -94,10 +80,18 @@ public class ServiceConfig {
 	public IUserService getUserService() {
 		return userService;
 	}
-    
+
 	public IPasswordPolicyService getPasswordPolicy() {
-		passwordPolicyService=new PasswordPolicyServiceInjector().getPasswordPolicyService();
+		passwordPolicyService = new PasswordPolicyServiceInjector().getPasswordPolicyService();
 		return passwordPolicyService;
 	}
-    
+
+	public IQuestionManagerService getQuestionManagerService() {
+		return questionManagerService;
+	}
+
+	public IQuestionChoiceMapperService getQuestionChoiceMapperService() {
+		return questionChoiceMapperService;
+	}
+
 }

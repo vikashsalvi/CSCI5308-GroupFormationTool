@@ -3,6 +3,8 @@ package com.app.group15.utility;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.app.group15.userManagement.ForgetPasswordUtility;
+
 import java.text.ParseException;
 import java.util.Date;
 import java.util.logging.Level;

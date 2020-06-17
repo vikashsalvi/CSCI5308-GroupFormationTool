@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
-import com.app.group15.model.User;
 import com.app.group15.persistence.dao.UserDaoMock;
+import com.app.group15.userManagement.User;
 
 
 class UserServiceTest {
