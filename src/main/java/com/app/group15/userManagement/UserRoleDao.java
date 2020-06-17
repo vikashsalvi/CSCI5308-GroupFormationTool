@@ -1,6 +1,6 @@
 package com.app.group15.userManagement;
 
-import com.app.group15.ExceptionHandler.AllowedRolesNotSetException;
+import com.app.group15.ExceptionHandler.AdminNotAllowedException;
 import com.app.group15.persistence.DatabaseManager;
 import com.app.group15.utility.GroupFormationToolLogger;
 
@@ -99,7 +99,7 @@ public class UserRoleDao extends UserRoleAbstractDao {
                 connection.setAutoCommit(false);
                 statement.setInt(1, userId);
                 if (role.equals(UserRole.ADMIN.getRole())) {
-					throw new AllowedRolesNotSetException("Admin User Cannot be created");
+                    throw new AdminNotAllowedException("Admin User Cannot be created");
                 }
                 statement.setInt(2, getRoleId(role));
 				statement.executeUpdate();
@@ -126,7 +126,7 @@ public class UserRoleDao extends UserRoleAbstractDao {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 connection.setAutoCommit(false);
                 if (role.equals(UserRole.ADMIN.getRole())) {
-					throw new AllowedRolesNotSetException("Admin User Cannot be created");
+                    throw new AdminNotAllowedException("Admin User Cannot be created");
                 }
                 statement.setInt(1, getRoleId(role));
                 statement.setInt(2, userId);

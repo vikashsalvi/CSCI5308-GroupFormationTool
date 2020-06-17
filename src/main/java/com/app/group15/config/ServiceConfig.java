@@ -1,44 +1,51 @@
 package com.app.group15.config;
 
-import com.app.group15.QuestionManager.IQuestionChoiceMapperService;
-import com.app.group15.QuestionManager.IQuestionManagerService;
-import com.app.group15.QuestionManager.QuestionChoiceMapperServiceInjector;
-import com.app.group15.QuestionManager.QuestionManagerServiceInjector;
-import com.app.group15.courseManagement.*;
+import com.app.group15.courseManagement.AssignTaServiceInjector;
+import com.app.group15.courseManagement.CourseServiceInjector;
+import com.app.group15.courseManagement.IAssignTAService;
+import com.app.group15.courseManagement.ICourseService;
+import com.app.group15.courseManagement.IInstructorService;
+import com.app.group15.courseManagement.InstructorServiceInjector;
 import com.app.group15.passwordPolicyManagement.IPasswordPolicyService;
 import com.app.group15.passwordPolicyManagement.PasswordPolicyServiceInjector;
-import com.app.group15.userManagement.*;
+import com.app.group15.userManagement.AuthorizationService;
+import com.app.group15.userManagement.IAuthorizationService;
+import com.app.group15.userManagement.ILoginService;
+import com.app.group15.userManagement.ISessionService;
+import com.app.group15.userManagement.ISignupService;
+import com.app.group15.userManagement.IUserService;
+import com.app.group15.userManagement.LoginServiceInjector;
+import com.app.group15.userManagement.SessionService;
+import com.app.group15.userManagement.SignUpServiceInjector;
+import com.app.group15.userManagement.UserServiceInjector;
 
 public class ServiceConfig {
 	private static ServiceConfig singletonServiceConfig = null;
-
+	
 	private IAuthorizationService authorizationService;
 	private IAssignTAService assignTaService;
-	private ICourseService courseService;
-	private IInstructorService instructorService;
-	private ILoginService loginService;
-	private ISessionService sessionService;
-	private ISignupService signUpService;
-	private IUserService userService;
-	private IPasswordPolicyService passwordPolicyService;
-	private IQuestionManagerService questionManagerService;
-	private IQuestionChoiceMapperService questionChoiceMapperService;
-
+    private ICourseService courseService;
+    private IInstructorService instructorService;
+    private ILoginService loginService;
+    private ISessionService sessionService;
+    private ISignupService signUpService;
+    private IUserService userService;
+    private IPasswordPolicyService passwordPolicyService;
+    
+    
 
 	private ServiceConfig() {
-		assignTaService = new AssignTaServiceInjector().getAssignTaService();
-		courseService = new CourseServiceInjector().getCourseService();
-		instructorService = new InstructorServiceInjector().getInstructorService();
-		loginService = new LoginServiceInjector().getLoginService();
-		sessionService = new SessionService();
-		signUpService = new SignUpServiceInjector().getSignUpService();
-		userService = new UserServiceInjector().getUserService();
-		authorizationService = new AuthorizationService();
-		questionManagerService = new QuestionManagerServiceInjector().getQuestionManagerService();
-		questionChoiceMapperService = new QuestionChoiceMapperServiceInjector().getQuestionChoiceMapperService();
-	}
-
-	public IAuthorizationService getAuthorizationService() {
+    	assignTaService=new AssignTaServiceInjector().getAssignTaService();
+        courseService=new CourseServiceInjector().getCourseService();
+        instructorService=new InstructorServiceInjector().getInstructorService();
+        loginService=new LoginServiceInjector().getLoginService();
+        sessionService=new SessionService();
+        signUpService=new SignUpServiceInjector().getSignUpService();
+        userService=new UserServiceInjector().getUserService();
+        authorizationService = new AuthorizationService();
+    }
+    
+    public IAuthorizationService getAuthorizationService() {
 		return authorizationService;
 	}
 
@@ -48,8 +55,8 @@ public class ServiceConfig {
         }
         return ServiceConfig.singletonServiceConfig;
     }
-
-	private static ServiceConfig getUniqueInstance() {
+    
+    private static ServiceConfig getUniqueInstance() {
         return singletonServiceConfig;
     }
 
@@ -80,18 +87,10 @@ public class ServiceConfig {
 	public IUserService getUserService() {
 		return userService;
 	}
-
+    
 	public IPasswordPolicyService getPasswordPolicy() {
-		passwordPolicyService = new PasswordPolicyServiceInjector().getPasswordPolicyService();
+		passwordPolicyService=new PasswordPolicyServiceInjector().getPasswordPolicyService();
 		return passwordPolicyService;
 	}
-
-	public IQuestionManagerService getQuestionManagerService() {
-		return questionManagerService;
-	}
-
-	public IQuestionChoiceMapperService getQuestionChoiceMapperService() {
-		return questionChoiceMapperService;
-	}
-
+    
 }

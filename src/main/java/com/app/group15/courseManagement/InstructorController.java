@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+
 import java.util.List;
 import java.util.logging.Level;
 
@@ -174,6 +175,7 @@ public class InstructorController {
 		return modelAndView;
 	}
 
+//	TODO error occuring when trying to upload file with single line. Ask Vikas or suraj for this. Also ask about how send error message on exception
 	@RequestMapping(value = "/instructor/importCSV", method = RequestMethod.POST)
 	public ModelAndView importCSV(HttpServletRequest request,
 								  RedirectAttributes redirectAttributes,
@@ -184,6 +186,7 @@ public class InstructorController {
 		if (sessionService.isUserSignedIn(request)) {
 			if (authorizationService.isAuthorized(request)) {
 				User user = sessionService.getSessionUser(request);
+//				GroupFormationToolLogger.log(Level.INFO, "User authorized 147");
 				if (courseService.isUserCourseAdmin(courseId, user.getId())) {
 					GroupFormationToolLogger.log(Level.INFO, "User authorized");
 					int insertCount = instructorService.addStudentsFromCSV(csvFile, courseId);

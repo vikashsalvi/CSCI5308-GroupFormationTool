@@ -57,10 +57,6 @@ public class InvokeStoredProcedure {
         statement.registerOutParameter(paramIndex, java.sql.Types.BIGINT);
     }
 
-    public int getOutputParameter(int paramIndex) throws SQLException {
-        return statement.getInt(paramIndex);
-    }
-
     public ResultSet executeWithResults() throws SQLException {
         if (statement.execute()) {
             return statement.getResultSet();

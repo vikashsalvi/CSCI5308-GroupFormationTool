@@ -1,8 +1,13 @@
 package com.app.group15.config;
 
-import com.app.group15.QuestionManager.QuestionManagerAbstractDao;
-import com.app.group15.QuestionManager.QuestionManagerDao;
-import com.app.group15.courseManagement.*;
+import com.app.group15.courseManagement.CourseAbstractDao;
+import com.app.group15.courseManagement.CourseDaoInjectorService;
+import com.app.group15.courseManagement.CourseInstructorMapperAbstractDao;
+import com.app.group15.courseManagement.CourseInstructorMapperDao;
+import com.app.group15.courseManagement.CourseInstructorMapperDaoInjectorService;
+import com.app.group15.courseManagement.CourseStudentMapperAbstractDao;
+import com.app.group15.courseManagement.CourseStudentMapperDao;
+import com.app.group15.courseManagement.CourseStudentMapperDaoInjectorService;
 import com.app.group15.notificationsManagement.EmailNotifierImpl;
 import com.app.group15.passwordPolicyManagement.PasswordPolicyAbstractDao;
 import com.app.group15.passwordPolicyManagement.PasswordPolicyDao;
@@ -35,8 +40,6 @@ public class AppConfig {
 	private CourseAbstractDao courseDao;
 	private PasswordPolicyAbstractDao passwordPolicyDao;
 	private UserPasswordHistoryAbstractDao userPasswordHistoryDao;
-	private QuestionManagerAbstractDao questionManagerAbstractDao;
-
 	private AppConfig() {
 
 		properties = new Properties();
@@ -59,8 +62,7 @@ public class AppConfig {
 
 		courseDao = new CourseDaoInjectorService().getCourseDao();
 		passwordPolicyDao = new PasswordPolicyDao();
-		userPasswordHistoryDao = new UserPasswordHistoryDao();
-		questionManagerAbstractDao = new QuestionManagerDao();
+		userPasswordHistoryDao=new UserPasswordHistoryDao();
 
 	}
 
@@ -169,11 +171,8 @@ public class AppConfig {
 		return userPasswordHistoryDao;
 	}
 
-	public QuestionManagerAbstractDao getQuestionManagerAbstractDao() {
-		return questionManagerAbstractDao;
-	}
+	
+	
+	
 
-	public void setQuestionManagerAbstractDao(QuestionManagerAbstractDao questionManagerAbstractDao) {
-		this.questionManagerAbstractDao = questionManagerAbstractDao;
-	}
 }
