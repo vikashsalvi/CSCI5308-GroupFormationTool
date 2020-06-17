@@ -6,10 +6,11 @@ import java.util.List;
 
 public class PasswordPolicyMinUpperCase implements IPasswordPolicyValidator{
 
+	PasswordPolicyAbstractDao passwordPolicyDao;
 	@Override
 	public boolean isPasswordValid(String password) {
 
-		PasswordPolicyAbstractDao passwordPolicyDao = AppConfig.getInstance().getPasswordPolicyDao();
+		passwordPolicyDao = AppConfig.getInstance().getPasswordPolicyDao();
 		List<PasswordPolicy> passwordPolicyList = passwordPolicyDao.getAll();
 
 		int minimumNumberOfUppercaseAllowed = Integer.parseInt(passwordPolicyList.get(2).getPolicyValue());

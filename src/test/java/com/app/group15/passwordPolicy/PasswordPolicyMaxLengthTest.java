@@ -10,7 +10,7 @@ class PasswordPolicyMaxLengthTest {
 
     @Test
     void isPasswordValid() {
-        PasswordPolicyMaxLength passwordPolicyMaxLength = new PasswordPolicyMaxLength();
+        PasswordPolicyMaxLengthMock passwordPolicyMaxLength = new PasswordPolicyMaxLengthMock();
 
         String length16 = "AAAAAAAAAAAAAAAA";
         String length17 = "AAAAAAAAAAAAAAAAA";
@@ -21,4 +21,6 @@ class PasswordPolicyMaxLengthTest {
         assertFalse(passwordPolicyMaxLength.isPasswordValid(length17));
 
     }
+
+
 }

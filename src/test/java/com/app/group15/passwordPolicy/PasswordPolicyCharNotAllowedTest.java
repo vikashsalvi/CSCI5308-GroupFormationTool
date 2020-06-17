@@ -10,7 +10,7 @@ class PasswordPolicyCharNotAllowedTest {
 
     @Test
     void isPasswordValidTest() {
-        PasswordPolicyCharNotAllowed passwordPolicyCharNotAllowed = new PasswordPolicyCharNotAllowed();
+        PasswordPolicyCharNotAllowedMock passwordPolicyCharNotAllowed = new PasswordPolicyCharNotAllowedMock();
 
         String noBannedChar0 = "abACW";
         String bannedChar1 = "$abACW";

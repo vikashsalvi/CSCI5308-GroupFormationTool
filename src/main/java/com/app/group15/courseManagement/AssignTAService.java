@@ -2,6 +2,7 @@ package com.app.group15.courseManagement;
 
 
 
+import com.app.group15.userManagement.IUserService;
 import com.app.group15.userManagement.User;
 import com.app.group15.userManagement.UserAbstractDao;
 import com.app.group15.userManagement.UserRoleAbstractDao;
@@ -16,15 +17,15 @@ public class AssignTAService  implements IAssignTAService,IAssignTaServiceInject
     private UserRoleAbstractDao userRoleDao;
     private CourseInstructorMapperAbstractDao courseInstructorMapperDao ;
     private IInstructorService instructorService;
+    private IUserService userService;
+    private ICourseService courseService;
 
-    
 
     public boolean performTAUpdate(String bannerId, int courseId)
     {
         User userEntity= userDao.getUserByBannerId(bannerId);
 
-        if (validateBannerID(bannerId) && validateCourseID(courseId)) {
-            System.out.println("HERE");
+        if (userService.validateBannerID(bannerId) && courseService.validateCourseID(courseId)) {
             if (instructorService.validateUserToAddAsTa(userEntity,courseId)){
             	instructorService.addOrUpdateStudentRole(userEntity,"TA");
 				courseInstructorMapperDao.addTaToACourse(courseId,userEntity.getId());
@@ -37,37 +38,6 @@ public class AssignTAService  implements IAssignTAService,IAssignTaServiceInject
         }
     }
 
-    public  boolean validateBannerID(String bannerId) {
-
-        Set<String> roleSet = userRoleDao.getRolesByBannerId(bannerId);
-        if (roleSet.contains("STUDENT")) {
-            return true;
-        }else {
-            return false; }
-    }
-
-    public boolean validateCourseID(int courseId) {
-
-        if (courseDao.get(courseId) != null) {
-            return true;
-        }else {
-            return false;
-        }
-    }
-
-    public boolean checkIntructorPermission(int instructorId, int courseId) {
-
-        boolean returnVar = false;
-        ArrayList<Course> courseEntitiesList = courseInstructorMapperDao.getCoursesByInstructor(instructorId);
-
-        for (Course courseEntity : courseEntitiesList) {
-            if (courseEntity.getId() == courseId) {
-                returnVar = true;
-                break;
-            }
-        }
-        return returnVar;
-    }
 
 	@Override
 	public void injectUserDao(UserAbstractDao userDao) {
@@ -96,7 +66,17 @@ public class AssignTAService  implements IAssignTAService,IAssignTaServiceInject
 	@Override
 	public void injectInstructorService(IInstructorService instructorService) {
 		this.instructorService=instructorService;
-		
 	}
+
+    @Override
+    public void injectUserService(IUserService userService) {
+        this.userService=userService;
+    }
+
+    @Override
+    public void injectCourseService(CourseService courseService) {
+        this.courseService=courseService;
+    }
+
 
 }

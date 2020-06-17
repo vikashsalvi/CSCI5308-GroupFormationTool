@@ -33,5 +33,4 @@ public abstract class PasswordPolicyAbstractDao<T> implements IDao {
 
     public abstract List<PasswordPolicy> getActivePasswordPolicy();
 
-	public abstract void updatePolicy(String policyID, int i, String policyValue);
 }

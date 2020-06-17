@@ -4,6 +4,7 @@ package com.app.group15.userManagement;
 import java.util.ArrayList;
 
 import java.util.List;
+import java.util.Set;
 
 
 public class UserService implements IUserService,IUserServiceInjector {
@@ -38,6 +39,16 @@ public class UserService implements IUserService,IUserServiceInjector {
 	public void injectUserRoleDao(UserRoleAbstractDao userRoleAbstractDao) {
 		this.userRoleDao=userRoleAbstractDao;
 		
+	}
+
+	@Override
+	public boolean validateBannerID(String bannerId) {
+		Set<String> roleSet = userRoleDao.getRolesByBannerId(bannerId);
+		if (roleSet.contains("STUDENT")) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 }

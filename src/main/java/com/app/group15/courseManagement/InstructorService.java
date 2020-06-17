@@ -168,6 +168,20 @@ public class InstructorService implements IInstructorService,IInstructorServiceI
 	@Override
 	public void injectCourseStudentMapper(CourseStudentMapperAbstractDao courseStudentMapperDao) {
 		this.courseStudentMapperDao=courseStudentMapperDao;
-		
+	}
+
+	@Override
+	public boolean checkIntructorPermission(int instructorId, int courseId) {
+
+		boolean returnVar = false;
+		ArrayList<Course> courseEntitiesList = courseInstructorMapperDao.getCoursesByInstructor(instructorId);
+
+		for (Course courseEntity : courseEntitiesList) {
+			if (courseEntity.getId() == courseId) {
+				returnVar = true;
+				break;
+			}
+		}
+		return returnVar;
 	}
 }

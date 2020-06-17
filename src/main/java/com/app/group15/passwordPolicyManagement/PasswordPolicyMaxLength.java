@@ -6,10 +6,13 @@ import java.util.List;
 
 public class PasswordPolicyMaxLength implements IPasswordPolicyValidator{
 
+	private PasswordPolicyAbstractDao passwordPolicyDao;
+
 	@Override
 	public boolean isPasswordValid(String password) {
 
-		PasswordPolicyAbstractDao passwordPolicyDao = AppConfig.getInstance().getPasswordPolicyDao();
+		passwordPolicyDao = AppConfig.getInstance().getPasswordPolicyDao();
+
 		List<PasswordPolicy> passwordPolicyList = passwordPolicyDao.getAll();
 
 		int maximumLengthAllowed = Integer.parseInt(passwordPolicyList.get(1).getPolicyValue());

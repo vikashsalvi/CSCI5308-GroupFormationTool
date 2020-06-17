@@ -11,7 +11,7 @@ class PasswordPolicyMinUpperCaseTest {
     @Test
     void isPasswordValid() {
 
-        PasswordPolicyMinUpperCase passwordPolicyMinUpperCase = new PasswordPolicyMinUpperCase();
+        PasswordPolicyMinUpperCaseMock passwordPolicyMinUpperCase = new PasswordPolicyMinUpperCaseMock();
 
         String uppercase0 = "aa@";
         String uppercase1 = "Aaa@";

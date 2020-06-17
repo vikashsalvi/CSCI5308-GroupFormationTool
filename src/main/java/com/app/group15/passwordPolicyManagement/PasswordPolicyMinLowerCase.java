@@ -6,10 +6,11 @@ import java.util.List;
 
 public class PasswordPolicyMinLowerCase implements IPasswordPolicyValidator{
 
+	private PasswordPolicyAbstractDao passwordPolicyDao;
 	@Override
 	public boolean isPasswordValid(String password) {
 
-		PasswordPolicyAbstractDao passwordPolicyDao = AppConfig.getInstance().getPasswordPolicyDao();
+		passwordPolicyDao = AppConfig.getInstance().getPasswordPolicyDao();
 		List<PasswordPolicy> passwordPolicyList = passwordPolicyDao.getAll();
 
 		int minimumNumberOfLowercaseAllowed = Integer.parseInt(passwordPolicyList.get(3).getPolicyValue());

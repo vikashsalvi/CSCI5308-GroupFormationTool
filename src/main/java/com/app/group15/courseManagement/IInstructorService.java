@@ -13,6 +13,7 @@ public interface IInstructorService {
 	public  boolean validateUserToAddAsTa(User user, int courseId);
 	public void addOrUpdateStudentRole(User user, String role) ;
 	public int addStudentsFromCSV(MultipartFile csvFile, int courseId);
+	public boolean checkIntructorPermission(int instructorId, int courseId);
 	
 
 }
