@@ -204,6 +204,7 @@ public class QuestionController {
 				questionManagerService.insertQuestion(question, user);
 
 				model.addObject("userEntity", user);
+				model.addObject("viewOnly", true);
 				List<String> options = questionManagerService.formPreview(question);
 				if (options != null) {
 					model.addObject("options", options);
