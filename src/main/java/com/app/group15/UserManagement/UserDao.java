@@ -173,7 +173,8 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
 
 	}
 
-	private String getUserPassword(int userId) {
+	@Override
+	public String getUserPassword(int userId) {
 		String query = "SELECT password from table_users  WHERE id=?";
 		try (Connection connection = DatabaseManager.getDataSource().getConnection();
 				PreparedStatement statement = connection.prepareStatement(query);) {
