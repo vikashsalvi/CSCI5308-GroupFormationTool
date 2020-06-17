@@ -1,6 +1,8 @@
 package com.app.group15.config;
 
+import com.app.group15.QuestionManager.IQuestionChoiceMapperService;
 import com.app.group15.QuestionManager.IQuestionManagerService;
+import com.app.group15.QuestionManager.QuestionChoiceMapperServiceInjector;
 import com.app.group15.QuestionManager.QuestionManagerServiceInjector;
 import com.app.group15.courseManagement.*;
 import com.app.group15.passwordPolicyManagement.IPasswordPolicyService;
@@ -9,19 +11,19 @@ import com.app.group15.userManagement.*;
 
 public class ServiceConfig {
 	private static ServiceConfig singletonServiceConfig = null;
-	
+
 	private IAuthorizationService authorizationService;
 	private IAssignTAService assignTaService;
-    private ICourseService courseService;
-    private IInstructorService instructorService;
-    private ILoginService loginService;
-    private ISessionService sessionService;
-    private ISignupService signUpService;
-    private IUserService userService;
+	private ICourseService courseService;
+	private IInstructorService instructorService;
+	private ILoginService loginService;
+	private ISessionService sessionService;
+	private ISignupService signUpService;
+	private IUserService userService;
 	private IPasswordPolicyService passwordPolicyService;
 	private IQuestionManagerService questionManagerService;
-    
-    
+	private IQuestionChoiceMapperService questionChoiceMapperService;
+
 
 	private ServiceConfig() {
 		assignTaService = new AssignTaServiceInjector().getAssignTaService();
@@ -33,9 +35,10 @@ public class ServiceConfig {
 		userService = new UserServiceInjector().getUserService();
 		authorizationService = new AuthorizationService();
 		questionManagerService = new QuestionManagerServiceInjector().getQuestionManagerService();
+		questionChoiceMapperService = new QuestionChoiceMapperServiceInjector().getQuestionChoiceMapperService();
 	}
-    
-    public IAuthorizationService getAuthorizationService() {
+
+	public IAuthorizationService getAuthorizationService() {
 		return authorizationService;
 	}
 
@@ -45,8 +48,8 @@ public class ServiceConfig {
         }
         return ServiceConfig.singletonServiceConfig;
     }
-    
-    private static ServiceConfig getUniqueInstance() {
+
+	private static ServiceConfig getUniqueInstance() {
         return singletonServiceConfig;
     }
 
@@ -85,6 +88,10 @@ public class ServiceConfig {
 
 	public IQuestionManagerService getQuestionManagerService() {
 		return questionManagerService;
+	}
+
+	public IQuestionChoiceMapperService getQuestionChoiceMapperService() {
+		return questionChoiceMapperService;
 	}
 
 }
