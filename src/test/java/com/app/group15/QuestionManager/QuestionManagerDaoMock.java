@@ -1,6 +1,6 @@
 package com.app.group15.QuestionManager;
 
-import com.app.group15.userManagement.User;
+import com.app.group15.UserManagement.User;
 
 import java.util.ArrayList;
 import java.util.List;

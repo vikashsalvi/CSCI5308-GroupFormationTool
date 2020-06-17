@@ -1,13 +1,27 @@
 package com.app.group15.config;
 
+import com.app.group15.CourseManagement.CourseServiceInjector;
+import com.app.group15.CourseManagement.ICourseService;
+import com.app.group15.CourseManagement.Instructor.AssignTaServiceInjector;
+import com.app.group15.CourseManagement.Instructor.IAssignTAService;
+import com.app.group15.CourseManagement.Instructor.IInstructorService;
+import com.app.group15.CourseManagement.Instructor.InstructorServiceInjector;
+import com.app.group15.PasswordPolicyManagement.IPasswordPolicyService;
+import com.app.group15.PasswordPolicyManagement.PasswordPolicyServiceInjector;
 import com.app.group15.QuestionManager.IQuestionChoiceMapperService;
 import com.app.group15.QuestionManager.IQuestionManagerService;
 import com.app.group15.QuestionManager.QuestionChoiceMapperServiceInjector;
 import com.app.group15.QuestionManager.QuestionManagerServiceInjector;
-import com.app.group15.courseManagement.*;
-import com.app.group15.passwordPolicyManagement.IPasswordPolicyService;
-import com.app.group15.passwordPolicyManagement.PasswordPolicyServiceInjector;
-import com.app.group15.userManagement.*;
+import com.app.group15.UserManagement.IUserService;
+import com.app.group15.UserManagement.LoginManagement.ILoginService;
+import com.app.group15.UserManagement.LoginManagement.LoginServiceInjector;
+import com.app.group15.UserManagement.SessionManagement.AuthorizationService;
+import com.app.group15.UserManagement.SessionManagement.IAuthorizationService;
+import com.app.group15.UserManagement.SessionManagement.ISessionService;
+import com.app.group15.UserManagement.SessionManagement.SessionService;
+import com.app.group15.UserManagement.SignupManagement.ISignupService;
+import com.app.group15.UserManagement.SignupManagement.SignUpServiceInjector;
+import com.app.group15.UserManagement.UserServiceInjector;
 
 public class ServiceConfig {
 	private static ServiceConfig singletonServiceConfig = null;

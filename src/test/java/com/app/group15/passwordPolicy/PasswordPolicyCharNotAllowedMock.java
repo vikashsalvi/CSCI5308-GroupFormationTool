@@ -1,9 +1,6 @@
 package com.app.group15.passwordPolicy;
 
-import com.app.group15.config.AppConfig;
-import com.app.group15.passwordPolicyManagement.IPasswordPolicyValidator;
-import com.app.group15.passwordPolicyManagement.PasswordPolicy;
-import com.app.group15.passwordPolicyManagement.PasswordPolicyAbstractDao;
+import com.app.group15.PasswordPolicyManagement.IPasswordPolicyValidator;
 
 import java.util.ArrayList;
 import java.util.List;

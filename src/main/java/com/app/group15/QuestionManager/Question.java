@@ -1,6 +1,6 @@
 package com.app.group15.QuestionManager;
 
-import com.app.group15.persistence.Persistence;
+import com.app.group15.Persistence.Persistence;
 
 import java.util.ArrayList;
 import java.util.List;

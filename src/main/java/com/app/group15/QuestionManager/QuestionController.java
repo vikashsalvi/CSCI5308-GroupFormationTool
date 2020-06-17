@@ -1,12 +1,10 @@
 package com.app.group15.QuestionManager;
 
+import com.app.group15.UserManagement.SessionManagement.IAuthorizationService;
+import com.app.group15.UserManagement.SessionManagement.ISessionService;
+import com.app.group15.UserManagement.User;
+import com.app.group15.Utility.GroupFormationToolLogger;
 import com.app.group15.config.ServiceConfig;
-import com.app.group15.courseManagement.ICourseService;
-import com.app.group15.courseManagement.IInstructorService;
-import com.app.group15.userManagement.IAuthorizationService;
-import com.app.group15.userManagement.ISessionService;
-import com.app.group15.userManagement.User;
-import com.app.group15.utility.GroupFormationToolLogger;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,8 +23,6 @@ public class QuestionController {
 
 	IQuestionManagerService questionManagerService = ServiceConfig.getInstance().getQuestionManagerService();
 	private IAuthorizationService authorizationService = ServiceConfig.getInstance().getAuthorizationService();
-	private IInstructorService instructorService = ServiceConfig.getInstance().getInstructorService();
-	private ICourseService courseService = ServiceConfig.getInstance().getCourseService();
 	private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
 	private IQuestionChoiceMapperService questionChoiceMapperService = ServiceConfig.getInstance().getQuestionChoiceMapperService();
 

@@ -1,18 +1,25 @@
 package com.app.group15.config;
 
+import com.app.group15.CourseManagement.CourseAbstractDao;
+import com.app.group15.CourseManagement.CourseDaoInjectorService;
+import com.app.group15.CourseManagement.Instructor.CourseInstructorMapperAbstractDao;
+import com.app.group15.CourseManagement.Instructor.CourseInstructorMapperDao;
+import com.app.group15.CourseManagement.Instructor.CourseInstructorMapperDaoInjectorService;
+import com.app.group15.CourseManagement.Student.CourseStudentMapperAbstractDao;
+import com.app.group15.CourseManagement.Student.CourseStudentMapperDao;
+import com.app.group15.CourseManagement.Student.CourseStudentMapperDaoInjectorService;
+import com.app.group15.NotificationManagement.EmailNotifierImpl;
+import com.app.group15.PasswordPolicyManagement.PasswordPolicyAbstractDao;
+import com.app.group15.PasswordPolicyManagement.PasswordPolicyDao;
+import com.app.group15.PasswordPolicyManagement.UserPasswordHistoryAbstractDao;
+import com.app.group15.PasswordPolicyManagement.UserPasswordHistoryDao;
 import com.app.group15.QuestionManager.QuestionManagerAbstractDao;
 import com.app.group15.QuestionManager.QuestionManagerDao;
-import com.app.group15.courseManagement.*;
-import com.app.group15.notificationsManagement.EmailNotifierImpl;
-import com.app.group15.passwordPolicyManagement.PasswordPolicyAbstractDao;
-import com.app.group15.passwordPolicyManagement.PasswordPolicyDao;
-import com.app.group15.passwordPolicyManagement.UserPasswordHistoryAbstractDao;
-import com.app.group15.passwordPolicyManagement.UserPasswordHistoryDao;
-import com.app.group15.userManagement.UserAbstractDao;
-import com.app.group15.userManagement.UserDao;
-import com.app.group15.userManagement.UserDaoInjectorService;
-import com.app.group15.userManagement.UserRoleDaoInjectorService;
-import com.app.group15.utility.GroupFormationToolLogger;
+import com.app.group15.UserManagement.UserAbstractDao;
+import com.app.group15.UserManagement.UserDao;
+import com.app.group15.UserManagement.UserDaoInjectorService;
+import com.app.group15.UserManagement.UserRoleDaoInjectorService;
+import com.app.group15.Utility.GroupFormationToolLogger;
 
 import java.io.FileInputStream;
 import java.io.IOException;

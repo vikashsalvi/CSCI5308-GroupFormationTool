@@ -1,7 +1,7 @@
 package com.app.group15.QuestionManager;
 
-import com.app.group15.persistence.InvokeStoredProcedure;
-import com.app.group15.utility.GroupFormationToolLogger;
+import com.app.group15.Persistence.InvokeStoredProcedure;
+import com.app.group15.Utility.GroupFormationToolLogger;
 
 import java.util.logging.Level;
 
