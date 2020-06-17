@@ -6,10 +6,12 @@ import java.util.List;
 
 public class PasswordPolicyMinSpecialChar implements IPasswordPolicyValidator{
 
+	PasswordPolicyAbstractDao passwordPolicyDao;
+
 	@Override
 	public boolean isPasswordValid(String password) {
 
-		PasswordPolicyAbstractDao passwordPolicyDao = AppConfig.getInstance().getPasswordPolicyDao();
+		passwordPolicyDao = AppConfig.getInstance().getPasswordPolicyDao();
 		List<PasswordPolicy> passwordPolicyList = passwordPolicyDao.getAll();
 
 		int minimumNumberOfSpecialCharAllowed = Integer.parseInt(passwordPolicyList.get(4).getPolicyValue());

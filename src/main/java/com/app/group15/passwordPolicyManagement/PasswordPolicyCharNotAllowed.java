@@ -8,10 +8,12 @@ import java.util.List;
 
 public class PasswordPolicyCharNotAllowed implements IPasswordPolicyValidator{
 
+	private PasswordPolicyAbstractDao passwordPolicyDao;
+
 	@Override
 	public boolean isPasswordValid(String password) {
 
-		PasswordPolicyAbstractDao passwordPolicyDao = AppConfig.getInstance().getPasswordPolicyDao();
+		passwordPolicyDao = AppConfig.getInstance().getPasswordPolicyDao();
 		List<PasswordPolicy> passwordPolicyList = passwordPolicyDao.getAll();
 
 		String bannedCharString = passwordPolicyList.get(5).getPolicyValue();
