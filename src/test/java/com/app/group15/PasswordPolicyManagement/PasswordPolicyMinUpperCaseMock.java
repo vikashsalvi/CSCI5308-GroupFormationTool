@@ -1,6 +1,4 @@
-package com.app.group15.passwordPolicy;
-
-import com.app.group15.PasswordPolicyManagement.IPasswordPolicyValidator;
+package com.app.group15.PasswordPolicyManagement;
 
 public class PasswordPolicyMinUpperCaseMock implements IPasswordPolicyValidator {
 
@@ -17,11 +15,7 @@ public class PasswordPolicyMinUpperCaseMock implements IPasswordPolicyValidator 
 			}
 		}
 
-		if (countUppercase >= minimumNumberOfUppercaseAllowed) {
-			return true;
-		} else {
-			return false;
-		}
+		return countUppercase >= minimumNumberOfUppercaseAllowed;
 	}
 
 }

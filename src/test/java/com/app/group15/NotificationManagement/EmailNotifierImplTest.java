@@ -1,4 +1,4 @@
-package com.app.group15.notifications;
+package com.app.group15.NotificationManagement;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

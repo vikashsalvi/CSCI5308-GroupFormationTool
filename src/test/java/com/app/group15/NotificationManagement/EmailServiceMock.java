@@ -1,4 +1,4 @@
-package com.app.group15.notifications;
+package com.app.group15.NotificationManagement;
 
 import com.app.group15.Config.AppConfig;
 import com.app.group15.Persistence.AwsSecretsManagerUtility;

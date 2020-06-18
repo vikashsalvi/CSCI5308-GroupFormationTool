@@ -11,13 +11,14 @@ public class QuestionChoiceMapperDao extends QuestionChoiceMapperAbstractDao {
 	public void deleteByQuestionId(int questionId) {
 		InvokeStoredProcedure invokeStoredProcedure = null;
 		try {
-			invokeStoredProcedure = new InvokeStoredProcedure("spDeleteQuestionChoiceMapper(?)");
+			invokeStoredProcedure = new InvokeStoredProcedure("spDeleteCompleteQuestion(?)");
 
 			invokeStoredProcedure.setParameter(1, questionId);
 			invokeStoredProcedure.execute();
 		} catch (Exception e) {
 			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		} finally {
+			assert invokeStoredProcedure != null;
 			invokeStoredProcedure.closeConnection();
 		}
 	}

@@ -1,9 +1,9 @@
 package com.app.group15.QuestionManager;
 
+import com.app.group15.Config.ServiceConfig;
 import com.app.group15.UserManagement.SessionManagement.IAuthorizationService;
 import com.app.group15.UserManagement.SessionManagement.ISessionService;
 import com.app.group15.UserManagement.User;
-import com.app.group15.Config.ServiceConfig;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -182,7 +182,6 @@ public class QuestionController {
 		if (sessionService.isUserSignedIn(request)) {
 			if (authorizationService.isAuthorized(request)) {
 				questionChoiceMapperService.deleteByQuestionId(questionId);
-				questionManagerService.deleteByQuestionId(questionId);
 				modelAndView = new ModelAndView("redirect:/instructor/questions");
 			} else {
 				modelAndView = new ModelAndView("redirect:/login");

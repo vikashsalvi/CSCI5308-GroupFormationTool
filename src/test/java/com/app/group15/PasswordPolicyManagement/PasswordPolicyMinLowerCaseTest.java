@@ -1,4 +1,4 @@
-package com.app.group15.passwordPolicy;
+package com.app.group15.PasswordPolicyManagement;
 
 import org.junit.jupiter.api.Test;
 
@@ -24,6 +24,6 @@ class PasswordPolicyMinLowerCaseTest {
         assertFalse(passwordPolicyMinLowerCase.isPasswordValid(lowercase0));
 
     }
-    
+
 
 }

@@ -21,7 +21,7 @@ public class QuestionManagerService implements IQuestionManagerServiceInjector, 
 	@Override
 	public List<QuestionType> getQuestionType() {
 		List<QuestionType> listOfQuestion = questionManagerDao.getAllQuestionTypes();
-		listOfQuestion.forEach(questionType -> {
+		listOfQuestion.forEach((QuestionType questionType) -> {
 			questionType.setQuestionType(
 					QuestionTypeEnum.valueOf(questionType.getQuestionType()).getQuestionType());
 		});
@@ -47,7 +47,7 @@ public class QuestionManagerService implements IQuestionManagerServiceInjector, 
 		if ((question.getQuestionTypeId() == 2) || (question.getQuestionTypeId() == 3)) {
 			options = new ArrayList<>();
 			List<String> temp = options;
-			question.getOptions().forEach(opt -> {
+			question.getOptions().forEach((Options opt) -> {
 				temp.add(opt.getOption());
 			});
 		}
@@ -72,7 +72,7 @@ public class QuestionManagerService implements IQuestionManagerServiceInjector, 
 					optionsIdList.add(optionID);
 				}
 
-				optionsIdList.forEach(insertedChoiceId -> {
+				optionsIdList.forEach((Integer insertedChoiceId) -> {
 					questionManagerDao.saveQuestionOptionMapping(insertedQuestionId, insertedChoiceId);
 				});
 
@@ -127,12 +127,6 @@ public class QuestionManagerService implements IQuestionManagerServiceInjector, 
 		}
 	}
 
-	@Override
-	public void deleteByQuestionId(int questionId) {
-		if (ServiceUtility.isValidInt(questionId)) {
-			questionManagerDao.deleteByQuestionId(questionId);
-		}
-	}
 
 
 }

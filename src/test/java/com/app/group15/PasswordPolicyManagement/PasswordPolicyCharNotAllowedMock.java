@@ -1,6 +1,4 @@
-package com.app.group15.passwordPolicy;
-
-import com.app.group15.PasswordPolicyManagement.IPasswordPolicyValidator;
+package com.app.group15.PasswordPolicyManagement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,17 +11,14 @@ public class PasswordPolicyCharNotAllowedMock implements IPasswordPolicyValidato
 		String bannedCharString = "$#*";
 		List<String> bannedCharList = new ArrayList<>();
 
-		bannedCharString.replaceAll(" +","");
+		bannedCharString = bannedCharString.replaceAll(" +", "");
 
-		for (int i=0; i<bannedCharString.length();i++)
-		{
+		for (int i = 0; i < bannedCharString.length(); i++) {
 			bannedCharList.add(String.valueOf(bannedCharString.charAt(i)));
 		}
 
-		for (int i=0; i< bannedCharList.size(); i++)
-		{
-			if (password.contains(bannedCharList.get(i)))
-			{
+		for (String s : bannedCharList) {
+			if (password.contains(s)) {
 				return false;
 			}
 		}

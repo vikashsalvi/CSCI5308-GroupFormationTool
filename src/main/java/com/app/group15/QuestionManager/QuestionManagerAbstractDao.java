@@ -40,6 +40,4 @@ public abstract class QuestionManagerAbstractDao implements IDao {
 	public abstract List<Options> getOptions(int questionId);
 
 	public abstract void saveQuestionOptionMapping(int insertedQuestionId, Integer insertedChoiceId);
-
-	public abstract void deleteByQuestionId(int questionId);
 }

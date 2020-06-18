@@ -31,6 +31,7 @@ public class QuestionManagerDao extends QuestionManagerAbstractDao {
 		} catch (Exception e) {
 			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		} finally {
+			assert invokeStoredProcedure != null;
 			invokeStoredProcedure.closeConnection();
 		}
 		return null;
@@ -177,21 +178,6 @@ public class QuestionManagerDao extends QuestionManagerAbstractDao {
 			invokeStoredProcedure.setParameter(1, insertedQuestionId);
 			invokeStoredProcedure.setParameter(2, insertedChoiceId);
 
-			invokeStoredProcedure.execute();
-		} catch (Exception e) {
-			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
-		} finally {
-			assert invokeStoredProcedure != null;
-			invokeStoredProcedure.closeConnection();
-		}
-	}
-
-	public void deleteByQuestionId(int questionId) {
-		InvokeStoredProcedure invokeStoredProcedure = null;
-		try {
-			invokeStoredProcedure = new InvokeStoredProcedure("spDeleteQuestion(?)");
-
-			invokeStoredProcedure.setParameter(1, questionId);
 			invokeStoredProcedure.execute();
 		} catch (Exception e) {
 			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
