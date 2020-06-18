@@ -133,47 +133,47 @@ public class AdminController {
 	@RequestMapping(value = "/admin/courses/edit", method = RequestMethod.GET)
 	public ModelAndView adminCourseEdit(HttpServletRequest request,
 			@RequestParam(required = true, value = "courseId") int courseId) {
-		authorizationService.setAllowedRoles(new String[] { "ADMIN" });
-		ModelAndView modelAndView;
+		authorizationService.setAllowedRoles(new String[]{"ADMIN"});
+		ModelAndView modelAndViewResponse;
 		if (sessionService.isUserSignedIn(request)) {
 			if (authorizationService.isAuthorized(request)) {
 				User user = sessionService.getSessionUser(request);
 				Course course = courseService.getCourseDetails(courseId);
 				User courseInstructor = courseService.getCourseInstructor(courseId);
 				List<User> allUsers = userService.getAllUsers();
-				modelAndView = new ModelAndView();
-				modelAndView.setViewName("admin/courseEdit");
-				modelAndView.addObject("user", user);
-				modelAndView.addObject("course", course);
-				modelAndView.addObject("courseInstructor", courseInstructor);
-				modelAndView.addObject("allUsers", allUsers);
-				return modelAndView;
+				modelAndViewResponse = new ModelAndView();
+				modelAndViewResponse.setViewName("admin/courseEdit");
+				modelAndViewResponse.addObject("user", user);
+				modelAndViewResponse.addObject("course", course);
+				modelAndViewResponse.addObject("courseInstructor", courseInstructor);
+				modelAndViewResponse.addObject("allUsers", allUsers);
+				return modelAndViewResponse;
 			} else {
-				modelAndView = new ModelAndView("redirect:/login");
+				modelAndViewResponse = new ModelAndView("redirect:/login");
 			}
 		} else {
-			modelAndView = new ModelAndView("redirect:/login");
+			modelAndViewResponse = new ModelAndView("redirect:/login");
 		}
-		return modelAndView;
+		return modelAndViewResponse;
 	}
 
 	@RequestMapping(value = "/admin/courses/edit", method = RequestMethod.POST)
 	public ModelAndView adminCourseEdit(HttpServletRequest request,
 			@RequestParam(required = true, value = "courseId") int courseId,
 			@RequestParam(required = true, value = "instructorId") int instructorId) {
-		authorizationService.setAllowedRoles(new String[] { "ADMIN" });
-		ModelAndView modelAndView;
+		authorizationService.setAllowedRoles(new String[]{"ADMIN"});
+		ModelAndView modelAndViewResponse;
 		if (sessionService.isUserSignedIn(request)) {
 			if (authorizationService.isAuthorized(request)) {
 				courseService.addOrUpdateInstructor(courseId, instructorId);
-				modelAndView = new ModelAndView("redirect:/admin/courses?feedback=instructorAdded");
+				modelAndViewResponse = new ModelAndView("redirect:/admin/courses?feedback=instructorAdded");
 			} else {
-				modelAndView = new ModelAndView("redirect:/login");
+				modelAndViewResponse = new ModelAndView("redirect:/login");
 			}
 		} else {
-			modelAndView = new ModelAndView("redirect:/login");
+			modelAndViewResponse = new ModelAndView("redirect:/login");
 		}
-		return modelAndView;
+		return modelAndViewResponse;
 	}
 
 	@RequestMapping(value = "/admin/courses/delete", method = RequestMethod.GET)

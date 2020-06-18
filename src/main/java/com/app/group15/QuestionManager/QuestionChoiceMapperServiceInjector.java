@@ -5,7 +5,7 @@ public class QuestionChoiceMapperServiceInjector {
 
 	public QuestionChoiceMapperServiceInjector() {
 		questionChoiceMapperService = new QuestionChoiceMapperService();
-		questionChoiceMapperService.injectQuestionChoiceMapperInjectorService(new QuestionChoiceMapperDao());
+		questionChoiceMapperService.injectQuestionChoiceMapperDao(new QuestionChoiceMapperDao());
 	}
 
 	public IQuestionChoiceMapperService getQuestionChoiceMapperService() {

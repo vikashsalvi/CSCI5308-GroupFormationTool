@@ -20,6 +20,7 @@ public class GuestController {
 	private IAuthorizationService authorizationService = ServiceConfig.getInstance().getAuthorizationService();
 	private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
 	private ICourseService courseService = ServiceConfig.getInstance().getCourseService();
+
 	@RequestMapping(value = "/user/home", method = RequestMethod.GET)
 	public ModelAndView guestHome(HttpServletRequest request) {
 		authorizationService.setAllowedRoles(new String[]{"GUEST"});

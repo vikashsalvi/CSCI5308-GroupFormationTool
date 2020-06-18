@@ -1,6 +1,6 @@
 package com.app.group15.QuestionManager;
 
-public interface IQuestionManagerInjectorService {
+public interface IQuestionManagerServiceInjector {
 
     public void injectQuestionManagerInjectorService(QuestionManagerDao questionManagerDao);
 }

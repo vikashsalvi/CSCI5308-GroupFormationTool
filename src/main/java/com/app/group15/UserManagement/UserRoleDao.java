@@ -136,14 +136,12 @@ public class UserRoleDao extends UserRoleAbstractDao {
 				try {
 					connection.rollback();
 				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
 					GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 				}
 				GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		}
 

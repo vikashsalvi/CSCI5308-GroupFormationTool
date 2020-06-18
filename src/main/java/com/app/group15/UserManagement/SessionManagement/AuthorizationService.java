@@ -15,20 +15,24 @@ import java.util.logging.Level;
 public class AuthorizationService implements IAuthorizationService {
 
 	private Set<String> allowedRoles = new HashSet<>();
+	private String invalidInput = "Invalid input";
 
+	@Override
+	public Set<String> getAllowedRoles() {
+		return allowedRoles;
+	}
+
+	@Override
 	public void setAllowedRoles(String[] args) {
 		if (ServiceUtility.isNotNull(args)) {
 			this.allowedRoles.clear();
 			this.allowedRoles.addAll(Arrays.asList(args));
 		} else {
-			GroupFormationToolLogger.log(Level.SEVERE, "Allowed roles are null ");
+			GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
 		}
 	}
 
-	public Set<String> getAllowedRoles() {
-		return allowedRoles;
-	}
-
+	@Override
 	public boolean isAuthorized(HttpServletRequest request) {
 		if (allowedRoles == null) {
 			try {

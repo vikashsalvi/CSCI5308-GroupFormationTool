@@ -1,18 +1,20 @@
 package com.app.group15.UserManagement;
 
+import com.app.group15.Utility.GroupFormationToolLogger;
+import com.app.group15.Utility.ServiceUtility;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 
-import com.app.group15.Utility.GroupFormationToolLogger;
-import com.app.group15.Utility.ServiceUtility;
-
 public class UserService implements IUserService, IUserServiceInjector {
 
 	private UserAbstractDao userDao;
 	private UserRoleAbstractDao userRoleDao;
+	private String invalid_input = "Invalid Input";
 
+	@Override
 	public List<User> getAllUsers() {
 		ArrayList<User> users = new ArrayList<>();
 		users = userDao.getAll();
@@ -22,11 +24,13 @@ public class UserService implements IUserService, IUserServiceInjector {
 		return users;
 	}
 
+	@Override
 	public void updateUserRole(int userId, String role) {
 		if (ServiceUtility.isNotNull(role) && ServiceUtility.isValidInt(userId)) {
 			userRoleDao.updateRole(userId, role);
 		} else {
-			GroupFormationToolLogger.log(Level.SEVERE, "Invalid Input");
+
+			GroupFormationToolLogger.log(Level.SEVERE, invalid_input);
 		}
 	}
 

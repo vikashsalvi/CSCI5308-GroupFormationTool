@@ -26,19 +26,16 @@ public abstract class UserRoleAbstractDao<T> implements IDao {
     @Override
     public int save(Persistence t) {
         return 0;
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void update(Persistence t, int id) {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void delete(int id) {
-        // TODO Auto-generated method stub
 
     }
 }

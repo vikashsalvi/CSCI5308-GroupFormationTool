@@ -14,6 +14,7 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
 	private CourseAbstractDao courseDao;
 	private CourseInstructorMapperAbstractDao courseInstructorMapperDao;
 	private CourseStudentMapperAbstractDao courseStudentMapperDao;
+	private String invalidInput = "Invalid input";
 
 	@Override
 	public List<Course> getCoursesList() {
@@ -22,13 +23,23 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
 
 	@Override
 	public Course getCourseDetails(int id) {
-		return (Course) courseDao.get(id);
+		if (ServiceUtility.isValidInt(id)) {
+			return (Course) courseDao.get(id);
+		} else {
+			GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
+			return null;
+		}
 	}
 
 	@Override
 	public User getCourseInstructor(int id) {
-		User user = courseInstructorMapperDao.getCourseInstructor(id);
-		return user;
+		if (ServiceUtility.isValidInt(id)) {
+			User user = courseInstructorMapperDao.getCourseInstructor(id);
+			return user;
+		} else {
+			GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
+			return null;
+		}
 	}
 
 	@Override
@@ -38,9 +49,9 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
 			courses.forEach(course -> userInstructors.add(getCourseInstructor(course.getId())));
 			return userInstructors;
 		} else {
-			GroupFormationToolLogger.log(Level.SEVERE, "Invalid input");
+			GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
+			return null;
 		}
-		return null;
 	}
 
 	@Override
@@ -48,7 +59,7 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
 		if (ServiceUtility.isValidInt(courseId) && ServiceUtility.isValidInt(instructorId)) {
 			courseInstructorMapperDao.addInstructorToACourse(courseId, instructorId);
 		} else {
-			GroupFormationToolLogger.log(Level.SEVERE, "Invalid input");
+			GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
 		}
 	}
 
@@ -60,7 +71,7 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
 			int courseId = courseDao.save(course);
 			return courseId;
 		} else {
-			GroupFormationToolLogger.log(Level.SEVERE, "Invalid input");
+			GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
 		}
 		return -1;
 	}
@@ -71,7 +82,7 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
 			courseInstructorMapperDao.deleteByCourseId(courseId);
 			courseDao.delete(courseId);
 		} else {
-			GroupFormationToolLogger.log(Level.SEVERE, "Invalid input");
+			GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
 		}
 	}
 
@@ -89,9 +100,9 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
 				return false;
 			}
 		} else {
-			GroupFormationToolLogger.log(Level.SEVERE, "Invalid input");
+			GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
+			return false;
 		}
-		return false;
 	}
 
 	@Override
@@ -105,7 +116,7 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
 			}
 			return courses;
 		} else {
-			GroupFormationToolLogger.log(Level.SEVERE, "Invalid input");
+			GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
 		}
 		return null;
 	}
@@ -115,7 +126,7 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
 		if (ServiceUtility.isValidInt(taId)) {
 			return courseInstructorMapperDao.getCourseByTa(taId);
 		} else {
-			GroupFormationToolLogger.log(Level.SEVERE, "Invalid input");
+			GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
 		}
 		return null;
 	}
@@ -158,9 +169,9 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
 				return false;
 			}
 		} else {
-			GroupFormationToolLogger.log(Level.SEVERE, "Invalid input");
+			GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
+			return false;
 		}
-		return false;
 	}
 
 }
