@@ -143,7 +143,7 @@ public class ForgetPasswordDao extends ForgetPasswordAbstractDao implements IFor
     private String getUserPassword(int userId) {
         String query = "SELECT password from table_users  WHERE id=?";
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
-             PreparedStatement statement = connection.prepareStatement(query);) {
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, userId);
             ResultSet result = statement.executeQuery();
             while (result.next()) {

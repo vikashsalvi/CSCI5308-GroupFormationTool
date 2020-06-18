@@ -108,19 +108,21 @@
                 <div class="row">
                     <div class="card">
                         <div class="card-header">
-                            <h1 class="h4 text-gray-800">Selecting TA for <span th:text='${ courseEntity.getName() }'></span></h1>
+                            <h1 class="h4 text-gray-800">Selecting TA for <span
+                                    th:text='${ courseEntity.getName() }'></span></h1>
                         </div>
                         <div class="card-body w-100">
                             <div th:if="${ error }" class="alert alert-danger" role="alert">
-															<strong>Oh snap!</strong> <span th:text="${errorMessage}"></span>
+                                <strong>Oh snap!</strong> <span th:text="${errorMessage}"></span>
                             </div>
                             <div th:if="${ error_invalid_permission }" class="alert alert-danger" role="alert">
                                 <strong>Oh snap!</strong> You don't have permission to change the TA for this course!
                             </div>
-                            <form action="/instructor/assign-ta"  method="POST">
+                            <form action="/instructor/assign-ta" method="POST">
                                 <div class="form-group">
                                     <label for="bannerId">Banner ID</label>
-                                    <input type="text" class="form-control" id="bannerId" placeholder="B00XXXXXX" name="bannerId">
+                                    <input class="form-control" id="bannerId" name="bannerId" placeholder="B00XXXXXX"
+                                           type="text">
                                     <input type="hidden" id="courseId" name="courseId" th:value="${courseId}">
                                 </div>
 

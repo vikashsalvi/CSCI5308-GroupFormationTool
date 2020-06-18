@@ -26,13 +26,13 @@ public class UserRoleDao extends UserRoleAbstractDao {
         String query = "SELECT * FROM table_user_roles WHERE id=?";
         UserRoles roleEntity = new UserRoles();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
-				PreparedStatement statement = connection.prepareStatement(query)) {
-			statement.setInt(1, id);
-			try (ResultSet result = statement.executeQuery()) {
-				while (result.next()) {
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, id);
+            try (ResultSet result = statement.executeQuery()) {
+                while (result.next()) {
 
-					roleEntity.setId(result.getInt("id"));
-					roleEntity.setRole(result.getString("role"));
+                    roleEntity.setId(result.getInt("id"));
+                    roleEntity.setRole(result.getString("role"));
 
                 }
             }
@@ -70,8 +70,8 @@ public class UserRoleDao extends UserRoleAbstractDao {
     @Override
     public Set<String> getRolesByBannerId(String bannerId) {
         String query = "SELECT role FROM table_users tu\n" +
-			"JOIN table_user_role_mapper trm ON tu.id=trm.user_id\n" +
-			"JOIN table_user_roles tr ON trm.role_id=tr.id\n" + "WHERE tu.banner_id=?";
+                "JOIN table_user_role_mapper trm ON tu.id=trm.user_id\n" +
+                "JOIN table_user_roles tr ON trm.role_id=tr.id\n" + "WHERE tu.banner_id=?";
         Set<String> roles = new HashSet<String>();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -79,7 +79,7 @@ public class UserRoleDao extends UserRoleAbstractDao {
             try (ResultSet result = statement.executeQuery()) {
                 while (result.next()) {
                     String role = result.getString("role");
-					roles.add(role);
+                    roles.add(role);
                 }
             }
         } catch (Exception e) {
@@ -99,15 +99,15 @@ public class UserRoleDao extends UserRoleAbstractDao {
                 connection.setAutoCommit(false);
                 statement.setInt(1, userId);
                 if (role.equals(UserRole.ADMIN.getRole())) {
-					throw new AllowedRolesNotSetException("Admin User Cannot be created");
+                    throw new AllowedRolesNotSetException("Admin User Cannot be created");
                 }
                 statement.setInt(2, getRoleId(role));
-				statement.executeUpdate();
-				connection.commit();
-			} catch (Exception e) {
-				try {
-					connection.rollback();
-				} catch (SQLException e1) {
+                statement.executeUpdate();
+                connection.commit();
+            } catch (Exception e) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
                     GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
                 }
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
@@ -126,48 +126,48 @@ public class UserRoleDao extends UserRoleAbstractDao {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 connection.setAutoCommit(false);
                 if (role.equals(UserRole.ADMIN.getRole())) {
-					throw new AllowedRolesNotSetException("Admin User Cannot be created");
+                    throw new AllowedRolesNotSetException("Admin User Cannot be created");
                 }
                 statement.setInt(1, getRoleId(role));
                 statement.setInt(2, userId);
-				statement.executeUpdate();
-				connection.commit();
-			} catch (Exception e) {
-				try {
-					connection.rollback();
-				} catch (SQLException e1) {
-					GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
-				}
-				GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
-			}
+                statement.executeUpdate();
+                connection.commit();
+            } catch (Exception e) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                }
+                GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            }
 
-		} catch (SQLException e) {
-			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
-		}
+        } catch (SQLException e) {
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+        }
 
-	}
+    }
 
-	@Override
-	public ArrayList<UserRoles> getAll() {
-		String query = "SELECT * FROM table_user_roles";
-		ArrayList<UserRoles> userRolesList = new ArrayList<UserRoles>();
-		try (Connection connection = DatabaseManager.getDataSource().getConnection();
-				PreparedStatement statement = connection.prepareStatement(query);
-				ResultSet result = statement.executeQuery()) {
+    @Override
+    public ArrayList<UserRoles> getAll() {
+        String query = "SELECT * FROM table_user_roles";
+        ArrayList<UserRoles> userRolesList = new ArrayList<UserRoles>();
+        try (Connection connection = DatabaseManager.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet result = statement.executeQuery()) {
 
-			while (result.next()) {
-				UserRoles role = new UserRoles();
-				role.setId(result.getInt("id"));
-				role.setRole(result.getString("role"));
-				userRolesList.add(role);
+            while (result.next()) {
+                UserRoles role = new UserRoles();
+                role.setId(result.getInt("id"));
+                role.setRole(result.getString("role"));
+                userRolesList.add(role);
 
-			}
-		} catch (Exception e) {
+            }
+        } catch (Exception e) {
 
-			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
-		}
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+        }
 
-		return userRolesList;
-	}
+        return userRolesList;
+    }
 
 }

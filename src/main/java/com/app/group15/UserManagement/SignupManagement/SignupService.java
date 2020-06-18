@@ -8,39 +8,39 @@ import com.app.group15.Utility.ServiceUtility;
 import java.util.logging.Level;
 
 public class SignupService implements ISignupService, ISignUpServiceInjector {
-	private UserAbstractDao userDao;
-	private String invalidInput = "Invalid input";
+    private UserAbstractDao userDao;
+    private String invalidInput = "Invalid input";
 
-	public boolean checkUserExists(String bannerId) {
-		if (ServiceUtility.isNotNull(bannerId)) {
-			User user = userDao.getUserByBannerId(bannerId);
-			boolean response;
+    public boolean checkUserExists(String bannerId) {
+        if (ServiceUtility.isNotNull(bannerId)) {
+            User user = userDao.getUserByBannerId(bannerId);
+            boolean response;
 
-			response = user.getBannerId() != null;
-			return response;
-		} else {
-			GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
-			return false;
-		}
-	}
+            response = user.getBannerId() != null;
+            return response;
+        } else {
+            GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
+            return false;
+        }
+    }
 
-	public int createUser(User user, String role) {
-		if (ServiceUtility.isNotNull(user) && ServiceUtility.isNotNull(role)) {
-			return userDao.saveUser(user, role);
-		} else {
-			GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
-		}
-		return -1;
-	}
+    public int createUser(User user, String role) {
+        if (ServiceUtility.isNotNull(user) && ServiceUtility.isNotNull(role)) {
+            return userDao.saveUser(user, role);
+        } else {
+            GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
+        }
+        return -1;
+    }
 
-	@Override
-	public void injectUserDao(UserAbstractDao userDao) {
-		if (ServiceUtility.isNotNull(userDao)) {
-			this.userDao = userDao;
-		} else {
-			GroupFormationToolLogger.log(Level.SEVERE, "User Dao Dependency not injected ");
-		}
+    @Override
+    public void injectUserDao(UserAbstractDao userDao) {
+        if (ServiceUtility.isNotNull(userDao)) {
+            this.userDao = userDao;
+        } else {
+            GroupFormationToolLogger.log(Level.SEVERE, "User Dao Dependency not injected ");
+        }
 
-	}
+    }
 
 }

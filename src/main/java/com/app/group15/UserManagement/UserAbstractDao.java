@@ -24,8 +24,8 @@ public abstract class UserAbstractDao<T> implements IDao {
 
     @Override
     public abstract ArrayList<User> getAll();
-    
-    public  abstract String getUserPassword(int userId);
+
+    public abstract String getUserPassword(int userId);
 
     public abstract int saveUser(User user, String role);
 

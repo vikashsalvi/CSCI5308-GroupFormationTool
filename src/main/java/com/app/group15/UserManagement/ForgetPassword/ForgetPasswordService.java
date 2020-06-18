@@ -1,10 +1,10 @@
 package com.app.group15.UserManagement.ForgetPassword;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.UserManagement.User;
 import com.app.group15.UserManagement.UserDao;
 import com.app.group15.Utility.GroupFormationToolLogger;
 import com.app.group15.Utility.ServiceUtility;
-import com.app.group15.Config.AppConfig;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;

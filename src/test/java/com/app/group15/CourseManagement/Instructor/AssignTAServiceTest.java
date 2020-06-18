@@ -30,13 +30,13 @@ class AssignTAServiceTest {
         assertNotNull(userEntity.getId());
 
         userEntity = userDaoMock.getUserByBannerIdMock("B003468");
-        assertEquals(userEntity.getId(),0);
+        assertEquals(userEntity.getId(), 0);
     }
 
     @Test
     void validateCourseIDTest() {
         Course courseEntity = courseDaoMock.getCourseByCourseIdMock("6");
-        assertEquals(courseEntity.getName(),"CSCI5409");
+        assertEquals(courseEntity.getName(), "CSCI5409");
 
         courseEntity = courseDaoMock.getCourseByCourseIdMock("7");
         assertNull(courseEntity.getName(), (String) null);
@@ -46,8 +46,8 @@ class AssignTAServiceTest {
 
     @Test
     void checkIntructorPermissionTest() {
-       CourseInstructorMapper courseInstructorMapperEntity = courseInstructorMapperDaoMock.getCourseInstructorMapperEntity(6);
-       assertEquals(courseInstructorMapperEntity.getInstructorId(), 17);
+        CourseInstructorMapper courseInstructorMapperEntity = courseInstructorMapperDaoMock.getCourseInstructorMapperEntity(6);
+        assertEquals(courseInstructorMapperEntity.getInstructorId(), 17);
 
         courseInstructorMapperEntity = courseInstructorMapperDaoMock.getCourseInstructorMapperEntity(6);
         assertNotEquals(courseInstructorMapperEntity.getInstructorId(), 16);

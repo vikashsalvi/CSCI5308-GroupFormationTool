@@ -4,8 +4,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Set;
 
 public interface IAuthorizationService {
-	public void setAllowedRoles(String[] args);
-	public Set<String> getAllowedRoles();
-	public boolean isAuthorized(HttpServletRequest request);
+    Set<String> getAllowedRoles();
+
+    void setAllowedRoles(String[] args);
+
+    boolean isAuthorized(HttpServletRequest request);
 
 }

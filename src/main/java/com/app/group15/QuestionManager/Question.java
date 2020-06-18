@@ -7,15 +7,15 @@ import java.util.List;
 
 public class Question extends Persistence {
 
-	private int questionId;
-	private String questionTitle;
-	private int questionTypeId;
-	private int questionInstructorId;
-	private String questionText;
-	private String questionAddedDate;
-	private List<Options> options;
+    private int questionId;
+    private String questionTitle;
+    private int questionTypeId;
+    private int questionInstructorId;
+    private String questionText;
+    private String questionAddedDate;
+    private List<Options> options;
 
-	public Question() {
+    public Question() {
         options = new ArrayList<>();
     }
 

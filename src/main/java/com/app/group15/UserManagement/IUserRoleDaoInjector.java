@@ -5,5 +5,5 @@ import com.app.group15.Persistence.IDao;
 
 public interface IUserRoleDaoInjector {
 
-	public void injectUserRoleDao(@SuppressWarnings("rawtypes") IDao userRoleDao);
+    void injectUserRoleDao(@SuppressWarnings("rawtypes") IDao userRoleDao);
 }

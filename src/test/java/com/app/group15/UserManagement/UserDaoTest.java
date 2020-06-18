@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 public class UserDaoTest {
     UserDaoMock userDaoMock = new UserDaoMock();
+
     @Test
     public void getUserByBannerIdTest() throws ParseException {
         User user = userDaoMock.getUserByBannerIdMock("B00843468");

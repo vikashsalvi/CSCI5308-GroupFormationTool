@@ -18,156 +18,156 @@ import java.util.logging.Level;
 
 @SuppressWarnings("rawtypes")
 public class CourseDao extends CourseAbstractDao
-		implements ICourseInstructorMapperInjector, ICourseStudentMapperDaoInjector {
+        implements ICourseInstructorMapperInjector, ICourseStudentMapperDaoInjector {
 
 
-	private CourseInstructorMapperAbstractDao courseInstructorMapperDao;
-	private CourseStudentMapperAbstractDao courseStudentMapperDao;
+    private CourseInstructorMapperAbstractDao courseInstructorMapperDao;
+    private CourseStudentMapperAbstractDao courseStudentMapperDao;
 
 
-	@Override
-	public Course get(int id) {
-		String query = "SELECT * FROM table_course WHERE id=?";
-		Course course = new Course();
-		try (Connection connection=DatabaseManager.getDataSource().getConnection();
-			PreparedStatement statement = connection.prepareStatement(query)) {
-			statement.setInt(1, id);
-			try (ResultSet result = statement.executeQuery()) {
-				while (result.next()) {
+    @Override
+    public Course get(int id) {
+        String query = "SELECT * FROM table_course WHERE id=?";
+        Course course = new Course();
+        try (Connection connection = DatabaseManager.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, id);
+            try (ResultSet result = statement.executeQuery()) {
+                while (result.next()) {
 
-					course.setId(result.getInt("id"));
-					course.setName(result.getString("name"));
+                    course.setId(result.getInt("id"));
+                    course.setName(result.getString("name"));
 
-				}
-			}
-		} catch (SQLException e) {
+                }
+            }
+        } catch (SQLException e) {
 
-			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
-		}
-		return course;
-	}
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+        }
+        return course;
+    }
 
-	@Override
-	public ArrayList<Course> getAll() {
-		String query = "SELECT * FROM table_course";
-		ArrayList<Course> coursesList = new ArrayList<Course>();
-		try (Connection connection=DatabaseManager.getDataSource().getConnection();
-				PreparedStatement statement = connection.prepareStatement(query);
-			 ResultSet result = statement.executeQuery()) {
-			while (result.next()) {
-				Course course = new Course();
-				course.setId(result.getInt("id"));
-				course.setName(result.getString("name"));
-				coursesList.add(course);
-			}
+    @Override
+    public ArrayList<Course> getAll() {
+        String query = "SELECT * FROM table_course";
+        ArrayList<Course> coursesList = new ArrayList<Course>();
+        try (Connection connection = DatabaseManager.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet result = statement.executeQuery()) {
+            while (result.next()) {
+                Course course = new Course();
+                course.setId(result.getInt("id"));
+                course.setName(result.getString("name"));
+                coursesList.add(course);
+            }
 
-		} catch (SQLException e) {
+        } catch (SQLException e) {
 
-			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
-		}
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+        }
 
-		return coursesList;
-	}
+        return coursesList;
+    }
 
-	@Override
-	public int save(Persistence course) {
-		Course courseEntity = (Course) course;
-		String query = "INSERT INTO table_course(name) VALUES(?)";
-		int courseId = 0;
-		try(Connection connection=DatabaseManager.getDataSource().getConnection()){
-			try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-				connection.setAutoCommit(false);
-				statement.setString(1, courseEntity.getName());
-				statement.executeUpdate();
-				connection.commit();
-				try (ResultSet result = statement.getGeneratedKeys()) {
+    @Override
+    public int save(Persistence course) {
+        Course courseEntity = (Course) course;
+        String query = "INSERT INTO table_course(name) VALUES(?)";
+        int courseId = 0;
+        try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+                connection.setAutoCommit(false);
+                statement.setString(1, courseEntity.getName());
+                statement.executeUpdate();
+                connection.commit();
+                try (ResultSet result = statement.getGeneratedKeys()) {
 
-					if (result.first()) {
+                    if (result.first()) {
 
-						courseId = result.getInt(1);
-					}
-				}
-			} catch (SQLException e) {
-				try {
-					connection.rollback();
-				} catch (SQLException e1) {
-					GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
-				}
+                        courseId = result.getInt(1);
+                    }
+                }
+            } catch (SQLException e) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                }
 
-				GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
-			}
-		} catch (SQLException e) {
-			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
-		}
-		
-		return courseId;
+                GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            }
+        } catch (SQLException e) {
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+        }
 
-	}
+        return courseId;
 
-	@Override
-	public void update(Persistence course, int id) {
-		Course courseEntity = (Course) course;
-		String query = "UPDATE table_course SET name=? WHERE id=?";
-		try(Connection connection=DatabaseManager.getDataSource().getConnection()){
-			try (PreparedStatement statement = connection.prepareStatement(query)) {
-				connection.setAutoCommit(false);
-				statement.setString(1, courseEntity.getName());
-				statement.setInt(2, id);
-				statement.executeUpdate();
-				connection.commit();
-			} catch (SQLException e) {
-				try {
-					connection.rollback();
-				} catch (SQLException e1) {
-					GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
-				}
-				GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
-			}
+    }
 
-		} catch (SQLException e) {
-			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
-		}
-		
-	}
+    @Override
+    public void update(Persistence course, int id) {
+        Course courseEntity = (Course) course;
+        String query = "UPDATE table_course SET name=? WHERE id=?";
+        try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                connection.setAutoCommit(false);
+                statement.setString(1, courseEntity.getName());
+                statement.setInt(2, id);
+                statement.executeUpdate();
+                connection.commit();
+            } catch (SQLException e) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                }
+                GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            }
 
-	@Override
-	public void delete(int id) {
-		String query = "DELETE FROM table_course WHERE id=?";
-		try(Connection connection=DatabaseManager.getDataSource().getConnection()){
-			try (PreparedStatement statement = connection.prepareStatement(query)) {
-				connection.setAutoCommit(false);
-				courseInstructorMapperDao.deleteByCourseId(id);
-				courseStudentMapperDao.deletByCourseId(id);
-				statement.setInt(1, id);
-				statement.executeUpdate();
-				connection.commit();
-			} catch (SQLException e) {
-				try {
-					connection.rollback();
-				} catch (SQLException e1) {
-					GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
-				}
+        } catch (SQLException e) {
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+        }
 
-				GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
-			}
+    }
 
-		} catch (SQLException e) {
-			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
-		}
-		
-	}
+    @Override
+    public void delete(int id) {
+        String query = "DELETE FROM table_course WHERE id=?";
+        try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                connection.setAutoCommit(false);
+                courseInstructorMapperDao.deleteByCourseId(id);
+                courseStudentMapperDao.deletByCourseId(id);
+                statement.setInt(1, id);
+                statement.executeUpdate();
+                connection.commit();
+            } catch (SQLException e) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                }
 
-	@Override
-	public void injectCourseInstructorMapperDao(CourseInstructorMapperDao courseInstructorMapperDao) {
-		this.courseInstructorMapperDao = courseInstructorMapperDao;
+                GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            }
 
-	}
+        } catch (SQLException e) {
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+        }
 
-	@Override
-	public void injectCourseStudentMapperDao(CourseStudentMapperDao courseStudentMapperDao) {
-		this.courseStudentMapperDao = courseStudentMapperDao;
+    }
 
-	}
+    @Override
+    public void injectCourseInstructorMapperDao(CourseInstructorMapperDao courseInstructorMapperDao) {
+        this.courseInstructorMapperDao = courseInstructorMapperDao;
+
+    }
+
+    @Override
+    public void injectCourseStudentMapperDao(CourseStudentMapperDao courseStudentMapperDao) {
+        this.courseStudentMapperDao = courseStudentMapperDao;
+
+    }
 
 }
 

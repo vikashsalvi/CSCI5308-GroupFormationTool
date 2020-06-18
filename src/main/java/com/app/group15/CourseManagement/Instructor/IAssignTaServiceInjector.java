@@ -8,18 +8,18 @@ import com.app.group15.UserManagement.UserRoleAbstractDao;
 
 public interface IAssignTaServiceInjector {
 
-    public void injectUserDao(UserAbstractDao userDao);
+    void injectUserDao(UserAbstractDao userDao);
 
-    public void injectCourseDao(CourseAbstractDao courseDao);
+    void injectCourseDao(CourseAbstractDao courseDao);
 
-    public void injectUserRoleDao(UserRoleAbstractDao userRoleDao);
+    void injectUserRoleDao(UserRoleAbstractDao userRoleDao);
 
-    public void injectCourseInstructorMapper(CourseInstructorMapperAbstractDao courseInstructorMapperDao);
+    void injectCourseInstructorMapper(CourseInstructorMapperAbstractDao courseInstructorMapperDao);
 
-    public void injectInstructorService(IInstructorService instructorService);
+    void injectInstructorService(IInstructorService instructorService);
 
-    public void injectUserService(IUserService userService);
+    void injectUserService(IUserService userService);
 
-    public void injectCourseService(CourseService courseService);
+    void injectCourseService(CourseService courseService);
 
 }

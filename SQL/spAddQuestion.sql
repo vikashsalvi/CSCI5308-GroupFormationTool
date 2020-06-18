@@ -9,7 +9,7 @@ CREATE PROCEDURE spAddQuestion (
     IN instructorId BIGINT,
     IN questionText VARCHAR(200),
     IN questionDate DATE,
-    OUT @IN_ID BIGINT
+    OUT IN_ID BIGINT
     )
 
 BEGIN
@@ -17,7 +17,7 @@ BEGIN
 	INTO table_question(title,type_id,instructor_id,question_text,question_date)
 	VALUES(questionTitle,questionTypeId,instructorId,questionText,questionDate);
 
-    SET @IN_ID = LAST_INSERT_ID();
+    SET IN_ID = LAST_INSERT_ID();
 
 END $$
 

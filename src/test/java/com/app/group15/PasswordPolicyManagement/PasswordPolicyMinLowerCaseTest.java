@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class PasswordPolicyMinLowerCaseTest {
 
 
-
     @Test
     void isPasswordValid() {
         PasswordPolicyMinLowerCaseMock passwordPolicyMinLowerCase = new PasswordPolicyMinLowerCaseMock();

@@ -4,7 +4,7 @@ import com.app.group15.UserManagement.UserDao;
 
 public interface IForgetPasswordServiceInjector {
 
-    public void injectUserDao(UserDao userDao);
+    void injectUserDao(UserDao userDao);
 
-    public void injectForgetPasswordDao(ForgetPasswordAbstractDao forgetPasswordDao);
+    void injectForgetPasswordDao(ForgetPasswordAbstractDao forgetPasswordDao);
 }

@@ -1,10 +1,10 @@
 package com.app.group15.UserManagement.ForgetPassword;
 
+import com.app.group15.Config.ServiceConfig;
 import com.app.group15.PasswordPolicyManagement.IPasswordPolicyService;
 import com.app.group15.PasswordPolicyManagement.PasswordPolicyValidationResult;
 import com.app.group15.Utility.GroupFormationToolLogger;
 import com.app.group15.Utility.ServiceUtility;
-import com.app.group15.Config.ServiceConfig;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -78,7 +78,7 @@ public class ForgetPasswordController {
     @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
     public ModelAndView changePassword(@RequestParam(required = false, value = "token") String token,
                                        @RequestParam(required = true, value = "password") String password,
-          
+
                                        @RequestParam(required = true, value = "cPassword") String newPassword) {
 
         if (ServiceUtility.isNotNull(token) && ServiceUtility.isNotNull(password) && ServiceUtility.isNotNull(newPassword)) {

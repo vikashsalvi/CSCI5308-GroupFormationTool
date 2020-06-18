@@ -7,18 +7,18 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface IInstructorService {
-	public List<Course> getCourseOfInstructor(int instructorId);
+    List<Course> getCourseOfInstructor(int instructorId);
 
-	public User getCourseTA(int id);
+    User getCourseTA(int id);
 
-	public List<User> getAllCourseTA(List<Course> courseEntities);
+    List<User> getAllCourseTA(List<Course> courseEntities);
 
-	public boolean validateUserToAddAsTa(User user, int courseId);
+    boolean validateUserToAddAsTa(User user, int courseId);
 
-	public void addOrUpdateStudentRole(User user, String role);
+    void addOrUpdateStudentRole(User user, String role);
 
-	public int addStudentsFromCSV(MultipartFile csvFile, int courseId);
+    int addStudentsFromCSV(MultipartFile csvFile, int courseId);
 
-	public boolean checkInstructorPermission(int instructorId, int courseId);
+    boolean checkInstructorPermission(int instructorId, int courseId);
 
 }

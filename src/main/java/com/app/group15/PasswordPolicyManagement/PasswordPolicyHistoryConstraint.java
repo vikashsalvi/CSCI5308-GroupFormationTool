@@ -11,39 +11,36 @@ import java.util.logging.Level;
 
 public class PasswordPolicyHistoryConstraint implements IPasswordPolicyValidator {
 
-	private UserPasswordHistoryAbstractDao passwordHistoryDao = AppConfig.getInstance().getUserPasswordHistoryDao();
-	private UserAbstractDao userDao=AppConfig.getInstance().getUserDao();
-	private int userId;
+    private UserPasswordHistoryAbstractDao passwordHistoryDao = AppConfig.getInstance().getUserPasswordHistoryDao();
+    private UserAbstractDao userDao = AppConfig.getInstance().getUserDao();
+    private int userId;
 
-	public int getUserId() {
-		return userId;
-	}
+    public int getUserId() {
+        return userId;
+    }
 
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
-	@Override
-	public boolean isPasswordValid(String password) {
-		if (ServiceUtility.isNotNull(password)) {
-			List<UserPasswordHistory> previousPasswords = passwordHistoryDao.getPasswordHistory(this.userId);
-			List<String> historyPasswords = new ArrayList<>();
-			if (this.userId != -1) {
-				String currentPassword = userDao.getUserPassword(this.userId);
-				if (currentPassword.equals(password)) {
-					return false;
-				}
-			}
+    @Override
+    public boolean isPasswordValid(String password) {
+        if (ServiceUtility.isNotNull(password)) {
+            List<UserPasswordHistory> previousPasswords = passwordHistoryDao.getPasswordHistory(this.userId);
+            List<String> historyPasswords = new ArrayList<>();
+            if (this.userId != -1) {
+                String currentPassword = userDao.getUserPassword(this.userId);
+                if (currentPassword.equals(password)) {
+                    return false;
+                }
+            }
 
-			previousPasswords.forEach((pass) -> historyPasswords.add(pass.getHistoryPassword()));
-			if (historyPasswords.contains(password)) {
-				return false;
-			}
-			return true;
-		} else {
-			GroupFormationToolLogger.log(Level.SEVERE, "Password is null or user id is invalid");
-		}
-		return false;
-	}
+            previousPasswords.forEach((pass) -> historyPasswords.add(pass.getHistoryPassword()));
+            return !historyPasswords.contains(password);
+        } else {
+            GroupFormationToolLogger.log(Level.SEVERE, "Password is null or user id is invalid");
+        }
+        return false;
+    }
 
 }

@@ -15,7 +15,7 @@ public abstract class CourseInstructorMapperAbstractDao<T> implements IDao {
 
     public abstract List<Course> getCoursesByInstructor(int taId);
 
-	public abstract Course getCourseByTa(int id);
+    public abstract Course getCourseByTa(int id);
 
     public abstract void deleteByCourseId(int courseId);
 
