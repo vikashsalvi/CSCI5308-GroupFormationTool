@@ -40,7 +40,7 @@ public class QuestionController {
                 modelAndView = new ModelAndView();
                 modelAndView.addObject("userEntity", user);
                 modelAndView.addObject("questionsList", questionsList);
-                modelAndView.setViewName("/question/question");
+                modelAndView.setViewName("question/question");
             } else {
                 modelAndView = new ModelAndView("redirect:/login");
             }
@@ -76,7 +76,7 @@ public class QuestionController {
                     modelAndView.addObject("options", options);
                 }
                 modelAndView.addObject("question", question);
-                modelAndView.setViewName("/question/questionPreview");
+                modelAndView.setViewName("question/questionPreview");
 
             } else {
                 modelAndView = new ModelAndView("redirect:/login");
@@ -100,7 +100,7 @@ public class QuestionController {
                 modelAndViewResponse = new ModelAndView();
                 modelAndViewResponse.addObject("userEntity", user);
                 modelAndViewResponse.addObject("question_type", allQuestionType);
-                modelAndViewResponse.setViewName("/question/add_question");
+                modelAndViewResponse.setViewName("question/add_question");
 
             } else {
                 modelAndViewResponse = new ModelAndView("redirect:/login");
@@ -127,7 +127,7 @@ public class QuestionController {
                 Question question = questionManagerService.formQuestion(questionTitle, questionText, selectedOption);
                 modelAndView.addObject("question", question);
                 modelAndView.addObject("userEntity", user);
-                modelAndView.setViewName("/question/questionManager");
+                modelAndView.setViewName("question/questionManager");
                 return modelAndView;
 
             } else {
@@ -157,7 +157,7 @@ public class QuestionController {
                     model.addObject("options", options);
                 }
                 model.addObject("question", question);
-                model.setViewName("/question/questionPreview");
+                model.setViewName("question/questionPreview");
 
             }
         }
@@ -170,7 +170,7 @@ public class QuestionController {
         question.getOptions().add(new Options());
         User user = sessionService.getSessionUser(request);
         model.addObject("userEntity", user);
-        model.setViewName("/question/questionManager");
+        model.setViewName("question/questionManager");
         return model;
     }
 
