@@ -1,8 +1,6 @@
 DELIMITER $$
-
 DROP PROCEDURE IF EXISTS spAddQuestion $$
-
-CREATE PROCEDURE spAddQuestion (
+CREATE PROCEDURE `spAddQuestion`(
 
     IN questionTitle VARCHAR(40),
     IN questionTypeId BIGINT,
@@ -11,7 +9,6 @@ CREATE PROCEDURE spAddQuestion (
     IN questionDate DATE,
     OUT IN_ID BIGINT
     )
-
 BEGIN
 	INSERT
 	INTO table_question(title,type_id,instructor_id,question_text,question_date)
@@ -19,6 +16,5 @@ BEGIN
 
     SET IN_ID = LAST_INSERT_ID();
 
-END $$
-
+END$$
 DELIMITER ;

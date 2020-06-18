@@ -9,9 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @Configuration
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity(securedEnabled = true, proxyTargetClass = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-//	DatabaseManager.getDataSource();
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
