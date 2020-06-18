@@ -1,4 +1,4 @@
-package com.app.group15.config;
+package com.app.group15.Config;
 
 import com.app.group15.CourseManagement.CourseAbstractDao;
 import com.app.group15.CourseManagement.CourseDaoInjectorService;

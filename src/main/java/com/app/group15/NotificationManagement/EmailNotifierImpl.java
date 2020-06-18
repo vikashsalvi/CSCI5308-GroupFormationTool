@@ -2,7 +2,7 @@ package com.app.group15.NotificationManagement;
 
 import com.app.group15.Persistence.AwsSecretsManagerUtility;
 import com.app.group15.Utility.GroupFormationToolLogger;
-import com.app.group15.config.AppConfig;
+import com.app.group15.Config.AppConfig;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;

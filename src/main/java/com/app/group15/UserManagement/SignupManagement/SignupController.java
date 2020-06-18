@@ -3,7 +3,7 @@ package com.app.group15.UserManagement.SignupManagement;
 import com.app.group15.PasswordPolicyManagement.IPasswordPolicyService;
 import com.app.group15.PasswordPolicyManagement.PasswordPolicyValidationResult;
 import com.app.group15.UserManagement.User;
-import com.app.group15.config.ServiceConfig;
+import com.app.group15.Config.ServiceConfig;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;

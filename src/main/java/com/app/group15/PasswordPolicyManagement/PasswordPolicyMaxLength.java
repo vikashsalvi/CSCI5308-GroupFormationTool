@@ -2,7 +2,7 @@ package com.app.group15.PasswordPolicyManagement;
 
 import com.app.group15.Utility.GroupFormationToolLogger;
 import com.app.group15.Utility.ServiceUtility;
-import com.app.group15.config.AppConfig;
+import com.app.group15.Config.AppConfig;
 
 import java.util.List;
 import java.util.logging.Level;

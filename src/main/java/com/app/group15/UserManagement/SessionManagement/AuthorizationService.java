@@ -4,7 +4,7 @@ import com.app.group15.ExceptionHandler.AllowedRolesNotSetException;
 import com.app.group15.UserManagement.UserRoleDao;
 import com.app.group15.Utility.GroupFormationToolLogger;
 import com.app.group15.Utility.ServiceUtility;
-import com.app.group15.config.AppConfig;
+import com.app.group15.Config.AppConfig;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;

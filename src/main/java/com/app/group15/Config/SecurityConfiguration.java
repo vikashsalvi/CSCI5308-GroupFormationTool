@@ -1,4 +1,4 @@
-package com.app.group15.config;
+package com.app.group15.Config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

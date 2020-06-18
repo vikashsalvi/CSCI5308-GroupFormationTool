@@ -10,7 +10,7 @@ import com.app.group15.UserManagement.UserRoleAbstractDao;
 import com.app.group15.Utility.FileUtility;
 import com.app.group15.Utility.GroupFormationToolLogger;
 import com.app.group15.Utility.ServiceUtility;
-import com.app.group15.config.AppConfig;
+import com.app.group15.Config.AppConfig;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;

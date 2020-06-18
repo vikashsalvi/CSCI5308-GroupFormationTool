@@ -4,7 +4,7 @@ import com.app.group15.PasswordPolicyManagement.IPasswordPolicyService;
 import com.app.group15.PasswordPolicyManagement.PasswordPolicyValidationResult;
 import com.app.group15.Utility.GroupFormationToolLogger;
 import com.app.group15.Utility.ServiceUtility;
-import com.app.group15.config.ServiceConfig;
+import com.app.group15.Config.ServiceConfig;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
