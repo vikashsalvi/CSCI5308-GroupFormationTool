@@ -15,11 +15,7 @@ public class PasswordPolicyMinUpperCaseMock implements IPasswordPolicyValidator 
 			}
 		}
 
-		if (countUppercase >= minimumNumberOfUppercaseAllowed) {
-			return true;
-		} else {
-			return false;
-		}
+		return countUppercase >= minimumNumberOfUppercaseAllowed;
 	}
 
 }

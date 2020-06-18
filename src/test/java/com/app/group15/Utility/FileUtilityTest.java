@@ -25,9 +25,6 @@ public class FileUtilityTest {
 		String sampleCSVStudentListPath = "src/main/resources/static/student_list.csv";
 		String[] cols = {"name", "email", "banner_id"};
 		ArrayList<HashMap<String, String>> data = new ArrayList<>();
-		HashMap<String, String> dataRow;
-		HashMap<String, String> error;
-		String errorMessage = new String("");
 		StringBuilder fileData = new StringBuilder();
 		try {
 			File myObj = new File(sampleCSVStudentListPath);

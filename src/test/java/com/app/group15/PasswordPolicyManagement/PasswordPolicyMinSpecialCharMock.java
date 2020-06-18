@@ -7,23 +7,17 @@ public class PasswordPolicyMinSpecialCharMock implements IPasswordPolicyValidato
 
 		int minimumNumberOfSpecialCharAllowed = 2;
 
-		int countSpecialChar=0;
+		int countSpecialChar = 0;
 
-		for (int i =0; i < password.length(); i++ )
-		{
+		for (int i = 0; i < password.length(); i++) {
 			char c = password.charAt(i);
 
-			if (!Character.isDigit(c) && !Character.isLetter(c) && !Character.isWhitespace(c))
-			{
+			if (!Character.isDigit(c) && !Character.isLetter(c) && !Character.isWhitespace(c)) {
 				countSpecialChar++;
 			}
 		}
 
-		if (countSpecialChar >= minimumNumberOfSpecialCharAllowed){
-			return true;
-		}else {
-			return false;
-		}
+		return countSpecialChar >= minimumNumberOfSpecialCharAllowed;
 	}
 
 }

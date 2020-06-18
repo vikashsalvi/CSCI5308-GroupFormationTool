@@ -31,6 +31,7 @@ public class QuestionManagerDao extends QuestionManagerAbstractDao {
 		} catch (Exception e) {
 			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		} finally {
+			assert invokeStoredProcedure != null;
 			invokeStoredProcedure.closeConnection();
 		}
 		return null;

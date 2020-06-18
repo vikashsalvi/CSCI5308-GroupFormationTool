@@ -7,11 +7,7 @@ public class PasswordPolicyMaxLengthMock implements IPasswordPolicyValidator {
 
 		int maximumLengthAllowed = 16;
 
-		if (password.length() <= maximumLengthAllowed) {
-			return true;
-		} else {
-			return false;
-		}
+		return password.length() <= maximumLengthAllowed;
 	}
 
 }

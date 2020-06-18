@@ -6,18 +6,17 @@ import java.util.List;
 
 public interface IQuestionManagerService {
 
-	public List<QuestionType> getQuestionType();
+	List<QuestionType> getQuestionType();
 
-	public Question formQuestion(String questionTitle, String questionText, int selectedOption);
+	Question formQuestion(String questionTitle, String questionText, int selectedOption);
 
-	public List<String> formPreview(Question question);
+	List<String> formPreview(Question question);
 
-	public boolean insertQuestion(Question question, User user);
+	boolean insertQuestion(Question question, User user);
 
-	public List<Question> getAllQuestionsOfInstructor(int instructorId, String sortColumn);
+	List<Question> getAllQuestionsOfInstructor(int instructorId, String sortColumn);
 
+	Question getQuestion(int questionId);
 
-	public Question getQuestion(int questionId);
-
-	public List<String> getOptions(int questionId);
+	List<String> getOptions(int questionId);
 }

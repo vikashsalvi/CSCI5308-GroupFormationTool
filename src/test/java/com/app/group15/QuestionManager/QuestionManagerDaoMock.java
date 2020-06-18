@@ -44,9 +44,8 @@ public class QuestionManagerDaoMock {
 	}
 
 	public Question insertQuestion(Question question, User user) {
-		Question qut = question;
 		question.setQuestionInstructorId(user.getId());
-		return qut;
+		return question;
 	}
 
 	public List<Question> getAllQuestionsOfInstructor(int instructorId) {

@@ -8,7 +8,7 @@ public class PasswordPolicyMinLowerCaseMock implements IPasswordPolicyValidator 
 
 		int minimumNumberOfLowercaseAllowed = 2;
 
-		int countLowercase =0;
+		int countLowercase = 0;
 
 		for (int i = 0; i < password.length(); i++) {
 			if (Character.isLowerCase(password.charAt(i))) {
@@ -16,12 +16,7 @@ public class PasswordPolicyMinLowerCaseMock implements IPasswordPolicyValidator 
 			}
 		}
 
-		if (countLowercase >= minimumNumberOfLowercaseAllowed)
-		{
-			return true;
-		}else {
-			return false;
-		}
+		return countLowercase >= minimumNumberOfLowercaseAllowed;
 	}
 
 }

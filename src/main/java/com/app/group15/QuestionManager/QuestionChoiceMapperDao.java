@@ -18,6 +18,7 @@ public class QuestionChoiceMapperDao extends QuestionChoiceMapperAbstractDao {
 		} catch (Exception e) {
 			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		} finally {
+			assert invokeStoredProcedure != null;
 			invokeStoredProcedure.closeConnection();
 		}
 	}
