@@ -5,9 +5,9 @@ import com.app.group15.CourseManagement.Student.CourseStudentMapperAbstractDao;
 
 public interface ICourseServiceInjector {
 
-    public void injectCourseDao(CourseAbstractDao courseDao);
+    void injectCourseDao(CourseAbstractDao courseDao);
 
-    public void injectCourseInstructorMapper(CourseInstructorMapperAbstractDao courseInstructorMapperDao);
+    void injectCourseInstructorMapper(CourseInstructorMapperAbstractDao courseInstructorMapperDao);
 
-    public void injectCourseStudentMapper(CourseStudentMapperAbstractDao courseStudentMapperDao);
+    void injectCourseStudentMapper(CourseStudentMapperAbstractDao courseStudentMapperDao);
 }

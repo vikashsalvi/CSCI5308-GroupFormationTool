@@ -1,16 +1,16 @@
 package com.app.group15.Persistence;
 
 public enum AwsSecretKey {
-	DEVINT("qa-dev-secret"), TEST("qa-test-secret"), PROD("qa-prod-secret");
+    DEVINT("qa-dev-secret"), TEST("qa-test-secret"), PROD("qa-prod-secret");
 
-	AwsSecretKey(String key) {
-		this.key = key;
-	}
+    private final String key;
 
-	public String getKey() {
-		return key;
-	}
+    AwsSecretKey(String key) {
+        this.key = key;
+    }
 
-	private final String key;
+    public String getKey() {
+        return key;
+    }
 
 }

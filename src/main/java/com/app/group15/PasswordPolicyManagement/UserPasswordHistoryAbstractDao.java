@@ -12,31 +12,32 @@ public class UserPasswordHistoryAbstractDao implements IDao {
         return null;
     }
 
-	public List getPasswordHistory(int userId) {
-		return null;
-	}
-	@Override
-	public List getAll() {
-		return null;
-	}
+    public List getPasswordHistory(int userId) {
+        return null;
+    }
 
-	@Override
-	public int save(Persistence t) {
-		return 0;
-	}
+    @Override
+    public List getAll() {
+        return null;
+    }
 
-	@Override
-	public void update(Persistence t, int id) {
+    @Override
+    public int save(Persistence t) {
+        return 0;
+    }
 
-	}
+    @Override
+    public void update(Persistence t, int id) {
 
-	@Override
-	public void delete(int id) {
-		
-	}
+    }
 
-	public void savePasswordHistory(UserPasswordHistory passwordHistory) {
-		
-	}
+    @Override
+    public void delete(int id) {
+
+    }
+
+    public void savePasswordHistory(UserPasswordHistory passwordHistory) {
+
+    }
 
 }

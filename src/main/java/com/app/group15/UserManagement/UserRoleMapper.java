@@ -13,14 +13,14 @@ public class UserRoleMapper extends Persistence {
 
     public void setUserId(int userId) {
         this.userId = userId;
-	}
+    }
 
-	public int getRoleId() {
-		return roleId;
-	}
+    public int getRoleId() {
+        return roleId;
+    }
 
-	public void setRoleId(int roleId) {
-		this.roleId = roleId;
-	}
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
 
 }

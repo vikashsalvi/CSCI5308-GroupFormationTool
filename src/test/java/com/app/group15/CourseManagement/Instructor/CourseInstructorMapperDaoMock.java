@@ -9,8 +9,7 @@ public class CourseInstructorMapperDaoMock {
 
     CourseInstructorMapper courseInstructorMapperEntity = new CourseInstructorMapper();
 
-    public CourseInstructorMapper getCourseInstructorMapperEntity(int courseId)
-    {
+    public CourseInstructorMapper getCourseInstructorMapperEntity(int courseId) {
         if (courseId == 6) {
             courseInstructorMapperEntity.setCourseId(6);
             courseInstructorMapperEntity.setInstructorId(17);

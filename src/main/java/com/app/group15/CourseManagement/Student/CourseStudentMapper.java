@@ -14,12 +14,12 @@ public class CourseStudentMapper extends Persistence {
         this.courseId = courseId;
     }
 
-	public int getStudentId() {
-		return studentId;
-	}
+    public int getStudentId() {
+        return studentId;
+    }
 
-	public void setStudentId(int studentId) {
-		this.studentId = studentId;
-	}
+    public void setStudentId(int studentId) {
+        this.studentId = studentId;
+    }
 
 }

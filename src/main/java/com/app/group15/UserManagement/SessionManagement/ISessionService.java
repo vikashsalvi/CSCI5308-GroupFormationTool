@@ -5,14 +5,14 @@ import com.app.group15.UserManagement.User;
 import javax.servlet.http.HttpServletRequest;
 
 public interface ISessionService {
-    public boolean isUserSignedIn(HttpServletRequest request);
+    boolean isUserSignedIn(HttpServletRequest request);
 
-    public User getSessionUser(HttpServletRequest request);
+    User getSessionUser(HttpServletRequest request);
 
-    public void destroySession(HttpServletRequest request);
+    void destroySession(HttpServletRequest request);
 
-    public void setSession(HttpServletRequest request, String name, String value);
+    void setSession(HttpServletRequest request, String name, String value);
 
-    public String getUserHome(HttpServletRequest request);
+    String getUserHome(HttpServletRequest request);
 
 }

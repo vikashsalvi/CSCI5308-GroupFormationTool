@@ -68,32 +68,32 @@
 					<!-- Nav Item - User Information -->
 					<li class="nav-item dropdown no-arrow">
 						<a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
-							 data-toggle="dropdown"
-							 href="#"
-							 id="userDropdown" role="button">
+						   data-toggle="dropdown"
+						   href="#"
+						   id="userDropdown" role="button">
 							<span class="mr-2 d-none d-lg-inline text-gray-600 small"
-										th:text='${userEntity.getFirstName() + " " + userEntity.getLastName()}'></span>
+								  th:text='${userEntity.getFirstName() + " " + userEntity.getLastName()}'></span>
 							<i class="fa fa-user-circle"></i>
 						</a>
 						<!-- Dropdown - User Information -->
 						<!--
-						<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-										 aria-labelledby="userDropdown">
-								<a class="dropdown-item" href="#">
-										<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-										Profile
-								</a>
-								<a class="dropdown-item" href="#">
-										<i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-										Settings
-								</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="/logout" data-toggle="modal" data-target="#logoutModal">
-										<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-										Logout
-								</a>
-						</div>
-						-->
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                         aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="#">
+                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Profile
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Settings
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="/logout" data-toggle="modal" data-target="#logoutModal">
+                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Logout
+                                </a>
+                        </div>
+                        -->
 					</li>
 				</ul>
 			</nav>
@@ -109,8 +109,8 @@
 				<div class="row">
 					<div class="card" style="width:800px;">
 						<div class="card-header">
-							<h1 th:if="${!viewOnly}" class="h4 text-gray-800">Preview of the added question </h1>
-							<h1 th:if="${viewOnly}" class="h4 text-gray-800">Preview of the Question id: <span
+							<h1 class="h4 text-gray-800" th:if="${!viewOnly}">Preview of the added question </h1>
+							<h1 class="h4 text-gray-800" th:if="${viewOnly}">Preview of the Question id: <span
 									th:text="${question.getQuestionId()}"></span></h1>
 						</div>
 						<div class="card-body w-100" id="questionDiv">
@@ -129,7 +129,7 @@
 									<select class="form-control" name="type">
 										<option value="0">select answer</option>
 										<option th:each="op : ${options}" th:text="${op}"
-														th:value="${op}"></option>
+												th:value="${op}"></option>
 									</select> </label>
 							</div>
 							<div th:if="${question.questionTypeId}=='3' ">
@@ -138,7 +138,7 @@
 										<br/>
 										<td>
 											<input th:value="${op}"
-														 type="checkbox">
+												   type="checkbox">
 											<label th:text="${op}"></label>
 										</td>
 									</tr>

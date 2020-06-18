@@ -13,23 +13,23 @@ public class CourseInstructorMapper extends Persistence {
     }
 
     public void setCourseId(int courseId) {
-		this.courseId = courseId;
-	}
+        this.courseId = courseId;
+    }
 
-	public int getInstructorId() {
-		return instructorId;
-	}
+    public int getInstructorId() {
+        return instructorId;
+    }
 
-	public void setInstructorId(int instructorId) {
-		this.instructorId = instructorId;
-	}
+    public void setInstructorId(int instructorId) {
+        this.instructorId = instructorId;
+    }
 
-	public int getTaId() {
-		return taId;
-	}
+    public int getTaId() {
+        return taId;
+    }
 
-	public void setTaId(int taId) {
-		this.taId = taId;
-	}
+    public void setTaId(int taId) {
+        this.taId = taId;
+    }
 
 }

@@ -2,21 +2,21 @@ package com.app.group15.PasswordPolicyManagement;
 
 public class PasswordPolicyMinLowerCaseMock implements IPasswordPolicyValidator {
 
-	@Override
-	public boolean isPasswordValid(String password) {
+    @Override
+    public boolean isPasswordValid(String password) {
 
 
-		int minimumNumberOfLowercaseAllowed = 2;
+        int minimumNumberOfLowercaseAllowed = 2;
 
-		int countLowercase = 0;
+        int countLowercase = 0;
 
-		for (int i = 0; i < password.length(); i++) {
-			if (Character.isLowerCase(password.charAt(i))) {
-				countLowercase++;
-			}
-		}
+        for (int i = 0; i < password.length(); i++) {
+            if (Character.isLowerCase(password.charAt(i))) {
+                countLowercase++;
+            }
+        }
 
-		return countLowercase >= minimumNumberOfLowercaseAllowed;
-	}
+        return countLowercase >= minimumNumberOfLowercaseAllowed;
+    }
 
 }

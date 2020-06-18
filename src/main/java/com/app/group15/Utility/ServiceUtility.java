@@ -4,27 +4,15 @@ package com.app.group15.Utility;
 public class ServiceUtility {
 
     public static boolean isNotNull(String validateString) {
-        if (null == validateString && validateString.length() > 0) {
-            return false;
-        } else {
-            return true;
-        }
+        return null != validateString || validateString.length() <= 0;
     }
 
     public static boolean isNotNull(Object validateObject) {
-        if (null == validateObject) {
-            return false;
-        } else {
-            return true;
-        }
+        return null != validateObject;
     }
 
     public static boolean isValidInt(int validateInt) {
-        if (validateInt < 0) {
-            return false;
-        } else {
-            return true;
-        }
+        return validateInt >= 0;
     }
 
 

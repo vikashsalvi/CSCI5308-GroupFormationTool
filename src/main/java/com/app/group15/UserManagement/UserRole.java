@@ -1,16 +1,16 @@
 package com.app.group15.UserManagement;
 
 public enum UserRole {
-	STUDENT("STUDENT"), INSTRUCTOR("INSTRUCTOR"), TA("TA"), GUEST("GUEST"), ADMIN("ADMIN");
+    STUDENT("STUDENT"), INSTRUCTOR("INSTRUCTOR"), TA("TA"), GUEST("GUEST"), ADMIN("ADMIN");
 
-	UserRole(String role) {
-		this.role = role;
-	}
+    private final String role;
 
-	public String getRole() {
-		return role;
-	}
+    UserRole(String role) {
+        this.role = role;
+    }
 
-	private final String role;
+    public String getRole() {
+        return role;
+    }
 
 }

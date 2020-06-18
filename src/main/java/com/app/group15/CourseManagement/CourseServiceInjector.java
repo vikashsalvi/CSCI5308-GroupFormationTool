@@ -12,10 +12,10 @@ public class CourseServiceInjector {
         courseService.injectCourseDao(new CourseDaoInjectorService().getCourseDao());
         courseService.injectCourseInstructorMapper(new CourseInstructorMapperDao());
         courseService.injectCourseStudentMapper(new CourseStudentMapperDao());
-	}
+    }
 
-	public CourseService getCourseService() {
-		return courseService;
-	}
-	
+    public CourseService getCourseService() {
+        return courseService;
+    }
+
 }

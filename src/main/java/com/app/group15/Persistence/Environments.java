@@ -1,16 +1,16 @@
 package com.app.group15.Persistence;
 
 public enum Environments {
-	DEV("DEVINT"), TEST("TEST"), PROD("PRODUCTION");
+    DEV("DEVINT"), TEST("TEST"), PROD("PRODUCTION");
 
-	Environments(String environment) {
-		this.environment = environment;
-	}
+    private final String environment;
 
-	public String getEnvironment() {
-		return environment;
-	}
+    Environments(String environment) {
+        this.environment = environment;
+    }
 
-	private final String environment;
+    public String getEnvironment() {
+        return environment;
+    }
 
 }

@@ -22,23 +22,23 @@ public class SessionService implements ISessionService {
     }
 
     public void setSession(HttpServletRequest request, String name, String value) {
-		request.getSession().setAttribute(name, value);
-	}
+        request.getSession().setAttribute(name, value);
+    }
 
-	public  String getUserHome(HttpServletRequest request){
-		String sessionBannerId = (String) request.getSession().getAttribute("BANNER_ID_SESSION");
-		UserRoleDao userRoleDao = new UserRoleDaoInjectorService().getUserRoleDao();
-		Set<String> roles = userRoleDao.getRolesByBannerId(sessionBannerId);
-		String redirect;
-		if (roles.contains("ADMIN")){
-			redirect= "/admin/home";
-		} else if (roles.contains("STUDENT")|| roles.contains("TA")){
-			redirect= "/student/home";
-		} else if (roles.contains("INSTRUCTOR")) {
-			redirect = "/instructor/home";
-		}else {
-			redirect= "/user/home";
-		}
-		return redirect;
-	}
+    public String getUserHome(HttpServletRequest request) {
+        String sessionBannerId = (String) request.getSession().getAttribute("BANNER_ID_SESSION");
+        UserRoleDao userRoleDao = new UserRoleDaoInjectorService().getUserRoleDao();
+        Set<String> roles = userRoleDao.getRolesByBannerId(sessionBannerId);
+        String redirect;
+        if (roles.contains("ADMIN")) {
+            redirect = "/admin/home";
+        } else if (roles.contains("STUDENT") || roles.contains("TA")) {
+            redirect = "/student/home";
+        } else if (roles.contains("INSTRUCTOR")) {
+            redirect = "/instructor/home";
+        } else {
+            redirect = "/user/home";
+        }
+        return redirect;
+    }
 }

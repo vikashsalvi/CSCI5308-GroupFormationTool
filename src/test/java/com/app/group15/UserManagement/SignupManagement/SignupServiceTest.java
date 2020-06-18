@@ -9,23 +9,23 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 class SignupServiceTest {
 
-	private UserDaoMock userDaoMock = new UserDaoMock();
+    private UserDaoMock userDaoMock = new UserDaoMock();
 
-	@Test
-	public void checkUserExistsTest() {
-		User user = userDaoMock.getUserByBannerIdMock("B00843468");
-		assertEquals(user.getFirstName(), "Daksh");
+    @Test
+    public void checkUserExistsTest() {
+        User user = userDaoMock.getUserByBannerIdMock("B00843468");
+        assertEquals(user.getFirstName(), "Daksh");
 
-		user = userDaoMock.getUserByBannerIdMock("B00843469");
-		assertNull(user.getFirstName());
-	}
+        user = userDaoMock.getUserByBannerIdMock("B00843469");
+        assertNull(user.getFirstName());
+    }
 
-	@Test
-	public void createUserTest() {
-		User user = new User();
-		int userId = userDaoMock.saveUserMock(user, "GUEST");
-		assertEquals(userId, 0);
-	}
-	
-	
+    @Test
+    public void createUserTest() {
+        User user = new User();
+        int userId = userDaoMock.saveUserMock(user, "GUEST");
+        assertEquals(userId, 0);
+    }
+
+
 }

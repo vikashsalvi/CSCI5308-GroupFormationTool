@@ -11,13 +11,13 @@ public class SignUpServiceInjector {
         signUpService.injectUserDao(new UserDaoInjectorService().getUserDao());
     }
 
-	public SignupService getSignUpService() {
-		return signUpService;
-	}
+    public SignupService getSignUpService() {
+        return signUpService;
+    }
 
-	public void setSignUpService(SignupService signUpService) {
-		this.signUpService = signUpService;
-	}
-	
+    public void setSignUpService(SignupService signUpService) {
+        this.signUpService = signUpService;
+    }
+
 
 }
