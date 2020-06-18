@@ -1,4 +1,4 @@
-package com.app.group15.config;
+package com.app.group15.Config;
 
 import com.app.group15.CourseManagement.CourseServiceInjector;
 import com.app.group15.CourseManagement.ICourseService;

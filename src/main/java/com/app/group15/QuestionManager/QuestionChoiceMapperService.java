@@ -5,7 +5,7 @@ public class QuestionChoiceMapperService implements IQuestionChoiceMapperInjecto
 	private QuestionChoiceMapperAbstractDao questionChoiceMapperDao;
 
 	@Override
-	public void injectQuestionChoiceMapperInjectorService(QuestionChoiceMapperDao questionChoiceMapperDao) {
+	public void injectQuestionChoiceMapperDao(QuestionChoiceMapperDao questionChoiceMapperDao) {
 		this.questionChoiceMapperDao = questionChoiceMapperDao;
 	}
 

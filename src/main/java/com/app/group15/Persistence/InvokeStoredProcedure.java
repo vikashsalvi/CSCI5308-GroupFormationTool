@@ -16,7 +16,7 @@ public class InvokeStoredProcedure {
 
 
     public InvokeStoredProcedure(String procedureName) throws SQLException {
-        this.procedureName = procedureName != null ? procedureName : null;
+        this.procedureName = procedureName;
         prepareConnection();
         prepareStatement();
     }

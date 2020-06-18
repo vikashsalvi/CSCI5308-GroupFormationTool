@@ -5,7 +5,7 @@ import com.app.group15.UserManagement.SessionManagement.IAuthorizationService;
 import com.app.group15.UserManagement.SessionManagement.ISessionService;
 import com.app.group15.UserManagement.User;
 import com.app.group15.Utility.GroupFormationToolLogger;
-import com.app.group15.config.ServiceConfig;
+import com.app.group15.Config.ServiceConfig;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,6 +20,7 @@ public class GuestController {
 	private IAuthorizationService authorizationService = ServiceConfig.getInstance().getAuthorizationService();
 	private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
 	private ICourseService courseService = ServiceConfig.getInstance().getCourseService();
+
 	@RequestMapping(value = "/user/home", method = RequestMethod.GET)
 	public ModelAndView guestHome(HttpServletRequest request) {
 		authorizationService.setAllowedRoles(new String[]{"GUEST"});

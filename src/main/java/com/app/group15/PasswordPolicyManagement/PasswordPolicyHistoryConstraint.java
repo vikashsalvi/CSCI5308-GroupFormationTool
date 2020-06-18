@@ -1,9 +1,9 @@
 package com.app.group15.PasswordPolicyManagement;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.UserManagement.UserAbstractDao;
 import com.app.group15.Utility.GroupFormationToolLogger;
 import com.app.group15.Utility.ServiceUtility;
-import com.app.group15.config.AppConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +25,16 @@ public class PasswordPolicyHistoryConstraint implements IPasswordPolicyValidator
 
 	@Override
 	public boolean isPasswordValid(String password) {
-		if (ServiceUtility.isValidInt(this.userId) && ServiceUtility.isNotNull(password)) {
+		if (ServiceUtility.isNotNull(password)) {
 			List<UserPasswordHistory> previousPasswords = passwordHistoryDao.getPasswordHistory(this.userId);
-			String currentPassword =userDao.getUserPassword(this.userId);
 			List<String> historyPasswords = new ArrayList<>();
-			if(currentPassword.equals(password)) {
-				return false;
+			if (this.userId != -1) {
+				String currentPassword = userDao.getUserPassword(this.userId);
+				if (currentPassword.equals(password)) {
+					return false;
+				}
 			}
+
 			previousPasswords.forEach((pass) -> historyPasswords.add(pass.getHistoryPassword()));
 			if (historyPasswords.contains(password)) {
 				return false;

@@ -10,9 +10,6 @@ import java.util.logging.Level;
 
 public class QuestionManagerDao extends QuestionManagerAbstractDao {
 
-	QuestionManagerDao questionManagerDao;
-
-
 	@Override
 	public Question get(int id) {
 		InvokeStoredProcedure invokeStoredProcedure = null;
@@ -41,7 +38,7 @@ public class QuestionManagerDao extends QuestionManagerAbstractDao {
 
 
 	@Override
-	public java.util.List<Question> getAllQuestionsOfInstructor(int instructorId) {
+	public List<Question> getAllQuestionsOfInstructor(int instructorId) {
 		InvokeStoredProcedure invokeStoredProcedure = null;
 		try {
 			invokeStoredProcedure = new InvokeStoredProcedure("spFindAllInstructorQuestions(?)");
@@ -63,6 +60,7 @@ public class QuestionManagerDao extends QuestionManagerAbstractDao {
 		} catch (Exception e) {
 			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		} finally {
+			assert invokeStoredProcedure != null;
 			invokeStoredProcedure.closeConnection();
 		}
 		return null;
@@ -88,6 +86,7 @@ public class QuestionManagerDao extends QuestionManagerAbstractDao {
 		} catch (Exception e) {
 			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		} finally {
+			assert invokeStoredProcedure != null;
 			invokeStoredProcedure.closeConnection();
 		}
 		return null;
@@ -113,19 +112,20 @@ public class QuestionManagerDao extends QuestionManagerAbstractDao {
 		} catch (Exception e) {
 			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		} finally {
+			assert invokeStoredProcedure != null;
 			invokeStoredProcedure.closeConnection();
 		}
 		return insertedQuestionId;
 	}
 
 	@Override
-	public int saveChocie(Options choice) {
+	public int saveOption(Options options) {
 		InvokeStoredProcedure invokeStoredProcedure = null;
 		int insertedChoiceId = -1;
 		try {
 			invokeStoredProcedure = new InvokeStoredProcedure("spAddChoice(?,?,?)");
-			invokeStoredProcedure.setParameter(1, choice.getOption());
-			invokeStoredProcedure.setParameter(2, Integer.parseInt(choice.getValue()));
+			invokeStoredProcedure.setParameter(1, options.getOption());
+			invokeStoredProcedure.setParameter(2, Integer.parseInt(options.getValue()));
 			invokeStoredProcedure.registerOutputParameterLong(3);
 
 			invokeStoredProcedure.execute();
@@ -134,6 +134,7 @@ public class QuestionManagerDao extends QuestionManagerAbstractDao {
 		} catch (Exception e) {
 			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		} finally {
+			assert invokeStoredProcedure != null;
 			invokeStoredProcedure.closeConnection();
 		}
 
@@ -161,13 +162,14 @@ public class QuestionManagerDao extends QuestionManagerAbstractDao {
 		} catch (Exception e) {
 			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		} finally {
+			assert invokeStoredProcedure != null;
 			invokeStoredProcedure.closeConnection();
 		}
 		return null;
 	}
 
 	@Override
-	public void saveQuestionChoiceMapping(int insertedQuestionId, Integer insertedChoiceId) {
+	public void saveQuestionOptionMapping(int insertedQuestionId, Integer insertedChoiceId) {
 		InvokeStoredProcedure invokeStoredProcedure = null;
 		try {
 			invokeStoredProcedure = new InvokeStoredProcedure("spMapQuestionChoice(?,?)");
@@ -179,6 +181,7 @@ public class QuestionManagerDao extends QuestionManagerAbstractDao {
 		} catch (Exception e) {
 			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		} finally {
+			assert invokeStoredProcedure != null;
 			invokeStoredProcedure.closeConnection();
 		}
 	}
@@ -193,6 +196,7 @@ public class QuestionManagerDao extends QuestionManagerAbstractDao {
 		} catch (Exception e) {
 			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		} finally {
+			assert invokeStoredProcedure != null;
 			invokeStoredProcedure.closeConnection();
 		}
 	}

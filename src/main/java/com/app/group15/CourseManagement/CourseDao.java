@@ -125,7 +125,6 @@ public class CourseDao extends CourseAbstractDao
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		
@@ -153,7 +152,6 @@ public class CourseDao extends CourseAbstractDao
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		

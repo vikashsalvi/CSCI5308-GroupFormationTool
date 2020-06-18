@@ -35,11 +35,11 @@ public abstract class QuestionManagerAbstractDao implements IDao {
 
 	public abstract int saveQuestion(Question question);
 
-	public abstract int saveChocie(Options choice);
+	public abstract int saveOption(Options option);
 
 	public abstract List<Options> getOptions(int questionId);
 
-	public abstract void saveQuestionChoiceMapping(int insertedQuestionId, Integer insertedChoiceId);
+	public abstract void saveQuestionOptionMapping(int insertedQuestionId, Integer insertedChoiceId);
 
 	public abstract void deleteByQuestionId(int questionId);
 }

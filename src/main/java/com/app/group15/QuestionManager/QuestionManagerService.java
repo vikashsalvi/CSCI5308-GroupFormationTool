@@ -1,13 +1,15 @@
 package com.app.group15.QuestionManager;
 
 import com.app.group15.UserManagement.User;
+import com.app.group15.Utility.ServiceUtility;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
-public class QuestionManagerService implements IQuestionManagerInjectorService, IQuestionManagerService {
+public class QuestionManagerService implements IQuestionManagerServiceInjector, IQuestionManagerService {
 
 	private QuestionManagerAbstractDao questionManagerDao;
 
@@ -26,11 +28,6 @@ public class QuestionManagerService implements IQuestionManagerInjectorService, 
 		return listOfQuestion;
 	}
 
-	@Override
-	public boolean addQuestion(String questionTitle, String questionText, int questionTypeId) {
-		Question question = new Question();
-		return false;
-	}
 
 	@Override
 	public Question formQuestion(String questionTitle, String questionText, int selectedOption) {
@@ -61,23 +58,22 @@ public class QuestionManagerService implements IQuestionManagerInjectorService, 
 	public boolean insertQuestion(Question question, User user) {
 
 		question.setQuestionInstructorId(user.getId());
-		java.util.Date currentDate = new java.util.Date();
+		Date currentDate = new Date();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		question.setQuestionAddedDate(simpleDateFormat.format(currentDate));
 
 		int insertedQuestionId = questionManagerDao.saveQuestion(question);
 		if (question.getQuestionTypeId() == 2 || question.getQuestionTypeId() == 3) {
 			if (insertedQuestionId != -1) {
-				List<Options> choices = question.getOptions();
-				List<Integer> choiceIdList = new ArrayList<>();
-				for (Options choice : choices) {
-//                	Todo Incorrect spelling of the method "saveChocie"
-					int choiceID = questionManagerDao.saveChocie(choice);
-					choiceIdList.add(choiceID);
+				List<Options> options = question.getOptions();
+				List<Integer> optionsIdList = new ArrayList<>();
+				for (Options option : options) {
+					int optionID = questionManagerDao.saveOption(option);
+					optionsIdList.add(optionID);
 				}
 
-				choiceIdList.forEach(insertedChoiceId -> {
-					questionManagerDao.saveQuestionChoiceMapping(insertedQuestionId, insertedChoiceId);
+				optionsIdList.forEach(insertedChoiceId -> {
+					questionManagerDao.saveQuestionOptionMapping(insertedQuestionId, insertedChoiceId);
 				});
 
 			}
@@ -112,26 +108,30 @@ public class QuestionManagerService implements IQuestionManagerInjectorService, 
 	}
 
 	@Override
-	public List<String> getAllQuestionsType(List<Question> questionList) {
+	public Question getQuestion(int questionId) {
+		if (ServiceUtility.isValidInt(questionId)) {
+			return (Question) questionManagerDao.get(questionId);
+		}
 		return null;
 	}
 
 	@Override
-	public Question getQuestion(int questionId) {
-		return (Question) questionManagerDao.get(questionId);
-	}
-
-	@Override
 	public List<String> getOptions(int questionId) {
-		List<Options> optionsList = questionManagerDao.getOptions(questionId);
-		List<String> optionsValueList = new ArrayList<>();
-		optionsList.forEach(options -> optionsValueList.add(options.getValue()));
-		return optionsValueList;
+		if (ServiceUtility.isValidInt(questionId)) {
+			List<Options> optionsList = questionManagerDao.getOptions(questionId);
+			List<String> optionsValueList = new ArrayList<>();
+			optionsList.forEach(options -> optionsValueList.add(options.getValue()));
+			return optionsValueList;
+		} else {
+			return null;
+		}
 	}
 
 	@Override
 	public void deleteByQuestionId(int questionId) {
-		questionManagerDao.deleteByQuestionId(questionId);
+		if (ServiceUtility.isValidInt(questionId)) {
+			questionManagerDao.deleteByQuestionId(questionId);
+		}
 	}
 
 

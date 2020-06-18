@@ -3,8 +3,7 @@ package com.app.group15.QuestionManager;
 import com.app.group15.UserManagement.SessionManagement.IAuthorizationService;
 import com.app.group15.UserManagement.SessionManagement.ISessionService;
 import com.app.group15.UserManagement.User;
-import com.app.group15.Utility.GroupFormationToolLogger;
-import com.app.group15.config.ServiceConfig;
+import com.app.group15.Config.ServiceConfig;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -16,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 @Controller
 public class QuestionController {
@@ -26,48 +24,6 @@ public class QuestionController {
 	private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
 	private IQuestionChoiceMapperService questionChoiceMapperService = ServiceConfig.getInstance().getQuestionChoiceMapperService();
 
-	@RequestMapping(value = "/questions/addQuestion", method = RequestMethod.POST)
-	public ModelAndView addQuestion(@RequestParam(required = true, value = "questionTitle") String questionTitle,
-									@RequestParam(required = true, value = "questionText") String questionText,
-									@RequestParam(required = true, value = "questionTypeId") int questionTypeId,
-									HttpServletRequest request) {
-		authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
-		ModelAndView modelAndView;
-		if (sessionService.isUserSignedIn(request)) {
-			if (authorizationService.isAuthorized(request)) {
-
-			} else {
-				//Unauthorized access
-				modelAndView = new ModelAndView("redirect:/login");
-			}
-		} else {
-			// User not logged in
-			modelAndView = new ModelAndView("redirect:/login");
-		}
-
-		questionManagerService.addQuestion(questionTitle, questionText, questionTypeId);
-		return null;
-	}
-
-	@RequestMapping(value = "/questions/fetchQuestionType", method = RequestMethod.POST)
-	public ModelAndView fetchQuestionType(HttpServletRequest request) {
-		authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
-		ModelAndView modelAndView;
-		if (sessionService.isUserSignedIn(request)) {
-			if (authorizationService.isAuthorized(request)) {
-				List<QuestionType> questionTypeList = questionManagerService.getQuestionType();
-				GroupFormationToolLogger.log(Level.INFO, questionTypeList.get(1).getQuestionType());
-			} else {
-				//Unauthorized access
-				modelAndView = new ModelAndView("redirect:/login");
-			}
-		} else {
-			// User not logged in
-			modelAndView = new ModelAndView("redirect:/login");
-		}
-
-		return null;
-	}
 
 	@RequestMapping(value = "/instructor/questions", method = RequestMethod.GET)
 	public ModelAndView questionPage(HttpServletRequest request, @RequestParam(required = false, value = "sortColumn") String sortColumn) {
@@ -86,11 +42,9 @@ public class QuestionController {
 				modelAndView.addObject("questionsList", questionsList);
 				modelAndView.setViewName("/question/question");
 			} else {
-				//Unauthorized access
 				modelAndView = new ModelAndView("redirect:/login");
 			}
 		} else {
-			// User not logged in
 			modelAndView = new ModelAndView("redirect:/login");
 		}
 
@@ -125,11 +79,9 @@ public class QuestionController {
 				modelAndView.setViewName("/question/questionPreview");
 
 			} else {
-				//Unauthorized access
 				modelAndView = new ModelAndView("redirect:/login");
 			}
 		} else {
-			// User not logged in
 			modelAndView = new ModelAndView("redirect:/login");
 		}
 
@@ -139,27 +91,25 @@ public class QuestionController {
 	@RequestMapping(value = "/instructor/questions/addQuestion", method = RequestMethod.GET)
 	public ModelAndView addQuestions(HttpServletRequest request) {
 		authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
-		ModelAndView modelAndView;
+		ModelAndView modelAndViewResponse;
 		if (sessionService.isUserSignedIn(request)) {
 			if (authorizationService.isAuthorized(request)) {
 				User user = sessionService.getSessionUser(request);
 				List<QuestionType> allQuestionType = questionManagerService.getQuestionType();
 
-				modelAndView = new ModelAndView();
-				modelAndView.addObject("userEntity", user);
-				modelAndView.addObject("question_type", allQuestionType);
-				modelAndView.setViewName("/question/add_question");
+				modelAndViewResponse = new ModelAndView();
+				modelAndViewResponse.addObject("userEntity", user);
+				modelAndViewResponse.addObject("question_type", allQuestionType);
+				modelAndViewResponse.setViewName("/question/add_question");
 
 			} else {
-				//Unauthorized access
-				modelAndView = new ModelAndView("redirect:/login");
+				modelAndViewResponse = new ModelAndView("redirect:/login");
 			}
 		} else {
-			// User not logged in
-			modelAndView = new ModelAndView("redirect:/login");
+			modelAndViewResponse = new ModelAndView("redirect:/login");
 		}
 
-		return modelAndView;
+		return modelAndViewResponse;
 	}
 
 	@RequestMapping(value = "/instructor/questions/add", method = RequestMethod.POST)
@@ -181,11 +131,9 @@ public class QuestionController {
 				return modelAndView;
 
 			} else {
-				//Unauthorized access
 				modelAndView = new ModelAndView("redirect:/login");
 			}
 		} else {
-			// User not logged in
 			modelAndView = new ModelAndView("redirect:/login");
 		}
 		return modelAndView;
@@ -203,7 +151,7 @@ public class QuestionController {
 				questionManagerService.insertQuestion(question, user);
 
 				model.addObject("userEntity", user);
-				model.addObject("viewOnly", true);
+				model.addObject("viewOnly", false);
 				List<String> options = questionManagerService.formPreview(question);
 				if (options != null) {
 					model.addObject("options", options);
@@ -217,7 +165,8 @@ public class QuestionController {
 	}
 
 	@RequestMapping(value = "/instructor/question/saveQuesAnsData", params = {"addRow"})
-	public ModelAndView addRow(final Question question, final BindingResult bindingResult, final ModelAndView model, HttpServletRequest request) {
+	public ModelAndView addRow(final Question question, final BindingResult bindingResult,
+							   final ModelAndView model, HttpServletRequest request) {
 		question.getOptions().add(new Options());
 		User user = sessionService.getSessionUser(request);
 		model.addObject("userEntity", user);
@@ -236,11 +185,9 @@ public class QuestionController {
 				questionManagerService.deleteByQuestionId(questionId);
 				modelAndView = new ModelAndView("redirect:/instructor/questions");
 			} else {
-				//Unauthorized access
 				modelAndView = new ModelAndView("redirect:/login");
 			}
 		} else {
-			// User not logged in
 			modelAndView = new ModelAndView("redirect:/login");
 		}
 
