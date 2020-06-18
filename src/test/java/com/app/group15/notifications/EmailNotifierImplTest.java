@@ -1,16 +1,16 @@
 package com.app.group15.notifications;
 
-import com.app.group15.NotificationManagement.EmailNotifierImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @SpringBootTest
 public class EmailNotifierImplTest {
 
-    EmailNotifierImpl emailNotifier = new EmailNotifierImpl();
+    EmailServiceMock emailNotifier = new EmailServiceMock();
 
     @Test
     void sendMessageTest() {
@@ -18,11 +18,11 @@ public class EmailNotifierImplTest {
         String receiptEmail = "thanksfordemo@gmail.com";
         String subject = "Hi test message";
         String message = "Test";
-        assertEquals(emailNotifier.sendMessage(receiptEmail, subject, message), true);
+        assertTrue(emailNotifier.sendMessage(receiptEmail, subject, message));
     }
 
     @Test
     void setCredentialsTest() {
-        assertEquals(emailNotifier.setCredentials(), true);
+        assertNotNull(emailNotifier.setCredentials());
     }
 }
