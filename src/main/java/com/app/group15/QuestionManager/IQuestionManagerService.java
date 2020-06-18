@@ -20,6 +20,4 @@ public interface IQuestionManagerService {
 	public Question getQuestion(int questionId);
 
 	public List<String> getOptions(int questionId);
-
-	public void deleteByQuestionId(int questionId);
 }

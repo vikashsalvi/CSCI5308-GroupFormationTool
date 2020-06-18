@@ -1,6 +1,4 @@
-package com.app.group15.passwordPolicy;
-
-import com.app.group15.PasswordPolicyManagement.IPasswordPolicyValidator;
+package com.app.group15.PasswordPolicyManagement;
 
 public class PasswordPolicyMinSpecialCharMock implements IPasswordPolicyValidator {
 

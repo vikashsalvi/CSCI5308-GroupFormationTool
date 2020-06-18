@@ -127,12 +127,6 @@ public class QuestionManagerService implements IQuestionManagerServiceInjector, 
 		}
 	}
 
-	@Override
-	public void deleteByQuestionId(int questionId) {
-		if (ServiceUtility.isValidInt(questionId)) {
-			questionManagerDao.deleteByQuestionId(questionId);
-		}
-	}
 
 
 }
