@@ -25,7 +25,6 @@ public class AwsSecretsManagerUtilityTest {
             GroupFormationToolLogger.log(Level.SEVERE, ex.getMessage(), ex);
         }
         String springPropertyEnv = System.getProperty("spring.profiles.active");
-        //springPropertyEnv = System.getenv("spring.profiles.active");
         if (null == springPropertyEnv) {
             springPropertyEnv = "DEVINT";
         }
