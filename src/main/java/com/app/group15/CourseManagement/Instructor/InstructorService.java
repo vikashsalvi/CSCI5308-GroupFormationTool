@@ -1,5 +1,6 @@
 package com.app.group15.CourseManagement.Instructor;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.CourseManagement.Course;
 import com.app.group15.CourseManagement.CourseAbstractDao;
 import com.app.group15.CourseManagement.Student.CourseStudentMapperAbstractDao;
@@ -10,7 +11,6 @@ import com.app.group15.UserManagement.UserRoleAbstractDao;
 import com.app.group15.Utility.FileUtility;
 import com.app.group15.Utility.GroupFormationToolLogger;
 import com.app.group15.Utility.ServiceUtility;
-import com.app.group15.Config.AppConfig;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -153,7 +153,7 @@ public class InstructorService implements IInstructorService, IInstructorService
 
 	@Override
 	public void injectCourseDao(CourseAbstractDao courseDao) {
-		if (ServiceUtility.isNotNull(userRoleDao)) {
+		if (ServiceUtility.isNotNull(courseDao)) {
 			this.courseDao = courseDao;
 		} else {
 			GroupFormationToolLogger.log(Level.SEVERE, "CourseDao injection issue in InstructorService");
