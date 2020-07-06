@@ -15,6 +15,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
+import static com.app.group15.Utility.DatabaseQueriesUtility.*;
+
 
 @SuppressWarnings("rawtypes")
 public class CourseDao extends CourseAbstractDao
@@ -27,7 +29,7 @@ public class CourseDao extends CourseAbstractDao
 
     @Override
     public Course get(int id) {
-        String query = "SELECT * FROM table_course WHERE id=?";
+        String query = GET_COURSE_FROM_ID;
         Course course = new Course();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -49,7 +51,7 @@ public class CourseDao extends CourseAbstractDao
 
     @Override
     public ArrayList<Course> getAll() {
-        String query = "SELECT * FROM table_course";
+        String query = GET_ALL_COURSES;
         ArrayList<Course> coursesList = new ArrayList<Course>();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query);
@@ -72,7 +74,7 @@ public class CourseDao extends CourseAbstractDao
     @Override
     public int save(Persistence course) {
         Course courseEntity = (Course) course;
-        String query = "INSERT INTO table_course(name) VALUES(?)";
+        String query = SAVE_COURSE;
         int courseId = 0;
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -107,7 +109,7 @@ public class CourseDao extends CourseAbstractDao
     @Override
     public void update(Persistence course, int id) {
         Course courseEntity = (Course) course;
-        String query = "UPDATE table_course SET name=? WHERE id=?";
+        String query = UPDATE_COURSE;
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 connection.setAutoCommit(false);
@@ -132,7 +134,7 @@ public class CourseDao extends CourseAbstractDao
 
     @Override
     public void delete(int id) {
-        String query = "DELETE FROM table_course WHERE id=?";
+        String query = DELETE_COURSE;
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 connection.setAutoCommit(false);

@@ -10,6 +10,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
+import static com.app.group15.Utility.DatabaseQueriesUtility.*;
+
 
 @SuppressWarnings("rawtypes")
 public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao {
@@ -17,7 +19,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
 
     @Override
     public ArrayList<CourseInstructorMapper> getAll() {
-        String query = "SELECT * from table_course_instructor_mapper";
+        String query = SELECT_ALL_COURSE_INSTRUCTOR_MAPPER;
         ArrayList<CourseInstructorMapper> allList = new ArrayList<CourseInstructorMapper>();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query);
@@ -40,9 +42,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
 
     @Override
     public User getCourseInstructor(int id) {
-        String query = "SELECT * FROM table_users tu\n" +
-                "JOIN table_course_instructor_mapper tcm ON tu.id=tcm.instructor_id\n" +
-                "WHERE tcm.course_id=?";
+        String query = GET_COURSE_INSTRUCTOR;
         User userEntity = new User();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -65,7 +65,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
 
     @Override
     public void deleteByCourseId(int courseId) {
-        String query = "DELETE FROM table_course_instructor_mapper WHERE course_id=?";
+        String query = DELETE_BY_COURSE_ID;
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             connection.setAutoCommit(false);
@@ -81,7 +81,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
 
     @Override
     protected boolean doesCourseIdExistInThisMapper(int courseId) {
-        String query = "SELECT * FROM table_course_instructor_mapper WHERE course_id=?";
+        String query = CHECK_COURSE_ID_EXISTS;
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, courseId);
@@ -100,7 +100,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
 
     @Override
     protected void addInstructorForCourseWithTa(int courseId, int instructorId) {
-        String query = "UPDATE table_course_instructor_mapper SET instructor_id=? WHERE course_id=?";
+        String query = ADD_INSTRUCTOR_FOR_COURSE_WITH_TA;
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 connection.setAutoCommit(false);
@@ -124,7 +124,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
 
     @Override
     protected void addTaForCourseWithInstructor(int courseId, int taId) {
-        String query = "UPDATE table_course_instructor_mapper SET ta_id=? WHERE course_id=?";
+        String query = ADD_TA_FOR_COURSE_WITH_INSTRUCTOR;
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 connection.setAutoCommit(false);
@@ -153,7 +153,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
                 addInstructorForCourseWithTa(courseId, instructorId);
 
             } else {
-                String query = "INSERT INTO table_course_instructor_mapper(course_id,instructor_id) VALUES(?,?)";
+                String query = ADD_INSTRUCTOR_TO_COURSE;
 
                 try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                     connection.setAutoCommit(false);
@@ -185,7 +185,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
                 addTaForCourseWithInstructor(courseId, taId);
 
             } else {
-                String query = "INSERT INTO table_course_instructor_mapper(course_id,ta_id) VAUES(?,?)";
+                String query = ADD_TA_TO_COURSE;
 
                 try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                     connection.setAutoCommit(false);
@@ -213,9 +213,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
 
     @Override
     public Course getCourseByTa(int taId) {
-        String query = "select * from table_course_instructor_mapper tim\n" +
-                "Join table_course tc on tc.id = tim.course_id \n" +
-                "where tim.ta_id = ?";
+        String query = GET_COURSE_BY_TA;
         Course course = new Course();
 
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
@@ -239,9 +237,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
 
     @Override
     public ArrayList<Course> getCoursesByInstructor(int id) {
-        String query = "select * from table_course_instructor_mapper tim\n" +
-                "Join table_course tc on tc.id = tim.course_id \n" +
-                "where tim.instructor_id = ?";
+        String query = GET_COURSE_BY_INSTRUCTOR;
         ArrayList<Course> arrayListCourse = new ArrayList<Course>();
 
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
@@ -267,9 +263,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
 
     @Override
     public User getCourseTA(int id) {
-        String query = "SELECT * FROM table_users tu\n" +
-                "JOIN table_course_instructor_mapper tcm ON tu.id=tcm.ta_id\n" +
-                "WHERE tcm.course_id=?";
+        String query = GET_COURSE_TA;
         User userEntity = new User();
 
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
@@ -293,9 +287,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
 
     @Override
     public ArrayList<Course> getCourseByInstructor(int id) {
-        String query = "select * from table_course_instructor_mapper tim\n" +
-                "Join table_course tc on tc.id = tim.course_id \n" +
-                "where tim.instructor_id = ?";
+        String query = GET_COURSE_BY_INSTRUCTOR;
         ArrayList<Course> arrayListCourse = new ArrayList<Course>();
 
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {

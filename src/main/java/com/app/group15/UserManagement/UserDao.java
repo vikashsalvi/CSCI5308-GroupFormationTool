@@ -10,6 +10,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
+import static com.app.group15.Utility.DatabaseQueriesUtility.*;
+
 @SuppressWarnings("rawtypes")
 public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
 
@@ -21,7 +23,7 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
 
     @Override
     public User get(int id) {
-        String query = "SELECT * FROM table_users WHERE id=?";
+        String query = GET_A_USER;
         User user = new User();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -44,7 +46,7 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
 
     @Override
     public User getUserByBannerId(String bannerId) {
-        String query = "SELECT * FROM table_users WHERE banner_id=?";
+        String query = GET_USER_BY_BANNER_ID;
         User user = new User();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -68,7 +70,7 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
 
     @Override
     public ArrayList<User> getAll() {
-        String query = "SELECT * FROM table_users";
+        String query = GET_ALL_USERS;
         ArrayList<User> usersList = new ArrayList<>();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query);
@@ -91,7 +93,7 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
 
     @Override
     public int saveUser(User user, String role) {
-        String query = "INSERT INTO table_users(first_name,last_name,email, banner_id,password) " + "VALUES(?,?,?,?,?)";
+        String query = SAVE_USER;
         int userId = 0;
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -132,7 +134,7 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
     @Override
     public void update(Persistence user, int id) {
         User userEntity = (User) user;
-        String query = "UPDATE table_users SET first_name=?,last_name=?,email=? WHERE id=?";
+        String query = UPDATE_USER;
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             connection.setAutoCommit(false);
@@ -150,7 +152,7 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
 
     @Override
     public void updateUserRole(int userId, String role) {
-        String query = "UPDATE table_user_role_mapper SET role_id=? WHERE user_id=?";
+        String query = UPDATE_USER_ROLE;
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 connection.setAutoCommit(false);
@@ -175,7 +177,7 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
 
     @Override
     public String getUserPassword(int userId) {
-        String query = "SELECT password from table_users  WHERE id=?";
+        String query = GET_PASSWORD_OF_USER;
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, userId);
@@ -203,7 +205,7 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
 
     @Override
     public User getUserByEmailId(String emailId) {
-        String query = "SELECT * FROM table_users WHERE email like ?";
+        String query = GET_USER_BY_EMAIL;
         User user = new User();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
