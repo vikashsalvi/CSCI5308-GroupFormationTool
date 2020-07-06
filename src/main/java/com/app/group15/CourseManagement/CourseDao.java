@@ -7,6 +7,7 @@ import com.app.group15.CourseManagement.Instructor.ICourseInstructorMapperInject
 import com.app.group15.CourseManagement.Student.CourseStudentMapperAbstractDao;
 import com.app.group15.CourseManagement.Student.CourseStudentMapperDao;
 import com.app.group15.CourseManagement.Student.ICourseStudentMapperDaoInjector;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.DatabaseManager;
 import com.app.group15.Persistence.Persistence;
 import com.app.group15.Utility.GroupFormationToolLogger;
@@ -28,7 +29,7 @@ public class CourseDao extends CourseAbstractDao
 
 
     @Override
-    public Course get(int id) {
+    public Course get(int id) throws SQLException, AwsSecretsManagerException {
         String query = GET_COURSE_FROM_ID;
         Course course = new Course();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
@@ -45,12 +46,13 @@ public class CourseDao extends CourseAbstractDao
         } catch (SQLException e) {
 
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return course;
     }
 
     @Override
-    public ArrayList<Course> getAll() {
+    public ArrayList<Course> getAll() throws SQLException, AwsSecretsManagerException {
         String query = GET_ALL_COURSES;
         ArrayList<Course> coursesList = new ArrayList<Course>();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
@@ -66,13 +68,14 @@ public class CourseDao extends CourseAbstractDao
         } catch (SQLException e) {
 
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
         return coursesList;
     }
 
     @Override
-    public int save(Persistence course) {
+    public int save(Persistence course) throws SQLException, AwsSecretsManagerException {
         Course courseEntity = (Course) course;
         String query = SAVE_COURSE;
         int courseId = 0;
@@ -94,12 +97,15 @@ public class CourseDao extends CourseAbstractDao
                     connection.rollback();
                 } catch (SQLException e1) {
                     GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                    throw e;
                 }
 
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                throw e;
             }
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
         return courseId;
@@ -107,7 +113,7 @@ public class CourseDao extends CourseAbstractDao
     }
 
     @Override
-    public void update(Persistence course, int id) {
+    public void update(Persistence course, int id) throws SQLException, AwsSecretsManagerException {
         Course courseEntity = (Course) course;
         String query = UPDATE_COURSE;
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
@@ -122,18 +128,21 @@ public class CourseDao extends CourseAbstractDao
                     connection.rollback();
                 } catch (SQLException e1) {
                     GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                    throw e;
                 }
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                throw e;
             }
 
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int id) throws SQLException, AwsSecretsManagerException {
         String query = DELETE_COURSE;
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -148,13 +157,16 @@ public class CourseDao extends CourseAbstractDao
                     connection.rollback();
                 } catch (SQLException e1) {
                     GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                    throw e;
                 }
 
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                throw e;
             }
 
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
     }

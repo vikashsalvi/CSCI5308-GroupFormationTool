@@ -1,10 +1,12 @@
 package com.app.group15.PasswordPolicyManagement;
 
 import com.app.group15.Config.AppConfig;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.UserManagement.UserAbstractDao;
 import com.app.group15.Utility.GroupFormationToolLogger;
 import com.app.group15.Utility.ServiceUtility;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -24,7 +26,7 @@ public class PasswordPolicyHistoryConstraint implements IPasswordPolicyValidator
     }
 
     @Override
-    public boolean isPasswordValid(String password) {
+    public boolean isPasswordValid(String password) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isNotNull(password)) {
             List<UserPasswordHistory> previousPasswords = passwordHistoryDao.getPasswordHistory(this.userId);
             List<String> historyPasswords = new ArrayList<>();

@@ -1,9 +1,11 @@
 package com.app.group15.PasswordPolicyManagement;
 
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.InvokeStoredProcedure;
 import com.app.group15.Utility.GroupFormationToolLogger;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -11,7 +13,7 @@ import java.util.logging.Level;
 public class UserPasswordHistoryDao extends UserPasswordHistoryAbstractDao {
 
     @Override
-    public List getPasswordHistory(int userId) {
+    public List getPasswordHistory(int userId) throws SQLException, AwsSecretsManagerException {
         InvokeStoredProcedure invokeStoredProcedure = null;
         try {
             invokeStoredProcedure = new InvokeStoredProcedure("spGetUserPasswordHistory(?)");
@@ -28,25 +30,27 @@ public class UserPasswordHistoryDao extends UserPasswordHistoryAbstractDao {
                 }
             }
             return passwordHistoryList;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         } finally {
             invokeStoredProcedure.closeConnection();
         }
-        return null;
+       
 
     }
 
     @Override
-    public void savePasswordHistory(UserPasswordHistory passwordHistory) {
+    public void savePasswordHistory(UserPasswordHistory passwordHistory) throws SQLException, AwsSecretsManagerException {
         InvokeStoredProcedure invokeStoredProcedure = null;
         try {
             invokeStoredProcedure = new InvokeStoredProcedure("spAddUserPasswordHistory(?,?)");
             invokeStoredProcedure.setParameter(1, passwordHistory.getUserId());
             invokeStoredProcedure.setParameter(2, passwordHistory.getHistoryPassword());
             invokeStoredProcedure.execute();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         } finally {
             invokeStoredProcedure.closeConnection();
         }

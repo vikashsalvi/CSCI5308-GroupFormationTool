@@ -3,6 +3,8 @@ package com.app.group15.NotificationManagement;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -22,7 +24,7 @@ public class EmailNotifierImplTest {
     }
 
     @Test
-    void setCredentialsTest() {
+    void setCredentialsTest() throws AwsSecretsManagerException {
         assertNotNull(emailNotifier.setCredentials());
     }
 }

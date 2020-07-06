@@ -1,15 +1,18 @@
 package com.app.group15.PasswordPolicyManagement;
 
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 
 public class PasswordPolicyServiceInjector {
 
     private PasswordPolicyDao passwordPolicyDao;
     private PasswordPolicyService passwordPolicyService;
 
-    public PasswordPolicyServiceInjector() {
+    public PasswordPolicyServiceInjector() throws SQLException, AwsSecretsManagerException {
 
         passwordPolicyDao = new PasswordPolicyDao();
         List<PasswordPolicy> activePasswordPolicy = passwordPolicyDao.getActivePasswordPolicy();

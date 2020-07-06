@@ -1,9 +1,11 @@
 package com.app.group15.PasswordPolicyManagement;
 
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.InvokeStoredProcedure;
 import com.app.group15.Utility.GroupFormationToolLogger;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -12,7 +14,7 @@ public class PasswordPolicyDao extends PasswordPolicyAbstractDao {
 
 
     @Override
-    public List<PasswordPolicy> getAll() {
+    public List<PasswordPolicy> getAll() throws SQLException, AwsSecretsManagerException {
 
         InvokeStoredProcedure invokeStoredProcedure = null;
         try {
@@ -31,16 +33,17 @@ public class PasswordPolicyDao extends PasswordPolicyAbstractDao {
                 }
             }
             return listOfPolicy;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         } finally {
             invokeStoredProcedure.closeConnection();
         }
-        return null;
+        
     }
 
     @Override
-    public List<PasswordPolicy> getActivePasswordPolicy() {
+    public List<PasswordPolicy> getActivePasswordPolicy() throws SQLException, AwsSecretsManagerException {
 
         InvokeStoredProcedure invokeStoredProcedure = null;
         try {
@@ -59,12 +62,13 @@ public class PasswordPolicyDao extends PasswordPolicyAbstractDao {
                 }
             }
             return listOfPolicy;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         } finally {
             invokeStoredProcedure.closeConnection();
         }
-        return null;
+     
     }
 
 }

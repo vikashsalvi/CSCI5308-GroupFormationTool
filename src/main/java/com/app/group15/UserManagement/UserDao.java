@@ -1,5 +1,7 @@
 package com.app.group15.UserManagement;
 
+import com.app.group15.ExceptionHandler.AllowedRolesNotSetException;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.DatabaseManager;
 import com.app.group15.Persistence.IDao;
 import com.app.group15.Persistence.Persistence;
@@ -22,7 +24,7 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
     }
 
     @Override
-    public User get(int id) {
+    public User get(int id) throws SQLException, AwsSecretsManagerException {
         String query = GET_A_USER;
         User user = new User();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
@@ -38,14 +40,15 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
 
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return user;
     }
 
     @Override
-    public User getUserByBannerId(String bannerId) {
+    public User getUserByBannerId(String bannerId) throws SQLException, AwsSecretsManagerException {
         String query = GET_USER_BY_BANNER_ID;
         User user = new User();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
@@ -62,14 +65,15 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
                     user.setPassword(result.getString("password"));
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return user;
     }
 
     @Override
-    public ArrayList<User> getAll() {
+    public ArrayList<User> getAll() throws SQLException, AwsSecretsManagerException {
         String query = GET_ALL_USERS;
         ArrayList<User> usersList = new ArrayList<>();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
@@ -85,14 +89,15 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
                 usersList.add(user);
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return usersList;
     }
 
     @Override
-    public int saveUser(User user, String role) {
+    public int saveUser(User user, String role) throws AllowedRolesNotSetException, AwsSecretsManagerException, SQLException {
         String query = SAVE_USER;
         int userId = 0;
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
@@ -114,25 +119,27 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
                 }
                 userRoleDao.addRole(userId, role);
 
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 try {
                     connection.rollback();
                 } catch (SQLException e1) {
                     GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
                 }
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                throw e;
             }
 
         } catch (SQLException e) {
 
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return userId;
 
     }
 
     @Override
-    public void update(Persistence user, int id) {
+    public void update(Persistence user, int id) throws SQLException, AwsSecretsManagerException {
         User userEntity = (User) user;
         String query = UPDATE_USER;
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
@@ -144,14 +151,15 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
             statement.setInt(4, id);
             statement.executeUpdate();
             connection.commit();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
     }
 
     @Override
-    public void updateUserRole(int userId, String role) {
+    public void updateUserRole(int userId, String role) throws SQLException, AwsSecretsManagerException {
         String query = UPDATE_USER_ROLE;
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -171,12 +179,13 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
             }
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
     }
 
     @Override
-    public String getUserPassword(int userId) {
+    public String getUserPassword(int userId) throws SQLException, AwsSecretsManagerException {
         String query = GET_PASSWORD_OF_USER;
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -186,8 +195,9 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
                 return result.getString("password");
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return null;
 
@@ -204,7 +214,7 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
     }
 
     @Override
-    public User getUserByEmailId(String emailId) {
+    public User getUserByEmailId(String emailId) throws SQLException, AwsSecretsManagerException {
         String query = GET_USER_BY_EMAIL;
         User user = new User();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
@@ -219,8 +229,9 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
                     user.setId(result.getInt("id"));
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return user;
     }

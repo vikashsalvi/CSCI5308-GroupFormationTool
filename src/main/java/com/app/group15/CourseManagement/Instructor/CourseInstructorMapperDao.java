@@ -2,6 +2,7 @@ package com.app.group15.CourseManagement.Instructor;
 
 
 import com.app.group15.CourseManagement.Course;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.DatabaseManager;
 import com.app.group15.UserManagement.User;
 import com.app.group15.Utility.GroupFormationToolLogger;
@@ -18,7 +19,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
 
 
     @Override
-    public ArrayList<CourseInstructorMapper> getAll() {
+    public ArrayList<CourseInstructorMapper> getAll() throws SQLException, AwsSecretsManagerException {
         String query = SELECT_ALL_COURSE_INSTRUCTOR_MAPPER;
         ArrayList<CourseInstructorMapper> allList = new ArrayList<CourseInstructorMapper>();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
@@ -36,12 +37,13 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
         } catch (SQLException e) {
 
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return allList;
     }
 
     @Override
-    public User getCourseInstructor(int id) {
+    public User getCourseInstructor(int id) throws SQLException, AwsSecretsManagerException {
         String query = GET_COURSE_INSTRUCTOR;
         User userEntity = new User();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
@@ -59,12 +61,13 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
         } catch (SQLException e) {
 
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return userEntity;
     }
 
     @Override
-    public void deleteByCourseId(int courseId) {
+    public void deleteByCourseId(int courseId) throws SQLException, AwsSecretsManagerException {
         String query = DELETE_BY_COURSE_ID;
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -75,12 +78,13 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
         } catch (SQLException e) {
 
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
     }
 
     @Override
-    protected boolean doesCourseIdExistInThisMapper(int courseId) {
+    protected boolean doesCourseIdExistInThisMapper(int courseId) throws SQLException, AwsSecretsManagerException {
         String query = CHECK_COURSE_ID_EXISTS;
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -90,16 +94,17 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
                     return true;
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
 
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return false;
 
     }
 
     @Override
-    protected void addInstructorForCourseWithTa(int courseId, int instructorId) {
+    protected void addInstructorForCourseWithTa(int courseId, int instructorId) throws SQLException, AwsSecretsManagerException {
         String query = ADD_INSTRUCTOR_FOR_COURSE_WITH_TA;
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -113,17 +118,20 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
                     connection.rollback();
                 } catch (SQLException e1) {
                     GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                    throw e;
                 }
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                throw e;
             }
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
     }
 
     @Override
-    protected void addTaForCourseWithInstructor(int courseId, int taId) {
+    protected void addTaForCourseWithInstructor(int courseId, int taId) throws SQLException, AwsSecretsManagerException {
         String query = ADD_TA_FOR_COURSE_WITH_INSTRUCTOR;
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -137,17 +145,20 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
                     connection.rollback();
                 } catch (SQLException e1) {
                     GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                    throw e;
                 }
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                throw e;
             }
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
     }
 
     @Override
-    public void addInstructorToACourse(int courseId, int instructorId) {
+    public void addInstructorToACourse(int courseId, int instructorId) throws SQLException, AwsSecretsManagerException {
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             if (doesCourseIdExistInThisMapper(courseId)) {
                 addInstructorForCourseWithTa(courseId, instructorId);
@@ -166,20 +177,23 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
                         connection.rollback();
                     } catch (SQLException e1) {
                         GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                        throw e;
                     }
                     GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                    throw e;
                 }
 
             }
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
 
     }
 
     @Override
-    public void addTaToACourse(int courseId, int taId) {
+    public void addTaToACourse(int courseId, int taId) throws SQLException, AwsSecretsManagerException {
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             if (doesCourseIdExistInThisMapper(courseId)) {
                 addTaForCourseWithInstructor(courseId, taId);
@@ -199,20 +213,23 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
                         connection.rollback();
                     } catch (SQLException e1) {
                         GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                        throw e;
                     }
                     GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                    throw e;
                 }
 
             }
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
 
     }
 
     @Override
-    public Course getCourseByTa(int taId) {
+    public Course getCourseByTa(int taId) throws AwsSecretsManagerException, SQLException {
         String query = GET_COURSE_BY_TA;
         Course course = new Course();
 
@@ -228,15 +245,17 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
                 }
             } catch (SQLException e) {
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                throw e;
             }
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return course;
     }
 
     @Override
-    public ArrayList<Course> getCoursesByInstructor(int id) {
+    public ArrayList<Course> getCoursesByInstructor(int id) throws AwsSecretsManagerException, SQLException {
         String query = GET_COURSE_BY_INSTRUCTOR;
         ArrayList<Course> arrayListCourse = new ArrayList<Course>();
 
@@ -254,15 +273,17 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
                 }
             } catch (SQLException e) {
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                throw e;
             }
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return arrayListCourse;
     }
 
     @Override
-    public User getCourseTA(int id) {
+    public User getCourseTA(int id) throws SQLException, AwsSecretsManagerException {
         String query = GET_COURSE_TA;
         User userEntity = new User();
 
@@ -278,15 +299,17 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
                 }
             } catch (SQLException e) {
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                throw e;
             }
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return userEntity;
     }
 
     @Override
-    public ArrayList<Course> getCourseByInstructor(int id) {
+    public ArrayList<Course> getCourseByInstructor(int id) throws SQLException, AwsSecretsManagerException {
         String query = GET_COURSE_BY_INSTRUCTOR;
         ArrayList<Course> arrayListCourse = new ArrayList<Course>();
 
@@ -304,9 +327,11 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
                 }
             } catch (SQLException e) {
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                throw e;
             }
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return arrayListCourse;
     }

@@ -4,6 +4,8 @@ package com.app.group15.CourseManagement.Instructor;
 import com.app.group15.CourseManagement.CourseAbstractDao;
 import com.app.group15.CourseManagement.CourseService;
 import com.app.group15.CourseManagement.ICourseService;
+import com.app.group15.ExceptionHandler.AllowedRolesNotSetException;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.UserManagement.IUserService;
 import com.app.group15.UserManagement.User;
 import com.app.group15.UserManagement.UserAbstractDao;
@@ -11,6 +13,7 @@ import com.app.group15.UserManagement.UserRoleAbstractDao;
 import com.app.group15.Utility.GroupFormationToolLogger;
 import com.app.group15.Utility.ServiceUtility;
 
+import java.sql.SQLException;
 import java.util.logging.Level;
 
 public class AssignTAService implements IAssignTAService, IAssignTaServiceInjector {
@@ -25,7 +28,7 @@ public class AssignTAService implements IAssignTAService, IAssignTaServiceInject
 
 
     @Override
-    public boolean performTAUpdate(String bannerId, int courseId) {
+    public boolean performTAUpdate(String bannerId, int courseId) throws SQLException, AllowedRolesNotSetException, AwsSecretsManagerException {
         if (ServiceUtility.isNotNull(bannerId) && ServiceUtility.isValidInt(courseId)) {
 
             User userEntity = userDao.getUserByBannerId(bannerId);

@@ -1,13 +1,17 @@
 package com.app.group15.QuestionManager;
 
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.UserManagement.User;
+import com.app.group15.Utility.GroupFormationToolLogger;
 import com.app.group15.Utility.ServiceUtility;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 
 public class QuestionManagerService implements IQuestionManagerServiceInjector, IQuestionManagerService {
 
@@ -19,7 +23,7 @@ public class QuestionManagerService implements IQuestionManagerServiceInjector, 
     }
 
     @Override
-    public List<QuestionType> getQuestionType() {
+    public List<QuestionType> getQuestionType() throws SQLException, AwsSecretsManagerException {
         List<QuestionType> listOfQuestion = questionManagerDao.getAllQuestionTypes();
         listOfQuestion.forEach((QuestionType questionType) -> {
             questionType.setQuestionType(
@@ -55,7 +59,7 @@ public class QuestionManagerService implements IQuestionManagerServiceInjector, 
     }
 
     @Override
-    public boolean insertQuestion(Question question, User user) {
+    public boolean insertQuestion(Question question, User user) throws SQLException, AwsSecretsManagerException {
 
         question.setQuestionInstructorId(user.getId());
         Date currentDate = new Date();
@@ -73,7 +77,12 @@ public class QuestionManagerService implements IQuestionManagerServiceInjector, 
                 }
 
                 optionsIdList.forEach((Integer insertedChoiceId) -> {
-                    questionManagerDao.saveQuestionOptionMapping(insertedQuestionId, insertedChoiceId);
+                    try {
+						questionManagerDao.saveQuestionOptionMapping(insertedQuestionId, insertedChoiceId);
+					} catch (SQLException | AwsSecretsManagerException e) {
+						 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+				         
+					}
                 });
 
             }
@@ -83,7 +92,7 @@ public class QuestionManagerService implements IQuestionManagerServiceInjector, 
     }
 
     @Override
-    public List<Question> getAllQuestionsOfInstructor(int instructorId, String sortColumn) {
+    public List<Question> getAllQuestionsOfInstructor(int instructorId, String sortColumn) throws SQLException, AwsSecretsManagerException {
         ArrayList<Question> questionArrayList = (ArrayList<Question>) questionManagerDao.getAllQuestionsOfInstructor(instructorId);
         switch (sortColumn) {
             case "questionId":
@@ -108,7 +117,7 @@ public class QuestionManagerService implements IQuestionManagerServiceInjector, 
     }
 
     @Override
-    public Question getQuestion(int questionId) {
+    public Question getQuestion(int questionId) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isValidInt(questionId)) {
             return (Question) questionManagerDao.get(questionId);
         }
@@ -116,7 +125,7 @@ public class QuestionManagerService implements IQuestionManagerServiceInjector, 
     }
 
     @Override
-    public List<String> getOptions(int questionId) {
+    public List<String> getOptions(int questionId) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isValidInt(questionId)) {
             List<Options> optionsList = questionManagerDao.getOptions(questionId);
             List<String> optionsValueList = new ArrayList<>();

@@ -1,5 +1,9 @@
 package com.app.group15.QuestionManager;
 
+import java.sql.SQLException;
+
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+
 public class QuestionChoiceMapperService implements IQuestionChoiceMapperInjectorService, IQuestionChoiceMapperService {
 
     private QuestionChoiceMapperAbstractDao questionChoiceMapperDao;
@@ -10,7 +14,7 @@ public class QuestionChoiceMapperService implements IQuestionChoiceMapperInjecto
     }
 
     @Override
-    public void deleteByQuestionId(int questionId) {
+    public void deleteByQuestionId(int questionId) throws SQLException, AwsSecretsManagerException {
         questionChoiceMapperDao.deleteByQuestionId(questionId);
     }
 }
