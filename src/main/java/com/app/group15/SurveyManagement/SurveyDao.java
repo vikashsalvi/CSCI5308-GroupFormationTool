@@ -14,8 +14,8 @@ public class SurveyDao extends SurveyAbstractDao implements ISurveyQuestionMappe
 
     private SurveyQuestionMapperAbstractDao surveyQuestionMapperDao;
 
-    @Override
-    public Persistence get(int id) throws SQLException, AwsSecretsManagerException {
+
+    public Survey getSurvey(int id) throws SQLException, AwsSecretsManagerException {
         InvokeStoredProcedure invokeStoredProcedure = null;
         try {
             invokeStoredProcedure = new InvokeStoredProcedure("spGetSurvey(?)");
@@ -39,7 +39,8 @@ public class SurveyDao extends SurveyAbstractDao implements ISurveyQuestionMappe
         }
     }
 
-    public Persistence getSurveyByCourseID(int courseID) throws SQLException, AwsSecretsManagerException {
+
+    public Survey getSurveyByCourseID(int courseID) throws SQLException, AwsSecretsManagerException {
         InvokeStoredProcedure invokeStoredProcedure = null;
         try {
             invokeStoredProcedure = new InvokeStoredProcedure("spGetSurveyByCourseID(?)");
@@ -61,6 +62,11 @@ public class SurveyDao extends SurveyAbstractDao implements ISurveyQuestionMappe
             assert invokeStoredProcedure != null;
             invokeStoredProcedure.closeConnection();
         }
+    }
+
+    @Override
+    public Persistence get(int id) throws SQLException, AwsSecretsManagerException {
+        return null;
     }
 
     @Override
