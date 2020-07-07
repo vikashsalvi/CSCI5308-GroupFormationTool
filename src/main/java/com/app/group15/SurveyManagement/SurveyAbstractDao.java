@@ -37,6 +37,8 @@ public abstract class SurveyAbstractDao<T> implements IDao {
 
     public abstract Survey getSurveyByCourseID(int courseID) throws SQLException, AwsSecretsManagerException;
 
+    public abstract List getRuleByQuestionType(int questionType) throws SQLException, AwsSecretsManagerException;
+
     public abstract int saveSurvey(Survey survey) throws SQLException, AwsSecretsManagerException;
 
     public abstract void publishSurvey(Survey survey) throws SQLException, AwsSecretsManagerException;
