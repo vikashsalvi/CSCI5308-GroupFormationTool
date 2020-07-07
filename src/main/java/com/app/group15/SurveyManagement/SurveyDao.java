@@ -96,7 +96,41 @@ public class SurveyDao extends SurveyAbstractDao implements ISurveyQuestionMappe
 		return insertedSurveyId;
     }
 
-    @Override
+	@Override
+	public void publishSurvey(Survey survey) throws SQLException, AwsSecretsManagerException {
+		InvokeStoredProcedure invokeStoredProcedure = null;
+		try {
+			invokeStoredProcedure = new InvokeStoredProcedure("spPublishSurvey(?)");
+			invokeStoredProcedure.setParameter(1, survey.getId());
+			invokeStoredProcedure.execute();
+
+		} catch (SQLException e) {
+			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+			throw e;
+		} finally {
+			assert invokeStoredProcedure != null;
+			invokeStoredProcedure.closeConnection();
+		}
+	}
+
+	@Override
+	public void unPublishSurvey(Survey survey) throws SQLException, AwsSecretsManagerException {
+		InvokeStoredProcedure invokeStoredProcedure = null;
+		try {
+			invokeStoredProcedure = new InvokeStoredProcedure("spUnPublishSurvey(?)");
+			invokeStoredProcedure.setParameter(1, survey.getId());
+			invokeStoredProcedure.execute();
+
+		} catch (SQLException e) {
+			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+			throw e;
+		} finally {
+			assert invokeStoredProcedure != null;
+			invokeStoredProcedure.closeConnection();
+		}
+	}
+
+	@Override
     public void update(Persistence persistence, int id) throws SQLException, AwsSecretsManagerException {
 
     }

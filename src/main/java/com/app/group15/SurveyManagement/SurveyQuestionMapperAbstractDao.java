@@ -9,17 +9,27 @@ import java.util.List;
 
 public abstract class SurveyQuestionMapperAbstractDao<T> implements IDao {
 	@Override
-	public abstract Persistence get(int id) throws SQLException, AwsSecretsManagerException;
+	public Persistence get(int id) throws SQLException, AwsSecretsManagerException {
+		return null;
+	}
 
 	@Override
-	public abstract List getAll() throws SQLException, AwsSecretsManagerException;
+	public List getAll() throws SQLException, AwsSecretsManagerException {
+		return null;
+	}
 
 	@Override
-	public abstract int save(Persistence persistence) throws SQLException, AwsSecretsManagerException;
+	public int save(Persistence persistence) throws SQLException, AwsSecretsManagerException {
+		return 0;
+	}
 
 	@Override
-	public abstract void update(Persistence persistence, int id) throws SQLException, AwsSecretsManagerException;
+	public void update(Persistence persistence, int id) throws SQLException, AwsSecretsManagerException {
+
+	}
 
 	@Override
-	public abstract void delete(int id) throws SQLException, AwsSecretsManagerException;
+	public void delete(int id) throws SQLException, AwsSecretsManagerException {
+
+	}
 }
