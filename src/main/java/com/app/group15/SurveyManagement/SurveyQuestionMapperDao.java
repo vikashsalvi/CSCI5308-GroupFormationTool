@@ -110,4 +110,35 @@ public class SurveyQuestionMapperDao extends SurveyQuestionMapperAbstractDao {
             invokeStoredProcedure.closeConnection();
         }
     }
+
+
+    public List<Question> getSurveyQuestionByInstructorID(int instructorID) throws SQLException, AwsSecretsManagerException {
+        InvokeStoredProcedure invokeStoredProcedure = null;
+
+        try {
+            invokeStoredProcedure = new InvokeStoredProcedure("spGetSurveyQuestionByInstructorID(?)");
+            invokeStoredProcedure.setParameter(1, instructorID);
+            ResultSet results = invokeStoredProcedure.executeWithResults();
+            List<Question> questionList = new ArrayList<>();
+            if (results != null) {
+                while (results.next()) {
+                    Question question = new Question();
+                    question.setId(results.getInt("id"));
+                    question.setQuestionTitle(results.getString("title"));
+                    question.setQuestionTypeId(results.getInt("type_id"));
+                    question.setQuestionInstructorId(results.getInt("instructor_id"));
+                    question.setQuestionText(results.getString("question_text"));
+                    question.setQuestionAddedDate(results.getString("question_date"));
+                    questionList.add(question);
+                }
+            }
+            return questionList;
+        } catch (SQLException e) {
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
+        } finally {
+            assert invokeStoredProcedure != null;
+            invokeStoredProcedure.closeConnection();
+        }
+    }
 }

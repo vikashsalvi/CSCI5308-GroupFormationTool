@@ -84,7 +84,47 @@
                                     th:text='${ courseEntity.getName() }'></span></h1>
                         </div>
                         <div class="card-body w-100">
-                            <!--                            BODY -->
+                            <table class="table table-responsive table-hover w-100 table-bordered">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <td>
+                                        Question Title
+                                    </td>
+                                    <td>
+                                        Question Type
+                                    </td>
+                                    <td>
+                                        Question Text
+                                    </td>
+                                    <td>
+                                        Remove from Survey
+                                    </td>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="course, iterstat: ${courseEntities}">
+                                    <td th:text="${course.getId()}"></td>
+                                    <td th:text="${course.getName()}"></td>
+
+                                    <td
+                                            th:if="${userEntitiesTA[iterstat.index].getFirstName()==null}">
+                                        <span>Not Assigned</span>
+                                    </td>
+                                    <td
+                                            th:if="${userEntitiesTA[iterstat.index].getFirstName()!=null}">
+											<span
+                                                    th:text='${userEntitiesTA[iterstat.index].getFirstName()  + " " + userEntitiesTA[iterstat.index].getLastName()}'></span>
+                                    </td>
+
+                                    <td><a class="btn btn-outline-primary"
+                                           th:href='${"/instructor/assign-ta?courseId="+course.getId()}'><i
+                                            class="fa fa-edit"></i>&nbsp;Edit TA</a></td>
+
+                                </tr>
+                                </tbody>
+                                <tfoot></tfoot>
+                            </table>
                         </div>
                     </div>
                 </div>

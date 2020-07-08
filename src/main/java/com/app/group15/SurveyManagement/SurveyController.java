@@ -43,6 +43,7 @@ public class SurveyController {
                     modelAndView.addObject("courseId", courseId);
                     modelAndView.addObject("userEntity", userEntity);
                     modelAndView.addObject("courseEntity", courseEntity);
+                    
 
                     return modelAndView;
                 } else {
