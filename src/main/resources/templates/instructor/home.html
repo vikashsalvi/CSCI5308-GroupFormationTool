@@ -137,6 +137,9 @@
                                             <td>
                                                 Import Students
                                             </td>
+                                            <td>
+                                                Survey
+                                            </td>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -163,6 +166,11 @@
                                                    th:href='${"/instructor/importCSV?courseId="+course.getId()}'><i
                                                     class="fa fa-file-import"></i>&nbsp;Import
                                                 Students</a>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-outline-primary"
+                                                   th:href='${"/instructor/survey?courseId="+course.getId()}'>
+                                                    <i class="fa fa-file-import"></i>&nbsp;Manage Survey</a>
                                             </td>
 
                                         </tr>
