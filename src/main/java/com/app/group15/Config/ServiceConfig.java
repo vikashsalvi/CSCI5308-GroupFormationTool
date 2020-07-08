@@ -1,7 +1,5 @@
 package com.app.group15.Config;
 
-import java.sql.SQLException;
-
 import com.app.group15.CourseManagement.CourseServiceInjector;
 import com.app.group15.CourseManagement.ICourseService;
 import com.app.group15.CourseManagement.Instructor.AssignTaServiceInjector;
@@ -15,6 +13,8 @@ import com.app.group15.QuestionManager.IQuestionChoiceMapperService;
 import com.app.group15.QuestionManager.IQuestionManagerService;
 import com.app.group15.QuestionManager.QuestionChoiceMapperServiceInjector;
 import com.app.group15.QuestionManager.QuestionManagerServiceInjector;
+import com.app.group15.SurveyManagement.ISurveyService;
+import com.app.group15.SurveyManagement.SurveyServiceInjector;
 import com.app.group15.UserManagement.ForgetPassword.ForgetPasswordServiceInjector;
 import com.app.group15.UserManagement.ForgetPassword.IForgetPasswordService;
 import com.app.group15.UserManagement.IUserService;
@@ -27,6 +27,8 @@ import com.app.group15.UserManagement.SessionManagement.SessionService;
 import com.app.group15.UserManagement.SignupManagement.ISignupService;
 import com.app.group15.UserManagement.SignupManagement.SignUpServiceInjector;
 import com.app.group15.UserManagement.UserServiceInjector;
+
+import java.sql.SQLException;
 
 public class ServiceConfig {
     private static ServiceConfig singletonServiceConfig = null;
@@ -43,6 +45,7 @@ public class ServiceConfig {
     private IQuestionManagerService questionManagerService;
     private IQuestionChoiceMapperService questionChoiceMapperService;
     private IForgetPasswordService forgetPasswordService;
+    private ISurveyService surveyService;
 
     private ServiceConfig() {
         assignTaService = new AssignTaServiceInjector().getAssignTaService();
@@ -56,6 +59,7 @@ public class ServiceConfig {
         questionManagerService = new QuestionManagerServiceInjector().getQuestionManagerService();
         questionChoiceMapperService = new QuestionChoiceMapperServiceInjector().getQuestionChoiceMapperService();
         forgetPasswordService = new ForgetPasswordServiceInjector().getForgetPasswordService();
+        surveyService = new SurveyServiceInjector().getSurveyService();
     }
 
     public static ServiceConfig getInstance() {
@@ -114,9 +118,12 @@ public class ServiceConfig {
         return questionChoiceMapperService;
     }
 
-
     public IForgetPasswordService getForgetPasswordService() {
         return forgetPasswordService;
+    }
+
+    public ISurveyService getSurveyService() {
+        return surveyService;
     }
 
 }

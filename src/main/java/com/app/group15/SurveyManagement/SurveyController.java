@@ -26,6 +26,7 @@ public class SurveyController {
     private IAuthorizationService authorizationService = ServiceConfig.getInstance().getAuthorizationService();
     private CourseAbstractDao courseDao = AppConfig.getInstance().getCourseDao();
     private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
+    private ISurveyService surveyService = ServiceConfig.getInstance().getSurveyService();
 
     @RequestMapping(value = "/instructor/survey", method = RequestMethod.GET)
     public ModelAndView manageSurveyGET(HttpServletRequest request, @RequestParam String courseId) {
@@ -43,7 +44,7 @@ public class SurveyController {
                     modelAndView.addObject("courseId", courseId);
                     modelAndView.addObject("userEntity", userEntity);
                     modelAndView.addObject("courseEntity", courseEntity);
-                    
+
 
                     return modelAndView;
                 } else {
