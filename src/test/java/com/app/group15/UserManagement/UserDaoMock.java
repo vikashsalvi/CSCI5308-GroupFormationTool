@@ -1,8 +1,13 @@
 package com.app.group15.UserManagement;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class UserDaoMock {
+import com.app.group15.ExceptionHandler.AllowedRolesNotSetException;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+import com.app.group15.Persistence.Persistence;
+
+public class UserDaoMock extends UserAbstractDao{
 
     public User getUserByBannerIdMock(String bannerId) {
         User user = new User();
@@ -42,4 +47,54 @@ public class UserDaoMock {
         return userList;
 
     }
+
+	@Override
+	public Persistence get(int id) throws SQLException, AwsSecretsManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public User getUserByBannerId(String bannerId) throws SQLException, AwsSecretsManagerException {
+		User user=new User();
+		user.setBannerId(bannerId);
+		return user;
+	}
+
+	@Override
+	public ArrayList getAll() throws SQLException, AwsSecretsManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getUserPassword(int userId) throws SQLException, AwsSecretsManagerException {
+		
+		return "pass 5";
+	}
+
+	@Override
+	public int saveUser(User user, String role)
+			throws AllowedRolesNotSetException, AwsSecretsManagerException, SQLException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void update(Persistence persistence, int id) throws SQLException, AwsSecretsManagerException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateUserRole(int userId, String role) throws SQLException, AwsSecretsManagerException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public User getUserByEmailId(String emailId) throws SQLException, AwsSecretsManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -1,44 +1,48 @@
 package com.app.group15.CourseManagement;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
-public class CourseDaoMock {
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+import com.app.group15.Persistence.Persistence;
 
-    public Course getCourseByCourseIdMock(String courseId) {
-        Course courseEntity = new Course();
+public class CourseDaoMock extends CourseAbstractDao{
 
-        if (courseId.equals("6")) {
-            courseEntity.setName("CSCI5409");
-            return courseEntity;
-        } else {
-            return courseEntity;
-        }
-    }
+   
 
-    public ArrayList<Course> getAllCourses() {
-        ArrayList<Course> courseList = new ArrayList<>();
-        Course c1 = new Course();
-        c1.setName("CSCI5409");
-        c1.setId(1);
-        Course c2 = new Course();
-        c2.setId(2);
-        c2.setName("CSCI5410");
-        courseList.add(c1);
-        courseList.add(c2);
-        return courseList;
-    }
+    
+	@Override
+	public Persistence get(int id) throws SQLException, AwsSecretsManagerException {
+		Course course=new Course();
+		course.setId(id);
+		return course;
+	}
 
-    public Course addCourse(String courseName) {
-        Course c1 = new Course();
-        c1.setName(courseName);
-        c1.setId(10);
-        return c1;
-    }
+	@Override
+	public ArrayList getAll() throws SQLException, AwsSecretsManagerException {
+		ArrayList<Course> courseList=new ArrayList();
+		Course course=new Course();
+		course.setName("Course 1");
+		courseList.add(course);
+		return courseList;
+	}
 
-    public Course deleteCourse(Course c) {
-        if (c.getName() != "") {
-            return null;
-        }
-        return c;
-    }
+	@Override
+	public int save(Persistence persistence) throws SQLException, AwsSecretsManagerException {
+		
+		return 1;
+	}
+
+	@Override
+	public void update(Persistence persistence, int id) throws SQLException, AwsSecretsManagerException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(int id) throws SQLException, AwsSecretsManagerException {
+		// TODO Auto-generated method stub
+		
+	}
 }

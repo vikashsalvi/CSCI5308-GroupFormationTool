@@ -22,25 +22,25 @@ public class PasswordPolicyServiceInjector {
         activePasswordPolicy.forEach(policy -> {
             switch (policy.getPolicyId()) {
                 case 1:
-                    activePolicyList.add(new PasswordPolicyMinLength());
+                    activePolicyList.add(new PasswordPolicyMinLengthInjector().getPasswordPolicyMinLength());
                     break;
                 case 2:
-                    activePolicyList.add(new PasswordPolicyMaxLength());
+                    activePolicyList.add(new PasswordPolicyMaxLengthInjector().getPasswordPolicyMaxLength());
                     break;
                 case 3:
-                    activePolicyList.add(new PasswordPolicyMinUpperCase());
+                    activePolicyList.add(new PasswordPolicyMinUpperCaseInjector().getPasswordPolicyMinUpperCase());
                     break;
                 case 4:
-                    activePolicyList.add(new PasswordPolicyMinLowerCase());
+                    activePolicyList.add(new PasswordPolicyMinLowerCaseInjector().getPasswordPolicyMinLowerCase());
                     break;
                 case 5:
-                    activePolicyList.add(new PasswordPolicyMinSpecialChar());
+                    activePolicyList.add(new PasswordPolicyMinSpecialCharInjector().getPasswordPolicyMinSpecialChar());
                     break;
                 case 6:
-                    activePolicyList.add(new PasswordPolicyCharNotAllowed());
+                    activePolicyList.add(new PasswordPolicyCharNotAllowedInjector().getPasswordPolicyCharNotAllowed());
                     break;
                 case 7:
-                    activePolicyList.add(new PasswordPolicyHistoryConstraint());
+                    activePolicyList.add(new PasswordPolicyHistoryConstraintInjector().getPasswordPolicyHistoryConstraint());
                     break;
             }
         });
