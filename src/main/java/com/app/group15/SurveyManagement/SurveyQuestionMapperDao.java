@@ -111,9 +111,7 @@ public class SurveyQuestionMapperDao extends SurveyQuestionMapperAbstractDao {
         }
     }
 
-
     public List<Question> getSurveyQuestionByInstructorID(int instructorID) throws SQLException, AwsSecretsManagerException {
-        System.out.println("SurveyQuestionMapperDao 116");
         InvokeStoredProcedure invokeStoredProcedure = null;
 
         try {
@@ -144,4 +142,38 @@ public class SurveyQuestionMapperDao extends SurveyQuestionMapperAbstractDao {
             invokeStoredProcedure.closeConnection();
         }
     }
+
+    public List<Question> getSurveyQuestionByCourseID(int courseID) throws SQLException, AwsSecretsManagerException {
+        InvokeStoredProcedure invokeStoredProcedure = null;
+
+        try {
+            invokeStoredProcedure = new InvokeStoredProcedure("spGetSurveyQuestionByCourseID(?)");
+            invokeStoredProcedure.setParameter(1, courseID);
+            ResultSet results = invokeStoredProcedure.executeWithResults();
+            List<Question> questionList = new ArrayList<>();
+            if (results != null) {
+                System.out.println("HERE");
+                while (results.next()) {
+                    Question question = new Question();
+                    question.setId(results.getInt("id"));
+                    question.setQuestionTitle(results.getString("title"));
+                    question.setQuestionTypeId(results.getInt("type_id"));
+                    question.setQuestionInstructorId(results.getInt("instructor_id"));
+                    question.setQuestionText(results.getString("question_text"));
+                    question.setQuestionAddedDate(results.getString("question_date"));
+                    System.out.println(question.toString());
+                    questionList.add(question);
+                }
+            }
+            return questionList;
+        } catch (SQLException e) {
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
+        } finally {
+            assert invokeStoredProcedure != null;
+            invokeStoredProcedure.closeConnection();
+        }
+    }
+
+
 }

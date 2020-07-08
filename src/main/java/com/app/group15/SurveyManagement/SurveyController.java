@@ -43,7 +43,7 @@ public class SurveyController {
                     List<Question> questionList = new ArrayList<>();
                     Course courseEntity = (Course) courseDao.get(Integer.parseInt(courseId));
                     try {
-                        questionList = surveyService.getSurveyQuestionByInstructorID(userEntity.getId());
+                        questionList = surveyService.getSurveyQuestionByCourseID(courseEntity.getId());
                     } catch (Exception e) {
                         GroupFormationToolLogger.log(Level.INFO, "Exception while getting Questions", e);
                     }

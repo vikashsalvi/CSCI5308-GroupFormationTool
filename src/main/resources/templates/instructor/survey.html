@@ -82,8 +82,11 @@
                         <div class="card-header">
                             <h1 class="h4 text-gray-800">Survey Management for <span
                                     th:text='${ courseEntity.getName() }'></span></h1>
+                            <button align="right" type="button" class="btn btn-primary">Publish</button>
+                            <button align="right" type="button" class="btn btn-danger">Un publish</button>
                         </div>
-                        <div class="card-body w-100">
+                        <div class="card-body">
+                            <caption><h5>Questions in Survey</h5></caption>
                             <table class="table table-responsive table-hover w-100 table-bordered">
                                 <thead class="thead-dark">
                                 <tr>
@@ -99,12 +102,11 @@
                                     <td>
                                         Remove from Survey
                                     </td>
-
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr th:each="question, iterstat: ${questionList}">
-                                    <td th:text="${question.getQuestionId()}"></td>
+                                    <td th:text="${question.getId()}"></td>
                                     <td th:text="${question.getQuestionTitle()}"></td>
                                     <td th:text="${question.getQuestionText()}"></td>
                                     <td>
@@ -113,11 +115,36 @@
                                             <i class="fa fa-trash"></i>&nbsp; Remove
                                         </a>
                                     </td>
-
                                 </tr>
                                 </tbody>
                                 <tfoot></tfoot>
                             </table>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Special title treatment</h5>
+                                            <p class="card-text">With supporting text below as a natural lead-in to
+                                                additional content.</p>
+                                            <a href="#" class="btn btn-success"><i class="fa fa-plus"
+                                                                                   aria-hidden="true"></i> Add to Survey</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Special title treatment</h5>
+                                            <p class="card-text">With supporting text below as a natural lead-in to
+                                                additional content.</p>
+                                            <a href="#" class="btn btn-success"><i class="fa fa-plus"
+                                                                                   aria-hidden="true"></i> Add to Survey</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>

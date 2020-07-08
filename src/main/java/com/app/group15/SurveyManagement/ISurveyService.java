@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface ISurveyService {
     List<Question> getSurveyQuestionByInstructorID(int instructorID) throws SQLException, AwsSecretsManagerException;
+
+    List<Question> getSurveyQuestionByCourseID(int courseID) throws SQLException, AwsSecretsManagerException;
 }

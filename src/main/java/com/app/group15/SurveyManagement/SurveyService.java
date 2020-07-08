@@ -16,6 +16,10 @@ public class SurveyService implements ISurveyService, ISurveyServiceInjector {
         return surveyQuestionMapperDao.getSurveyQuestionByInstructorID(instructorID);
     }
 
+    public List<Question> getSurveyQuestionByCourseID(int courseID) throws SQLException, AwsSecretsManagerException {
+        return surveyQuestionMapperDao.getSurveyQuestionByCourseID(courseID);
+    }
+
     @Override
     public void injectSurveyDao(SurveyAbstractDao surveyDao) {
         this.surveyDao = surveyDao;
