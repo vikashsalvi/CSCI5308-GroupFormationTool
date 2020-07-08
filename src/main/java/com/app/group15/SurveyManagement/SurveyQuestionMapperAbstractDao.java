@@ -32,4 +32,11 @@ public abstract class SurveyQuestionMapperAbstractDao<T> implements IDao {
 	public void delete(int id) throws SQLException, AwsSecretsManagerException {
 
 	}
+	public abstract int getHighestOrderValue(int surveyId) throws SQLException, AwsSecretsManagerException;
+
+	public abstract int addQuestion(SurveyQuestionMapper surveyQuestionMapper) throws SQLException, AwsSecretsManagerException;
+
+	public abstract void getAllSurveyQuestions(int surveyId) throws SQLException, AwsSecretsManagerException;
+
+	public abstract void deleteSurveyQuestion(int id) throws SQLException, AwsSecretsManagerException;
 }
