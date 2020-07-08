@@ -14,6 +14,6 @@ public class SurveyService implements ISurveyService, ISurveyServiceInjector {
 
     @Override
     public void injectSurveyQuestionMapperDao(SurveyQuestionMapperAbstractDao surveyQuestionDao) {
-        this.surveyQuestionMapperDao = surveyQuestionMapperDao;
+        this.surveyQuestionMapperDao = surveyQuestionDao;
     }
 }
