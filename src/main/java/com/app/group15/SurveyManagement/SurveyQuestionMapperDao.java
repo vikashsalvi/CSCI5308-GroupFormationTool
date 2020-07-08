@@ -113,6 +113,7 @@ public class SurveyQuestionMapperDao extends SurveyQuestionMapperAbstractDao {
 
 
     public List<Question> getSurveyQuestionByInstructorID(int instructorID) throws SQLException, AwsSecretsManagerException {
+        System.out.println("SurveyQuestionMapperDao 116");
         InvokeStoredProcedure invokeStoredProcedure = null;
 
         try {
@@ -121,6 +122,7 @@ public class SurveyQuestionMapperDao extends SurveyQuestionMapperAbstractDao {
             ResultSet results = invokeStoredProcedure.executeWithResults();
             List<Question> questionList = new ArrayList<>();
             if (results != null) {
+                System.out.println("HERE");
                 while (results.next()) {
                     Question question = new Question();
                     question.setId(results.getInt("id"));
@@ -129,6 +131,7 @@ public class SurveyQuestionMapperDao extends SurveyQuestionMapperAbstractDao {
                     question.setQuestionInstructorId(results.getInt("instructor_id"));
                     question.setQuestionText(results.getString("question_text"));
                     question.setQuestionAddedDate(results.getString("question_date"));
+                    System.out.println(question.toString());
                     questionList.add(question);
                 }
             }

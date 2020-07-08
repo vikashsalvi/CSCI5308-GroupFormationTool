@@ -88,10 +88,10 @@
                                 <thead class="thead-dark">
                                 <tr>
                                     <td>
-                                        Question Title
+                                        Question ID
                                     </td>
                                     <td>
-                                        Question Type
+                                        Question Title
                                     </td>
                                     <td>
                                         Question Text
@@ -103,23 +103,16 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="course, iterstat: ${courseEntities}">
-                                    <td th:text="${course.getId()}"></td>
-                                    <td th:text="${course.getName()}"></td>
-
-                                    <td
-                                            th:if="${userEntitiesTA[iterstat.index].getFirstName()==null}">
-                                        <span>Not Assigned</span>
+                                <tr th:each="question, iterstat: ${questionList}">
+                                    <td th:text="${question.getQuestionId()}"></td>
+                                    <td th:text="${question.getQuestionTitle()}"></td>
+                                    <td th:text="${question.getQuestionText()}"></td>
+                                    <td>
+                                        <a class="btn btn-outline-danger"
+                                           th:href='${"/instructor/remove-from-survey?questionId="+question.getId()}'>
+                                            <i class="fa fa-trash"></i>&nbsp; Remove
+                                        </a>
                                     </td>
-                                    <td
-                                            th:if="${userEntitiesTA[iterstat.index].getFirstName()!=null}">
-											<span
-                                                    th:text='${userEntitiesTA[iterstat.index].getFirstName()  + " " + userEntitiesTA[iterstat.index].getLastName()}'></span>
-                                    </td>
-
-                                    <td><a class="btn btn-outline-primary"
-                                           th:href='${"/instructor/assign-ta?courseId="+course.getId()}'><i
-                                            class="fa fa-edit"></i>&nbsp;Edit TA</a></td>
 
                                 </tr>
                                 </tbody>

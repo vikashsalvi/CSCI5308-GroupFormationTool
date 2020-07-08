@@ -7,6 +7,5 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface ISurveyService {
-
     List<Question> getSurveyQuestionByInstructorID(int instructorID) throws SQLException, AwsSecretsManagerException;
 }

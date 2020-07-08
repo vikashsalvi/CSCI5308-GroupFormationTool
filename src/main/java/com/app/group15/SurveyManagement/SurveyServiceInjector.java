@@ -5,6 +5,8 @@ public class SurveyServiceInjector {
 
     public SurveyServiceInjector() {
         surveyService = new SurveyService();
+        surveyService.injectSurveyDao(new SurveyDao());
+        surveyService.injectSurveyQuestionMapperDao(new SurveyQuestionMapperDao());
     }
 
     public SurveyService getSurveyService() {
