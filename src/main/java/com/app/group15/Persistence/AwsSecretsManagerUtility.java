@@ -7,6 +7,7 @@ import com.amazonaws.services.secretsmanager.AWSSecretsManager;
 import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
 import com.amazonaws.services.secretsmanager.model.*;
 import com.app.group15.Config.AppConfig;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Utility.GroupFormationToolLogger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -43,21 +44,21 @@ public class AwsSecretsManagerUtility {
 
     }
 
-    public static String getSmtpEmail() {
+    public static String getSmtpEmail() throws AwsSecretsManagerException {
         JsonNode secretsJson = getSecretNode("smtp_email");
         return secretsJson.get("smptp_email").textValue();
 
 
     }
 
-    public static String getSmtpPassword() {
+    public static String getSmtpPassword() throws AwsSecretsManagerException {
         JsonNode secretsJson = getSecretNode("smtp_password");
         return secretsJson.get("smtp_password").textValue();
 
 
     }
 
-    public static JsonNode getSecretNode(String key) {
+    public static JsonNode getSecretNode(String key) throws AwsSecretsManagerException{
         final String secretName = key;
         final String region = "us-east-2";
         String AWSAccessKey = "AKIAIFGQZFS4BYYNVAAQ";
@@ -83,15 +84,20 @@ public class AwsSecretsManagerUtility {
             getSecretValueResult = client.getSecretValue(getSecretValueRequest);
         } catch (DecryptionFailureException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw new AwsSecretsManagerException("Error with secrets manager",e);
         } catch (InternalServiceErrorException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw new AwsSecretsManagerException("Error with secrets manager",e);
 
         } catch (InvalidParameterException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw new AwsSecretsManagerException("Error with secrets manager",e);
         } catch (InvalidRequestException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw new AwsSecretsManagerException("Error with secrets manager",e);
         } catch (ResourceNotFoundException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw new AwsSecretsManagerException("Error with secrets manager",e);
         }
         if (getSecretValueResult.getSecretString() != null) {
             secret = getSecretValueResult.getSecretString();
@@ -99,6 +105,7 @@ public class AwsSecretsManagerUtility {
                 secretsJson = objectMapper.readTree(secret);
             } catch (JsonProcessingException e) {
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                throw new AwsSecretsManagerException("Error with secrets manager",e);
             }
         } else {
             decodedBinarySecret = new String(Base64.getDecoder().decode(getSecretValueResult.getSecretBinary()).array());
@@ -107,7 +114,7 @@ public class AwsSecretsManagerUtility {
 
     }
 
-    public static DatabaseDetails getDatabaseDetails() {
+    public static DatabaseDetails getDatabaseDetails() throws AwsSecretsManagerException {
 
         JsonNode secretsJson = getSecretNode(getKeyFromEnvProperties());
         databaseDetails = new DatabaseDetails();

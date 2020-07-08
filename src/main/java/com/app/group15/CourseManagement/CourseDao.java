@@ -7,6 +7,7 @@ import com.app.group15.CourseManagement.Instructor.ICourseInstructorMapperInject
 import com.app.group15.CourseManagement.Student.CourseStudentMapperAbstractDao;
 import com.app.group15.CourseManagement.Student.CourseStudentMapperDao;
 import com.app.group15.CourseManagement.Student.ICourseStudentMapperDaoInjector;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.DatabaseManager;
 import com.app.group15.Persistence.Persistence;
 import com.app.group15.Utility.GroupFormationToolLogger;
@@ -14,6 +15,8 @@ import com.app.group15.Utility.GroupFormationToolLogger;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
+
+import static com.app.group15.Utility.DatabaseQueriesUtility.*;
 
 
 @SuppressWarnings("rawtypes")
@@ -26,8 +29,8 @@ public class CourseDao extends CourseAbstractDao
 
 
     @Override
-    public Course get(int id) {
-        String query = "SELECT * FROM table_course WHERE id=?";
+    public Course get(int id) throws SQLException, AwsSecretsManagerException {
+        String query = GET_COURSE_FROM_ID;
         Course course = new Course();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -43,13 +46,14 @@ public class CourseDao extends CourseAbstractDao
         } catch (SQLException e) {
 
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return course;
     }
 
     @Override
-    public ArrayList<Course> getAll() {
-        String query = "SELECT * FROM table_course";
+    public ArrayList<Course> getAll() throws SQLException, AwsSecretsManagerException {
+        String query = GET_ALL_COURSES;
         ArrayList<Course> coursesList = new ArrayList<Course>();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query);
@@ -64,15 +68,16 @@ public class CourseDao extends CourseAbstractDao
         } catch (SQLException e) {
 
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
         return coursesList;
     }
 
     @Override
-    public int save(Persistence course) {
+    public int save(Persistence course) throws SQLException, AwsSecretsManagerException {
         Course courseEntity = (Course) course;
-        String query = "INSERT INTO table_course(name) VALUES(?)";
+        String query = SAVE_COURSE;
         int courseId = 0;
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -92,12 +97,15 @@ public class CourseDao extends CourseAbstractDao
                     connection.rollback();
                 } catch (SQLException e1) {
                     GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                    throw e;
                 }
 
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                throw e;
             }
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
         return courseId;
@@ -105,9 +113,9 @@ public class CourseDao extends CourseAbstractDao
     }
 
     @Override
-    public void update(Persistence course, int id) {
+    public void update(Persistence course, int id) throws SQLException, AwsSecretsManagerException {
         Course courseEntity = (Course) course;
-        String query = "UPDATE table_course SET name=? WHERE id=?";
+        String query = UPDATE_COURSE;
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 connection.setAutoCommit(false);
@@ -120,19 +128,22 @@ public class CourseDao extends CourseAbstractDao
                     connection.rollback();
                 } catch (SQLException e1) {
                     GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                    throw e;
                 }
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                throw e;
             }
 
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
     }
 
     @Override
-    public void delete(int id) {
-        String query = "DELETE FROM table_course WHERE id=?";
+    public void delete(int id) throws SQLException, AwsSecretsManagerException {
+        String query = DELETE_COURSE;
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 connection.setAutoCommit(false);
@@ -146,13 +157,16 @@ public class CourseDao extends CourseAbstractDao
                     connection.rollback();
                 } catch (SQLException e1) {
                     GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                    throw e;
                 }
 
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                throw e;
             }
 
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
     }

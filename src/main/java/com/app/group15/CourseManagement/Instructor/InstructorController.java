@@ -5,6 +5,8 @@ import com.app.group15.Config.ServiceConfig;
 import com.app.group15.CourseManagement.Course;
 import com.app.group15.CourseManagement.CourseAbstractDao;
 import com.app.group15.CourseManagement.ICourseService;
+import com.app.group15.ExceptionHandler.AllowedRolesNotSetException;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.UserManagement.IUserService;
 import com.app.group15.UserManagement.SessionManagement.IAuthorizationService;
 import com.app.group15.UserManagement.SessionManagement.ISessionService;
@@ -19,6 +21,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -36,6 +40,7 @@ public class InstructorController {
     public ModelAndView adminHome(HttpServletRequest request) {
         authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
         ModelAndView modelAndView;
+        try {
         if (sessionService.isUserSignedIn(request)) {
             if (authorizationService.isAuthorized(request)) {
 
@@ -57,12 +62,23 @@ public class InstructorController {
             modelAndView = new ModelAndView("redirect:/login");
         }
         return modelAndView;
+        }catch(SQLException e) {
+        	GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+        	modelAndView = new ModelAndView("dbError");
+        	return modelAndView;
+        }
+        catch (AwsSecretsManagerException e) {
+			GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+			modelAndView = new ModelAndView("awsError");
+			return modelAndView;
+		}
     }
 
     @RequestMapping(value = "/instructor/assign-ta", method = RequestMethod.GET)
     public ModelAndView assignTAGET(HttpServletRequest request, @RequestParam String courseId) {
         authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
         ModelAndView modelAndView;
+        try {
         if (sessionService.isUserSignedIn(request)) {
             if (authorizationService.isAuthorized(request)) {
 
@@ -83,6 +99,17 @@ public class InstructorController {
             modelAndView = new ModelAndView("redirect:/login");
         }
         return modelAndView;
+        }
+        catch(SQLException e) {
+        	GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+        	modelAndView = new ModelAndView("dbError");
+        	return modelAndView;
+        }
+        catch (AwsSecretsManagerException e) {
+			GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+			modelAndView = new ModelAndView("awsError");
+			return modelAndView;
+		}
     }
 
 
@@ -91,6 +118,7 @@ public class InstructorController {
                                      @RequestParam(required = true, value = "courseId") int courseId) {
         authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
         ModelAndView modelAndView;
+        try {
         if (sessionService.isUserSignedIn(request)) {
             if (authorizationService.isAuthorized(request)) {
 
@@ -136,6 +164,21 @@ public class InstructorController {
             modelAndView = new ModelAndView("redirect:/login");
         }
         return modelAndView;
+        }catch(SQLException e) {
+        	GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+        	modelAndView = new ModelAndView("dbError");
+        	return modelAndView;
+        }
+        catch(AllowedRolesNotSetException e) {
+        	GroupFormationToolLogger.log(Level.INFO, " Redirecting to /roleError endpoint ");
+        	modelAndView = new ModelAndView("roleError");
+        	return modelAndView;
+        }
+        catch (AwsSecretsManagerException e) {
+			GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+			modelAndView = new ModelAndView("awsError");
+			return modelAndView;
+		}
     }
 
 
@@ -143,6 +186,7 @@ public class InstructorController {
     public ModelAndView importCSV(HttpServletRequest request, @RequestParam(required = true, value = "courseId") int courseId) {
         authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR", "TA", "STUDENT"});
         ModelAndView modelAndView;
+        try {
         if (sessionService.isUserSignedIn(request)) {
             if (authorizationService.isAuthorized(request)) {
                 User user = sessionService.getSessionUser(request);
@@ -166,6 +210,16 @@ public class InstructorController {
             modelAndView = new ModelAndView("redirect:/login");
         }
         return modelAndView;
+        }catch(SQLException e) {
+        	GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+        	modelAndView = new ModelAndView("dbError");
+        	return modelAndView;
+        }
+        catch (AwsSecretsManagerException e) {
+			GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+			modelAndView = new ModelAndView("awsError");
+			return modelAndView;
+		}
     }
 
     @RequestMapping(value = "/instructor/importCSV", method = RequestMethod.POST)
@@ -175,6 +229,7 @@ public class InstructorController {
                                   @RequestParam(required = true, value = "csvFile") MultipartFile csvFile) {
         authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR", "TA"});
         ModelAndView modelAndView;
+        try {
         if (sessionService.isUserSignedIn(request)) {
             if (authorizationService.isAuthorized(request)) {
                 User user = sessionService.getSessionUser(request);
@@ -207,5 +262,21 @@ public class InstructorController {
             modelAndView = new ModelAndView("redirect:/login");
         }
         return modelAndView;
+        }
+        catch(SQLException e) {
+        	GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+        	modelAndView = new ModelAndView("dbError");
+        	return modelAndView;
+        }
+        catch(AllowedRolesNotSetException e) {
+        	GroupFormationToolLogger.log(Level.INFO, " Redirecting to /roleError endpoint ");
+        	modelAndView = new ModelAndView("roleError");
+        	return modelAndView;
+        }
+        catch(AwsSecretsManagerException e) {
+        	GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+        	modelAndView = new ModelAndView("awsError");
+        	return modelAndView;
+        }
     }
 }

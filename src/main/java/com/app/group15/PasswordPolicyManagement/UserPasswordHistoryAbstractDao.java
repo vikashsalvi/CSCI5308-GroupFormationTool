@@ -1,8 +1,10 @@
 package com.app.group15.PasswordPolicyManagement;
 
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.IDao;
 import com.app.group15.Persistence.Persistence;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class UserPasswordHistoryAbstractDao implements IDao {
@@ -12,7 +14,7 @@ public class UserPasswordHistoryAbstractDao implements IDao {
         return null;
     }
 
-    public List getPasswordHistory(int userId) {
+    public List getPasswordHistory(int userId) throws SQLException, AwsSecretsManagerException {
         return null;
     }
 
@@ -36,7 +38,7 @@ public class UserPasswordHistoryAbstractDao implements IDao {
 
     }
 
-    public void savePasswordHistory(UserPasswordHistory passwordHistory) {
+    public void savePasswordHistory(UserPasswordHistory passwordHistory) throws SQLException, AwsSecretsManagerException {
 
     }
 

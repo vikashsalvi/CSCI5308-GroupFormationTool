@@ -2,10 +2,12 @@ package com.app.group15.CourseManagement;
 
 import com.app.group15.CourseManagement.Instructor.CourseInstructorMapperAbstractDao;
 import com.app.group15.CourseManagement.Student.CourseStudentMapperAbstractDao;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.UserManagement.User;
 import com.app.group15.Utility.GroupFormationToolLogger;
 import com.app.group15.Utility.ServiceUtility;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -17,12 +19,12 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
     private String invalidInput = "Invalid input";
 
     @Override
-    public List<Course> getCoursesList() {
+    public List<Course> getCoursesList() throws SQLException, AwsSecretsManagerException {
         return courseDao.getAll();
     }
 
     @Override
-    public Course getCourseDetails(int id) {
+    public Course getCourseDetails(int id) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isValidInt(id)) {
             return (Course) courseDao.get(id);
         } else {
@@ -32,7 +34,7 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
     }
 
     @Override
-    public User getCourseInstructor(int id) {
+    public User getCourseInstructor(int id) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isValidInt(id)) {
             User user = courseInstructorMapperDao.getCourseInstructor(id);
             return user;
@@ -46,7 +48,13 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
     public List<User> getAllCourseInstructors(List<Course> courses) {
         if (ServiceUtility.isNotNull(courses)) {
             List<User> userInstructors = new ArrayList<>();
-            courses.forEach(course -> userInstructors.add(getCourseInstructor(course.getId())));
+            courses.forEach(course -> {
+				try {
+					userInstructors.add(getCourseInstructor(course.getId()));
+				} catch (SQLException | AwsSecretsManagerException e) {
+					 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+				}
+			});
             return userInstructors;
         } else {
             GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
@@ -55,7 +63,7 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
     }
 
     @Override
-    public void addOrUpdateInstructor(int courseId, int instructorId) {
+    public void addOrUpdateInstructor(int courseId, int instructorId) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isValidInt(courseId) && ServiceUtility.isValidInt(instructorId)) {
             courseInstructorMapperDao.addInstructorToACourse(courseId, instructorId);
         } else {
@@ -64,7 +72,7 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
     }
 
     @Override
-    public int addCourse(String courseName) {
+    public int addCourse(String courseName) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isNotNull(courseName)) {
             Course course = new Course();
             course.setName(courseName);
@@ -77,7 +85,7 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
     }
 
     @Override
-    public void deleteCourse(int courseId) {
+    public void deleteCourse(int courseId) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isValidInt(courseId)) {
             courseInstructorMapperDao.deleteByCourseId(courseId);
             courseDao.delete(courseId);
@@ -87,7 +95,7 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
     }
 
     @Override
-    public boolean isUserCourseAdmin(int courseId, int userId) {
+    public boolean isUserCourseAdmin(int courseId, int userId) throws SQLException, AwsSecretsManagerException {
 
         if (ServiceUtility.isValidInt(courseId) && ServiceUtility.isValidInt(userId)) {
             User userTa = courseInstructorMapperDao.getCourseTA(courseId);
@@ -102,7 +110,7 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
     }
 
     @Override
-    public List<Course> getStudentCourses(int studentId) {
+    public List<Course> getStudentCourses(int studentId) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isValidInt(studentId)) {
             ArrayList<Integer> courseIdsOfAStudent = courseStudentMapperDao.getCourseIdsOfAStudent(studentId);
             ArrayList<Course> courses = new ArrayList<>();
@@ -118,7 +126,7 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
     }
 
     @Override
-    public Course getStudentCourseAsTa(int taId) {
+    public Course getStudentCourseAsTa(int taId) throws AwsSecretsManagerException, SQLException {
         if (ServiceUtility.isValidInt(taId)) {
             return courseInstructorMapperDao.getCourseByTa(taId);
         } else {
@@ -157,7 +165,7 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
     }
 
     @Override
-    public boolean validateCourseID(int courseId) {
+    public boolean validateCourseID(int courseId) throws SQLException ,AwsSecretsManagerException{
         if (ServiceUtility.isValidInt(courseId)) {
             return courseDao.get(courseId) != null;
         } else {

@@ -3,8 +3,10 @@ package com.app.group15.CourseManagement.Student;
 import com.app.group15.Config.ServiceConfig;
 import com.app.group15.CourseManagement.Course;
 import com.app.group15.CourseManagement.ICourseService;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.UserManagement.SessionManagement.IAuthorizationService;
 import com.app.group15.UserManagement.SessionManagement.ISessionService;
+import com.app.group15.Utility.GroupFormationToolLogger;
 import com.app.group15.UserManagement.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
 
 @Controller
 public class StudentController {
@@ -25,6 +30,7 @@ public class StudentController {
     public ModelAndView studentHome(HttpServletRequest request) {
         authorizationService.setAllowedRoles(new String[]{"STUDENT", "TA"});
         ModelAndView modelAndViewResponse;
+        try {
         if (sessionService.isUserSignedIn(request)) {
             if (authorizationService.isAuthorized(request)) {
                 User user = sessionService.getSessionUser(request);
@@ -46,6 +52,16 @@ public class StudentController {
             modelAndViewResponse = new ModelAndView("redirect:/login");
         }
         return modelAndViewResponse;
+        } catch(SQLException e) {
+        	GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+        	modelAndViewResponse = new ModelAndView("dbError");
+        	return modelAndViewResponse;
+        }
+        catch (AwsSecretsManagerException e) {
+			GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+			modelAndViewResponse = new ModelAndView("awsError");
+			return modelAndViewResponse;
+		}
     }
 
     @RequestMapping(value = "/student/courseInfo", method = RequestMethod.GET)
@@ -53,6 +69,7 @@ public class StudentController {
                                       @RequestParam(required = true, value = "courseId") int courseId) {
         authorizationService.setAllowedRoles(new String[]{"STUDENT", "TA"});
         ModelAndView modelAndViewResponse;
+        try {
         if (sessionService.isUserSignedIn(request)) {
             if (authorizationService.isAuthorized(request)) {
                 User user = sessionService.getSessionUser(request);
@@ -74,5 +91,15 @@ public class StudentController {
             modelAndViewResponse = new ModelAndView("redirect:/login");
         }
         return modelAndViewResponse;
+        }catch(SQLException e) {
+        	GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+        	modelAndViewResponse = new ModelAndView("dbError");
+        	return modelAndViewResponse;
+        }
+        catch (AwsSecretsManagerException e) {
+			GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+			modelAndViewResponse = new ModelAndView("awsError");
+			return modelAndViewResponse;
+		}
     }
 }

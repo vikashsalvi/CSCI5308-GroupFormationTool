@@ -1,8 +1,10 @@
 package com.app.group15.QuestionManager;
 
 import com.app.group15.Config.ServiceConfig;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.UserManagement.SessionManagement.IAuthorizationService;
 import com.app.group15.UserManagement.SessionManagement.ISessionService;
+import com.app.group15.Utility.GroupFormationToolLogger;
 import com.app.group15.UserManagement.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -13,8 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 @Controller
 public class QuestionController {
@@ -30,6 +35,7 @@ public class QuestionController {
 
         authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
         ModelAndView modelAndView;
+        try {
         if (sessionService.isUserSignedIn(request)) {
             if (authorizationService.isAuthorized(request)) {
                 User user = sessionService.getSessionUser(request);
@@ -49,6 +55,17 @@ public class QuestionController {
         }
 
         return modelAndView;
+        }
+        catch(SQLException e) {
+        	GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+        	modelAndView = new ModelAndView("dbError");
+        	return modelAndView;
+        }
+        catch (AwsSecretsManagerException e) {
+			GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+			modelAndView = new ModelAndView("awsError");
+			return modelAndView;
+		}
     }
 
 
@@ -57,6 +74,7 @@ public class QuestionController {
                                      @RequestParam(required = true, value = "questionId") int questionId) {
         authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
         ModelAndView modelAndView;
+        try {
         if (sessionService.isUserSignedIn(request)) {
             if (authorizationService.isAuthorized(request)) {
                 modelAndView = new ModelAndView();
@@ -86,12 +104,23 @@ public class QuestionController {
         }
 
         return modelAndView;
+        }catch(SQLException e) {
+        	GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+        	modelAndView = new ModelAndView("dbError");
+        	return modelAndView;
+        }
+        catch (AwsSecretsManagerException e) {
+			GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+			modelAndView = new ModelAndView("awsError");
+			return modelAndView;
+		}
     }
 
     @RequestMapping(value = "/instructor/questions/addQuestion", method = RequestMethod.GET)
     public ModelAndView addQuestions(HttpServletRequest request) {
         authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
         ModelAndView modelAndViewResponse;
+        try {
         if (sessionService.isUserSignedIn(request)) {
             if (authorizationService.isAuthorized(request)) {
                 User user = sessionService.getSessionUser(request);
@@ -110,6 +139,17 @@ public class QuestionController {
         }
 
         return modelAndViewResponse;
+        }
+        catch(SQLException e) {
+        	GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+        	modelAndViewResponse = new ModelAndView("dbError");
+        	return modelAndViewResponse;
+        }
+        catch (AwsSecretsManagerException e) {
+			GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+			modelAndViewResponse = new ModelAndView("awsError");
+			return modelAndViewResponse;
+		}
     }
 
     @RequestMapping(value = "/instructor/questions/add", method = RequestMethod.POST)
@@ -119,6 +159,7 @@ public class QuestionController {
                                      HttpServletRequest request) {
         authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
         ModelAndView modelAndView;
+        try {
         if (sessionService.isUserSignedIn(request)) {
             if (authorizationService.isAuthorized(request)) {
                 User user = sessionService.getSessionUser(request);
@@ -137,11 +178,23 @@ public class QuestionController {
             modelAndView = new ModelAndView("redirect:/login");
         }
         return modelAndView;
+        }
+        catch(SQLException e) {
+        	GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+        	modelAndView = new ModelAndView("dbError");
+        	return modelAndView;
+        }
+        catch (AwsSecretsManagerException e) {
+			GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+			ModelAndView modelAndViewResponse = new ModelAndView("awsError");
+			return modelAndViewResponse;
+		}
     }
 
     @RequestMapping(value = "/instructor/question/saveQuesAnsData", method = RequestMethod.POST)
     public ModelAndView saveQuestAnsData(@ModelAttribute Question question, ModelAndView model, HttpServletRequest request) {
         authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
+        try {
         if (sessionService.isUserSignedIn(request)) {
             if (authorizationService.isAuthorized(request)) {
 
@@ -162,16 +215,40 @@ public class QuestionController {
             }
         }
         return model;
+        }catch(SQLException e) {
+        	GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+        	model.setViewName("dbError");
+        	return model;
+        }
+        catch(AwsSecretsManagerException e) {
+        	GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+        	model.setViewName("awsError");
+        	return model;
+        }
+        
     }
 
     @RequestMapping(value = "/instructor/question/saveQuesAnsData", params = {"addRow"})
     public ModelAndView addRow(final Question question, final BindingResult bindingResult,
                                final ModelAndView model, HttpServletRequest request) {
+    	try {
         question.getOptions().add(new Options());
         User user = sessionService.getSessionUser(request);
         model.addObject("userEntity", user);
         model.setViewName("question/questionManager");
         return model;
+    	}
+    	catch(SQLException e) {
+        	GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+        	model.setViewName("dbError");
+        	return model;
+        }
+    	catch(AwsSecretsManagerException e) {
+        	GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+        	model.setViewName("awsError");
+        	return model;
+        }
+    	
     }
 
     @RequestMapping(value = "/instructor/question/delete")
@@ -179,6 +256,7 @@ public class QuestionController {
                                        @RequestParam(required = true, value = "questionId") int questionId) {
         authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
         ModelAndView modelAndView;
+        try {
         if (sessionService.isUserSignedIn(request)) {
             if (authorizationService.isAuthorized(request)) {
                 questionChoiceMapperService.deleteByQuestionId(questionId);
@@ -191,6 +269,17 @@ public class QuestionController {
         }
 
         return modelAndView;
+        }
+        catch(SQLException e) {
+        	GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+        	modelAndView = new ModelAndView("dbError");
+        	return modelAndView;
+        }
+        catch (AwsSecretsManagerException e) {
+			GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+			modelAndView = new ModelAndView("awsError");
+			return modelAndView;
+		}
     }
 
 }

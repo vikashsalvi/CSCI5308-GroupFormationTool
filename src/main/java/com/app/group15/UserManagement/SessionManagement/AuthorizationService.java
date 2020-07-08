@@ -2,11 +2,14 @@ package com.app.group15.UserManagement.SessionManagement;
 
 import com.app.group15.Config.AppConfig;
 import com.app.group15.ExceptionHandler.AllowedRolesNotSetException;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.UserManagement.UserRoleDao;
 import com.app.group15.Utility.GroupFormationToolLogger;
 import com.app.group15.Utility.ServiceUtility;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,7 +36,7 @@ public class AuthorizationService implements IAuthorizationService {
     }
 
     @Override
-    public boolean isAuthorized(HttpServletRequest request) {
+    public boolean isAuthorized(HttpServletRequest request) throws SQLException, AwsSecretsManagerException {
         if (allowedRoles == null) {
             try {
                 throw new AllowedRolesNotSetException("allowedRoles parameter not set");

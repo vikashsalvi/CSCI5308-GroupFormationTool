@@ -2,6 +2,7 @@ package com.app.group15.CourseManagement;
 
 
 import com.app.group15.Config.ServiceConfig;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.UserManagement.SessionManagement.IAuthorizationService;
 import com.app.group15.UserManagement.SessionManagement.ISessionService;
 import com.app.group15.UserManagement.User;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -25,6 +28,7 @@ public class GuestController {
     public ModelAndView guestHome(HttpServletRequest request) {
         authorizationService.setAllowedRoles(new String[]{"GUEST"});
         ModelAndView modelAndView;
+        try {
         if (sessionService.isUserSignedIn(request)) {
             if (authorizationService.isAuthorized(request)) {
                 User user = sessionService.getSessionUser(request);
@@ -43,5 +47,16 @@ public class GuestController {
             modelAndView = new ModelAndView("redirect:/login");
         }
         return modelAndView;
+        }
+        catch(SQLException e) {
+        	GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+        	modelAndView = new ModelAndView("dbError");
+        	return modelAndView;
+        }
+        catch (AwsSecretsManagerException e) {
+			GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+			modelAndView = new ModelAndView("awsError");
+			return modelAndView;
+		}
     }
 }

@@ -1,11 +1,14 @@
 package com.app.group15.Config;
 
+import java.sql.SQLException;
+
 import com.app.group15.CourseManagement.CourseServiceInjector;
 import com.app.group15.CourseManagement.ICourseService;
 import com.app.group15.CourseManagement.Instructor.AssignTaServiceInjector;
 import com.app.group15.CourseManagement.Instructor.IAssignTAService;
 import com.app.group15.CourseManagement.Instructor.IInstructorService;
 import com.app.group15.CourseManagement.Instructor.InstructorServiceInjector;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.PasswordPolicyManagement.IPasswordPolicyService;
 import com.app.group15.PasswordPolicyManagement.PasswordPolicyServiceInjector;
 import com.app.group15.QuestionManager.IQuestionChoiceMapperService;
@@ -98,7 +101,7 @@ public class ServiceConfig {
         return userService;
     }
 
-    public IPasswordPolicyService getPasswordPolicy() {
+    public IPasswordPolicyService getPasswordPolicy() throws SQLException, AwsSecretsManagerException {
         passwordPolicyService = new PasswordPolicyServiceInjector().getPasswordPolicyService();
         return passwordPolicyService;
     }

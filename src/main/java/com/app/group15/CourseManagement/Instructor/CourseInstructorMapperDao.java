@@ -2,6 +2,7 @@ package com.app.group15.CourseManagement.Instructor;
 
 
 import com.app.group15.CourseManagement.Course;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.DatabaseManager;
 import com.app.group15.UserManagement.User;
 import com.app.group15.Utility.GroupFormationToolLogger;
@@ -10,14 +11,16 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
+import static com.app.group15.Utility.DatabaseQueriesUtility.*;
+
 
 @SuppressWarnings("rawtypes")
 public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao {
 
 
     @Override
-    public ArrayList<CourseInstructorMapper> getAll() {
-        String query = "SELECT * from table_course_instructor_mapper";
+    public ArrayList<CourseInstructorMapper> getAll() throws SQLException, AwsSecretsManagerException {
+        String query = SELECT_ALL_COURSE_INSTRUCTOR_MAPPER;
         ArrayList<CourseInstructorMapper> allList = new ArrayList<CourseInstructorMapper>();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query);
@@ -34,15 +37,14 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
         } catch (SQLException e) {
 
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return allList;
     }
 
     @Override
-    public User getCourseInstructor(int id) {
-        String query = "SELECT * FROM table_users tu\n" +
-                "JOIN table_course_instructor_mapper tcm ON tu.id=tcm.instructor_id\n" +
-                "WHERE tcm.course_id=?";
+    public User getCourseInstructor(int id) throws SQLException, AwsSecretsManagerException {
+        String query = GET_COURSE_INSTRUCTOR;
         User userEntity = new User();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -59,13 +61,14 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
         } catch (SQLException e) {
 
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return userEntity;
     }
 
     @Override
-    public void deleteByCourseId(int courseId) {
-        String query = "DELETE FROM table_course_instructor_mapper WHERE course_id=?";
+    public void deleteByCourseId(int courseId) throws SQLException, AwsSecretsManagerException {
+        String query = DELETE_BY_COURSE_ID;
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             connection.setAutoCommit(false);
@@ -75,13 +78,14 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
         } catch (SQLException e) {
 
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
     }
 
     @Override
-    protected boolean doesCourseIdExistInThisMapper(int courseId) {
-        String query = "SELECT * FROM table_course_instructor_mapper WHERE course_id=?";
+    protected boolean doesCourseIdExistInThisMapper(int courseId) throws SQLException, AwsSecretsManagerException {
+        String query = CHECK_COURSE_ID_EXISTS;
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, courseId);
@@ -90,17 +94,18 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
                     return true;
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
 
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return false;
 
     }
 
     @Override
-    protected void addInstructorForCourseWithTa(int courseId, int instructorId) {
-        String query = "UPDATE table_course_instructor_mapper SET instructor_id=? WHERE course_id=?";
+    protected void addInstructorForCourseWithTa(int courseId, int instructorId) throws SQLException, AwsSecretsManagerException {
+        String query = ADD_INSTRUCTOR_FOR_COURSE_WITH_TA;
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 connection.setAutoCommit(false);
@@ -113,18 +118,21 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
                     connection.rollback();
                 } catch (SQLException e1) {
                     GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                    throw e;
                 }
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                throw e;
             }
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
     }
 
     @Override
-    protected void addTaForCourseWithInstructor(int courseId, int taId) {
-        String query = "UPDATE table_course_instructor_mapper SET ta_id=? WHERE course_id=?";
+    protected void addTaForCourseWithInstructor(int courseId, int taId) throws SQLException, AwsSecretsManagerException {
+        String query = ADD_TA_FOR_COURSE_WITH_INSTRUCTOR;
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 connection.setAutoCommit(false);
@@ -137,23 +145,26 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
                     connection.rollback();
                 } catch (SQLException e1) {
                     GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                    throw e;
                 }
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                throw e;
             }
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
     }
 
     @Override
-    public void addInstructorToACourse(int courseId, int instructorId) {
+    public void addInstructorToACourse(int courseId, int instructorId) throws SQLException, AwsSecretsManagerException {
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             if (doesCourseIdExistInThisMapper(courseId)) {
                 addInstructorForCourseWithTa(courseId, instructorId);
 
             } else {
-                String query = "INSERT INTO table_course_instructor_mapper(course_id,instructor_id) VALUES(?,?)";
+                String query = ADD_INSTRUCTOR_TO_COURSE;
 
                 try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                     connection.setAutoCommit(false);
@@ -166,26 +177,29 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
                         connection.rollback();
                     } catch (SQLException e1) {
                         GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                        throw e;
                     }
                     GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                    throw e;
                 }
 
             }
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
 
     }
 
     @Override
-    public void addTaToACourse(int courseId, int taId) {
+    public void addTaToACourse(int courseId, int taId) throws SQLException, AwsSecretsManagerException {
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             if (doesCourseIdExistInThisMapper(courseId)) {
                 addTaForCourseWithInstructor(courseId, taId);
 
             } else {
-                String query = "INSERT INTO table_course_instructor_mapper(course_id,ta_id) VAUES(?,?)";
+                String query = ADD_TA_TO_COURSE;
 
                 try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                     connection.setAutoCommit(false);
@@ -199,23 +213,24 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
                         connection.rollback();
                     } catch (SQLException e1) {
                         GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                        throw e;
                     }
                     GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                    throw e;
                 }
 
             }
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
 
     }
 
     @Override
-    public Course getCourseByTa(int taId) {
-        String query = "select * from table_course_instructor_mapper tim\n" +
-                "Join table_course tc on tc.id = tim.course_id \n" +
-                "where tim.ta_id = ?";
+    public Course getCourseByTa(int taId) throws AwsSecretsManagerException, SQLException {
+        String query = GET_COURSE_BY_TA;
         Course course = new Course();
 
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
@@ -230,18 +245,18 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
                 }
             } catch (SQLException e) {
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                throw e;
             }
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return course;
     }
 
     @Override
-    public ArrayList<Course> getCoursesByInstructor(int id) {
-        String query = "select * from table_course_instructor_mapper tim\n" +
-                "Join table_course tc on tc.id = tim.course_id \n" +
-                "where tim.instructor_id = ?";
+    public ArrayList<Course> getCoursesByInstructor(int id) throws AwsSecretsManagerException, SQLException {
+        String query = GET_COURSE_BY_INSTRUCTOR;
         ArrayList<Course> arrayListCourse = new ArrayList<Course>();
 
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
@@ -258,18 +273,18 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
                 }
             } catch (SQLException e) {
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                throw e;
             }
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return arrayListCourse;
     }
 
     @Override
-    public User getCourseTA(int id) {
-        String query = "SELECT * FROM table_users tu\n" +
-                "JOIN table_course_instructor_mapper tcm ON tu.id=tcm.ta_id\n" +
-                "WHERE tcm.course_id=?";
+    public User getCourseTA(int id) throws SQLException, AwsSecretsManagerException {
+        String query = GET_COURSE_TA;
         User userEntity = new User();
 
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
@@ -284,18 +299,18 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
                 }
             } catch (SQLException e) {
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                throw e;
             }
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return userEntity;
     }
 
     @Override
-    public ArrayList<Course> getCourseByInstructor(int id) {
-        String query = "select * from table_course_instructor_mapper tim\n" +
-                "Join table_course tc on tc.id = tim.course_id \n" +
-                "where tim.instructor_id = ?";
+    public ArrayList<Course> getCourseByInstructor(int id) throws SQLException, AwsSecretsManagerException {
+        String query = GET_COURSE_BY_INSTRUCTOR;
         ArrayList<Course> arrayListCourse = new ArrayList<Course>();
 
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
@@ -312,9 +327,11 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
                 }
             } catch (SQLException e) {
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                throw e;
             }
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return arrayListCourse;
     }

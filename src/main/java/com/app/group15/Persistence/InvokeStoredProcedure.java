@@ -1,5 +1,6 @@
 package com.app.group15.Persistence;
 
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Utility.GroupFormationToolLogger;
 
 import java.sql.CallableStatement;
@@ -15,13 +16,13 @@ public class InvokeStoredProcedure {
     private CallableStatement statement;
 
 
-    public InvokeStoredProcedure(String procedureName) throws SQLException {
+    public InvokeStoredProcedure(String procedureName) throws SQLException, AwsSecretsManagerException {
         this.procedureName = procedureName;
         prepareConnection();
         prepareStatement();
     }
 
-    public void prepareConnection() throws SQLException {
+    public void prepareConnection() throws SQLException, AwsSecretsManagerException {
         connection = DatabaseManager.getDataSource().getConnection();
     }
 
@@ -29,7 +30,7 @@ public class InvokeStoredProcedure {
         statement = connection.prepareCall("{call " + procedureName + " }");
     }
 
-    public void closeConnection() {
+    public void closeConnection() throws SQLException {
         try {
             if (statement != null) {
                 statement.close();
@@ -39,9 +40,10 @@ public class InvokeStoredProcedure {
                     connection.close();
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
 
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
     }
 

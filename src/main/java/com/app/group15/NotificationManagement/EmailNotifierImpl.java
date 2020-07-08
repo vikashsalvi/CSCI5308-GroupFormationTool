@@ -1,6 +1,7 @@
 package com.app.group15.NotificationManagement;
 
 import com.app.group15.Config.AppConfig;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.AwsSecretsManagerUtility;
 import com.app.group15.Utility.GroupFormationToolLogger;
 import org.springframework.mail.MailException;
@@ -21,7 +22,7 @@ public class EmailNotifierImpl implements INotifier {
     private JavaMailSenderImpl javaMailSender;
 
     @Override
-    public boolean setCredentials() {
+    public boolean setCredentials() throws AwsSecretsManagerException {
         javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setHost(springProperties.getProperty("mail.host"));
         javaMailSender.setPort(Integer.parseInt(springProperties.getProperty("mail.port")));
@@ -37,7 +38,7 @@ public class EmailNotifierImpl implements INotifier {
     }
 
     @Override
-    public boolean sendMessage(String receiptEmail, String subject, String message) {
+    public boolean sendMessage(String receiptEmail, String subject, String message) throws AwsSecretsManagerException {
         setCredentials();
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(receiptEmail);
@@ -47,6 +48,7 @@ public class EmailNotifierImpl implements INotifier {
             javaMailSender.send(simpleMailMessage);
         } catch (MailException ex) {
             GroupFormationToolLogger.log(Level.SEVERE, ex.getMessage(), ex);
+            throw ex;
         } catch (Exception e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
         }

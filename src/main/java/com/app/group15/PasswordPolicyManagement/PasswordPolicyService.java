@@ -1,8 +1,10 @@
 package com.app.group15.PasswordPolicyManagement;
 
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Utility.GroupFormationToolLogger;
 import com.app.group15.Utility.ServiceUtility;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -23,7 +25,7 @@ public class PasswordPolicyService implements IPasswordPolicyServiceInjector, IP
     }
 
     @Override
-    public PasswordPolicyValidationResult validatePassword(String password, int userId) {
+    public PasswordPolicyValidationResult validatePassword(String password, int userId) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isNotNull(password)) {
             PasswordPolicyValidationResult result = new PasswordPolicyValidationResult();
             List<String> failList = new ArrayList<String>();

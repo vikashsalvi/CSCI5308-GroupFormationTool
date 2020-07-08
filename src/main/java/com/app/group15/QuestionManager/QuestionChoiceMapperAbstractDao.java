@@ -1,8 +1,10 @@
 package com.app.group15.QuestionManager;
 
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.IDao;
 import com.app.group15.Persistence.Persistence;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public abstract class QuestionChoiceMapperAbstractDao implements IDao {
@@ -32,5 +34,5 @@ public abstract class QuestionChoiceMapperAbstractDao implements IDao {
 
     }
 
-    public abstract void deleteByQuestionId(int questionId);
+    public abstract void deleteByQuestionId(int questionId) throws SQLException, AwsSecretsManagerException;
 }

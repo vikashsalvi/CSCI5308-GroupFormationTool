@@ -4,6 +4,8 @@ import com.app.group15.Config.AppConfig;
 import com.app.group15.CourseManagement.Course;
 import com.app.group15.CourseManagement.CourseAbstractDao;
 import com.app.group15.CourseManagement.Student.CourseStudentMapperAbstractDao;
+import com.app.group15.ExceptionHandler.AllowedRolesNotSetException;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.UserManagement.ForgetPassword.ForgetPasswordUtility;
 import com.app.group15.UserManagement.User;
 import com.app.group15.UserManagement.UserAbstractDao;
@@ -13,6 +15,7 @@ import com.app.group15.Utility.GroupFormationToolLogger;
 import com.app.group15.Utility.ServiceUtility;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +33,7 @@ public class InstructorService implements IInstructorService, IInstructorService
 
 
     @Override
-    public List<Course> getCourseOfInstructor(int instructorId) {
+    public List<Course> getCourseOfInstructor(int instructorId) throws AwsSecretsManagerException, SQLException {
         if (ServiceUtility.isValidInt(instructorId)) {
             List<Course> arrayListCourses = courseInstructorMapperDao.getCoursesByInstructor(instructorId);
             return arrayListCourses;
@@ -42,7 +45,7 @@ public class InstructorService implements IInstructorService, IInstructorService
     }
 
     @Override
-    public User getCourseTA(int userId) {
+    public User getCourseTA(int userId) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isValidInt(userId)) {
             User userEntity = courseInstructorMapperDao.getCourseTA(userId);
             return userEntity;
@@ -53,10 +56,16 @@ public class InstructorService implements IInstructorService, IInstructorService
     }
 
     @Override
-    public List<User> getAllCourseTA(List<Course> courseEntities) {
+    public List<User> getAllCourseTA(List<Course> courseEntities)throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isNotNull(courseEntities)) {
             List<User> userEntitiesTa = new ArrayList<>();
-            courseEntities.forEach(courseEntity -> userEntitiesTa.add(getCourseTA(courseEntity.getId())));
+            courseEntities.forEach(courseEntity -> {
+				try {
+					userEntitiesTa.add(getCourseTA(courseEntity.getId()));
+				} catch (SQLException | AwsSecretsManagerException e) {
+					 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+				}
+			});
             return userEntitiesTa;
         } else {
             GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
@@ -65,7 +74,7 @@ public class InstructorService implements IInstructorService, IInstructorService
     }
 
     @Override
-    public boolean validateUserToAddAsTa(User user, int courseId) {
+    public boolean validateUserToAddAsTa(User user, int courseId) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isNotNull(user) && ServiceUtility.isValidInt(courseId)) {
             boolean valid;
             ArrayList<Integer> courseIdsOfAStudent = courseStudentMapperDao.getCourseIdsOfAStudent(user.getId());
@@ -78,7 +87,7 @@ public class InstructorService implements IInstructorService, IInstructorService
     }
 
     @Override
-    public void addOrUpdateStudentRole(User user, String role) {
+    public void addOrUpdateStudentRole(User user, String role) throws SQLException, AllowedRolesNotSetException, AwsSecretsManagerException {
         if (ServiceUtility.isNotNull(user) && ServiceUtility.isNotNull(role)) {
             Set<String> userRoles = userRoleDao.getRolesByBannerId(user.getBannerId());
             if (!userRoles.contains(role)) {
@@ -92,7 +101,7 @@ public class InstructorService implements IInstructorService, IInstructorService
     }
 
     @Override
-    public int addStudentsFromCSV(MultipartFile file, int courseId) {
+    public int addStudentsFromCSV(MultipartFile file, int courseId) throws SQLException, AllowedRolesNotSetException, AwsSecretsManagerException {
         if (ServiceUtility.isNotNull(file) && ServiceUtility.isNotNull(courseId)) {
 
             String[] cols;
@@ -179,7 +188,7 @@ public class InstructorService implements IInstructorService, IInstructorService
     }
 
     @Override
-    public boolean checkInstructorPermission(int instructorId, int courseId) {
+    public boolean checkInstructorPermission(int instructorId, int courseId) throws AwsSecretsManagerException, SQLException {
         if (ServiceUtility.isValidInt(instructorId) && ServiceUtility.isValidInt(courseId)) {
             boolean returnVar = false;
             List<Course> courseEntitiesList = courseInstructorMapperDao.getCoursesByInstructor(instructorId);
@@ -197,7 +206,7 @@ public class InstructorService implements IInstructorService, IInstructorService
         return false;
     }
 
-    private void addExistingUserToCourse(int courseId, String name, String bannerId, String email, String emailSubject, User user, String emailBody) {
+    private void addExistingUserToCourse(int courseId, String name, String bannerId, String email, String emailSubject, User user, String emailBody) throws AllowedRolesNotSetException, SQLException, AwsSecretsManagerException {
         GroupFormationToolLogger.log(Level.INFO, String.format("%s not registered in system!", user.getBannerId()));
         String[] firstLast = name.split(" ");
         user.setFirstName(firstLast[0]);
@@ -217,7 +226,7 @@ public class InstructorService implements IInstructorService, IInstructorService
         AppConfig.getInstance().getEmailNotifier().sendMessage(email, emailSubject, emailBody);
     }
 
-    private void generateNewUserAndToCourse(int courseId, String email, String emailSubject, User user, String emailBody) {
+    private void generateNewUserAndToCourse(int courseId, String email, String emailSubject, User user, String emailBody) throws SQLException, AllowedRolesNotSetException, AwsSecretsManagerException {
         GroupFormationToolLogger.log(Level.INFO, String.format("%s already exists!", user.getBannerId()));
         if (validateUserToAddAsStudent(user)) {
             ArrayList<Integer> courseIdsOfAStudent = courseStudentMapperDao.getCourseIdsOfAStudent(user.getId());
@@ -237,7 +246,7 @@ public class InstructorService implements IInstructorService, IInstructorService
     }
 
 
-    public boolean validateUserToAddAsStudent(User user) {
+    public boolean validateUserToAddAsStudent(User user) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isNotNull(user)) {
             Set<String> userRoles = userRoleDao.getRolesByBannerId(user.getBannerId());
             boolean valid;
