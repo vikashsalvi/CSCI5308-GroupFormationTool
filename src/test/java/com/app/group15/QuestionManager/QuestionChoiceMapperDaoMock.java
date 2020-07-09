@@ -1,9 +1,18 @@
 package com.app.group15.QuestionManager;
 
-class QuestionChoiceMapperDaoMock {
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 
-    public int deleteByQuestionId(int questionId) {
-        return 0;
+import java.sql.SQLException;
+
+class QuestionChoiceMapperDaoMock extends QuestionChoiceMapperAbstractDao {
+
+
+    @Override
+    public void deleteByQuestionId(int questionId) throws SQLException, AwsSecretsManagerException {
+
     }
 
+    public int deleteByQuestionIdMock(int questionId) throws SQLException, AwsSecretsManagerException {
+        return questionId;
+    }
 }

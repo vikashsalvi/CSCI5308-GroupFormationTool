@@ -6,18 +6,38 @@ import com.app.group15.CourseManagement.Instructor.AssignTaServiceInjectorForTes
 import com.app.group15.CourseManagement.Instructor.IAssignTAService;
 import com.app.group15.CourseManagement.Instructor.IInstructorService;
 import com.app.group15.CourseManagement.Instructor.InstructorServiceInjectorForTest;
+import com.app.group15.QuestionManager.IQuestionChoiceMapperService;
+import com.app.group15.QuestionManager.IQuestionManagerService;
+import com.app.group15.QuestionManager.QuestionChoiceMapperServiceInjectorForTest;
+import com.app.group15.QuestionManager.QuestionManagerServiceInjectorForTest;
+import com.app.group15.UserManagement.IUserService;
+import com.app.group15.UserManagement.LoginManagement.ILoginService;
+import com.app.group15.UserManagement.LoginManagement.LoginServiceInjectorForTest;
+import com.app.group15.UserManagement.SignupManagement.ISignupService;
+import com.app.group15.UserManagement.SignupManagement.SignUpServiceInjectorForTest;
+import com.app.group15.UserManagement.UserServiceInjectorForTest;
 
 public class ServiceConfigForTest {
 	private static ServiceConfigForTest singletonServiceConfig = null;
-	
-	private  ICourseService courseService;
+
+	private ICourseService courseService;
 	private IInstructorService instructorService;
 	private IAssignTAService assignTaService;
-	
+	private IQuestionManagerService questionManagerService;
+	private IQuestionChoiceMapperService questionChoiceMapperService;
+	private IUserService userService;
+	private ILoginService loginService;
+	private ISignupService signupService;
+
 	private ServiceConfigForTest() {
-		courseService=new CourseServiceInjectorForTest().getCourseService();
-		instructorService=new InstructorServiceInjectorForTest().getInstructorService();
-		assignTaService=new AssignTaServiceInjectorForTest().getAssignTaService();
+		courseService = new CourseServiceInjectorForTest().getCourseService();
+		instructorService = new InstructorServiceInjectorForTest().getInstructorService();
+		assignTaService = new AssignTaServiceInjectorForTest().getAssignTaService();
+		questionManagerService = new QuestionManagerServiceInjectorForTest().getQuestionManagerService();
+		questionChoiceMapperService = new QuestionChoiceMapperServiceInjectorForTest().getQuestionChoiceMapperService();
+		userService = new UserServiceInjectorForTest().getUserService();
+		loginService = new LoginServiceInjectorForTest().getLoginService();
+		signupService = new SignUpServiceInjectorForTest().getSignUpService();
 	}
 	
 	public static ServiceConfigForTest getInstance() {
@@ -43,11 +63,24 @@ public class ServiceConfigForTest {
 		return assignTaService;
 	}
 
-	
-	
-	
-	
+	public IQuestionManagerService getQuestionManagerService() {
+		return questionManagerService;
+	}
 
-    
+	public IQuestionChoiceMapperService getQuestionChoiceMapperService() {
+		return questionChoiceMapperService;
+	}
+
+	public IUserService getUserService() {
+		return userService;
+	}
+
+	public ILoginService getLoginService() {
+		return loginService;
+	}
+
+	public ISignupService getSignupService() {
+		return signupService;
+	}
 
 }

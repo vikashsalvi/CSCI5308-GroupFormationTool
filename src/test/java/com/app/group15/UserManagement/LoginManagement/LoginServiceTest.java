@@ -1,23 +1,24 @@
 package com.app.group15.UserManagement.LoginManagement;
 
-import com.app.group15.UserManagement.User;
-import com.app.group15.UserManagement.UserDaoMock;
+import com.app.group15.Config.ServiceConfigForTest;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class LoginServiceTest {
 
-    private UserDaoMock userDaoMock = new UserDaoMock();
+    private ILoginService loginService = ServiceConfigForTest.getInstance().getLoginService();
 
     @Test
-    public void validateLoginTest() {
+    public void validateLoginTest() throws SQLException, AwsSecretsManagerException {
 
-        User user = userDaoMock.getUserByBannerIdMock("B00843468");
-        assertEquals(user.getFirstName(), "Daksh");
-
-        user = userDaoMock.getUserByBannerIdMock("B00843467");
-        assertNull(user.getPassword());
+        boolean passwordCorrect = loginService.validateLogin("B00843468", "passwordTest");
+        assertEquals(passwordCorrect, true);
+        boolean passwordInCorrect = loginService.validateLogin("B00843468", "password");
+        assertNotEquals(passwordInCorrect, true);
     }
 }

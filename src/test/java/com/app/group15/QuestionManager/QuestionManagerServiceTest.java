@@ -1,86 +1,86 @@
 package com.app.group15.QuestionManager;
 
+import com.app.group15.Config.ServiceConfigForTest;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.UserManagement.User;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class QuestionManagerServiceTest {
 
-    QuestionManagerDaoMock questionManagerDaoMock = new QuestionManagerDaoMock();
+    private QuestionManagerDaoMock questionManagerDaoMock = new QuestionManagerDaoMock();
+    private IQuestionManagerService questionManagerService = ServiceConfigForTest.getInstance().getQuestionManagerService();
+
 
     @Test
-    public void getQuestionTypeTest() {
-        List<QuestionType> allQuestionType = questionManagerDaoMock.getAllQuestionType();
-        assertEquals(allQuestionType.get(0).getId(), 2);
+    public void getQuestionTypeTest() throws SQLException, AwsSecretsManagerException {
+        List<QuestionType> allQuestionType = questionManagerService.getQuestionType();
+        assertEquals(allQuestionType.get(0).getId(), 1);
         assertNotNull(allQuestionType);
     }
 
     @Test
     public void formQuestionTest() {
-        Question question = questionManagerDaoMock.formQuestion();
+        String questionTitle = "This is question title";
+        String questionText = "This is question";
+        int selectedOption = 1;
+        Question question = questionManagerService.formQuestion(questionTitle, questionText, selectedOption);
         assertEquals(question.getQuestionText(), "This is question");
         assertNotEquals(question.getQuestionTitle(), "This is question");
     }
 
     @Test
     public void formPreviewTest() {
-        List<Options> options = questionManagerDaoMock.formPreview();
+        List<Options> op = new ArrayList<>();
+        Options options = new Options();
+        options.setOption("option 1");
+        options.setValue("1");
+        Options options2 = new Options();
+        options2.setOption("option 2");
+        options2.setValue("2");
+        op.add(options);
+        op.add(options2);
+
+        Question question = new Question();
+        question.setQuestionTypeId(2);
+        question.setOptions(op);
+
+        List<String> responseOptions = questionManagerService.formPreview(question);
+
         assertNotNull(options);
 
-        assertEquals(options.get(0).getOption(), "option 1");
-        assertEquals(options.get(1).getOption(), "option 2");
-        assertNotEquals(options.get(0).getValue(), "2");
-        assertNotEquals(options.get(1).getValue(), "1");
+        assertEquals(responseOptions.get(0), "option 1");
+        assertEquals(responseOptions.get(1), "option 2");
     }
 
     @Test
-    public void insertQuestionTest() {
+    public void insertQuestionTest() throws SQLException, AwsSecretsManagerException {
         Question qst = questionManagerDaoMock.formQuestion();
         User user = new User();
         user.setId(1);
-        Question inssertedQuestion = questionManagerDaoMock.insertQuestion(qst, user);
-        assertNotNull(inssertedQuestion);
-        assertEquals(inssertedQuestion.getQuestionInstructorId(), 1);
+        Question insertedQuestion = questionManagerDaoMock.insertQuestion(qst, user);
+        assertNotEquals(questionManagerService.insertQuestion(qst, user), true);
+        assertNotNull(insertedQuestion);
+        assertEquals(insertedQuestion.getQuestionInstructorId(), 1);
     }
 
     @Test
-    public void getAllQuestionsOfInstructorTest() {
-        ArrayList<Question> questionArrayList = (ArrayList<Question>) questionManagerDaoMock.getAllQuestionsOfInstructor(1);
-        int i;
-        String sortColumn = "questionId";
-        switch (sortColumn) {
-            case "questionId":
-                questionArrayList.sort(Comparator.comparingInt(Question::getQuestionId));
-                break;
-            case "questionTitle":
-                questionArrayList.sort(Comparator.comparing(Question::getQuestionTitle));
-                break;
-            case "questionType":
-                questionArrayList.sort(Comparator.comparingInt(Question::getQuestionTypeId));
-                break;
-            case "questionText":
-                questionArrayList.sort(Comparator.comparing(Question::getQuestionText));
-                break;
-            case "questionDate":
-                questionArrayList.sort(Comparator.comparing(Question::getQuestionAddedDate));
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + sortColumn);
-        }
-        for (i = 0; i < questionArrayList.size(); i++) {
-            Question question = questionArrayList.get(i);
+    public void getAllQuestionsOfInstructorTest() throws SQLException, AwsSecretsManagerException {
+        List<Question> questionId = questionManagerService.getAllQuestionsOfInstructor(1, "questionId");
+        for (int i = 0; i < questionId.size(); i++) {
+            Question question = questionId.get(i);
             assertEquals(question.getQuestionId(), i);
         }
     }
 
     @Test
-    public void getQuestion() {
-        Question question = questionManagerDaoMock.get();
+    public void getQuestion() throws SQLException, AwsSecretsManagerException {
+        Question question = questionManagerService.getQuestion(1);
         assertEquals(question.getQuestionInstructorId(), 1);
     }
 }
