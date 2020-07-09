@@ -6,6 +6,7 @@ import com.app.group15.Config.ServiceConfig;
 import com.app.group15.CourseManagement.Course;
 import com.app.group15.CourseManagement.CourseAbstractDao;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+import com.app.group15.QuestionManager.IQuestionManagerService;
 import com.app.group15.QuestionManager.Question;
 import com.app.group15.UserManagement.SessionManagement.IAuthorizationService;
 import com.app.group15.UserManagement.SessionManagement.ISessionService;
@@ -30,16 +31,18 @@ public class SurveyController {
     private CourseAbstractDao courseDao = AppConfig.getInstance().getCourseDao();
     private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
     private ISurveyService surveyService = ServiceConfig.getInstance().getSurveyService();
+    private IQuestionManagerService questionManagerService=ServiceConfig.getInstance().getQuestionManagerService();
 
     @RequestMapping(value = "/instructor/survey", method = RequestMethod.GET)
     public ModelAndView manageSurveyGET(HttpServletRequest request, @RequestParam String courseId) {
         authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
+        String sortColumn="questionId";
         ModelAndView modelAndView;
         try {
             if (sessionService.isUserSignedIn(request)) {
                 if (authorizationService.isAuthorized(request)) {
-
-                    User userEntity = sessionService.getSessionUser(request);
+                    User user = sessionService.getSessionUser(request);
+					ArrayList<Question> allQuestionsOfInstructor = (ArrayList<Question>) questionManagerService.getAllQuestionsOfInstructor(user.getId(), sortColumn);
                     List<Question> questionList = new ArrayList<>();
                     Course courseEntity = (Course) courseDao.get(Integer.parseInt(courseId));
                     try {
@@ -50,8 +53,9 @@ public class SurveyController {
 
                     modelAndView = new ModelAndView();
                     modelAndView.setViewName("instructor/survey");
+                    modelAndView.addObject("allQuestionsOfInstructor",allQuestionsOfInstructor);
                     modelAndView.addObject("courseId", courseId);
-                    modelAndView.addObject("userEntity", userEntity);
+                    modelAndView.addObject("userEntity", user);
                     modelAndView.addObject("courseEntity", courseEntity);
                     modelAndView.addObject("questionList", questionList);
 
