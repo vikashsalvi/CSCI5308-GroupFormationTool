@@ -85,11 +85,8 @@ public class QuestionController {
                 Question question = questionManagerService.getQuestion(questionId);
                 modelAndView.addObject("userEntity", user);
 
-                System.out.println(question.toString());
-
                 List<String> options = questionManagerService.getOptions(questionId);
 
-                System.out.println(options.toString());
                 if (options != null) {
                     modelAndView.addObject("options", options);
                 }
@@ -225,7 +222,7 @@ public class QuestionController {
         	model.setViewName("awsError");
         	return model;
         }
-        
+
     }
 
     @RequestMapping(value = "/instructor/question/saveQuesAnsData", params = {"addRow"})
@@ -248,7 +245,7 @@ public class QuestionController {
         	model.setViewName("awsError");
         	return model;
         }
-    	
+
     }
 
     @RequestMapping(value = "/instructor/question/delete")

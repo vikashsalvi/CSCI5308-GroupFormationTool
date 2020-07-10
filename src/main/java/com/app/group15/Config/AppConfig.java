@@ -15,6 +15,7 @@ import com.app.group15.PasswordPolicyManagement.UserPasswordHistoryAbstractDao;
 import com.app.group15.PasswordPolicyManagement.UserPasswordHistoryDao;
 import com.app.group15.QuestionManager.QuestionManagerAbstractDao;
 import com.app.group15.QuestionManager.QuestionManagerDao;
+import com.app.group15.SurveyManagement.*;
 import com.app.group15.UserManagement.UserAbstractDao;
 import com.app.group15.UserManagement.UserDao;
 import com.app.group15.UserManagement.UserDaoInjectorService;
@@ -44,7 +45,18 @@ public class AppConfig {
     private UserPasswordHistoryAbstractDao userPasswordHistoryDao;
     private QuestionManagerAbstractDao questionManagerAbstractDao;
 
-    private AppConfig() {
+    private SurveyAbstractDao surveyDao;
+    private SurveyQuestionMapperAbstractDao surveyQuestionMapperDao;
+
+	public SurveyAbstractDao getSurveyDao() {
+		return surveyDao;
+	}
+
+	public SurveyQuestionMapperAbstractDao getSurveyQuestionMapperDao() {
+		return surveyQuestionMapperDao;
+	}
+
+	private AppConfig() {
 
         properties = new Properties();
         String propertyFilePath = "src/main/resources/application.properties";
@@ -69,6 +81,8 @@ public class AppConfig {
         userPasswordHistoryDao = new UserPasswordHistoryDao();
         questionManagerAbstractDao = new QuestionManagerDao();
 
+        surveyDao=new SurveyDaoInjectorService().getSurveyDao();
+        surveyQuestionMapperDao=new SurveyQuestionMapperDao();
     }
 
     public static AppConfig getSingletonAppConfig() {

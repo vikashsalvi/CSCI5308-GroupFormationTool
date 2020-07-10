@@ -40,7 +40,6 @@ public class FileUtilityTest {
             assertArrayEquals(fileCols, cols);
             myReader.close();
         } catch (Exception e) {
-            System.out.println("An error occurred.");
             e.printStackTrace();
         }
 
