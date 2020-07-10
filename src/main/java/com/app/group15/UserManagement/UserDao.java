@@ -55,7 +55,6 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, bannerId);
             try (ResultSet result = statement.executeQuery()) {
-                System.out.println(result);
                 while (result.next()) {
                     user.setBannerId(result.getString("banner_id"));
                     user.setEmail(result.getString("email"));

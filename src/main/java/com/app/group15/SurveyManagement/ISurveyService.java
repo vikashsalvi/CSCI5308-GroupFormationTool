@@ -9,5 +9,19 @@ import java.util.List;
 public interface ISurveyService {
     List<Question> getSurveyQuestionByInstructorID(int instructorID) throws SQLException, AwsSecretsManagerException;
 
+    Survey getSurveyByCourseId(int courseId) throws SQLException, AwsSecretsManagerException;
+
     List<Question> getSurveyQuestionByCourseID(int courseID) throws SQLException, AwsSecretsManagerException;
+
+    List<Question> getRemainingQuestionsForSurvey(int courseId, int instructorId) throws SQLException, AwsSecretsManagerException;
+
+    void createSurveyIfNotExists(int courseId) throws SQLException, AwsSecretsManagerException;
+
+    int addQuestionToSurvey(int courseId, int questionId, String rule, int ruleValue) throws SQLException, AwsSecretsManagerException;
+
+    void deleteSurveyQuestion(int questionId, int courseId) throws SQLException, AwsSecretsManagerException;
+
+    void publishSurvey(int courseId) throws SQLException, AwsSecretsManagerException;
+
+	void unPublishSurvey(int courseId) throws SQLException, AwsSecretsManagerException;
 }

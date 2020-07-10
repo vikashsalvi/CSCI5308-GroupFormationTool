@@ -65,6 +65,7 @@ public class SurveyDao extends SurveyAbstractDao implements ISurveyQuestionMappe
         }
     }
 
+    @Override
     public List getRuleByQuestionType(int questionType) throws SQLException, AwsSecretsManagerException {
         InvokeStoredProcedure invokeStoredProcedure = null;
         try {
@@ -153,7 +154,31 @@ public class SurveyDao extends SurveyAbstractDao implements ISurveyQuestionMappe
         }
     }
 
-    @Override
+	@Override
+	public int getRuleIdByRuleAndQuestionType(String rule, int questionType) throws SQLException, AwsSecretsManagerException {
+		InvokeStoredProcedure invokeStoredProcedure = null;
+		try {
+			invokeStoredProcedure = new InvokeStoredProcedure("spGetRuleIdByRuleAndQuestionType(?,?)");
+			invokeStoredProcedure.setParameter(1, rule);
+			invokeStoredProcedure.setParameter(2, questionType);
+			ResultSet results = invokeStoredProcedure.executeWithResults();
+			int ruleId = -1;
+			if (results != null) {
+				while (results.next()) {
+					ruleId=results.getInt("id");
+				}
+			}
+			return ruleId;
+		} catch (SQLException e) {
+			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+			throw e;
+		} finally {
+			assert invokeStoredProcedure != null;
+			invokeStoredProcedure.closeConnection();
+		}
+	}
+
+	@Override
     public void update(Persistence persistence, int id) throws SQLException, AwsSecretsManagerException {
 
     }

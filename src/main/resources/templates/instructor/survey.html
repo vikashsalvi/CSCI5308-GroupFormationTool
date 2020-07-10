@@ -10,7 +10,6 @@
 
 	<!-- Custom styles for this template-->
 	<link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
-
 </head>
 <body id="page-top">
 <div id="wrapper">
@@ -78,16 +77,69 @@
 			</nav>
 			<div class="container-fluid">
 				<div class="row">
-					<div class="card">
+					<div class="card w-100">
 						<div class="card-header">
 							<h1 class="h4 text-gray-800">Survey Management for <span
 									th:text='${ courseEntity.getName() }'></span></h1>
-							<button align="right" type="button" class="btn btn-primary">Publish</button>
-							<button align="right" type="button" class="btn btn-danger">Un publish</button>
+							<div class="row">
+								<div class="col-auto">
+									<form method="POST" action="/instructor/survey/publish">
+										<input type="hidden" name="courseId" th:value="${courseId}">
+										<span
+												th:if="${survey.getPublishState()==1}"
+												class="d-inline-block"
+												tabindex="0"
+												data-toggle="tooltip"
+												title="Survey already published!"
+										>
+										<button
+												type="submit" class="btn btn-primary ml-2"
+												style="pointer-events: none;"
+												disabled
+										>Publish
+										</button>
+										</span>
+										<button th:if="${survey.getPublishState()==0}"
+														type="submit"
+														class="btn btn-primary ml-2"
+														data-toggle="tooltip"
+														data-placement="top"
+														title="Publish Survey..."
+										>Publish
+										</button>
+									</form>
+								</div>
+								<div class="col-auto">
+									<form method="POST" action="/instructor/survey/unPublish">
+										<input type="hidden" name="courseId" th:value="${courseId}">
+										<span
+												th:if="${survey.getPublishState()==0}"
+												class="d-inline-block"
+												tabindex="0"
+												data-toggle="tooltip"
+												title="Survey not published!"
+										>
+										<button type="submit"
+														class="btn btn-danger ml-2"
+														style="pointer-events: none;"
+														disabled>Un Publish
+										</button>
+										</span>
+										<button th:if="${survey.getPublishState()==1}"
+														type="submit"
+														class="btn btn-danger ml-2"
+														data-toggle="tooltip"
+														data-placement="top"
+														title="Un Publish Survey..."
+										>Un Publish
+										</button>
+									</form>
+								</div>
+							</div>
 						</div>
 						<div class="card-body">
 							<caption><h5>Questions in Survey</h5></caption>
-							<table class="table table-responsive table-hover w-100 table-bordered">
+							<table class="table table-responsive w-100 table-bordered">
 								<thead class="thead-dark">
 								<tr>
 									<td>
@@ -100,6 +152,12 @@
 										Question Text
 									</td>
 									<td>
+										Question Type
+									</td>
+									<td>
+										Date Added/Modified
+									</td>
+									<td>
 										Remove from Survey
 									</td>
 								</tr>
@@ -109,11 +167,43 @@
 									<td th:text="${question.getId()}"></td>
 									<td th:text="${question.getQuestionTitle()}"></td>
 									<td th:text="${question.getQuestionText()}"></td>
+									<td th:if="${question.getQuestionTypeId()==1}">Numeric</td>
+									<td th:if="${question.getQuestionTypeId()==2}">Multiple Choice Multiple Select</td>
+									<td th:if="${question.getQuestionTypeId()==3}">Multiple Choice Single Select</td>
+									<td th:if="${question.getQuestionTypeId()==4}">Free Text</td>
+									<td th:text="${question.getQuestionAddedDate()}"></td>
 									<td>
-										<a class="btn btn-outline-danger"
-											 th:href='${"/instructor/remove-from-survey?questionId="+question.getId()}'>
-											<i class="fa fa-trash"></i>&nbsp; Remove
-										</a>
+										<form
+												method="POST"
+												action="/instructor/survey/deleteQuestion"
+										>
+											<input type="hidden" name="questionId" th:value="${question.getId()}">
+											<input type="hidden" name="courseId" th:value="${courseId}">
+											<span
+													th:if="${survey.getPublishState()==1}"
+													class="d-inline-block"
+													tabindex="0"
+													data-toggle="tooltip"
+													data-placement="right"
+													title="Please un publish survey to remove!"
+											>
+											<button
+													type="submit" class="btn btn-outline-danger ml-2"
+													style="pointer-events: none;"
+													disabled
+											><i class="fa fa-trash"></i>&nbsp; Remove
+											</button>
+											</span>
+											<button th:if="${survey.getPublishState()==0}"
+															type="submit"
+															class="btn btn-outline-danger"
+															data-toggle="tooltip"
+															data-placement="right"
+															title="Remove question from survey"
+											>
+												<i class="fa fa-trash"></i>&nbsp; Remove
+											</button>
+										</form>
 									</td>
 								</tr>
 								</tbody>
@@ -121,23 +211,91 @@
 							</table>
 
 							<div class="row">
-								<div class="col-sm-6 pt-2" th:each="question, iterstat:${allQuestionsOfInstructor}">
+								<div class="col-sm-4 pt-2" th:each="question, iterstat:${allQuestionsOfInstructor}">
 									<div class="card pt-2">
-										<div class="card-body">
+										<div class="card-header">
 											<h5 class="card-title" th:text="${question.getQuestionTitle()}"></h5>
-											<p class="card-text" th:text="${question.getQuestionText()}"></p>
-											<a href="#" class="btn btn-success"><i class="fa fa-plus"
-																														 aria-hidden="true"></i> Add to Survey</a>
 										</div>
-									</div>
-								</div>
-								<div class="col-sm-6 pt-2" th:each="question, iterstat:${allQuestionsOfInstructor}">
-									<div class="card pt-2">
 										<div class="card-body">
-											<h5 class="card-title" th:text="${question.getQuestionTitle()}"></h5>
-											<p class="card-text" th:text="${question.getQuestionText()}"></p>
-											<a href="#" class="btn btn-success"><i class="fa fa-plus"
-																														 aria-hidden="true"></i> Add to Survey</a>
+											<div class="card-title" th:text="${question.getQuestionText()}"></div>
+											<p>Please Select Rules:</p>
+											<form method="POST" action="/instructor/survey/addQuestion">
+												<input type="hidden" name="courseId" th:value="${courseEntity.getId()}">
+												<input type="hidden" name="questionId" th:value="${question.getId()}">
+												<div class="form-check mt-2">
+													<input class="form-check-input" type="radio" name="rule"
+																 th:id='${"rule_"+question.getQuestionId()+"_similar"}' value="similar" required>
+													<label class="form-check-label" th:for='${"rule_"+question.getQuestionId()+"_similar"}'>
+														Similar
+													</label>
+												</div>
+												<div class="form-check mt-2">
+													<input class="form-check-input" type="radio" name="rule"
+																 th:id='${"rule_"+question.getQuestionId()+"_dissimilar"}' value="dissimilar" required>
+													<label class="form-check-label" th:for='${"rule_"+question.getQuestionId()+"_dissimilar"}'>
+														Dis-similar
+													</label>
+												</div>
+												<div th:if="${question.getQuestionTypeId()==1}">
+													<div class="form-row">
+														<div class="col-auto">
+															<div class="form-check mt-2">
+																<input class="form-check-input" type="radio" name="rule"
+																			 th:id='${"rule_"+question.getQuestionId()+"_lt"}' value="less"
+																			 onclick="window.location.href=window.location.href.split('&')[0]+'&show=lt'"
+																			 th:checked="${showLt}"  required>
+																<label class="form-check-label" th:for='${"rule_"+question.getQuestionId()+"_lt"}'>
+																	Less Than
+																</label>
+															</div>
+														</div>
+														<div class="col-4" th:if="${showLt}">
+															<input class="form-control" type="number" min="0" name="ruleValue" required>
+														</div>
+													</div>
+													<div class="form-row">
+														<div class="col-auto">
+															<div class="form-check mt-2">
+																<input class="form-check-input" type="radio" name="rule"
+																			 th:id='${"rule_"+question.getQuestionId()+"_gt"}' value="greater"
+																			 onclick="window.location.href=window.location.href.split('&')[0]+'&show=gt'"
+																			 th:checked="${showGt}" required>
+																<label class="form-check-label" th:for='${"rule_"+question.getQuestionId()+"_gt"}'>
+																	Greater Than
+																</label>
+															</div>
+														</div>
+														<div class="col-4" th:if="${showGt}">
+															<input class="form-control" type="number" min="0" name="ruleValue" required>
+														</div>
+													</div>
+												</div>
+												<span
+														th:if="${survey.getPublishState()==1}"
+														class="d-inline-block"
+														tabindex="0"
+														data-toggle="tooltip"
+														data-placement="right"
+														title="Please un publish survey to add!"
+												>
+												<button
+														type="submit"
+														class="btn btn-outline-success mt-3"
+														style="pointer-events: none;"
+														disabled
+												><i class="fa fa-trash"></i>&nbsp; Remove
+												</button>
+												</span>
+												<button th:if="${survey.getPublishState()==0}"
+																type="submit"
+																class="btn btn-outline-success mt-3"
+																data-toggle="tooltip"
+																data-placement="right"
+																title="Add question to survey"
+												>
+													<i class="fa fa-plus"></i>&nbsp; Add to Survey
+												</button>
+											</form>
 										</div>
 									</div>
 								</div>
@@ -153,6 +311,7 @@
 </div>
 
 <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/popper.min.js}"></script>
 <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 
 <!-- Core plugin JavaScript-->
@@ -160,5 +319,10 @@
 
 <!-- Custom scripts for all pages-->
 <script th:src="@{/js/sb-admin-2.min.js}"></script>
+<script>
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
+</script>
 </body>
 </html>

@@ -7,6 +7,15 @@ public class SurveyQuestionMapper extends Persistence {
 	private int questionOrder;
 	private int surveyId;
 	private int ruleId;
+	private int ruleValue;
+
+	public int getRuleValue() {
+		return ruleValue;
+	}
+
+	public void setRuleValue(int ruleValue) {
+		this.ruleValue = ruleValue;
+	}
 
 	public int getQuestionId() {
 		return questionId;
