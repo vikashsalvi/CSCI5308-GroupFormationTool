@@ -12,11 +12,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 public class EmailNotifierImplTest {
 
-    EmailServiceMock emailNotifier = new EmailServiceMock();
+    
 
     @Test
     void sendMessageTest() {
-
+    	EmailServiceMock emailNotifier = new EmailServiceMock();
         String receiptEmail = "thanksfordemo@gmail.com";
         String subject = "Hi test message";
         String message = "Test";
@@ -25,6 +25,7 @@ public class EmailNotifierImplTest {
 
     @Test
     void setCredentialsTest() throws AwsSecretsManagerException {
+    	EmailServiceMock emailNotifier = new EmailServiceMock();
         assertNotNull(emailNotifier.setCredentials());
     }
 }

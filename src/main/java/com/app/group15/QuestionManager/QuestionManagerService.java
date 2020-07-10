@@ -18,7 +18,7 @@ public class QuestionManagerService implements IQuestionManagerServiceInjector, 
     private QuestionManagerAbstractDao questionManagerDao;
 
     @Override
-    public void injectQuestionManagerInjectorService(QuestionManagerDao questionManagerDao) {
+    public void injectQuestionManagerInjectorService(QuestionManagerAbstractDao questionManagerDao) {
         this.questionManagerDao = questionManagerDao;
     }
 

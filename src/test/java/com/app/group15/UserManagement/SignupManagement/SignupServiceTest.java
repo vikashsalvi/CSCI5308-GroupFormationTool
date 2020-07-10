@@ -1,30 +1,35 @@
 package com.app.group15.UserManagement.SignupManagement;
 
+import com.app.group15.Config.ServiceConfigForTest;
+import com.app.group15.ExceptionHandler.AllowedRolesNotSetException;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.UserManagement.User;
 import com.app.group15.UserManagement.UserDaoMock;
+import com.app.group15.UserManagement.UserRole;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 class SignupServiceTest {
 
     private UserDaoMock userDaoMock = new UserDaoMock();
+    private ISignupService signupService = ServiceConfigForTest.getInstance().getSignupService();
 
     @Test
-    public void checkUserExistsTest() {
-        User user = userDaoMock.getUserByBannerIdMock("B00843468");
-        assertEquals(user.getFirstName(), "Daksh");
-
-        user = userDaoMock.getUserByBannerIdMock("B00843469");
-        assertNull(user.getFirstName());
+    public void checkUserExistsTest() throws SQLException, AwsSecretsManagerException {
+        boolean exist = signupService.checkUserExists("B00843469");
+        assertEquals(exist, true);
     }
 
     @Test
-    public void createUserTest() {
+    public void createUserTest() throws AllowedRolesNotSetException, SQLException, AwsSecretsManagerException {
         User user = new User();
-        int userId = userDaoMock.saveUserMock(user, "GUEST");
-        assertEquals(userId, 0);
+        user.setBannerId("B00843469");
+
+        int created = signupService.createUser(user, UserRole.GUEST.getRole());
+        assertEquals(created, 1);
     }
 
 

@@ -1,25 +1,13 @@
 package com.app.group15.QuestionManager;
 
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.UserManagement.User;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionManagerDaoMock {
-
-
-    public List<QuestionType> getAllQuestionType() {
-        List<QuestionType> list = new ArrayList<>();
-        QuestionType questionType = new QuestionType();
-        questionType.setQuestionType("NUMERIC");
-        questionType.setId(1);
-        QuestionType questionType_2 = new QuestionType();
-        questionType.setQuestionType("MCQ_SC");
-        questionType.setId(2);
-        list.add(questionType);
-        list.add(questionType_2);
-        return list;
-    }
+public class QuestionManagerDaoMock extends QuestionManagerAbstractDao {
 
     public Question formQuestion() {
         Question question = new Question();
@@ -48,6 +36,17 @@ public class QuestionManagerDaoMock {
         return question;
     }
 
+    @Override
+    public Question get(int id) throws SQLException, AwsSecretsManagerException {
+        Question question = new Question();
+        question.setQuestionInstructorId(1);
+        question.setQuestionTypeId(1);
+        question.setQuestionText("This is question");
+        question.setQuestionTitle("Question");
+        return question;
+    }
+
+    @Override
     public List<Question> getAllQuestionsOfInstructor(int instructorId) {
         int i;
         List<Question> questionList = new ArrayList<>();
@@ -65,12 +64,39 @@ public class QuestionManagerDaoMock {
         return questionList;
     }
 
-    public Question get() {
-        Question question = new Question();
-        question.setQuestionInstructorId(1);
-        question.setQuestionTypeId(1);
-        question.setQuestionText("This is question");
-        question.setQuestionTitle("Question");
-        return question;
+    @Override
+    public List getAllQuestionTypes() {
+        List<QuestionType> list = new ArrayList<>();
+        QuestionType questionType = new QuestionType();
+        questionType.setQuestionType("NUMERIC");
+        questionType.setId(1);
+        list.add(questionType);
+
+        QuestionType questionType_2 = new QuestionType();
+        questionType_2.setQuestionType("MCQ_SC");
+        questionType_2.setId(2);
+
+        list.add(questionType_2);
+        return list;
+    }
+
+    @Override
+    public int saveQuestion(Question question) {
+        return 0;
+    }
+
+    @Override
+    public int saveOption(Options option) {
+        return 0;
+    }
+
+    @Override
+    public List<Options> getOptions(int questionId) {
+        return null;
+    }
+
+    @Override
+    public void saveQuestionOptionMapping(int insertedQuestionId, Integer insertedChoiceId) {
+
     }
 }

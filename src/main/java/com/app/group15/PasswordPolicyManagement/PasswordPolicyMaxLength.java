@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 
-public class PasswordPolicyMaxLength implements IPasswordPolicyValidator {
+public class PasswordPolicyMaxLength implements IPasswordPolicyValidator,IPasswordPolicyAbstractDaoInjector {
 
     private PasswordPolicyAbstractDao passwordPolicyDao;
 
@@ -17,7 +17,6 @@ public class PasswordPolicyMaxLength implements IPasswordPolicyValidator {
     public boolean isPasswordValid(String password) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isNotNull(password)) {
 
-            passwordPolicyDao = AppConfig.getInstance().getPasswordPolicyDao();
 
             List<PasswordPolicy> passwordPolicyList = passwordPolicyDao.getAll();
 
@@ -30,4 +29,10 @@ public class PasswordPolicyMaxLength implements IPasswordPolicyValidator {
         return false;
 
     }
+
+	@Override
+	public void injectPasswordPolicyAbstractDao(PasswordPolicyAbstractDao dao) {
+		this.passwordPolicyDao=dao;
+		
+	}
 }

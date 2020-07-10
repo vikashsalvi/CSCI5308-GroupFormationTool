@@ -1,15 +1,15 @@
 package com.app.group15.QuestionManager;
 
-import java.sql.SQLException;
-
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+
+import java.sql.SQLException;
 
 public class QuestionChoiceMapperService implements IQuestionChoiceMapperInjectorService, IQuestionChoiceMapperService {
 
     private QuestionChoiceMapperAbstractDao questionChoiceMapperDao;
 
     @Override
-    public void injectQuestionChoiceMapperDao(QuestionChoiceMapperDao questionChoiceMapperDao) {
+    public void injectQuestionChoiceMapperDao(QuestionChoiceMapperAbstractDao questionChoiceMapperDao) {
         this.questionChoiceMapperDao = questionChoiceMapperDao;
     }
 
