@@ -2,25 +2,24 @@ package com.app.group15.PasswordPolicyManagement;
 
 import org.junit.jupiter.api.Test;
 
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.sql.SQLException;
+
 class PasswordPolicyMinUpperCaseTest {
+	private IPasswordPolicyValidator passwordPolicyValidator;
 
     @Test
-    void isPasswordValid() {
-
-        PasswordPolicyMinUpperCaseMock passwordPolicyMinUpperCase = new PasswordPolicyMinUpperCaseMock();
-
-        String uppercase0 = "aa@";
-        String uppercase1 = "Aaa@";
-        String uppercase2 = "AAaa@";
-        String uppercase3 = "AAAaa@";
-
-        assertFalse(passwordPolicyMinUpperCase.isPasswordValid(uppercase0));
-        assertFalse(passwordPolicyMinUpperCase.isPasswordValid(uppercase1));
-        assertTrue(passwordPolicyMinUpperCase.isPasswordValid(uppercase2));
-        assertTrue(passwordPolicyMinUpperCase.isPasswordValid(uppercase3));
+    void isPasswordValid() throws SQLException, AwsSecretsManagerException {
+    	PasswordPolicyMinUpperCase policy=new PasswordPolicyMinUpperCase();
+     	policy.injectPasswordPolicyAbstractDao(new PasswordPolicyDaoMock());
+     	passwordPolicyValidator=policy;
+     	assertEquals(passwordPolicyValidator.isPasswordValid("uuuuuuu"),false);
+     	assertEquals(passwordPolicyValidator.isPasswordValid("uuUUUUUUU"),true);
 
 
     }

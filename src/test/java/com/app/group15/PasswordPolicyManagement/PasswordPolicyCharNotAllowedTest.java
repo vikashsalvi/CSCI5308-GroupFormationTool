@@ -2,21 +2,24 @@ package com.app.group15.PasswordPolicyManagement;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+
+import java.sql.SQLException;
 
 class PasswordPolicyCharNotAllowedTest {
+	
+	private IPasswordPolicyValidator passwordPolicyValidator;
 
     @Test
-    void isPasswordValidTest() {
-        PasswordPolicyCharNotAllowedMock passwordPolicyCharNotAllowed = new PasswordPolicyCharNotAllowedMock();
-
-        String noBannedChar0 = "abACW";
-        String bannedChar1 = "$abACW";
-        String noBannedChar1 = "(abACW";
-
-        assertFalse(passwordPolicyCharNotAllowed.isPasswordValid(bannedChar1));
-        assertTrue(passwordPolicyCharNotAllowed.isPasswordValid(noBannedChar1));
-        assertTrue(passwordPolicyCharNotAllowed.isPasswordValid(noBannedChar0));
+    void isPasswordValidTest() throws SQLException, AwsSecretsManagerException {
+    	PasswordPolicyCharNotAllowed policy =new PasswordPolicyCharNotAllowed();
+    	policy.injectPasswordPolicyAbstractDao(new PasswordPolicyDaoMock());
+    	passwordPolicyValidator=policy;
+    	assertEquals(passwordPolicyValidator.isPasswordValid("123%"),false);
+    	assertEquals(passwordPolicyValidator.isPasswordValid("123"),true);
+        
     }
 }

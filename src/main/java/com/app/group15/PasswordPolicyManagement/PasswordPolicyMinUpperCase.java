@@ -9,14 +9,14 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 
-public class PasswordPolicyMinUpperCase implements IPasswordPolicyValidator {
+public class PasswordPolicyMinUpperCase implements IPasswordPolicyValidator,IPasswordPolicyAbstractDaoInjector {
 
-    PasswordPolicyAbstractDao passwordPolicyDao;
+    private PasswordPolicyAbstractDao passwordPolicyDao;
 
     @Override
     public boolean isPasswordValid(String password) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isNotNull(password)) {
-            passwordPolicyDao = AppConfig.getInstance().getPasswordPolicyDao();
+            
             List<PasswordPolicy> passwordPolicyList = passwordPolicyDao.getAll();
 
             int minimumNumberOfUppercaseAllowed = Integer.parseInt(passwordPolicyList.get(2).getPolicyValue());
@@ -35,5 +35,11 @@ public class PasswordPolicyMinUpperCase implements IPasswordPolicyValidator {
         }
         return false;
     }
+
+	@Override
+	public void injectPasswordPolicyAbstractDao(PasswordPolicyAbstractDao dao) {
+		this.passwordPolicyDao=dao;
+		
+	}
 
 }

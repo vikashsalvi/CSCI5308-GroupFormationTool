@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-public class PasswordPolicyCharNotAllowed implements IPasswordPolicyValidator {
+public class PasswordPolicyCharNotAllowed implements IPasswordPolicyValidator,IPasswordPolicyAbstractDaoInjector {
 
     private PasswordPolicyAbstractDao passwordPolicyDao;
 
@@ -18,10 +18,11 @@ public class PasswordPolicyCharNotAllowed implements IPasswordPolicyValidator {
     public boolean isPasswordValid(String password) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isNotNull(password)) {
 
-            passwordPolicyDao = AppConfig.getInstance().getPasswordPolicyDao();
             List<PasswordPolicy> passwordPolicyList = passwordPolicyDao.getAll();
-
+            
+            
             String bannedCharString = passwordPolicyList.get(5).getPolicyValue();
+          
             List<String> bannedCharList = new ArrayList<>();
 
             bannedCharString.replaceAll(" +", "");
@@ -43,4 +44,9 @@ public class PasswordPolicyCharNotAllowed implements IPasswordPolicyValidator {
         return false;
 
     }
+
+	@Override
+	public void injectPasswordPolicyAbstractDao(PasswordPolicyAbstractDao dao) {
+		this.passwordPolicyDao=dao;
+	}
 }

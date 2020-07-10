@@ -1,6 +1,6 @@
 package com.app.group15.PasswordPolicyManagement;
 
-import com.app.group15.Config.AppConfig;
+
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.UserManagement.UserAbstractDao;
 import com.app.group15.Utility.GroupFormationToolLogger;
@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-public class PasswordPolicyHistoryConstraint implements IPasswordPolicyValidator {
+public class PasswordPolicyHistoryConstraint implements IPasswordPolicyValidator,IUserPasswordHistoryAbstractDaoInjector {
 
-    private UserPasswordHistoryAbstractDao passwordHistoryDao = AppConfig.getInstance().getUserPasswordHistoryDao();
-    private UserAbstractDao userDao = AppConfig.getInstance().getUserDao();
+    private UserPasswordHistoryAbstractDao passwordHistoryDao;
+    private UserAbstractDao userDao ;
     private int userId;
 
     public int getUserId() {
@@ -44,5 +44,17 @@ public class PasswordPolicyHistoryConstraint implements IPasswordPolicyValidator
         }
         return false;
     }
+
+	@Override
+	public void injectUserPasswordHistoryAbstractDao(UserPasswordHistoryAbstractDao passwordHistoryDao) {
+		this.passwordHistoryDao=passwordHistoryDao;
+		
+	}
+
+	@Override
+	public void injectUserDao(UserAbstractDao userDao) {
+		this.userDao=userDao;
+		
+	}
 
 }

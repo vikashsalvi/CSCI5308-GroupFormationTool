@@ -9,14 +9,14 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 
-public class PasswordPolicyMinLength implements IPasswordPolicyValidator {
+public class PasswordPolicyMinLength implements IPasswordPolicyValidator,IPasswordPolicyAbstractDaoInjector {
 
     private PasswordPolicyAbstractDao passwordPolicyDao;
 
     @Override
     public boolean isPasswordValid(String password) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isNotNull(password)) {
-            passwordPolicyDao = AppConfig.getInstance().getPasswordPolicyDao();
+            
             List<PasswordPolicy> passwordPolicyList = passwordPolicyDao.getAll();
 
             int minimumLengthAllowed = Integer.parseInt(passwordPolicyList.get(0).getPolicyValue());
@@ -27,5 +27,11 @@ public class PasswordPolicyMinLength implements IPasswordPolicyValidator {
         }
         return false;
     }
+
+	@Override
+	public void injectPasswordPolicyAbstractDao(PasswordPolicyAbstractDao dao) {
+		this.passwordPolicyDao=dao;
+		
+	}
 
 }

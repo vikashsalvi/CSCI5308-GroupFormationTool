@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 
-public class PasswordPolicyMinSpecialChar implements IPasswordPolicyValidator {
+public class PasswordPolicyMinSpecialChar implements IPasswordPolicyValidator,IPasswordPolicyAbstractDaoInjector {
 
     PasswordPolicyAbstractDao passwordPolicyDao;
 
@@ -17,7 +17,7 @@ public class PasswordPolicyMinSpecialChar implements IPasswordPolicyValidator {
     public boolean isPasswordValid(String password) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isNotNull(password)) {
 
-            passwordPolicyDao = AppConfig.getInstance().getPasswordPolicyDao();
+ 
             List<PasswordPolicy> passwordPolicyList = passwordPolicyDao.getAll();
 
             int minimumNumberOfSpecialCharAllowed = Integer.parseInt(passwordPolicyList.get(4).getPolicyValue());
@@ -38,5 +38,11 @@ public class PasswordPolicyMinSpecialChar implements IPasswordPolicyValidator {
         }
         return false;
     }
+
+	@Override
+	public void injectPasswordPolicyAbstractDao(PasswordPolicyAbstractDao dao) {
+		this.passwordPolicyDao=dao;
+		
+	}
 
 }

@@ -14,6 +14,7 @@ public class UserPasswordHistoryAbstractDao implements IDao {
         return null;
     }
 
+    
     public List getPasswordHistory(int userId) throws SQLException, AwsSecretsManagerException {
         return null;
     }
