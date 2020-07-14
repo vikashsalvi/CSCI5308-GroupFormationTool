@@ -1,20 +1,17 @@
 package com.app.group15.SurveyManagement;
 
 
-import ch.qos.logback.core.encoder.EchoEncoder;
 import com.app.group15.Config.AppConfig;
 import com.app.group15.Config.ServiceConfig;
 import com.app.group15.CourseManagement.Course;
 import com.app.group15.CourseManagement.CourseAbstractDao;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
-import com.app.group15.QuestionManager.IQuestionManagerService;
 import com.app.group15.QuestionManager.Question;
 import com.app.group15.UserManagement.SessionManagement.IAuthorizationService;
 import com.app.group15.UserManagement.SessionManagement.ISessionService;
 import com.app.group15.UserManagement.User;
 import com.app.group15.Utility.GroupFormationToolLogger;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
