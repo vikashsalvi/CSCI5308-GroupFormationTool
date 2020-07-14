@@ -216,10 +216,12 @@ public class SurveyQuestionMapperDao extends SurveyQuestionMapperAbstractDao {
             invokeStoredProcedure.setParameter(1, courseID);
             ResultSet results = invokeStoredProcedure.executeWithResults();
             List<Question> questionList = new ArrayList<>();
+            int surveyId;
             if (results != null) {
                 while (results.next()) {
                     Question question = new Question();
-                    question.setId(results.getInt("id"));
+                    results.getInt("id");
+                    question.setQuestionId(results.getInt("id"));
 
                     question.setQuestionTitle(results.getString("title"));
                     question.setQuestionTypeId(results.getInt("type_id"));
@@ -227,6 +229,7 @@ public class SurveyQuestionMapperDao extends SurveyQuestionMapperAbstractDao {
                     question.setQuestionText(results.getString("question_text"));
                     question.setOptions(getQuestionOptionsByQuestionId(results.getInt("id")));
                     question.setQuestionAddedDate(results.getString("question_date"));
+                    question.setSurveyId(results.getInt("survey_id"));
                     questionList.add(question);
 
                 }
@@ -253,7 +256,7 @@ public class SurveyQuestionMapperDao extends SurveyQuestionMapperAbstractDao {
                 while (results.next()) {
 
                     Options options = new Options();
-                    options.setId(results.getInt("id"));
+                    options.setId(results.getInt("choice_id"));
                     options.setOption(results.getString("choice"));
                     options.setValue(results.getString("stored_as"));
                     optionsList.add(options);

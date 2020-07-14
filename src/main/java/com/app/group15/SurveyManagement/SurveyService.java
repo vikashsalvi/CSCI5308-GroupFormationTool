@@ -38,6 +38,7 @@ public class SurveyService implements ISurveyService, ISurveyServiceInjector {
 	public SurveyFormResponse getSurveyQuestionWithOptions(int courseId) throws SQLException, AwsSecretsManagerException {
 		List<Question> questionList = this.surveyQuestionMapperDao.getSurveyQuestionWithCourseByCourseID(courseId);
 		List<SurveyResponse> surveyResponse = new ArrayList<>();
+		int surveyId = questionList.get(0).getSurveyId();
 		for (Question qst : questionList) {
 			SurveyResponse response = new SurveyResponse();
 			response.setQuestionId(qst.getQuestionId());
@@ -50,6 +51,7 @@ public class SurveyService implements ISurveyService, ISurveyServiceInjector {
 			surveyResponse.add(response);
 		}
 		SurveyFormResponse surveyFormResponse = new SurveyFormResponse();
+		surveyFormResponse.setSurveyId(surveyId);
 		surveyFormResponse.setSurveyResponse(surveyResponse);
 		return surveyFormResponse;
 	}
@@ -101,13 +103,19 @@ public class SurveyService implements ISurveyService, ISurveyServiceInjector {
 
 		for (SurveyResponse surveyResponse : surveyFormResponse.getSurveyResponse()) {
 			if (surveyResponse.getQuestionTypeId() == 1) {
-				//surveyDao.saveNumericResponse(surveyResponse.getQuestionId(),surveyFormResponse.getSurveyId(),surveyResponse.getNumericResponse(),user.getId());
+				surveyDao.saveNumericResponse(surveyResponse.getQuestionId(), surveyFormResponse.getSurveyId(), surveyResponse.getNumericResponse(), user.getId());
 			} else if (surveyResponse.getQuestionTypeId() == 2) {
-				//surveyDao.saveChoiceResponse(surveyResponse.getQuestionId(),surveyFormResponse.getSurveyId(),surveyResponse.getChoiceId(),user.getId());
+				surveyDao.saveChoiceResponse(surveyResponse.getQuestionId(), surveyFormResponse.getSurveyId(), surveyResponse.getChoiceId(), user.getId());
 			} else if (surveyResponse.getQuestionTypeId() == 3) {
-				//surveyDao.saveChoiceResponse(surveyResponse.getQuestionId(),surveyFormResponse.getSurveyId(),surveyResponse.getChoiceId(),user.getId());
+				String[] choices = surveyResponse.getChoiceId().split(",");
+				for (String choice : choices) {
+					int chose = Integer.parseInt(choice);
+					if (chose > 0) {
+						surveyDao.saveChoiceResponse(surveyResponse.getQuestionId(), surveyFormResponse.getSurveyId(), choice, user.getId());
+					}
+				}
 			} else {
-				//surveyDao.saveTextResponse(surveyResponse.getQuestionId(),surveyFormResponse.getSurveyId(),surveyResponse.getTextResponse(),user.getId());
+				surveyDao.saveTextResponse(surveyResponse.getQuestionId(), surveyFormResponse.getSurveyId(), surveyResponse.getTextResponse(), user.getId());
 			}
 		}
 	}

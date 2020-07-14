@@ -183,15 +183,15 @@ public class SurveyDao extends SurveyAbstractDao implements ISurveyQuestionMappe
         InvokeStoredProcedure invokeStoredProcedure = null;
         int insertedSurveyId = -1;
         try {
-            invokeStoredProcedure = new InvokeStoredProcedure("spSaveSurveyNumericResponse(?,?,?,?)");
+            invokeStoredProcedure = new InvokeStoredProcedure("spAddSurveyNumericResponse(?,?,?,?)");
             invokeStoredProcedure.setParameter(1, questionId);
             invokeStoredProcedure.setParameter(2, surveyId);
             invokeStoredProcedure.setParameter(3, numericResponse);
             invokeStoredProcedure.setParameter(4, userId);
-            invokeStoredProcedure.registerOutputParameterLong(2);
+
 
             invokeStoredProcedure.execute();
-            insertedSurveyId = invokeStoredProcedure.getOutputParameter(2);
+            //insertedSurveyId = invokeStoredProcedure.getOutputParameter(2);
 
         } catch (SQLException | AwsSecretsManagerException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
@@ -207,15 +207,15 @@ public class SurveyDao extends SurveyAbstractDao implements ISurveyQuestionMappe
         InvokeStoredProcedure invokeStoredProcedure = null;
         int insertedSurveyId = -1;
         try {
-            invokeStoredProcedure = new InvokeStoredProcedure("spSaveSurveyTextResponse(?,?,?,?)");
+            invokeStoredProcedure = new InvokeStoredProcedure("spAddSurveyTextResponse(?,?,?,?)");
             invokeStoredProcedure.setParameter(1, questionId);
             invokeStoredProcedure.setParameter(2, surveyId);
             invokeStoredProcedure.setParameter(3, textResponse);
             invokeStoredProcedure.setParameter(4, userId);
-            invokeStoredProcedure.registerOutputParameterLong(2);
+
 
             invokeStoredProcedure.execute();
-            insertedSurveyId = invokeStoredProcedure.getOutputParameter(2);
+            //insertedSurveyId = invokeStoredProcedure.getOutputParameter(2);
 
         } catch (SQLException | AwsSecretsManagerException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
@@ -231,15 +231,14 @@ public class SurveyDao extends SurveyAbstractDao implements ISurveyQuestionMappe
         InvokeStoredProcedure invokeStoredProcedure = null;
         int insertedSurveyId = -1;
         try {
-            invokeStoredProcedure = new InvokeStoredProcedure("spSaveSurveyChoiceResponse(?,?,?,?)");
+            invokeStoredProcedure = new InvokeStoredProcedure("spAddSurveyChoiceResponse(?,?,?,?)");
             invokeStoredProcedure.setParameter(1, questionId);
             invokeStoredProcedure.setParameter(2, surveyId);
             invokeStoredProcedure.setParameter(3, choiceId);
             invokeStoredProcedure.setParameter(4, userId);
-            invokeStoredProcedure.registerOutputParameterLong(2);
+
 
             invokeStoredProcedure.execute();
-            insertedSurveyId = invokeStoredProcedure.getOutputParameter(2);
 
         } catch (SQLException | AwsSecretsManagerException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);

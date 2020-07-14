@@ -41,7 +41,6 @@ public class UserService implements IUserService, IUserServiceInjector {
         if (ServiceUtility.isNotNull(role) && ServiceUtility.isValidInt(userId)) {
             userRoleDao.updateRole(userId, role);
         } else {
-
             GroupFormationToolLogger.log(Level.SEVERE, invalid_input);
         }
     }

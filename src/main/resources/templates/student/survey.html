@@ -76,6 +76,8 @@
                 </div>
                 <form id="addOptions" method="post" th:action="@{/student/survey/submit}"
                       th:object="${SurveyFromResponse}">
+
+
                     <div th:each="tx, op: *{surveyResponse}">
 
                         <label th:text="*{surveyResponse[__${op.index}__].questionTitle}"></label>
@@ -96,7 +98,7 @@
                                 <select class="form-control" name="type"
                                         th:field="*{surveyResponse[__${op.index}__].choiceId}">
                                     <option value="0">select answer</option>
-                                    <option th:each="option, i : *{surveyResponse[__${op.index}__].getOptions()}"
+                                    <option th:each="option, i : *{surveyResponse[__${op.index}__].options}"
                                             th:text="${option.getOption()}"
                                             th:value="${option.getId()}"
                                     >
@@ -105,15 +107,16 @@
                             </label>
                         </div>
                         <ul th:if="*{surveyResponse[__${op.index}__].questionTypeId}==3">
-                            <li th:each="op : *{surveyResponse[__${op.index}__].getOptions()}">
-                                <input th:checked="${op.isSelected}"
+                            <li th:each="opt : *{surveyResponse[__${op.index}__].options}">
+                                <input th:checked="${opt.isSelected}"
                                        th:field="*{surveyResponse[__${op.index}__].choiceId}"
-                                       th:value="${op.getId()}"
+                                       th:value="${opt.getId()}"
                                        type="checkbox"
                                 />
-                                <label th:text="${op.option}"></label>
+                                <label th:text="${opt.option}"></label>
                             </li>
                         </ul>
+
                         <!--<div th:if="*{surveyResponse[__${op.index}__].questionTypeId}==3">
                             <label>Select answer :
                                 <div th:each="op : *{surveyResponse[__${op.index}__].getOptions()}">
@@ -131,6 +134,16 @@
                         </div>
 
                         <br/>
+                        <input name="ID" th:field="*{surveyResponse[__${op.index}__].questionId}"
+                               th:value="*{surveyResponse[__${op.index}__].getQuestionId()}" type="hidden">
+                        <input name="TYPE_ID" th:field="*{surveyResponse[__${op.index}__].questionTypeId}"
+                               th:value="*{surveyResponse[__${op.index}__].getQuestionTypeId()}" type="hidden">
+                        <input name="QST_TEXT" th:field="*{surveyResponse[__${op.index}__].questionInstructorId}"
+                               th:value="*{surveyResponse[__${op.index}__].getQuestionInstructorId()}" type="hidden">
+                        <input name="QST_TITLE" th:field="*{surveyResponse[__${op.index}__].questionTitle}"
+                               th:value="*{surveyResponse[__${op.index}__].getQuestionTitle()}" type="hidden">
+                        <input name="QST_TITLE" th:field="${SurveyFromResponse.surveyId}"
+                               th:value="${SurveyFromResponse.surveyId}" type="hidden">
                     </div>
                     <hr>
                     <input id="addQuestion" style="margin-top: 10px" type="submit" value="Save">

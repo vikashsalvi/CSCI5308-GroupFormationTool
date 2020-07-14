@@ -5,16 +5,16 @@ import com.app.group15.QuestionManager.Options;
 import java.util.List;
 
 public class SurveyResponse {
-    private int questionId;
-    private int questionTypeId;
-    private String choiceId;
-    private int numericResponse;
-    private String textResponse;
-    private String questionTitle;
-    private int questionInstructorId;
-    private String questionText;
-    private String questionAddedDate;
-    private List<Options> options;
+    public int questionId;
+    public int questionTypeId;
+    public String choiceId;
+    public int numericResponse;
+    public String textResponse;
+    public String questionTitle;
+    public int questionInstructorId;
+    public String questionText;
+    public String questionAddedDate;
+    public List<Options> options;
 
 
     public String getQuestionTitle() {
