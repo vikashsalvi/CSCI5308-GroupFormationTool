@@ -2,7 +2,6 @@ package com.app.group15.SurveyManagement;
 
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.InvokeStoredProcedure;
-import com.app.group15.Persistence.Persistence;
 import com.app.group15.Utility.GroupFormationToolLogger;
 
 import java.sql.ResultSet;
@@ -88,15 +87,6 @@ public class SurveyDao extends SurveyAbstractDao implements ISurveyQuestionMappe
         }
     }
 
-    @Override
-    public Persistence get(int id) throws SQLException, AwsSecretsManagerException {
-        return null;
-    }
-
-    @Override
-    public List getAll() throws SQLException, AwsSecretsManagerException {
-        return null;
-    }
 
     @Override
     public int saveSurvey(Survey survey) throws SQLException, AwsSecretsManagerException {
@@ -246,16 +236,6 @@ public class SurveyDao extends SurveyAbstractDao implements ISurveyQuestionMappe
             assert invokeStoredProcedure != null;
             invokeStoredProcedure.closeConnection();
         }
-    }
-
-    @Override
-    public void update(Persistence persistence, int id) throws SQLException, AwsSecretsManagerException {
-
-    }
-
-    @Override
-    public void delete(int id) throws SQLException, AwsSecretsManagerException {
-
     }
 
     @Override
