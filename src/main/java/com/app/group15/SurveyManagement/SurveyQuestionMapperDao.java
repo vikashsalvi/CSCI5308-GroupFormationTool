@@ -143,7 +143,7 @@ public class SurveyQuestionMapperDao extends SurveyQuestionMapperAbstractDao {
         }
     }
 
-    public List<Question> getSurveyQuestionByCourseID(int courseID) throws SQLException, AwsSecretsManagerException {
+    public List<Question> 	getSurveyQuestionByCourseID(int courseID) throws SQLException, AwsSecretsManagerException {
         InvokeStoredProcedure invokeStoredProcedure = null;
 
         try {
