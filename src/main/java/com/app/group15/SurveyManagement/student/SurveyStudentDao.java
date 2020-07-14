@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-public class SurveyStudentDao extends SurveyStudentAbstractDao implements ISurveyStudentDaoInjector {
+public class SurveyStudentDao extends SurveyStudentAbstractDao {
 
     @Override
     public void saveNumericResponse(int questionId, int surveyId, int numericResponse, int userId) throws SQLException, AwsSecretsManagerException {
