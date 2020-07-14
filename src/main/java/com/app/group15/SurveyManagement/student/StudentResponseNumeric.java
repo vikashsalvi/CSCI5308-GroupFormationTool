@@ -1,12 +1,12 @@
-package com.app.group15.SurveyManagement;
+package com.app.group15.SurveyManagement.student;
 
 import com.app.group15.QuestionManager.Question;
 
-public class StudentResponseChoice {
+public class StudentResponseNumeric {
     private int id;
     private int questionId;
     private int surveyId;
-    private int choiceId;
+    private int numericResponse;
     private int studentId;
     private Question question;
 
@@ -42,12 +42,12 @@ public class StudentResponseChoice {
         this.surveyId = surveyId;
     }
 
-    public int getChoiceId() {
-        return choiceId;
+    public int getNumericResponse() {
+        return numericResponse;
     }
 
-    public void setChoiceId(int choiceId) {
-        this.choiceId = choiceId;
+    public void setNumericResponse(int numericResponse) {
+        this.numericResponse = numericResponse;
     }
 
     public int getStudentId() {

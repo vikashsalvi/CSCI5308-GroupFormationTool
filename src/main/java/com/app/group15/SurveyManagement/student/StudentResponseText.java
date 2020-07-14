@@ -1,4 +1,4 @@
-package com.app.group15.SurveyManagement;
+package com.app.group15.SurveyManagement.student;
 
 import com.app.group15.QuestionManager.Question;
 

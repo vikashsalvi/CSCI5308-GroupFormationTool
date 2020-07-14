@@ -207,43 +207,6 @@ public class SurveyQuestionMapperDao extends SurveyQuestionMapperAbstractDao {
         }
     }
 
-    @Override
-    public List<Question> getSurveyQuestionWithCourseByCourseID(int courseID) throws SQLException, AwsSecretsManagerException {
-        InvokeStoredProcedure invokeStoredProcedure = null;
-
-        try {
-            invokeStoredProcedure = new InvokeStoredProcedure("spGetSurveyQuestionByCourseID(?)");
-            invokeStoredProcedure.setParameter(1, courseID);
-            ResultSet results = invokeStoredProcedure.executeWithResults();
-            List<Question> questionList = new ArrayList<>();
-            int surveyId;
-            if (results != null) {
-                while (results.next()) {
-                    Question question = new Question();
-                    results.getInt("id");
-                    question.setQuestionId(results.getInt("id"));
-
-                    question.setQuestionTitle(results.getString("title"));
-                    question.setQuestionTypeId(results.getInt("type_id"));
-                    question.setQuestionInstructorId(results.getInt("instructor_id"));
-                    question.setQuestionText(results.getString("question_text"));
-                    question.setOptions(getQuestionOptionsByQuestionId(results.getInt("id")));
-                    question.setQuestionAddedDate(results.getString("question_date"));
-                    question.setSurveyId(results.getInt("survey_id"));
-                    questionList.add(question);
-
-                }
-            }
-            return questionList;
-        } catch (SQLException | AwsSecretsManagerException e) {
-            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
-            throw e;
-        } finally {
-            assert invokeStoredProcedure != null;
-            invokeStoredProcedure.closeConnection();
-        }
-    }
-
     private List<Options> getQuestionOptionsByQuestionId(int questionId) throws SQLException, AwsSecretsManagerException {
         InvokeStoredProcedure invokeStoredProcedure = null;
 
