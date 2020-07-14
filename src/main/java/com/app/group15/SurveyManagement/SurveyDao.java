@@ -181,7 +181,7 @@ public class SurveyDao extends SurveyAbstractDao implements ISurveyQuestionMappe
     @Override
     public void saveNumericResponse(int questionId, int surveyId, int numericResponse, int userId) throws SQLException, AwsSecretsManagerException {
         InvokeStoredProcedure invokeStoredProcedure = null;
-        int insertedSurveyId = -1;
+
         try {
             invokeStoredProcedure = new InvokeStoredProcedure("spAddSurveyNumericResponse(?,?,?,?)");
             invokeStoredProcedure.setParameter(1, questionId);
@@ -191,7 +191,6 @@ public class SurveyDao extends SurveyAbstractDao implements ISurveyQuestionMappe
 
 
             invokeStoredProcedure.execute();
-            //insertedSurveyId = invokeStoredProcedure.getOutputParameter(2);
 
         } catch (SQLException | AwsSecretsManagerException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
@@ -205,7 +204,7 @@ public class SurveyDao extends SurveyAbstractDao implements ISurveyQuestionMappe
     @Override
     public void saveTextResponse(int questionId, int surveyId, String textResponse, int userId) throws SQLException, AwsSecretsManagerException {
         InvokeStoredProcedure invokeStoredProcedure = null;
-        int insertedSurveyId = -1;
+
         try {
             invokeStoredProcedure = new InvokeStoredProcedure("spAddSurveyTextResponse(?,?,?,?)");
             invokeStoredProcedure.setParameter(1, questionId);
@@ -229,7 +228,7 @@ public class SurveyDao extends SurveyAbstractDao implements ISurveyQuestionMappe
     @Override
     public void saveChoiceResponse(int questionId, int surveyId, String choiceId, int userId) throws SQLException, AwsSecretsManagerException {
         InvokeStoredProcedure invokeStoredProcedure = null;
-        int insertedSurveyId = -1;
+
         try {
             invokeStoredProcedure = new InvokeStoredProcedure("spAddSurveyChoiceResponse(?,?,?,?)");
             invokeStoredProcedure.setParameter(1, questionId);
