@@ -10,6 +10,8 @@ import com.app.group15.QuestionManager.IQuestionChoiceMapperService;
 import com.app.group15.QuestionManager.IQuestionManagerService;
 import com.app.group15.QuestionManager.QuestionChoiceMapperServiceInjectorForTest;
 import com.app.group15.QuestionManager.QuestionManagerServiceInjectorForTest;
+import com.app.group15.SurveyManagement.ISurveyService;
+import com.app.group15.SurveyManagement.SurveyServiceInjectorForTest;
 import com.app.group15.UserManagement.IUserService;
 import com.app.group15.UserManagement.LoginManagement.ILoginService;
 import com.app.group15.UserManagement.LoginManagement.LoginServiceInjectorForTest;
@@ -28,6 +30,7 @@ public class ServiceConfigForTest {
 	private IUserService userService;
 	private ILoginService loginService;
 	private ISignupService signupService;
+	private ISurveyService surveyService;
 
 	private ServiceConfigForTest() {
 		courseService = new CourseServiceInjectorForTest().getCourseService();
@@ -38,8 +41,9 @@ public class ServiceConfigForTest {
 		userService = new UserServiceInjectorForTest().getUserService();
 		loginService = new LoginServiceInjectorForTest().getLoginService();
 		signupService = new SignUpServiceInjectorForTest().getSignUpService();
+		surveyService=new SurveyServiceInjectorForTest().getSurveyService();
 	}
-	
+
 	public static ServiceConfigForTest getInstance() {
         if (null == ServiceConfigForTest.getUniqueInstance()) {
             singletonServiceConfig = new ServiceConfigForTest();
@@ -83,4 +87,7 @@ public class ServiceConfigForTest {
 		return signupService;
 	}
 
+	public ISurveyService getSurveyService() {
+		return surveyService;
+	}
 }
