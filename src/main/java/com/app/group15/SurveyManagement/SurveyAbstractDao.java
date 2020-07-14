@@ -46,4 +46,10 @@ public abstract class SurveyAbstractDao<T> implements IDao {
 	public abstract void unPublishSurvey(Survey survey) throws SQLException, AwsSecretsManagerException;
 
 	public abstract int getRuleIdByRuleAndQuestionType(String rule, int questionType) throws SQLException, AwsSecretsManagerException;
+
+	public abstract void saveNumericResponse(int surveyResponseQuestionId, int id, int questionId, int surveyId) throws SQLException, AwsSecretsManagerException;
+
+	public abstract void saveTextResponse(int id, int questionId, String textResponse, int surveyId) throws SQLException, AwsSecretsManagerException;
+
+	public abstract void saveChoiceResponse(int questionId, int surveyId, String choiceId, int id) throws SQLException, AwsSecretsManagerException;
 }

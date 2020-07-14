@@ -168,8 +168,8 @@
 									<td th:text="${question.getQuestionTitle()}"></td>
 									<td th:text="${question.getQuestionText()}"></td>
 									<td th:if="${question.getQuestionTypeId()==1}">Numeric</td>
-									<td th:if="${question.getQuestionTypeId()==2}">Multiple Choice Multiple Select</td>
-									<td th:if="${question.getQuestionTypeId()==3}">Multiple Choice Single Select</td>
+									<td th:if="${question.getQuestionTypeId()==3}">Multiple Choice Multiple Select</td>
+									<td th:if="${question.getQuestionTypeId()==2}">Multiple Choice Single Select</td>
 									<td th:if="${question.getQuestionTypeId()==4}">Free Text</td>
 									<td th:text="${question.getQuestionAddedDate()}"></td>
 									<td>

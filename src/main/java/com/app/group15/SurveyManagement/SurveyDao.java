@@ -157,28 +157,100 @@ public class SurveyDao extends SurveyAbstractDao implements ISurveyQuestionMappe
 	@Override
 	public int getRuleIdByRuleAndQuestionType(String rule, int questionType) throws SQLException, AwsSecretsManagerException {
 		InvokeStoredProcedure invokeStoredProcedure = null;
-		try {
-			invokeStoredProcedure = new InvokeStoredProcedure("spGetRuleIdByRuleAndQuestionType(?,?)");
-			invokeStoredProcedure.setParameter(1, rule);
-			invokeStoredProcedure.setParameter(2, questionType);
-			ResultSet results = invokeStoredProcedure.executeWithResults();
-			int ruleId = -1;
-			if (results != null) {
-				while (results.next()) {
-					ruleId=results.getInt("id");
-				}
-			}
-			return ruleId;
-		} catch (SQLException e) {
-			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
-			throw e;
-		} finally {
-			assert invokeStoredProcedure != null;
-			invokeStoredProcedure.closeConnection();
-		}
-	}
+        try {
+            invokeStoredProcedure = new InvokeStoredProcedure("spGetRuleIdByRuleAndQuestionType(?,?)");
+            invokeStoredProcedure.setParameter(1, rule);
+            invokeStoredProcedure.setParameter(2, questionType);
+            ResultSet results = invokeStoredProcedure.executeWithResults();
+            int ruleId = -1;
+            if (results != null) {
+                while (results.next()) {
+                    ruleId = results.getInt("id");
+                }
+            }
+            return ruleId;
+        } catch (SQLException e) {
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
+        } finally {
+            assert invokeStoredProcedure != null;
+            invokeStoredProcedure.closeConnection();
+        }
+    }
 
-	@Override
+    @Override
+    public void saveNumericResponse(int questionId, int surveyId, int numericResponse, int userId) throws SQLException, AwsSecretsManagerException {
+        InvokeStoredProcedure invokeStoredProcedure = null;
+        int insertedSurveyId = -1;
+        try {
+            invokeStoredProcedure = new InvokeStoredProcedure("spSaveSurveyNumericResponse(?,?,?,?)");
+            invokeStoredProcedure.setParameter(1, questionId);
+            invokeStoredProcedure.setParameter(2, surveyId);
+            invokeStoredProcedure.setParameter(3, numericResponse);
+            invokeStoredProcedure.setParameter(4, userId);
+            invokeStoredProcedure.registerOutputParameterLong(2);
+
+            invokeStoredProcedure.execute();
+            insertedSurveyId = invokeStoredProcedure.getOutputParameter(2);
+
+        } catch (SQLException | AwsSecretsManagerException e) {
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
+        } finally {
+            assert invokeStoredProcedure != null;
+            invokeStoredProcedure.closeConnection();
+        }
+    }
+
+    @Override
+    public void saveTextResponse(int questionId, int surveyId, String textResponse, int userId) throws SQLException, AwsSecretsManagerException {
+        InvokeStoredProcedure invokeStoredProcedure = null;
+        int insertedSurveyId = -1;
+        try {
+            invokeStoredProcedure = new InvokeStoredProcedure("spSaveSurveyTextResponse(?,?,?,?)");
+            invokeStoredProcedure.setParameter(1, questionId);
+            invokeStoredProcedure.setParameter(2, surveyId);
+            invokeStoredProcedure.setParameter(3, textResponse);
+            invokeStoredProcedure.setParameter(4, userId);
+            invokeStoredProcedure.registerOutputParameterLong(2);
+
+            invokeStoredProcedure.execute();
+            insertedSurveyId = invokeStoredProcedure.getOutputParameter(2);
+
+        } catch (SQLException | AwsSecretsManagerException e) {
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
+        } finally {
+            assert invokeStoredProcedure != null;
+            invokeStoredProcedure.closeConnection();
+        }
+    }
+
+    @Override
+    public void saveChoiceResponse(int questionId, int surveyId, String choiceId, int userId) throws SQLException, AwsSecretsManagerException {
+        InvokeStoredProcedure invokeStoredProcedure = null;
+        int insertedSurveyId = -1;
+        try {
+            invokeStoredProcedure = new InvokeStoredProcedure("spSaveSurveyChoiceResponse(?,?,?,?)");
+            invokeStoredProcedure.setParameter(1, questionId);
+            invokeStoredProcedure.setParameter(2, surveyId);
+            invokeStoredProcedure.setParameter(3, choiceId);
+            invokeStoredProcedure.setParameter(4, userId);
+            invokeStoredProcedure.registerOutputParameterLong(2);
+
+            invokeStoredProcedure.execute();
+            insertedSurveyId = invokeStoredProcedure.getOutputParameter(2);
+
+        } catch (SQLException | AwsSecretsManagerException e) {
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
+        } finally {
+            assert invokeStoredProcedure != null;
+            invokeStoredProcedure.closeConnection();
+        }
+    }
+
+    @Override
     public void update(Persistence persistence, int id) throws SQLException, AwsSecretsManagerException {
 
     }

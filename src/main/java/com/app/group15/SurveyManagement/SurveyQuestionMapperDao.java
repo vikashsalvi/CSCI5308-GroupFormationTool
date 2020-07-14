@@ -2,6 +2,7 @@ package com.app.group15.SurveyManagement;
 
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.InvokeStoredProcedure;
+import com.app.group15.QuestionManager.Options;
 import com.app.group15.QuestionManager.Question;
 import com.app.group15.Utility.GroupFormationToolLogger;
 
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 public class SurveyQuestionMapperDao extends SurveyQuestionMapperAbstractDao {
+
     @Override
     public int getHighestOrderValue(int surveyId) throws SQLException, AwsSecretsManagerException {
         InvokeStoredProcedure invokeStoredProcedure = null;
@@ -185,25 +187,85 @@ public class SurveyQuestionMapperDao extends SurveyQuestionMapperAbstractDao {
 			if (results != null) {
 				while (results.next()) {
 					Question question = new Question();
-					question.setQuestionId(results.getInt("id"));
-					question.setId(results.getInt("id"));
-					question.setQuestionTitle(results.getString("title"));
-					question.setQuestionTypeId(results.getInt("type_id"));
-					question.setQuestionInstructorId(results.getInt("instructor_id"));
-					question.setQuestionText(results.getString("question_text"));
-					question.setQuestionAddedDate(results.getString("question_date"));
-					Questions.add(question);
-				}
-			}
-			return Questions;
-		} catch (SQLException e) {
-			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
-			throw e;
-		} finally {
-			assert invokeStoredProcedure != null;
-			invokeStoredProcedure.closeConnection();
-		}
-	}
+                    question.setQuestionId(results.getInt("id"));
+                    question.setId(results.getInt("id"));
+                    question.setQuestionTitle(results.getString("title"));
+                    question.setQuestionTypeId(results.getInt("type_id"));
+                    question.setQuestionInstructorId(results.getInt("instructor_id"));
+                    question.setQuestionText(results.getString("question_text"));
+                    question.setQuestionAddedDate(results.getString("question_date"));
+                    Questions.add(question);
+                }
+            }
+            return Questions;
+        } catch (SQLException e) {
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
+        } finally {
+            assert invokeStoredProcedure != null;
+            invokeStoredProcedure.closeConnection();
+        }
+    }
 
+    @Override
+    public List<Question> getSurveyQuestionWithCourseByCourseID(int courseID) throws SQLException, AwsSecretsManagerException {
+        InvokeStoredProcedure invokeStoredProcedure = null;
 
+        try {
+            invokeStoredProcedure = new InvokeStoredProcedure("spGetSurveyQuestionByCourseID(?)");
+            invokeStoredProcedure.setParameter(1, courseID);
+            ResultSet results = invokeStoredProcedure.executeWithResults();
+            List<Question> questionList = new ArrayList<>();
+            if (results != null) {
+                while (results.next()) {
+                    Question question = new Question();
+                    question.setId(results.getInt("id"));
+
+                    question.setQuestionTitle(results.getString("title"));
+                    question.setQuestionTypeId(results.getInt("type_id"));
+                    question.setQuestionInstructorId(results.getInt("instructor_id"));
+                    question.setQuestionText(results.getString("question_text"));
+                    question.setOptions(getQuestionOptionsByQuestionId(results.getInt("id")));
+                    question.setQuestionAddedDate(results.getString("question_date"));
+                    questionList.add(question);
+
+                }
+            }
+            return questionList;
+        } catch (SQLException | AwsSecretsManagerException e) {
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
+        } finally {
+            assert invokeStoredProcedure != null;
+            invokeStoredProcedure.closeConnection();
+        }
+    }
+
+    private List<Options> getQuestionOptionsByQuestionId(int questionId) throws SQLException, AwsSecretsManagerException {
+        InvokeStoredProcedure invokeStoredProcedure = null;
+
+        try {
+            invokeStoredProcedure = new InvokeStoredProcedure("spFindQuestionChoices(?)");
+            invokeStoredProcedure.setParameter(1, questionId);
+            ResultSet results = invokeStoredProcedure.executeWithResults();
+            List<Options> optionsList = new ArrayList<>();
+            if (results != null) {
+                while (results.next()) {
+
+                    Options options = new Options();
+                    options.setId(results.getInt("id"));
+                    options.setOption(results.getString("choice"));
+                    options.setValue(results.getString("stored_as"));
+                    optionsList.add(options);
+                }
+            }
+            return optionsList;
+        } catch (SQLException | AwsSecretsManagerException e) {
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
+        } finally {
+            assert invokeStoredProcedure != null;
+            invokeStoredProcedure.closeConnection();
+        }
+    }
 }

@@ -121,6 +121,9 @@
                                             <th>
                                                 View course
                                             </th>
+                                            <th>
+                                                Survey
+                                            </th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -132,6 +135,12 @@
                                                 <a class="btn btn-outline-primary"
                                                    th:href='@{/student/courseInfo(courseId=${course.getId()})}'>
                                                     <i class="far fa-eye"></i>&nbsp; View Course
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-outline-primary"
+                                                   th:href='@{/student/survey(courseId=${course.getId()})}'>
+                                                    <i class="far fa-eye"></i>&nbsp; Start survey
                                                 </a>
                                             </td>
                                         </tr>

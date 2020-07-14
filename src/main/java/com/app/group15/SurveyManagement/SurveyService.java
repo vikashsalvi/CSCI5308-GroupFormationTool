@@ -3,8 +3,10 @@ package com.app.group15.SurveyManagement;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.QuestionManager.Question;
 import com.app.group15.QuestionManager.QuestionManagerAbstractDao;
+import com.app.group15.UserManagement.User;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SurveyService implements ISurveyService, ISurveyServiceInjector {
@@ -30,6 +32,26 @@ public class SurveyService implements ISurveyService, ISurveyServiceInjector {
 	@Override
 	public List<Question> getRemainingQuestionsForSurvey(int courseId, int instructorId) throws SQLException, AwsSecretsManagerException {
 		return this.surveyQuestionMapperDao.getRemainingQuestionsForSurvey(courseId, instructorId);
+	}
+
+	@Override
+	public SurveyFormResponse getSurveyQuestionWithOptions(int courseId) throws SQLException, AwsSecretsManagerException {
+		List<Question> questionList = this.surveyQuestionMapperDao.getSurveyQuestionWithCourseByCourseID(courseId);
+		List<SurveyResponse> surveyResponse = new ArrayList<>();
+		for (Question qst : questionList) {
+			SurveyResponse response = new SurveyResponse();
+			response.setQuestionId(qst.getQuestionId());
+			response.setQuestionTitle(qst.getQuestionTitle());
+			response.setQuestionTypeId(qst.getQuestionTypeId());
+			response.setQuestionInstructorId(qst.getQuestionInstructorId());
+			response.setQuestionText(qst.getQuestionText());
+			response.setOptions(qst.getOptions());
+			response.setQuestionAddedDate(qst.getQuestionAddedDate());
+			surveyResponse.add(response);
+		}
+		SurveyFormResponse surveyFormResponse = new SurveyFormResponse();
+		surveyFormResponse.setSurveyResponse(surveyResponse);
+		return surveyFormResponse;
 	}
 
 	@Override
@@ -72,6 +94,22 @@ public class SurveyService implements ISurveyService, ISurveyServiceInjector {
 	public void unPublishSurvey(int courseId) throws SQLException, AwsSecretsManagerException {
 		Survey survey = surveyDao.getSurveyByCourseID(courseId);
 		surveyDao.unPublishSurvey(survey);
+	}
+
+	@Override
+	public void submitResponse(User user, SurveyFormResponse surveyFormResponse) throws SQLException, AwsSecretsManagerException {
+
+		for (SurveyResponse surveyResponse : surveyFormResponse.getSurveyResponse()) {
+			if (surveyResponse.getQuestionTypeId() == 1) {
+				//surveyDao.saveNumericResponse(surveyResponse.getQuestionId(),surveyFormResponse.getSurveyId(),surveyResponse.getNumericResponse(),user.getId());
+			} else if (surveyResponse.getQuestionTypeId() == 2) {
+				//surveyDao.saveChoiceResponse(surveyResponse.getQuestionId(),surveyFormResponse.getSurveyId(),surveyResponse.getChoiceId(),user.getId());
+			} else if (surveyResponse.getQuestionTypeId() == 3) {
+				//surveyDao.saveChoiceResponse(surveyResponse.getQuestionId(),surveyFormResponse.getSurveyId(),surveyResponse.getChoiceId(),user.getId());
+			} else {
+				//surveyDao.saveTextResponse(surveyResponse.getQuestionId(),surveyFormResponse.getSurveyId(),surveyResponse.getTextResponse(),user.getId());
+			}
+		}
 	}
 
 	@Override
