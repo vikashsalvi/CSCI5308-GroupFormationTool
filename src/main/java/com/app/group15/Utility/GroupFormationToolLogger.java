@@ -35,10 +35,15 @@ public class GroupFormationToolLogger {
     }
 
     private static Logger getLogger() {
-        return logger == null ? new GroupFormationToolLogger().getLogger() : logger;
+        if (GroupFormationToolLogger.logger == null) {
+            return new GroupFormationToolLogger().getLogger();
+        } else {
+            return GroupFormationToolLogger.logger;
+        }
     }
 
     public static void log(Level level, String msg, Exception e) {
+        e.printStackTrace();
         getLogger().log(level, msg, e);
     }
 

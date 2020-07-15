@@ -104,7 +104,7 @@
                             <div class="card-header">
                                 <h3 class="h5">Courses as student</h3>
                             </div>
-                            <div class="card-body w-100">
+                            <div class="card-body w-200">
                                 <div class="row">
                                     <table class="card-table table table-responsive table-hover">
                                         <thead class="thead-dark">
@@ -121,6 +121,9 @@
                                             <th>
                                                 View course
                                             </th>
+                                            <th>
+                                                Survey
+                                            </th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -132,6 +135,17 @@
                                                 <a class="btn btn-outline-primary"
                                                    th:href='@{/student/courseInfo(courseId=${course.getId()})}'>
                                                     <i class="far fa-eye"></i>&nbsp; View Course
+                                                </a>
+                                            </td>
+                                            <td th:if="${surveyAppeared[iterstat.index]}">
+                                                <a class="btn btn-outline-primary"
+                                                   th:href='@{/student/survey(courseId=${course.getId()})}'>
+                                                    <i class="far fa-eye"></i>&nbsp; Start survey
+                                                </a>
+                                            </td>
+                                            <td th:if="!${surveyAppeared[iterstat.index]}">
+                                                <a class="btn btn-outline-primary" disabled>
+                                                    <i class="far fa-eye"></i>&nbsp; Start survey
                                                 </a>
                                             </td>
                                         </tr>

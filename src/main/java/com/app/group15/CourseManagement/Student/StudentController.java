@@ -4,10 +4,11 @@ import com.app.group15.Config.ServiceConfig;
 import com.app.group15.CourseManagement.Course;
 import com.app.group15.CourseManagement.ICourseService;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+import com.app.group15.SurveyManagement.student.ISurveyStudentService;
 import com.app.group15.UserManagement.SessionManagement.IAuthorizationService;
 import com.app.group15.UserManagement.SessionManagement.ISessionService;
-import com.app.group15.Utility.GroupFormationToolLogger;
 import com.app.group15.UserManagement.User;
+import com.app.group15.Utility.GroupFormationToolLogger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
@@ -23,6 +23,7 @@ import java.util.logging.Level;
 @Controller
 public class StudentController {
     private IAuthorizationService authorizationService = ServiceConfig.getInstance().getAuthorizationService();
+    private ISurveyStudentService surveyStudentService = ServiceConfig.getInstance().getSurveyStudentService();
     private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
     private ICourseService courseService = ServiceConfig.getInstance().getCourseService();
 
@@ -35,6 +36,7 @@ public class StudentController {
             if (authorizationService.isAuthorized(request)) {
                 User user = sessionService.getSessionUser(request);
                 List<Course> coursesAsStudent = courseService.getStudentCourses(user.getId());
+                List<Boolean> surveyAppeared = surveyStudentService.validateIfUserHasSubmittedSurveyBefore(coursesAsStudent, user.getId());
                 List<User> coursesAsStudentInstructors = courseService.getAllCourseInstructors(coursesAsStudent);
                 Course courseAsTa = courseService.getStudentCourseAsTa(user.getId());
                 User courseAsTaInstructor = courseService.getCourseInstructor(courseAsTa.getId());
@@ -42,6 +44,7 @@ public class StudentController {
                 modelAndViewResponse.setViewName("student/home");
                 modelAndViewResponse.addObject("user", user);
                 modelAndViewResponse.addObject("coursesAsStudent", coursesAsStudent);
+                modelAndViewResponse.addObject("surveyAppeared", surveyAppeared);
                 modelAndViewResponse.addObject("coursesAsStudentInstructor", coursesAsStudentInstructors);
                 modelAndViewResponse.addObject("courseAsTa", courseAsTa);
                 modelAndViewResponse.addObject("courseAsTaInstructor", courseAsTaInstructor);

@@ -13,5 +13,5 @@ public interface IUserService {
     void updateUserRole(int userId, String role) throws AllowedRolesNotSetException, SQLException,AwsSecretsManagerException;
 
     boolean validateBannerID(String bannerId) throws SQLException,AwsSecretsManagerException;
-
+    public User getUser(int userId) throws SQLException,AwsSecretsManagerException;
 }

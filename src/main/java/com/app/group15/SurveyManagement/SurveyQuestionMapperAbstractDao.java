@@ -47,5 +47,6 @@ public abstract class SurveyQuestionMapperAbstractDao<T> implements IDao {
     public abstract List<Question> getSurveyQuestionByCourseID(int course) throws SQLException, AwsSecretsManagerException;
 
 
-    public abstract List<Question> getRemainingQuestionsForSurvey(int courseId, int instructorId)  throws SQLException, AwsSecretsManagerException;
+    public abstract List<Question> getRemainingQuestionsForSurvey(int courseId, int instructorId) throws SQLException, AwsSecretsManagerException;
+
 }
