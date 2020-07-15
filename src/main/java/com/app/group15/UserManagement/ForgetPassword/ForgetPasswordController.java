@@ -1,5 +1,6 @@
 package com.app.group15.UserManagement.ForgetPassword;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.Config.ServiceConfig;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.PasswordPolicyManagement.IPasswordPolicyService;
@@ -23,7 +24,8 @@ import java.util.logging.Level;
 public class ForgetPasswordController {
 
 	private IPasswordPolicyService passwordPolicyService;
-	private IForgetPasswordService forgetPasswordService = ServiceConfig.getInstance().getForgetPasswordService();
+	private IForgetPasswordAbstractFactory forgetPasswordAbstractFactory= AppConfig.getInstance().getForgetPasswordAbstractFactory();
+	private IForgetPasswordService forgetPasswordService = forgetPasswordAbstractFactory.getForgetPasswordService();
 	private String invalidInput = "Invalid invalid";
 
 	@RequestMapping(value = "/forgetPassword", method = RequestMethod.GET)
@@ -117,7 +119,7 @@ public class ForgetPasswordController {
 					Integer.parseInt(user.get("id")));
 
 			if (!newPassword.equals(password)) {
-				
+
 				modelAndView.setViewName("resetPassword");
 				modelAndView.addObject("error", true);
 				modelAndView.addObject("completed", false);

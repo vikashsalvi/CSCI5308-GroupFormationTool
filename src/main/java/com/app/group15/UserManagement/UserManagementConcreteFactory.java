@@ -35,7 +35,7 @@ public class UserManagementConcreteFactory implements IUserManagementAbstractFac
 
 	@Override
 	public UserAbstractDao getUserDao() {
-		return new UserDaoInjectorService().getUserDao();
+		return new UserDao();
 	}
 
 	@Override

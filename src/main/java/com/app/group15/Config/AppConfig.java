@@ -23,7 +23,12 @@ import com.app.group15.SurveyManagement.SurveyAbstractDao;
 import com.app.group15.SurveyManagement.SurveyDaoInjectorService;
 import com.app.group15.SurveyManagement.SurveyQuestionMapperAbstractDao;
 import com.app.group15.SurveyManagement.SurveyQuestionMapperDao;
-import com.app.group15.UserManagement.*;
+import com.app.group15.UserManagement.ForgetPassword.ForgetPasswordConcreteFactory;
+import com.app.group15.UserManagement.ForgetPassword.IForgetPasswordAbstractFactory;
+import com.app.group15.UserManagement.IUserManagementAbstractFactory;
+import com.app.group15.UserManagement.UserManagementConcreteFactory;
+import com.app.group15.UserManagement.UserRoleDaoInjectorService;
+
 import com.app.group15.Utility.GroupFormationToolLogger;
 
 import java.io.FileInputStream;
@@ -43,7 +48,6 @@ public class AppConfig {
     private UserRoleDaoInjectorService userRoleDaoInjectorService;
     private CourseStudentMapperAbstractDao courseStudentMapperDao;
     private CourseInstructorMapperAbstractDao courseInstructorMapperDao;
-    private UserAbstractDao userDao;
     private CourseAbstractDao courseDao;
     private PasswordPolicyAbstractDao passwordPolicyDao;
     private UserPasswordHistoryAbstractDao userPasswordHistoryDao;
@@ -55,6 +59,7 @@ public class AppConfig {
     private IQuestionManagerAbstractFactory questionManagerAbstractFactory;
     private IGroupFormationAlgorithmAbstractFactory groupAlgorithmAbstractFactory;
     private IUserManagementAbstractFactory userManagementAbstractFactory;
+    private IForgetPasswordAbstractFactory forgetPasswordAbstractFactory;
 
 	public SurveyAbstractDao getSurveyDao() {
 		return surveyDao;
@@ -82,7 +87,6 @@ public class AppConfig {
         userRoleDaoInjectorService = new UserRoleDaoInjectorService();
         courseStudentMapperDao = new CourseStudentMapperDao();
         courseInstructorMapperDao = new CourseInstructorMapperDao();
-        userDao = new UserDaoInjectorService().getUserDao();
 
         courseDao = new CourseDaoInjectorService().getCourseDao();
         passwordPolicyDao = new PasswordPolicyDao();
@@ -94,7 +98,8 @@ public class AppConfig {
        //ABSTRACT FACTORY
         questionManagerAbstractFactory=QuestionManagerConcreteFactory.getInstance();
         groupAlgorithmAbstractFactory=GroupFormationAlgorithmConcreteFactory.getInstance();
-        userManagementAbstractFactory=UserManagementConcreteFactory.getInstance();
+        userManagementAbstractFactory= UserManagementConcreteFactory.getInstance();
+        forgetPasswordAbstractFactory= ForgetPasswordConcreteFactory.getInstance();
     }
 
     public static AppConfig getSingletonAppConfig() {
@@ -120,13 +125,6 @@ public class AppConfig {
         return courseDao;
     }
 
-    public UserAbstractDao getUserDao() {
-        return userDao;
-    }
-
-    public void setUserDao(UserDao userDao) {
-        this.userDao = userDao;
-    }
 
     public CourseInstructorMapperAbstractDao getCourseInstructorMapperDao() {
         return courseInstructorMapperDao;
@@ -216,7 +214,7 @@ public class AppConfig {
 		return userManagementAbstractFactory;
 	}
 
-
-
-
+	public IForgetPasswordAbstractFactory getForgetPasswordAbstractFactory() {
+		return forgetPasswordAbstractFactory;
+	}
 }

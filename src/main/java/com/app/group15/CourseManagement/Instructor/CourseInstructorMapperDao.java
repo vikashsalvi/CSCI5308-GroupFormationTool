@@ -1,9 +1,11 @@
 package com.app.group15.CourseManagement.Instructor;
 
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.CourseManagement.Course;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.DatabaseManager;
+import com.app.group15.UserManagement.IUserManagementAbstractFactory;
 import com.app.group15.UserManagement.User;
 import com.app.group15.Utility.GroupFormationToolLogger;
 
@@ -17,6 +19,7 @@ import static com.app.group15.Utility.DatabaseQueriesUtility.*;
 @SuppressWarnings("rawtypes")
 public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao {
 
+	private IUserManagementAbstractFactory userManagementAbstractFactory= AppConfig.getInstance().getUserManagementAbstractFactory();
 
     @Override
     public ArrayList<CourseInstructorMapper> getAll() throws SQLException, AwsSecretsManagerException {
@@ -45,7 +48,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
     @Override
     public User getCourseInstructor(int id) throws SQLException, AwsSecretsManagerException {
         String query = GET_COURSE_INSTRUCTOR;
-        User userEntity = new User();
+        User userEntity = (User) userManagementAbstractFactory.getUserModel();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
@@ -285,7 +288,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
     @Override
     public User getCourseTA(int id) throws SQLException, AwsSecretsManagerException {
         String query = GET_COURSE_TA;
-        User userEntity = new User();
+        User userEntity = (User) userManagementAbstractFactory.getUserModel();
 
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {

@@ -4,15 +4,15 @@ import com.app.group15.Config.AppConfig;
 
 public class UserDaoInjectorService {
 
-	private UserAbstractDao userDao;
+	private UserDao userDao;
 
 	public UserDaoInjectorService() {
 
-		userDao = AppConfig.getInstance().getUserManagementAbstractFactory().getUserDao();
-		userDao.injectUserRoleDao(AppConfig.getInstance().getUserManagementAbstractFactory().getUserRoleDao());
+		userDao = new UserDao();
+		userDao.injectUserRoleDao(new UserRoleDaoInjectorService().getUserRoleDao());
 	}
 
-	public UserAbstractDao getUserDao() {
+	public UserDao getUserDao() {
 		return userDao;
 	}
 

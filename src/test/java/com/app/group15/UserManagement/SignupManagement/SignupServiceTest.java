@@ -1,8 +1,10 @@
 package com.app.group15.UserManagement.SignupManagement;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.Config.ServiceConfigForTest;
 import com.app.group15.ExceptionHandler.AllowedRolesNotSetException;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+import com.app.group15.UserManagement.IUserManagementAbstractFactory;
 import com.app.group15.UserManagement.User;
 import com.app.group15.UserManagement.UserDaoMock;
 import com.app.group15.UserManagement.UserRole;
@@ -16,6 +18,7 @@ class SignupServiceTest {
 
     private UserDaoMock userDaoMock = new UserDaoMock();
     private ISignupService signupService = ServiceConfigForTest.getInstance().getSignupService();
+    private IUserManagementAbstractFactory userManagementAbstractFactory = AppConfig.getInstance().getUserManagementAbstractFactory();
 
     @Test
     public void checkUserExistsTest() throws SQLException, AwsSecretsManagerException {
@@ -25,7 +28,7 @@ class SignupServiceTest {
 
     @Test
     public void createUserTest() throws AllowedRolesNotSetException, SQLException, AwsSecretsManagerException {
-        User user = new User();
+        User user = (User) userManagementAbstractFactory.getUserModel();
         user.setBannerId("B00843469");
 
         int created = signupService.createUser(user, UserRole.GUEST.getRole());

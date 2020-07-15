@@ -1,9 +1,11 @@
 package com.app.group15.SurveyManagement.student;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.CourseManagement.Course;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.QuestionManager.Options;
 import com.app.group15.QuestionManager.Question;
+import com.app.group15.UserManagement.IUserManagementAbstractFactory;
 import com.app.group15.UserManagement.User;
 
 import java.sql.SQLException;
@@ -12,6 +14,7 @@ import java.util.List;
 
 public class SurveyStudentDaoMock extends SurveyStudentAbstractDao {
 
+	private IUserManagementAbstractFactory userManagementAbstractFactory=AppConfig.getInstance().getUserManagementAbstractFactory();
 
     @Override
     public void saveNumericResponse(int questionId, int surveyId, int numericResponse, int userId) throws SQLException, AwsSecretsManagerException {
@@ -133,7 +136,7 @@ public class SurveyStudentDaoMock extends SurveyStudentAbstractDao {
 
     public User getUser() {
 
-        User user = new User();
+        User user = (User) userManagementAbstractFactory.getUserModel();
         user.setBannerId("B00838074");
         user.setFirstName("John");
         user.setLastName("Doe");
