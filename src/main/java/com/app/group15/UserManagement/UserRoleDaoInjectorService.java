@@ -1,15 +1,17 @@
 package com.app.group15.UserManagement;
 
+import com.app.group15.Config.AppConfig;
+
 public class UserRoleDaoInjectorService {
 
-    private UserRoleDao userRoleDao;
+    private UserRoleAbstractDao userRoleDao;
 
     public UserRoleDaoInjectorService() {
-        userRoleDao = new UserRoleDao();
+        userRoleDao = AppConfig.getInstance().getUserManagementAbstractFactory().getUserRoleDao();
 
     }
 
-    public UserRoleDao getUserRoleDao() {
+    public UserRoleAbstractDao getUserRoleDao() {
         return userRoleDao;
     }
 

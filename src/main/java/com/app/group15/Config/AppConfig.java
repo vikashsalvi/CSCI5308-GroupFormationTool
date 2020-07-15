@@ -23,10 +23,7 @@ import com.app.group15.SurveyManagement.SurveyAbstractDao;
 import com.app.group15.SurveyManagement.SurveyDaoInjectorService;
 import com.app.group15.SurveyManagement.SurveyQuestionMapperAbstractDao;
 import com.app.group15.SurveyManagement.SurveyQuestionMapperDao;
-import com.app.group15.UserManagement.UserAbstractDao;
-import com.app.group15.UserManagement.UserDao;
-import com.app.group15.UserManagement.UserDaoInjectorService;
-import com.app.group15.UserManagement.UserRoleDaoInjectorService;
+import com.app.group15.UserManagement.*;
 import com.app.group15.Utility.GroupFormationToolLogger;
 
 import java.io.FileInputStream;
@@ -50,13 +47,14 @@ public class AppConfig {
     private CourseAbstractDao courseDao;
     private PasswordPolicyAbstractDao passwordPolicyDao;
     private UserPasswordHistoryAbstractDao userPasswordHistoryDao;
-   
+
     private SurveyAbstractDao surveyDao;
     private SurveyQuestionMapperAbstractDao surveyQuestionMapperDao;
-    
+
     // Abstract Factory
     private IQuestionManagerAbstractFactory questionManagerAbstractFactory;
     private IGroupFormationAlgorithmAbstractFactory groupAlgorithmAbstractFactory;
+    private IUserManagementAbstractFactory userManagementAbstractFactory;
 
 	public SurveyAbstractDao getSurveyDao() {
 		return surveyDao;
@@ -89,13 +87,14 @@ public class AppConfig {
         courseDao = new CourseDaoInjectorService().getCourseDao();
         passwordPolicyDao = new PasswordPolicyDao();
         userPasswordHistoryDao = new UserPasswordHistoryDao();
-    
+
 
         surveyDao=new SurveyDaoInjectorService().getSurveyDao();
         surveyQuestionMapperDao=new SurveyQuestionMapperDao();
-       //ABSTRACT FACTORY 
+       //ABSTRACT FACTORY
         questionManagerAbstractFactory=QuestionManagerConcreteFactory.getInstance();
         groupAlgorithmAbstractFactory=GroupFormationAlgorithmConcreteFactory.getInstance();
+        userManagementAbstractFactory=UserManagementConcreteFactory.getInstance();
     }
 
     public static AppConfig getSingletonAppConfig() {
@@ -203,7 +202,7 @@ public class AppConfig {
         return userPasswordHistoryDao;
     }
 
-    
+
 
 	public IQuestionManagerAbstractFactory getQuestionManagerAbstractFactory() {
 		return questionManagerAbstractFactory;
@@ -212,8 +211,12 @@ public class AppConfig {
 	public IGroupFormationAlgorithmAbstractFactory getGroupAlgorithmAbstractFactory() {
 		return groupAlgorithmAbstractFactory;
 	}
-	
-	
-    
-    
+
+	public IUserManagementAbstractFactory getUserManagementAbstractFactory() {
+		return userManagementAbstractFactory;
+	}
+
+
+
+
 }

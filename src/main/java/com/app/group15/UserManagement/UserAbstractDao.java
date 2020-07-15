@@ -38,4 +38,6 @@ public abstract class UserAbstractDao<T> implements IDao {
     public abstract void updateUserRole(int userId, String role) throws SQLException,AwsSecretsManagerException;
 
     public abstract User getUserByEmailId(String emailId) throws SQLException,AwsSecretsManagerException;
+
+	public abstract void injectUserRoleDao(UserRoleAbstractDao userRoleDao);
 }

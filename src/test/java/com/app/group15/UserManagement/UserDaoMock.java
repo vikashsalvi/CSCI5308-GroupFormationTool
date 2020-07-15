@@ -88,4 +88,9 @@ public class UserDaoMock extends UserAbstractDao {
     public User getUserByEmailId(String emailId) throws SQLException, AwsSecretsManagerException {
         return null;
     }
+
+	@Override
+	public void injectUserRoleDao(UserRoleAbstractDao userRoleDao) {
+
+	}
 }
