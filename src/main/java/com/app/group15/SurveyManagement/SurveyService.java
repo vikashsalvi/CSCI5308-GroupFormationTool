@@ -52,7 +52,7 @@ public class SurveyService implements ISurveyService, ISurveyServiceInjector {
         createSurveyIfNotExists(courseId);
         Question question = (Question) questionManagerDao.get(questionId);
         int ruleId = surveyDao.getRuleIdByRuleAndQuestionType(rule, question.getQuestionTypeId());
-        SurveyQuestionMapper surveyQuestionMapper = new SurveyQuestionMapper();
+        SurveyQuestionMapper surveyQuestionMapper = (SurveyQuestionMapper) surveyManagementAbstractFactory.getSurveyQuestionMapperModel();
         int surveyId = surveyDao.getSurveyByCourseID(courseId).getId();
         surveyQuestionMapper.setSurveyId(surveyId);
         surveyQuestionMapper.setQuestionId(questionId);

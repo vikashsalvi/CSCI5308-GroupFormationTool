@@ -1,19 +1,15 @@
 package com.app.group15.SurveyManagement;
 
-import com.app.group15.Config.AppConfig;
-import com.app.group15.QuestionManager.IQuestionManagerAbstractFactory;
+import com.app.group15.QuestionManager.QuestionManagerDao;
 
 public class SurveyServiceInjector {
     private SurveyService surveyService;
-
-    ISurveyManagementAbstractFactory surveyManagementAbstractFactory = AppConfig.getInstance().getSurveyManagementAbstractFactory();
-    IQuestionManagerAbstractFactory questionManagerAbstractFactory = AppConfig.getInstance().getQuestionManagerAbstractFactory();
-
+    
     public SurveyServiceInjector() {
-        surveyService = (SurveyService) surveyManagementAbstractFactory.getSurveyService();
-        surveyService.injectSurveyDao(surveyManagementAbstractFactory.getSurveyDao());
-        surveyService.injectSurveyQuestionMapperDao(surveyManagementAbstractFactory.getSurveyQuestionMapperDao());
-        surveyService.injectQuestionManagerDao(questionManagerAbstractFactory.getQuestionManagerDao());
+        surveyService = new SurveyService();
+        surveyService.injectSurveyDao(new SurveyDao());
+        surveyService.injectSurveyQuestionMapperDao(new SurveyQuestionMapperDao());
+        surveyService.injectQuestionManagerDao(new QuestionManagerDao());
     }
 
     public SurveyService getSurveyService() {

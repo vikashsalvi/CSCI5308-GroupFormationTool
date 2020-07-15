@@ -26,6 +26,11 @@ public class PasswordPolicyConcreteFactory implements IPasswordPolicyAbstractFac
     }
 
     @Override
+    public PasswordPolicyValidationResult getPasswordPolicyValidationResultModel() {
+        return new PasswordPolicyValidationResult();
+    }
+
+    @Override
     public Persistence getUserPasswordHistoryModel() {
         return new UserPasswordHistory();
     }

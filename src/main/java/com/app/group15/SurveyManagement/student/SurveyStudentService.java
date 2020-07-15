@@ -1,8 +1,10 @@
 package com.app.group15.SurveyManagement.student;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.CourseManagement.Course;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.QuestionManager.Question;
+import com.app.group15.SurveyManagement.ISurveyManagementAbstractFactory;
 import com.app.group15.SurveyManagement.Survey;
 import com.app.group15.SurveyManagement.SurveyAbstractDao;
 import com.app.group15.UserManagement.User;
@@ -14,6 +16,7 @@ import java.util.List;
 
 public class SurveyStudentService implements ISurveyStudentService, ISurveyStudentServiceInjector {
 
+    private ISurveyManagementAbstractFactory surveyManagementAbstractFactory = AppConfig.getInstance().getSurveyManagementAbstractFactory();
     private SurveyStudentAbstractDao surveyStudentDao;
     private SurveyAbstractDao surveyDao;
 
@@ -46,7 +49,7 @@ public class SurveyStudentService implements ISurveyStudentService, ISurveyStude
         List<SurveyResponse> surveyResponse = new ArrayList<>();
         int surveyId = questionList.get(0).getSurveyId();
         for (Question qst : questionList) {
-            SurveyResponse response = new SurveyResponse();
+            SurveyResponse response = surveyManagementAbstractFactory.getSurveyResponseModel();
             response.setQuestionId(qst.getQuestionId());
             response.setQuestionTitle(qst.getQuestionTitle());
             response.setQuestionTypeId(qst.getQuestionTypeId());
@@ -56,7 +59,7 @@ public class SurveyStudentService implements ISurveyStudentService, ISurveyStude
             response.setQuestionAddedDate(qst.getQuestionAddedDate());
             surveyResponse.add(response);
         }
-        SurveyFormResponse surveyFormResponse = new SurveyFormResponse();
+        SurveyFormResponse surveyFormResponse = surveyManagementAbstractFactory.getSurveyFormResponseModel();
         surveyFormResponse.setSurveyId(surveyId);
         surveyFormResponse.setSurveyResponse(surveyResponse);
         return surveyFormResponse;
@@ -101,19 +104,20 @@ public class SurveyStudentService implements ISurveyStudentService, ISurveyStude
     public void injectSurveyDao(SurveyAbstractDao surveyAbstractDao) {
         this.surveyDao = surveyAbstractDao;
     }
-	@Override
-	public List<StudentResponseNumeric> getNumericStudentResponsesForASurvey(int surveyId) throws SQLException, AwsSecretsManagerException {
-		return this.surveyStudentDao.getNumericStudentResponsesOfASurvey(surveyId);
-	}
 
-	@Override
-	public List<StudentResponseText> getTextStudentResponsesForASurvey(int surveyId) throws SQLException, AwsSecretsManagerException {
-		return this.surveyStudentDao.getTextStudentResponsesOfASurvey(surveyId);
-	}
+    @Override
+    public List<StudentResponseNumeric> getNumericStudentResponsesForASurvey(int surveyId) throws SQLException, AwsSecretsManagerException {
+        return this.surveyStudentDao.getNumericStudentResponsesOfASurvey(surveyId);
+    }
 
-	@Override
-	public List<StudentResponseChoice> getChoiceStudentResponsesForASurvey(int surveyId) throws SQLException, AwsSecretsManagerException {
-		return this.surveyStudentDao.getChoiceStudentResponsesOfASurvey(surveyId);
-	}
+    @Override
+    public List<StudentResponseText> getTextStudentResponsesForASurvey(int surveyId) throws SQLException, AwsSecretsManagerException {
+        return this.surveyStudentDao.getTextStudentResponsesOfASurvey(surveyId);
+    }
+
+    @Override
+    public List<StudentResponseChoice> getChoiceStudentResponsesForASurvey(int surveyId) throws SQLException, AwsSecretsManagerException {
+        return this.surveyStudentDao.getChoiceStudentResponsesOfASurvey(surveyId);
+    }
 
 }

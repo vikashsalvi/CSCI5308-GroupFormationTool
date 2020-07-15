@@ -8,6 +8,8 @@ import java.sql.SQLException;
 public interface IPasswordPolicyAbstractFactory {
 
     public Persistence getPasswordPolicyModel();
+    
+    public PasswordPolicyValidationResult getPasswordPolicyValidationResultModel();
 
     public Persistence getUserPasswordHistoryModel();
 
@@ -30,5 +32,6 @@ public interface IPasswordPolicyAbstractFactory {
     public IPasswordPolicyValidator getPasswordPolicyCharNotAllowed();
 
     public IPasswordPolicyValidator getPasswordPolicyHistoryConstrain();
+
 
 }
