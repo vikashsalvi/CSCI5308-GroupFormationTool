@@ -2,12 +2,13 @@ package com.app.group15.SurveyManagement.student;
 
 import com.app.group15.QuestionManager.Question;
 
-public class StudentResponseText {
+public class StudentResponseText extends StudentResponse{
     private int id;
-    private int questionId;
+    
     private int surveyId;
     private String textResponse;
     private int studentId;
+    
     private Question question;
 
     public Question getQuestion() {
@@ -27,13 +28,7 @@ public class StudentResponseText {
         this.id = id;
     }
 
-    public int getQuestionId() {
-        return questionId;
-    }
-
-    public void setQuestionId(int questionId) {
-        this.questionId = questionId;
-    }
+    
 
     public int getSurveyId() {
         return surveyId;
@@ -58,4 +53,8 @@ public class StudentResponseText {
     public void setStudentId(int studentId) {
         this.studentId = studentId;
     }
+
+	
+    
+    
 }

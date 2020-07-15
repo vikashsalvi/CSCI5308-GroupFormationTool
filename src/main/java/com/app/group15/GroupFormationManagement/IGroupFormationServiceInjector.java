@@ -1,10 +1,9 @@
 package com.app.group15.GroupFormationManagement;
 
-import com.app.group15.SurveyManagement.ISurveyService;
-import com.app.group15.SurveyManagement.student.ISurveyStudentService;
+import com.app.group15.UserManagement.IUserService;
 
 public interface IGroupFormationServiceInjector {
-	public void injectSurveyService(ISurveyService surveyService);
-	public void injectSurveyStudentService(ISurveyStudentService surveyStudentService);
-
+	
+	public void injectGroupFormationAlgorithm(GroupFormationAlgorithm groupFormationAlgorithm);
+	public void injectUserService(IUserService userService);
 }

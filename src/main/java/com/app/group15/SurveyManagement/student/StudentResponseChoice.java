@@ -2,12 +2,13 @@ package com.app.group15.SurveyManagement.student;
 
 import com.app.group15.QuestionManager.Question;
 
-public class StudentResponseChoice {
+public class StudentResponseChoice extends StudentResponse{
     private int id;
-    private int questionId;
+    
     private int surveyId;
     private int choiceId;
     private int studentId;
+    private Integer cumulativeValue;
     private Question question;
 
     public Question getQuestion() {
@@ -26,13 +27,6 @@ public class StudentResponseChoice {
         this.id = id;
     }
 
-    public int getQuestionId() {
-        return questionId;
-    }
-
-    public void setQuestionId(int questionId) {
-        this.questionId = questionId;
-    }
 
     public int getSurveyId() {
         return surveyId;
@@ -57,4 +51,18 @@ public class StudentResponseChoice {
     public void setStudentId(int studentId) {
         this.studentId = studentId;
     }
+
+	public Integer getCumulativeValue() {
+		return cumulativeValue;
+	}
+
+	public void setCumulativeValue(Integer cumulativeValue) {
+		this.cumulativeValue = cumulativeValue;
+	}
+    
+    
+
+	
+    
+    
 }

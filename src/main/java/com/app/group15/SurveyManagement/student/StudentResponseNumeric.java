@@ -2,9 +2,9 @@ package com.app.group15.SurveyManagement.student;
 
 import com.app.group15.QuestionManager.Question;
 
-public class StudentResponseNumeric {
+public class StudentResponseNumeric extends StudentResponse {
     private int id;
-    private int questionId;
+   
     private int surveyId;
     private int numericResponse;
     private int studentId;
@@ -26,13 +26,7 @@ public class StudentResponseNumeric {
         this.id = id;
     }
 
-    public int getQuestionId() {
-        return questionId;
-    }
-
-    public void setQuestionId(int questionId) {
-        this.questionId = questionId;
-    }
+    
 
     public int getSurveyId() {
         return surveyId;
@@ -57,4 +51,8 @@ public class StudentResponseNumeric {
     public void setStudentId(int studentId) {
         this.studentId = studentId;
     }
+
+	
+    
+    
 }
