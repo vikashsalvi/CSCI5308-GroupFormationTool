@@ -3,6 +3,7 @@ package com.app.group15.SurveyManagement;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.IDao;
 import com.app.group15.Persistence.Persistence;
+import com.app.group15.UserManagement.User;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -57,9 +58,9 @@ public abstract class SurveyAbstractDao<T> implements IDao {
 	
     public abstract ArrayList<SurveyQuestionMapper> getQuestionsOfASurveySortedByOrder(int surveyId) throws SQLException, AwsSecretsManagerException;
     public abstract int getSurveyIdOfACourse(int courseId) throws SQLException, AwsSecretsManagerException;
-    
-    public abstract String getRuleFromId(int ruleId) throws SQLException, AwsSecretsManagerException;
 
+	public abstract String getRuleFromId(int ruleId) throws SQLException, AwsSecretsManagerException;
 
+	public abstract User getUser(int studentId) throws SQLException, AwsSecretsManagerException;
 }
 

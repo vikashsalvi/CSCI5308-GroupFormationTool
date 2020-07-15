@@ -3,6 +3,8 @@ package com.app.group15.SurveyManagement;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.QuestionManager.Question;
 import com.app.group15.QuestionManager.QuestionManagerAbstractDao;
+import com.app.group15.SurveyManagement.student.*;
+import com.app.group15.UserManagement.User;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,6 +15,8 @@ public class SurveyService implements ISurveyService, ISurveyServiceInjector {
 	private SurveyAbstractDao surveyDao;
 	private SurveyQuestionMapperAbstractDao surveyQuestionMapperDao;
 	private QuestionManagerAbstractDao questionManagerDao;
+	private SurveyStudentAbstractDao surveyStudentDao;
+
 
 	@Override
 	public List<Question> getSurveyQuestionByInstructorID(int instructorID) throws SQLException, AwsSecretsManagerException {
@@ -76,6 +80,154 @@ public class SurveyService implements ISurveyService, ISurveyServiceInjector {
 		surveyDao.unPublishSurvey(survey);
 	}
 
+	@Override
+	public List<SurveyUserResponse> getSurveyResponse(String courseId) throws SQLException, AwsSecretsManagerException {
+		Survey survey = surveyDao.getSurveyByCourseID(Integer.parseInt(courseId));
+		List<StudentResponseNumeric> numericResponse = surveyStudentDao.getNumericStudentResponsesOfASurvey(survey.getId());
+		List<StudentResponseText> textResponse = surveyStudentDao.getTextStudentResponsesOfASurvey(survey.getId());
+		List<StudentResponseChoice> choiceResponse = surveyStudentDao.getChoiceStudentResponsesOfASurvey(survey.getId());
+		List<SurveyUserResponse> surveyUserResponses = new ArrayList<>();
+		List<SurveyUserResponse> tmpSurveyUserResponses = new ArrayList<>();
+
+		for (StudentResponseNumeric response : numericResponse) {
+			User user = surveyDao.getUser(response.getStudentId());
+
+			SurveyResponse surveyResponse = new SurveyResponse();
+			surveyResponse.setNumericResponse(response.getNumericResponse());
+			surveyResponse.setQuestionTypeId(1);
+			surveyResponse.setQuestionTitle(response.getQuestion().getQuestionTitle());
+			surveyResponse.setQuestionInstructorId(response.getQuestion().getQuestionInstructorId());
+			surveyResponse.setQuestionText(response.getQuestion().getQuestionText());
+			surveyResponse.setQuestionId(response.getQuestionId());
+
+			if (surveyUserResponses.size() == 0) {
+				SurveyUserResponse surveyUserResponse = new SurveyUserResponse();
+				surveyUserResponse.setUser(user);
+				List<SurveyResponse> surveyResponseList = new ArrayList<>();
+				surveyResponseList.add(surveyResponse);
+				surveyUserResponse.setSurveyResponseList(surveyResponseList);
+				surveyUserResponses.add(surveyUserResponse);
+			} else {
+
+				for (SurveyUserResponse surveyUserResponse : surveyUserResponses) {
+					if (surveyUserResponse.getUser().getId() == user.getId()) {
+
+						List<SurveyResponse> surveyResponseList = surveyUserResponse.getSurveyResponseList();
+						surveyResponseList.add(surveyResponse);
+						surveyUserResponse.setSurveyResponseList(surveyResponseList);
+						//surveyUserResponses.remove(surveyUserResponse);
+						//surveyUserResponses.add(surveyUserResponse);
+
+					} else {
+						SurveyUserResponse surveyUserRespons = new SurveyUserResponse();
+						surveyUserRespons.setUser(user);
+						List<SurveyResponse> surveyResponseList = new ArrayList<>();
+						surveyResponseList.add(surveyResponse);
+						surveyUserRespons.setSurveyResponseList(surveyResponseList);
+						tmpSurveyUserResponses.add(surveyUserRespons);
+					}
+				}
+			}
+		}
+		surveyUserResponses.addAll(tmpSurveyUserResponses);
+		tmpSurveyUserResponses = new ArrayList<>();
+		for (StudentResponseText response : textResponse) {
+			User user = surveyDao.getUser(response.getStudentId());
+
+			SurveyResponse surveyResponse = new SurveyResponse();
+			surveyResponse.setTextResponse(response.getTextResponse());
+			surveyResponse.setQuestionTypeId(4);
+			surveyResponse.setQuestionTitle(response.getQuestion().getQuestionTitle());
+			surveyResponse.setQuestionInstructorId(response.getQuestion().getQuestionInstructorId());
+			surveyResponse.setQuestionText(response.getQuestion().getQuestionText());
+			surveyResponse.setQuestionId(response.getQuestionId());
+
+			if (surveyUserResponses.size() == 0) {
+				SurveyUserResponse surveyUserResponse = new SurveyUserResponse();
+				surveyUserResponse.setUser(user);
+				List<SurveyResponse> surveyResponseList = new ArrayList<>();
+				surveyResponseList.add(surveyResponse);
+				surveyUserResponse.setSurveyResponseList(surveyResponseList);
+				surveyUserResponses.add(surveyUserResponse);
+			} else {
+				for (SurveyUserResponse surveyUserResponse : surveyUserResponses) {
+					if (surveyUserResponse.getUser().getId() == user.getId()) {
+						List<SurveyResponse> surveyResponseList = surveyUserResponse.getSurveyResponseList();
+						surveyResponseList.add(surveyResponse);
+						surveyUserResponse.setSurveyResponseList(surveyResponseList);
+					} else {
+						SurveyUserResponse surveyUserRespons = new SurveyUserResponse();
+						surveyUserRespons.setUser(user);
+						List<SurveyResponse> surveyResponseList = new ArrayList<>();
+						surveyResponseList.add(surveyResponse);
+						surveyUserRespons.setSurveyResponseList(surveyResponseList);
+						tmpSurveyUserResponses.add(surveyUserRespons);
+					}
+				}
+			}
+
+
+		}
+		surveyUserResponses.addAll(tmpSurveyUserResponses);
+		tmpSurveyUserResponses = new ArrayList<>();
+		for (StudentResponseChoice response : choiceResponse) {
+			User user = surveyDao.getUser(response.getStudentId());
+
+			SurveyResponse surveyResponse = new SurveyResponse();
+			surveyResponse.setChoiceId(String.valueOf(response.getChoiceId()));
+			surveyResponse.setQuestionTypeId(3);
+			surveyResponse.setChoiceText(response.getChoiceText());
+			surveyResponse.setQuestionTitle(response.getQuestion().getQuestionTitle());
+			surveyResponse.setQuestionInstructorId(response.getQuestion().getQuestionInstructorId());
+			surveyResponse.setQuestionText(response.getQuestion().getQuestionText());
+			surveyResponse.setQuestionId(response.getQuestionId());
+			if (surveyUserResponses.size() == 0) {
+				SurveyUserResponse surveyUserResponse = new SurveyUserResponse();
+				surveyUserResponse.setUser(user);
+				List<SurveyResponse> surveyResponseList = new ArrayList<>();
+				surveyResponseList.add(surveyResponse);
+				surveyUserResponse.setSurveyResponseList(surveyResponseList);
+				surveyUserResponses.add(surveyUserResponse);
+			} else {
+				for (SurveyUserResponse surveyUserResponse : surveyUserResponses) {
+					if (surveyUserResponse.getUser().getId() == user.getId()) {
+						List<SurveyResponse> surveyResponseList = surveyUserResponse.getSurveyResponseList();
+						surveyResponseList.add(surveyResponse);
+						surveyUserResponse.setSurveyResponseList(surveyResponseList);
+					} else {
+						SurveyUserResponse surveyUserRespons = new SurveyUserResponse();
+						surveyUserRespons.setUser(user);
+						List<SurveyResponse> surveyResponseList = new ArrayList<>();
+						surveyResponseList.add(surveyResponse);
+						surveyUserRespons.setSurveyResponseList(surveyResponseList);
+						tmpSurveyUserResponses.add(surveyUserRespons);
+					}
+				}
+			}
+
+		}
+		List<SurveyUserResponse> finalSurveyResponse = new ArrayList<>();
+		for (SurveyUserResponse response : surveyUserResponses) {
+			if (finalSurveyResponse.size() > 0) {
+				boolean f = false;
+				for (int i = 0; i < finalSurveyResponse.size(); i++) {
+					if (finalSurveyResponse.get(i).getUser().getId() != response.getUser().getId()) {
+						f = true;
+					} else {
+						f = false;
+						break;
+					}
+				}
+				if (f) {
+					finalSurveyResponse.add(response);
+				}
+			} else {
+				finalSurveyResponse.add(response);
+			}
+		}
+
+		return finalSurveyResponse;
+	}
 
 	@Override
 	public void injectSurveyDao(SurveyAbstractDao surveyDao) {
@@ -98,6 +250,11 @@ public class SurveyService implements ISurveyService, ISurveyServiceInjector {
 	@Override
 	public void injectQuestionManagerDao(QuestionManagerAbstractDao questionManagerDao) {
 		this.questionManagerDao = questionManagerDao;
+	}
+
+	@Override
+	public void injectSurveyStudentDao(SurveyStudentAbstractDao surveyStudentDao) {
+		this.surveyStudentDao = surveyStudentDao;
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package com.app.group15.SurveyManagement;
 
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.InvokeStoredProcedure;
+import com.app.group15.UserManagement.User;
 import com.app.group15.Utility.GroupFormationToolLogger;
 
 import java.sql.ResultSet;
@@ -315,5 +316,32 @@ public class SurveyDao extends SurveyAbstractDao implements ISurveyQuestionMappe
 			invokeStoredProcedure.closeConnection();
 		}
 		return "";
+	}
+
+
+	@Override
+	public User getUser(int studentId) throws SQLException, AwsSecretsManagerException {
+		InvokeStoredProcedure invokeStoredProcedure = null;
+		User user = new User();
+		try {
+			invokeStoredProcedure = new InvokeStoredProcedure("spGetUser(?)");
+			invokeStoredProcedure.setParameter(1, studentId);
+			ResultSet results = invokeStoredProcedure.executeWithResults();
+			if (results != null) {
+				while (results.next()) {
+					user.setId(results.getInt("id"));
+					user.setFirstName(results.getString("first_name"));
+					user.setLastName(results.getString("last_name"));
+					user.setBannerId(results.getString("banner_id"));
+				}
+			}
+
+		} catch (SQLException | AwsSecretsManagerException e) {
+			GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+			throw e;
+		} finally {
+			invokeStoredProcedure.closeConnection();
+		}
+		return user;
 	}
 }

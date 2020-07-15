@@ -25,8 +25,12 @@ public interface ISurveyService {
     void publishSurvey(int courseId) throws SQLException, AwsSecretsManagerException;
 
     void unPublishSurvey(int courseId) throws SQLException, AwsSecretsManagerException;
-    public  ArrayList<SurveyQuestionMapper> getQuestionsOfASurveySortedByOrder(int surveyId) throws SQLException, AwsSecretsManagerException;
-    public  int getSurveyIdOfACourse(int courseId) throws SQLException, AwsSecretsManagerException;
-    
-    public abstract String getRuleFromId(int ruleId) throws SQLException, AwsSecretsManagerException;
+
+    ArrayList<SurveyQuestionMapper> getQuestionsOfASurveySortedByOrder(int surveyId) throws SQLException, AwsSecretsManagerException;
+
+    int getSurveyIdOfACourse(int courseId) throws SQLException, AwsSecretsManagerException;
+
+    String getRuleFromId(int ruleId) throws SQLException, AwsSecretsManagerException;
+
+    List<SurveyUserResponse> getSurveyResponse(String courseId) throws SQLException, AwsSecretsManagerException;
 }

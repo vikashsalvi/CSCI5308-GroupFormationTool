@@ -1,6 +1,7 @@
 package com.app.group15.SurveyManagement;
 
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+import com.app.group15.UserManagement.User;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -85,6 +86,11 @@ public class SurveyDaoMock extends SurveyAbstractDao {
 
     @Override
     public String getRuleFromId(int ruleId) throws SQLException, AwsSecretsManagerException {
+        return null;
+    }
+
+    @Override
+    public User getUser(int studentId) throws SQLException, AwsSecretsManagerException {
         return null;
     }
 }
