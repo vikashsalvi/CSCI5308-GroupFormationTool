@@ -38,7 +38,6 @@ public class SurveyStudentController {
                     try {
                         User user = sessionService.getSessionUser(request);
                         Survey survey = surveyService.getSurveyByCourseId(courseId);
-                        //List<Question> questionList = surveyService.getSurveyQuestionWithOptions(courseId);
                         modelAndView = new ModelAndView();
                         modelAndView.addObject("user", user);
                         modelAndView.addObject("survey", survey);

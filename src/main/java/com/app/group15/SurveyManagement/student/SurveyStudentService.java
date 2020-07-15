@@ -1,8 +1,12 @@
 package com.app.group15.SurveyManagement.student;
 
+import com.app.group15.CourseManagement.Course;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.QuestionManager.Question;
+import com.app.group15.SurveyManagement.Survey;
+import com.app.group15.SurveyManagement.SurveyAbstractDao;
 import com.app.group15.UserManagement.User;
+import com.app.group15.Utility.ServiceUtility;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,6 +15,7 @@ import java.util.List;
 public class SurveyStudentService implements ISurveyStudentService, ISurveyStudentServiceInjector {
 
     private SurveyStudentAbstractDao surveyStudentDao;
+    private SurveyAbstractDao surveyDao;
 
     @Override
     public void submitResponse(User user, SurveyFormResponse surveyFormResponse) throws SQLException, AwsSecretsManagerException {
@@ -18,9 +23,9 @@ public class SurveyStudentService implements ISurveyStudentService, ISurveyStude
         for (SurveyResponse surveyResponse : surveyFormResponse.getSurveyResponse()) {
             if (surveyResponse.getQuestionTypeId() == 1) {
                 surveyStudentDao.saveNumericResponse(surveyResponse.getQuestionId(), surveyFormResponse.getSurveyId(), surveyResponse.getNumericResponse(), user.getId());
-            } else if (surveyResponse.getQuestionTypeId() == 2) {
+            } else if (surveyResponse.getQuestionTypeId() == 2 && Integer.parseInt(surveyResponse.getChoiceId()) > 0) {
                 surveyStudentDao.saveChoiceResponse(surveyResponse.getQuestionId(), surveyFormResponse.getSurveyId(), surveyResponse.getChoiceId(), user.getId());
-            } else if (surveyResponse.getQuestionTypeId() == 3) {
+            } else if (surveyResponse.getQuestionTypeId() == 3 && ServiceUtility.isNotNull(surveyResponse.getChoiceId())) {
                 String[] choices = surveyResponse.getChoiceId().split(",");
                 for (String choice : choices) {
                     int chose = Integer.parseInt(choice);
@@ -28,7 +33,7 @@ public class SurveyStudentService implements ISurveyStudentService, ISurveyStude
                         surveyStudentDao.saveChoiceResponse(surveyResponse.getQuestionId(), surveyFormResponse.getSurveyId(), choice, user.getId());
                     }
                 }
-            } else {
+            } else if (surveyResponse.getQuestionTypeId() == 4) {
                 surveyStudentDao.saveTextResponse(surveyResponse.getQuestionId(), surveyFormResponse.getSurveyId(), surveyResponse.getTextResponse(), user.getId());
             }
         }
@@ -56,8 +61,42 @@ public class SurveyStudentService implements ISurveyStudentService, ISurveyStude
         return surveyFormResponse;
     }
 
+
+    @Override
+    public List<Boolean> validateIfUserHasSubmittedSurveyBefore(List<Course> courseList, int userId) throws SQLException, AwsSecretsManagerException {
+        List<Survey> surveyList = new ArrayList<>();
+        for (Course course : courseList) {
+            Survey survey = surveyDao.getSurveyByCourseID(course.getId());
+            surveyList.add(survey);
+        }
+        List<Boolean> appearedList = new ArrayList<>();
+        for (Survey survey : surveyList) {
+            List<Integer> columnCount = surveyStudentDao.validateUserHasAppearedSurveyBefore(userId, survey.getId());
+            int colCount = 0;
+            for (Integer count : columnCount) {
+                colCount += count;
+            }
+
+            if (colCount > 0) {
+                appearedList.add(false);
+            } else {
+                if (survey.getPublishState() == 1) {
+                    appearedList.add(true);
+                } else {
+                    appearedList.add(false);
+                }
+            }
+        }
+        return appearedList;
+    }
+
     @Override
     public void injectSurveyStudentDao(SurveyStudentAbstractDao surveyStudentAbstractDao) {
         this.surveyStudentDao = surveyStudentAbstractDao;
+    }
+
+    @Override
+    public void injectSurveyDao(SurveyAbstractDao surveyAbstractDao) {
+        this.surveyDao = surveyAbstractDao;
     }
 }

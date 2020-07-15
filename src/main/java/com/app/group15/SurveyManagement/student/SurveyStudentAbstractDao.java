@@ -44,4 +44,6 @@ public abstract class SurveyStudentAbstractDao implements IDao {
     public abstract List<Question> getSurveyQuestionWithCourseByCourseID(int courseID) throws SQLException, AwsSecretsManagerException;
 
     public abstract List<Options> getQuestionOptionsByQuestionId(int questionId) throws SQLException, AwsSecretsManagerException;
+
+    public abstract List<Integer> validateUserHasAppearedSurveyBefore(int userId, int surveyId) throws SQLException, AwsSecretsManagerException;
 }

@@ -150,5 +150,38 @@ public class SurveyStudentDao extends SurveyStudentAbstractDao {
         }
     }
 
+    @Override
+    public List<Integer> validateUserHasAppearedSurveyBefore(int userId, int surveyId) throws SQLException, AwsSecretsManagerException {
+        InvokeStoredProcedure invokeStoredProcedure = null;
+        try {
+            invokeStoredProcedure = new InvokeStoredProcedure("spValidateUserAppearedSurvey(?,?)");
+            invokeStoredProcedure.setParameter(1, userId);
+            invokeStoredProcedure.setParameter(2, surveyId);
+            List<Integer> count = new ArrayList<>();
+            ResultSet results = invokeStoredProcedure.executeWithResults();
+            int choiceCount, numericCount, textCount;
+
+            if (results != null) {
+                while (results.next()) {
+                    choiceCount = results.getInt("count_1");
+                    numericCount = results.getInt("count_2");
+                    textCount = results.getInt("count_3");
+
+                    count.add(choiceCount);
+                    count.add(numericCount);
+                    count.add(textCount);
+                }
+            }
+            return count;
+        } catch (SQLException | AwsSecretsManagerException e) {
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
+        } finally {
+            assert invokeStoredProcedure != null;
+            invokeStoredProcedure.closeConnection();
+        }
+
+    }
+
 
 }

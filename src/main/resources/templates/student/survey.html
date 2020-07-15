@@ -90,6 +90,7 @@
                             <input class="form-control" name="answer"
                                    size="2"
                                    style="width:200px" th:field="*{surveyResponse[__${op.index}__].numericResponse}"
+                                   required
                                    type="number">
                         </div>
 
@@ -106,16 +107,16 @@
                                 </select>
                             </label>
                         </div>
-                        <ul th:if="*{surveyResponse[__${op.index}__].questionTypeId}==3">
-                            <li th:each="opt : *{surveyResponse[__${op.index}__].options}">
+                        <div th:if="*{surveyResponse[__${op.index}__].questionTypeId}==3">
+                            <div th:each="opt : *{surveyResponse[__${op.index}__].options}">
                                 <input th:checked="${opt.isSelected}"
                                        th:field="*{surveyResponse[__${op.index}__].choiceId}"
                                        th:value="${opt.getId()}"
                                        type="checkbox"
                                 />
                                 <label th:text="${opt.option}"></label>
-                            </li>
-                        </ul>
+                            </div>
+                        </div>
 
                         <!--<div th:if="*{surveyResponse[__${op.index}__].questionTypeId}==3">
                             <label>Select answer :
@@ -130,6 +131,7 @@
 -->
                         <div th:if="*{surveyResponse[__${op.index}__].questionTypeId}==4">
                             <textarea cols="50" id="freeText" rows="4"
+                                      required
                                       th:field="*{surveyResponse[__${op.index}__].textResponse}"></textarea>
                         </div>
 
@@ -146,7 +148,8 @@
                                th:value="${SurveyFromResponse.surveyId}" type="hidden">
                     </div>
                     <hr>
-                    <input id="addQuestion" style="margin-top: 10px" type="submit" value="Save">
+                    <input class="btn btn-outline-primary" id="addQuestion" style="margin-top: 10px" type="submit"
+                           value="Save">
                 </form>
             </div>
         </div>
