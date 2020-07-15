@@ -18,7 +18,7 @@ public class SurveyStudentService implements ISurveyStudentService, ISurveyStude
     private SurveyAbstractDao surveyDao;
 
     @Override
-    public void submitResponse(User user, SurveyFormResponse surveyFormResponse) throws SQLException, AwsSecretsManagerException {
+    public boolean submitResponse(User user, SurveyFormResponse surveyFormResponse) throws SQLException, AwsSecretsManagerException {
 
         for (SurveyResponse surveyResponse : surveyFormResponse.getSurveyResponse()) {
             if (surveyResponse.getQuestionTypeId() == 1) {
@@ -37,6 +37,7 @@ public class SurveyStudentService implements ISurveyStudentService, ISurveyStude
                 surveyStudentDao.saveTextResponse(surveyResponse.getQuestionId(), surveyFormResponse.getSurveyId(), surveyResponse.getTextResponse(), user.getId());
             }
         }
+        return true;
     }
 
     @Override
