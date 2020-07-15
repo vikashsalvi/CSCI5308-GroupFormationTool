@@ -35,13 +35,16 @@ public class UserService implements IUserService, IUserServiceInjector {
 		});
         return users;
     }
+    @Override
+    public User getUser(int userId) throws SQLException, AwsSecretsManagerException {
+    	return (User) userDao.get(userId);
+    }
 
     @Override
     public void updateUserRole(int userId, String role) throws AllowedRolesNotSetException, SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isNotNull(role) && ServiceUtility.isValidInt(userId)) {
             userRoleDao.updateRole(userId, role);
         } else {
-
             GroupFormationToolLogger.log(Level.SEVERE, invalid_input);
         }
     }
