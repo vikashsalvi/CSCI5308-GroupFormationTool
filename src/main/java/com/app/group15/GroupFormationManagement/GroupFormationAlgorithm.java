@@ -4,11 +4,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 
 public abstract class GroupFormationAlgorithm {
-
-	private IGroupFormationAlgorithmService groupFormationService = new GroupFormationAlgorithmServiceInjector().getGroupFormationService();	
+	
+	private IGroupFormationAlgorithmAbstractFactory algorithmAbstractFactory=AppConfig.getInstance().getGroupAlgorithmAbstractFactory();
+	private IGroupFormationAlgorithmService groupFormationService = algorithmAbstractFactory.getGroupFormationAlgorithmService();	
 	
 	public final ArrayList<ArrayList<Integer>> template(int courseId,int groupSize) throws SQLException, AwsSecretsManagerException {
 		int surveyId=getSurveyIdForACourse(courseId);

@@ -1,6 +1,8 @@
 package com.app.group15.QuestionManager;
 
-public class Options {
+import com.app.group15.Persistence.Persistence;
+
+public class Options extends Persistence{
 
     private String option;
     private String value;

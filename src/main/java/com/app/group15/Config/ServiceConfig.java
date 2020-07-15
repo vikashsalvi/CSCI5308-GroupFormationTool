@@ -44,8 +44,7 @@ public class ServiceConfig {
     private ISignupService signUpService;
     private IUserService userService;
     private IPasswordPolicyService passwordPolicyService;
-    private IQuestionManagerService questionManagerService;
-    private IQuestionChoiceMapperService questionChoiceMapperService;
+   
     private IForgetPasswordService forgetPasswordService;
     private ISurveyService surveyService;
     private ISurveyStudentService surveyStudentService;
@@ -59,8 +58,7 @@ public class ServiceConfig {
         signUpService = new SignUpServiceInjector().getSignUpService();
         userService = new UserServiceInjector().getUserService();
         authorizationService = new AuthorizationService();
-        questionManagerService = new QuestionManagerServiceInjector().getQuestionManagerService();
-        questionChoiceMapperService = new QuestionChoiceMapperServiceInjector().getQuestionChoiceMapperService();
+        
         forgetPasswordService = new ForgetPasswordServiceInjector().getForgetPasswordService();
         surveyService = new SurveyServiceInjector().getSurveyService();
         surveyStudentService = new SurveyStudentInjectorService().getSurveyStudentService();
@@ -114,13 +112,7 @@ public class ServiceConfig {
         return passwordPolicyService;
     }
 
-    public IQuestionManagerService getQuestionManagerService() {
-        return questionManagerService;
-    }
-
-    public IQuestionChoiceMapperService getQuestionChoiceMapperService() {
-        return questionChoiceMapperService;
-    }
+    
 
     public IForgetPasswordService getForgetPasswordService() {
         return forgetPasswordService;
