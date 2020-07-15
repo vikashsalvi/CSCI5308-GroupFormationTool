@@ -16,13 +16,8 @@ import com.app.group15.PasswordPolicyManagement.PasswordPolicyDao;
 import com.app.group15.PasswordPolicyManagement.UserPasswordHistoryAbstractDao;
 import com.app.group15.PasswordPolicyManagement.UserPasswordHistoryDao;
 import com.app.group15.QuestionManager.IQuestionManagerAbstractFactory;
-import com.app.group15.QuestionManager.QuestionManagerAbstractDao;
 import com.app.group15.QuestionManager.QuestionManagerConcreteFactory;
-import com.app.group15.QuestionManager.QuestionManagerDao;
-import com.app.group15.SurveyManagement.SurveyAbstractDao;
-import com.app.group15.SurveyManagement.SurveyDaoInjectorService;
-import com.app.group15.SurveyManagement.SurveyQuestionMapperAbstractDao;
-import com.app.group15.SurveyManagement.SurveyQuestionMapperDao;
+import com.app.group15.SurveyManagement.*;
 import com.app.group15.UserManagement.UserAbstractDao;
 import com.app.group15.UserManagement.UserDao;
 import com.app.group15.UserManagement.UserDaoInjectorService;
@@ -50,23 +45,26 @@ public class AppConfig {
     private CourseAbstractDao courseDao;
     private PasswordPolicyAbstractDao passwordPolicyDao;
     private UserPasswordHistoryAbstractDao userPasswordHistoryDao;
-   
+
     private SurveyAbstractDao surveyDao;
     private SurveyQuestionMapperAbstractDao surveyQuestionMapperDao;
-    
+
     // Abstract Factory
     private IQuestionManagerAbstractFactory questionManagerAbstractFactory;
     private IGroupFormationAlgorithmAbstractFactory groupAlgorithmAbstractFactory;
+    private ISurveyManagementAbstractFactory surveyManagementAbstractFactory;
 
-	public SurveyAbstractDao getSurveyDao() {
-		return surveyDao;
-	}
 
-	public SurveyQuestionMapperAbstractDao getSurveyQuestionMapperDao() {
-		return surveyQuestionMapperDao;
-	}
+    public SurveyAbstractDao getSurveyDao() {
+        return surveyDao;
+    }
 
-	private AppConfig() {
+    public SurveyQuestionMapperAbstractDao getSurveyQuestionMapperDao() {
+        return surveyQuestionMapperDao;
+    }
+
+
+    private AppConfig() {
 
         properties = new Properties();
         String propertyFilePath = "src/main/resources/application.properties";
@@ -89,13 +87,14 @@ public class AppConfig {
         courseDao = new CourseDaoInjectorService().getCourseDao();
         passwordPolicyDao = new PasswordPolicyDao();
         userPasswordHistoryDao = new UserPasswordHistoryDao();
-    
 
-        surveyDao=new SurveyDaoInjectorService().getSurveyDao();
-        surveyQuestionMapperDao=new SurveyQuestionMapperDao();
-       //ABSTRACT FACTORY 
-        questionManagerAbstractFactory=QuestionManagerConcreteFactory.getInstance();
-        groupAlgorithmAbstractFactory=GroupFormationAlgorithmConcreteFactory.getInstance();
+
+        surveyDao = new SurveyDaoInjectorService().getSurveyDao();
+        surveyQuestionMapperDao = new SurveyQuestionMapperDao();
+        //ABSTRACT FACTORY
+        questionManagerAbstractFactory = QuestionManagerConcreteFactory.getInstance();
+        groupAlgorithmAbstractFactory = GroupFormationAlgorithmConcreteFactory.getInstance();
+        surveyManagementAbstractFactory = SurveyManagementConcreteFactory.getInstance();
     }
 
     public static AppConfig getSingletonAppConfig() {
@@ -203,17 +202,18 @@ public class AppConfig {
         return userPasswordHistoryDao;
     }
 
-    
 
-	public IQuestionManagerAbstractFactory getQuestionManagerAbstractFactory() {
-		return questionManagerAbstractFactory;
-	}
+    public IQuestionManagerAbstractFactory getQuestionManagerAbstractFactory() {
+        return questionManagerAbstractFactory;
+    }
 
-	public IGroupFormationAlgorithmAbstractFactory getGroupAlgorithmAbstractFactory() {
-		return groupAlgorithmAbstractFactory;
-	}
-	
-	
-    
-    
+    public IGroupFormationAlgorithmAbstractFactory getGroupAlgorithmAbstractFactory() {
+        return groupAlgorithmAbstractFactory;
+    }
+
+    public ISurveyManagementAbstractFactory getSurveyManagementAbstractFactory() {
+        return surveyManagementAbstractFactory;
+    }
+
+
 }

@@ -26,10 +26,11 @@ import java.util.logging.Level;
 @Controller
 public class SurveyController {
 
+    private ISurveyManagementAbstractFactory surveyManagementAbstractFactory = AppConfig.getInstance().getSurveyManagementAbstractFactory();
     private IAuthorizationService authorizationService = ServiceConfig.getInstance().getAuthorizationService();
     private CourseAbstractDao courseDao = AppConfig.getInstance().getCourseDao();
     private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
-    private ISurveyService surveyService = ServiceConfig.getInstance().getSurveyService();
+    private ISurveyService surveyService = surveyManagementAbstractFactory.getSurveyService();
 
     @RequestMapping(value = "/instructor/survey", method = RequestMethod.GET)
     public ModelAndView manageSurveyGET(HttpServletRequest request,
@@ -75,7 +76,6 @@ public class SurveyController {
                     modelAndView.addObject("questionList", questionList);
                     modelAndView.addObject("showLt", showLt);
                     modelAndView.addObject("showGt", showGt);
-
 
                     return modelAndView;
                 } else {
@@ -209,38 +209,38 @@ public class SurveyController {
         }
     }
 
-	@RequestMapping(value = "/instructor/survey/unPublish",method = RequestMethod.POST)
-	public ModelAndView unPublishSurvey(HttpServletRequest request,
-									  @RequestParam(value = "courseId", required = true) int courseId){
-		authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
-		ModelAndView modelAndView;
-		try {
-			if (sessionService.isUserSignedIn(request)) {
-				if (authorizationService.isAuthorized(request)) {
-					try {
-						surveyService.unPublishSurvey(courseId);
-						GroupFormationToolLogger.log(Level.FINEST, String.format("Survey of course with course id %d published!", courseId));
-					} catch (Exception e) {
-						GroupFormationToolLogger.log(Level.INFO, "Exception while adding question to survey", e);
-					}
-					modelAndView = new ModelAndView(String.format("redirect:/instructor/survey?courseId=%d",courseId));
-					return modelAndView;
-				} else {
-					modelAndView = new ModelAndView("redirect:/login");
-				}
-			} else {
-				modelAndView = new ModelAndView("redirect:/login");
-			}
-			return modelAndView;
-		} catch (SQLException e) {
-			GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
-			modelAndView = new ModelAndView("dbError");
-			return modelAndView;
-		} catch (AwsSecretsManagerException e) {
-			GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
-			modelAndView = new ModelAndView("awsError");
-			return modelAndView;
-		}
-	}
+    @RequestMapping(value = "/instructor/survey/unPublish", method = RequestMethod.POST)
+    public ModelAndView unPublishSurvey(HttpServletRequest request,
+                                        @RequestParam(value = "courseId", required = true) int courseId) {
+        authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
+        ModelAndView modelAndView;
+        try {
+            if (sessionService.isUserSignedIn(request)) {
+                if (authorizationService.isAuthorized(request)) {
+                    try {
+                        surveyService.unPublishSurvey(courseId);
+                        GroupFormationToolLogger.log(Level.FINEST, String.format("Survey of course with course id %d published!", courseId));
+                    } catch (Exception e) {
+                        GroupFormationToolLogger.log(Level.INFO, "Exception while adding question to survey", e);
+                    }
+                    modelAndView = new ModelAndView(String.format("redirect:/instructor/survey?courseId=%d", courseId));
+                    return modelAndView;
+                } else {
+                    modelAndView = new ModelAndView("redirect:/login");
+                }
+            } else {
+                modelAndView = new ModelAndView("redirect:/login");
+            }
+            return modelAndView;
+        } catch (SQLException e) {
+            GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+            modelAndView = new ModelAndView("dbError");
+            return modelAndView;
+        } catch (AwsSecretsManagerException e) {
+            GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+            modelAndView = new ModelAndView("awsError");
+            return modelAndView;
+        }
+    }
 
 }
