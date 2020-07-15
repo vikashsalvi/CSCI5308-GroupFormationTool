@@ -35,7 +35,6 @@ public class SurveyStudentController {
         try {
             if (sessionService.isUserSignedIn(request)) {
                 if (authorizationService.isAuthorized(request)) {
-                    try {
                         User user = sessionService.getSessionUser(request);
                         Survey survey = surveyService.getSurveyByCourseId(courseId);
                         modelAndView = new ModelAndView();
@@ -45,11 +44,6 @@ public class SurveyStudentController {
                         modelAndView.addObject("SurveyFromResponse", surveyFormResponse);
                         modelAndView.setViewName("student/survey");
                         return modelAndView;
-                    } catch (Exception e) {
-                        GroupFormationToolLogger.log(Level.FINEST, String.format("Error getting details for course ", courseId));
-                    }
-                    modelAndView = new ModelAndView("student/survey");
-                    return modelAndView;
                 } else {
                     modelAndView = new ModelAndView("redirect:/login");
                 }
@@ -65,7 +59,11 @@ public class SurveyStudentController {
             GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
             modelAndView = new ModelAndView("awsError");
             return modelAndView;
+        } catch (Exception e) {
+            GroupFormationToolLogger.log(Level.FINEST, String.format("Error getting details for course ", courseId));
         }
+        modelAndView = new ModelAndView("student/survey");
+        return modelAndView;
     }
 
     @RequestMapping(value = "/student/survey/submit", method = RequestMethod.POST)
@@ -76,7 +74,6 @@ public class SurveyStudentController {
         try {
             if (sessionService.isUserSignedIn(request)) {
                 if (authorizationService.isAuthorized(request)) {
-                    try {
                         modelAndView = new ModelAndView();
                         User user = sessionService.getSessionUser(request);
                         surveyStudentService.submitResponse(user, surveyFormResponse);
@@ -84,10 +81,6 @@ public class SurveyStudentController {
                         modelAndView.addObject("SurveyFromResponse", surveyFormResponse);
                         modelAndView.setViewName("student/surveySaved");
                         return modelAndView;
-                    } catch (Exception e) {
-                        GroupFormationToolLogger.log(Level.FINEST, "Error submitting survey");
-                    }
-                    modelAndView = new ModelAndView();
                 } else {
                     modelAndView = new ModelAndView("redirect:/login");
                 }
@@ -103,7 +96,10 @@ public class SurveyStudentController {
             GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
             modelAndView = new ModelAndView("awsError");
             return modelAndView;
+        } catch (Exception e) {
+            GroupFormationToolLogger.log(Level.FINEST, "Error submitting survey");
         }
-
+        modelAndView = new ModelAndView();
+        return modelAndView;
     }
 }
