@@ -5,6 +5,7 @@ import com.app.group15.Persistence.IDao;
 import com.app.group15.Persistence.Persistence;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class SurveyAbstractDao<T> implements IDao {
@@ -52,4 +53,11 @@ public abstract class SurveyAbstractDao<T> implements IDao {
 	public abstract void saveTextResponse(int id, int questionId, String textResponse, int surveyId) throws SQLException, AwsSecretsManagerException;
 
 	public abstract void saveChoiceResponse(int questionId, int surveyId, String choiceId, int id) throws SQLException, AwsSecretsManagerException;
+	
+	
+    public abstract ArrayList<SurveyQuestionMapper> getQuestionsOfASurveySortedByOrder(int surveyId) throws SQLException, AwsSecretsManagerException;
+    public abstract int getSurveyIdOfACourse(int courseId) throws SQLException, AwsSecretsManagerException;
+    
+    public abstract String getRuleFromId(int ruleId) throws SQLException, AwsSecretsManagerException;
 }
+

@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 import com.sun.mail.util.QEncoderStream;
 
-public class MatrixGroupFormationAlgorithm implements IGroupFormationAlgorithm {
+public class MatrixGroupFormationAlgorithm extends GroupFormationAlgorithm {
 
 	private ArrayList<Integer> studentsAdded = new ArrayList<>();
 	private HashMap<Integer, ArrayList<Object>> studentResponseMaintainerMap = new HashMap<>();

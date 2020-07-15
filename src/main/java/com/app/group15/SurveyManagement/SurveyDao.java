@@ -242,4 +242,81 @@ public class SurveyDao extends SurveyAbstractDao implements ISurveyQuestionMappe
     public void injectSurveyQuestionMapperDao(SurveyQuestionMapperDao surveyQuestionMapperDao) {
         this.surveyQuestionMapperDao = surveyQuestionMapperDao;
     }
+
+
+	
+
+	@Override
+	public ArrayList<SurveyQuestionMapper> getQuestionsOfASurveySortedByOrder(int surveyId) throws SQLException, AwsSecretsManagerException {
+		InvokeStoredProcedure invokeStoredProcedure = null;
+		ArrayList<SurveyQuestionMapper> questionMapperList=new ArrayList<>();
+        try {
+            invokeStoredProcedure = new InvokeStoredProcedure("spGetSurveyQuestionsInOrder(?)");
+            invokeStoredProcedure.setParameter(1, surveyId);
+            ResultSet results = invokeStoredProcedure.executeWithResults();
+            if (results != null) {
+                while (results.next()) {
+                   SurveyQuestionMapper question=new SurveyQuestionMapper();
+                   question.setQuestionId(results.getInt("question_id"));
+                   question.setQuestionOrder(results.getInt("questionOrder"));
+                   question.setRuleId(results.getInt("rule_id"));
+                   question.setRuleValue(results.getInt("rule_value"));
+                   question.setSurveyId(results.getInt("survey_id"));
+                   question.setId(results.getInt("id"));
+                   questionMapperList.add(question);
+                }
+            }
+            
+           
+        } catch (SQLException e) {
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
+        } finally {
+            invokeStoredProcedure.closeConnection();
+        }
+		return questionMapperList;
+		
+	}
+
+
+	@Override
+	public int getSurveyIdOfACourse(int courseId) throws SQLException, AwsSecretsManagerException {
+		InvokeStoredProcedure invokeStoredProcedure = null;
+        try {
+            invokeStoredProcedure = new InvokeStoredProcedure("spGetSurveyIdOfCourse(?)");
+            invokeStoredProcedure.setParameter(1, courseId);
+            ResultSet results = invokeStoredProcedure.executeWithResults();
+            if (results != null) {
+                return results.getInt("id");
+            }
+           
+        } catch (SQLException e) {
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
+        } finally {
+            invokeStoredProcedure.closeConnection();
+        }
+		return 0;
+	}
+
+
+	@Override
+	public String getRuleFromId(int ruleId) throws SQLException, AwsSecretsManagerException {
+		InvokeStoredProcedure invokeStoredProcedure = null;
+        try {
+            invokeStoredProcedure = new InvokeStoredProcedure("spGetQuestionRule(?)");
+            invokeStoredProcedure.setParameter(1, ruleId);
+            ResultSet results = invokeStoredProcedure.executeWithResults();
+            if (results != null) {
+                return results.getString("rule");
+            }
+           
+        } catch (SQLException e) {
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
+        } finally {
+            invokeStoredProcedure.closeConnection();
+        }
+		return "";
+	}
 }

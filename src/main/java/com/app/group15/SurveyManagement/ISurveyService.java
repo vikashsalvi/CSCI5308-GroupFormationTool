@@ -4,6 +4,7 @@ import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.QuestionManager.Question;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public interface ISurveyService {
@@ -24,5 +25,8 @@ public interface ISurveyService {
     void publishSurvey(int courseId) throws SQLException, AwsSecretsManagerException;
 
     void unPublishSurvey(int courseId) throws SQLException, AwsSecretsManagerException;
-
+    public  ArrayList<SurveyQuestionMapper> getQuestionsOfASurveySortedByOrder(int surveyId) throws SQLException, AwsSecretsManagerException;
+    public  int getSurveyIdOfACourse(int courseId) throws SQLException, AwsSecretsManagerException;
+    
+    public abstract String getRuleFromId(int ruleId) throws SQLException, AwsSecretsManagerException;
 }

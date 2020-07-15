@@ -95,8 +95,24 @@ public class SurveyStudentService implements ISurveyStudentService, ISurveyStude
         this.surveyStudentDao = surveyStudentAbstractDao;
     }
 
+
     @Override
     public void injectSurveyDao(SurveyAbstractDao surveyAbstractDao) {
         this.surveyDao = surveyAbstractDao;
     }
+	@Override
+	public List<StudentResponseNumeric> getNumericStudentResponsesForASurvey(int surveyId) throws SQLException, AwsSecretsManagerException {
+		return this.surveyStudentDao.getNumericStudentResponsesOfASurvey(surveyId);
+	}
+
+	@Override
+	public List<StudentResponseText> getTextStudentResponsesForASurvey(int surveyId) throws SQLException, AwsSecretsManagerException {
+		return this.surveyStudentDao.getTextStudentResponsesOfASurvey(surveyId);
+	}
+
+	@Override
+	public List<StudentResponseChoice> getChoiceStudentResponsesForASurvey(int surveyId) throws SQLException, AwsSecretsManagerException {
+		return this.surveyStudentDao.getChoiceStudentResponsesOfASurvey(surveyId);
+	}
+
 }

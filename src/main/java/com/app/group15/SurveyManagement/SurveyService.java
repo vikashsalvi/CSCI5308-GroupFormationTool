@@ -5,6 +5,7 @@ import com.app.group15.QuestionManager.Question;
 import com.app.group15.QuestionManager.QuestionManagerAbstractDao;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SurveyService implements ISurveyService, ISurveyServiceInjector {
@@ -97,6 +98,22 @@ public class SurveyService implements ISurveyService, ISurveyServiceInjector {
 	@Override
 	public void injectQuestionManagerDao(QuestionManagerAbstractDao questionManagerDao) {
 		this.questionManagerDao = questionManagerDao;
+	}
+
+	@Override
+	public ArrayList<SurveyQuestionMapper> getQuestionsOfASurveySortedByOrder(int surveyId)
+			throws SQLException, AwsSecretsManagerException {
+		return this.surveyDao.getQuestionsOfASurveySortedByOrder(surveyId);
+	}
+
+	@Override
+	public int getSurveyIdOfACourse(int courseId) throws SQLException, AwsSecretsManagerException {
+		return this.surveyDao.getSurveyIdOfACourse(courseId);
+	}
+
+	@Override
+	public String getRuleFromId(int ruleId) throws SQLException, AwsSecretsManagerException {
+		return this.surveyDao.getRuleFromId(ruleId);
 	}
 
 
