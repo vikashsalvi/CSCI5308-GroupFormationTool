@@ -11,10 +11,7 @@ import com.app.group15.CourseManagement.Student.CourseStudentMapperDaoInjectorSe
 import com.app.group15.GroupFormationManagement.GroupFormationAlgorithmConcreteFactory;
 import com.app.group15.GroupFormationManagement.IGroupFormationAlgorithmAbstractFactory;
 import com.app.group15.NotificationManagement.EmailNotifierImpl;
-import com.app.group15.PasswordPolicyManagement.PasswordPolicyAbstractDao;
-import com.app.group15.PasswordPolicyManagement.PasswordPolicyDao;
-import com.app.group15.PasswordPolicyManagement.UserPasswordHistoryAbstractDao;
-import com.app.group15.PasswordPolicyManagement.UserPasswordHistoryDao;
+import com.app.group15.PasswordPolicyManagement.*;
 import com.app.group15.QuestionManager.IQuestionManagerAbstractFactory;
 import com.app.group15.QuestionManager.QuestionManagerConcreteFactory;
 import com.app.group15.SurveyManagement.*;
@@ -53,6 +50,7 @@ public class AppConfig {
     private IQuestionManagerAbstractFactory questionManagerAbstractFactory;
     private IGroupFormationAlgorithmAbstractFactory groupAlgorithmAbstractFactory;
     private ISurveyManagementAbstractFactory surveyManagementAbstractFactory;
+    private IPasswordPolicyAbstractFactory passwordPolicyAbstractFactory;
 
 
     public SurveyAbstractDao getSurveyDao() {
@@ -95,6 +93,7 @@ public class AppConfig {
         questionManagerAbstractFactory = QuestionManagerConcreteFactory.getInstance();
         groupAlgorithmAbstractFactory = GroupFormationAlgorithmConcreteFactory.getInstance();
         surveyManagementAbstractFactory = SurveyManagementConcreteFactory.getInstance();
+        passwordPolicyAbstractFactory = PasswordPolicyConcreteFactory.getInstance();
     }
 
     public static AppConfig getSingletonAppConfig() {
@@ -215,5 +214,7 @@ public class AppConfig {
         return surveyManagementAbstractFactory;
     }
 
-
+    public IPasswordPolicyAbstractFactory getPasswordPolicyAbstractFactory() {
+        return passwordPolicyAbstractFactory;
+    }
 }

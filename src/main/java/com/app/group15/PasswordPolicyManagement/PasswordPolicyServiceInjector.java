@@ -1,46 +1,49 @@
 package com.app.group15.PasswordPolicyManagement;
 
 
+import com.app.group15.Config.AppConfig;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 
 public class PasswordPolicyServiceInjector {
 
     private PasswordPolicyDao passwordPolicyDao;
     private PasswordPolicyService passwordPolicyService;
+    IPasswordPolicyAbstractFactory passwordPolicyAbstractFactory = AppConfig.getInstance().getPasswordPolicyAbstractFactory();
+
 
     public PasswordPolicyServiceInjector() throws SQLException, AwsSecretsManagerException {
 
-        passwordPolicyDao = new PasswordPolicyDao();
+        passwordPolicyDao = (PasswordPolicyDao) passwordPolicyAbstractFactory.getPasswordPolicyDao();
         List<PasswordPolicy> activePasswordPolicy = passwordPolicyDao.getActivePasswordPolicy();
-        passwordPolicyService = new PasswordPolicyService();
+        passwordPolicyService = (PasswordPolicyService) passwordPolicyAbstractFactory.getPasswordPolicyService();
         List<IPasswordPolicyValidator> activePolicyList = new ArrayList();
 
         activePasswordPolicy.forEach(policy -> {
             switch (policy.getPolicyId()) {
                 case 1:
-                    activePolicyList.add(new PasswordPolicyMinLengthInjector().getPasswordPolicyMinLength());
+                    activePolicyList.add(passwordPolicyAbstractFactory.getPasswordPolicyMinLength());
                     break;
                 case 2:
-                    activePolicyList.add(new PasswordPolicyMaxLengthInjector().getPasswordPolicyMaxLength());
+                    activePolicyList.add(passwordPolicyAbstractFactory.getPasswordPolicyMaxLength());
                     break;
                 case 3:
-                    activePolicyList.add(new PasswordPolicyMinUpperCaseInjector().getPasswordPolicyMinUpperCase());
+                    activePolicyList.add(passwordPolicyAbstractFactory.getPasswordPolicyMinUpperCase());
                     break;
                 case 4:
-                    activePolicyList.add(new PasswordPolicyMinLowerCaseInjector().getPasswordPolicyMinLowerCase());
+                    activePolicyList.add(passwordPolicyAbstractFactory.getPasswordPolicyMinLowerCase());
                     break;
                 case 5:
-                    activePolicyList.add(new PasswordPolicyMinSpecialCharInjector().getPasswordPolicyMinSpecialChar());
+                    activePolicyList.add(passwordPolicyAbstractFactory.getPasswordPolicyMinSpecialChar());
                     break;
                 case 6:
-                    activePolicyList.add(new PasswordPolicyCharNotAllowedInjector().getPasswordPolicyCharNotAllowed());
+                    activePolicyList.add(passwordPolicyAbstractFactory.getPasswordPolicyCharNotAllowed());
                     break;
                 case 7:
-                    activePolicyList.add(new PasswordPolicyHistoryConstraintInjector().getPasswordPolicyHistoryConstraint());
+                    activePolicyList.add(passwordPolicyAbstractFactory.getPasswordPolicyHistoryConstrain());
                     break;
             }
         });
