@@ -12,6 +12,8 @@ import com.app.group15.QuestionManager.QuestionChoiceMapperServiceInjectorForTes
 import com.app.group15.QuestionManager.QuestionManagerServiceInjectorForTest;
 import com.app.group15.SurveyManagement.ISurveyService;
 import com.app.group15.SurveyManagement.SurveyServiceInjectorForTest;
+import com.app.group15.SurveyManagement.student.ISurveyStudentService;
+import com.app.group15.SurveyManagement.student.SurveyStudentInjectorServiceTest;
 import com.app.group15.UserManagement.IUserService;
 import com.app.group15.UserManagement.LoginManagement.ILoginService;
 import com.app.group15.UserManagement.LoginManagement.LoginServiceInjectorForTest;
@@ -31,6 +33,7 @@ public class ServiceConfigForTest {
 	private ILoginService loginService;
 	private ISignupService signupService;
 	private ISurveyService surveyService;
+	private ISurveyStudentService surveyStudentService;
 
 	private ServiceConfigForTest() {
 		courseService = new CourseServiceInjectorForTest().getCourseService();
@@ -41,19 +44,25 @@ public class ServiceConfigForTest {
 		userService = new UserServiceInjectorForTest().getUserService();
 		loginService = new LoginServiceInjectorForTest().getLoginService();
 		signupService = new SignUpServiceInjectorForTest().getSignUpService();
-		surveyService=new SurveyServiceInjectorForTest().getSurveyService();
+		surveyService = new SurveyServiceInjectorForTest().getSurveyService();
+		surveyStudentService = new SurveyStudentInjectorServiceTest().getSurveyStudentService();
+
 	}
 
 	public static ServiceConfigForTest getInstance() {
-        if (null == ServiceConfigForTest.getUniqueInstance()) {
-            singletonServiceConfig = new ServiceConfigForTest();
-        }
-        return ServiceConfigForTest.singletonServiceConfig;
-    }
+		if (null == ServiceConfigForTest.getUniqueInstance()) {
+			singletonServiceConfig = new ServiceConfigForTest();
+		}
+		return ServiceConfigForTest.singletonServiceConfig;
+	}
 
-    private static ServiceConfigForTest getUniqueInstance() {
-        return singletonServiceConfig;
-    }
+	private static ServiceConfigForTest getUniqueInstance() {
+		return singletonServiceConfig;
+	}
+
+	public ISurveyStudentService getSurveyStudentService() {
+		return surveyStudentService;
+	}
 
 	public ICourseService getCourseService() {
 		return courseService;
@@ -90,4 +99,6 @@ public class ServiceConfigForTest {
 	public ISurveyService getSurveyService() {
 		return surveyService;
 	}
+
+
 }

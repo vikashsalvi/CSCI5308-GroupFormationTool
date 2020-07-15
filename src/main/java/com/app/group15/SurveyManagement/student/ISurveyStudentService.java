@@ -8,15 +8,17 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface ISurveyStudentService {
-    void submitResponse(User user, SurveyFormResponse surveyFormResponse) throws SQLException, AwsSecretsManagerException;
+    boolean submitResponse(User user, SurveyFormResponse surveyFormResponse) throws SQLException, AwsSecretsManagerException;
 
     SurveyFormResponse getSurveyQuestionWithOptions(int courseId) throws SQLException, AwsSecretsManagerException;
 
 
     List<Boolean> validateIfUserHasSubmittedSurveyBefore(List<Course> courseList, int userId) throws SQLException, AwsSecretsManagerException;
-    
-    public List<StudentResponseNumeric> getNumericStudentResponsesForASurvey(int surveyId) throws SQLException, AwsSecretsManagerException ;
-    public List<StudentResponseText> getTextStudentResponsesForASurvey(int surveyId) throws SQLException, AwsSecretsManagerException ;
-    public List<StudentResponseChoice> getChoiceStudentResponsesForASurvey(int surveyId) throws SQLException, AwsSecretsManagerException ;
+
+    List<StudentResponseNumeric> getNumericStudentResponsesForASurvey(int surveyId) throws SQLException, AwsSecretsManagerException;
+
+    List<StudentResponseText> getTextStudentResponsesForASurvey(int surveyId) throws SQLException, AwsSecretsManagerException;
+
+    List<StudentResponseChoice> getChoiceStudentResponsesForASurvey(int surveyId) throws SQLException, AwsSecretsManagerException;
 
 }

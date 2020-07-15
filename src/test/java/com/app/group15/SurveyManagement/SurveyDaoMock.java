@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-class SurveyDaoMock extends SurveyAbstractDao {
+public class SurveyDaoMock extends SurveyAbstractDao {
 
     @Override
     public Survey getSurvey(int id) throws SQLException, AwsSecretsManagerException {
@@ -56,5 +56,35 @@ class SurveyDaoMock extends SurveyAbstractDao {
     @Override
     public int getRuleIdByRuleAndQuestionType(String rule, int questionType) throws SQLException, AwsSecretsManagerException {
         return 1;
+    }
+
+    @Override
+    public void saveNumericResponse(int surveyResponseQuestionId, int id, int questionId, int surveyId) throws SQLException, AwsSecretsManagerException {
+
+    }
+
+    @Override
+    public void saveTextResponse(int id, int questionId, String textResponse, int surveyId) throws SQLException, AwsSecretsManagerException {
+
+    }
+
+    @Override
+    public void saveChoiceResponse(int questionId, int surveyId, String choiceId, int id) throws SQLException, AwsSecretsManagerException {
+
+    }
+
+    @Override
+    public ArrayList<SurveyQuestionMapper> getQuestionsOfASurveySortedByOrder(int surveyId) throws SQLException, AwsSecretsManagerException {
+        return null;
+    }
+
+    @Override
+    public int getSurveyIdOfACourse(int courseId) throws SQLException, AwsSecretsManagerException {
+        return 0;
+    }
+
+    @Override
+    public String getRuleFromId(int ruleId) throws SQLException, AwsSecretsManagerException {
+        return null;
     }
 }
