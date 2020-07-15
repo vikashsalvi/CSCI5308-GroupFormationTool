@@ -23,8 +23,8 @@ import java.util.logging.Level;
 @RequestMapping("/")
 public class ForgetPasswordController {
 
-	private IPasswordPolicyService passwordPolicyService;
 	private IForgetPasswordAbstractFactory forgetPasswordAbstractFactory= AppConfig.getInstance().getForgetPasswordAbstractFactory();
+	private IPasswordPolicyService passwordPolicyService;
 	private IForgetPasswordService forgetPasswordService = forgetPasswordAbstractFactory.getForgetPasswordService();
 	private String invalidInput = "Invalid invalid";
 

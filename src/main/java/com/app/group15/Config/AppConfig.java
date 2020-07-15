@@ -26,6 +26,10 @@ import com.app.group15.SurveyManagement.SurveyQuestionMapperDao;
 import com.app.group15.UserManagement.ForgetPassword.ForgetPasswordConcreteFactory;
 import com.app.group15.UserManagement.ForgetPassword.IForgetPasswordAbstractFactory;
 import com.app.group15.UserManagement.IUserManagementAbstractFactory;
+import com.app.group15.UserManagement.LoginManagement.ILoginManagementAbstractFactory;
+import com.app.group15.UserManagement.LoginManagement.LoginManagementConcreteFactory;
+import com.app.group15.UserManagement.SessionManagement.ISessionManagementAbstractFactory;
+import com.app.group15.UserManagement.SessionManagement.SessionManagementConcreteFactory;
 import com.app.group15.UserManagement.UserManagementConcreteFactory;
 import com.app.group15.UserManagement.UserRoleDaoInjectorService;
 
@@ -60,6 +64,8 @@ public class AppConfig {
     private IGroupFormationAlgorithmAbstractFactory groupAlgorithmAbstractFactory;
     private IUserManagementAbstractFactory userManagementAbstractFactory;
     private IForgetPasswordAbstractFactory forgetPasswordAbstractFactory;
+    private ILoginManagementAbstractFactory loginManagementAbstractFactory;
+    private ISessionManagementAbstractFactory sessionManagementAbstractFactory;
 
 	public SurveyAbstractDao getSurveyDao() {
 		return surveyDao;
@@ -100,6 +106,8 @@ public class AppConfig {
         groupAlgorithmAbstractFactory=GroupFormationAlgorithmConcreteFactory.getInstance();
         userManagementAbstractFactory= UserManagementConcreteFactory.getInstance();
         forgetPasswordAbstractFactory= ForgetPasswordConcreteFactory.getInstance();
+        loginManagementAbstractFactory= LoginManagementConcreteFactory.getInstance();
+        sessionManagementAbstractFactory= SessionManagementConcreteFactory.getInstance();
     }
 
     public static AppConfig getSingletonAppConfig() {
@@ -216,5 +224,13 @@ public class AppConfig {
 
 	public IForgetPasswordAbstractFactory getForgetPasswordAbstractFactory() {
 		return forgetPasswordAbstractFactory;
+	}
+
+	public ILoginManagementAbstractFactory getLoginManagementAbstractFactory() {
+		return loginManagementAbstractFactory;
+	}
+
+	public ISessionManagementAbstractFactory getSessionManagementAbstractFactory() {
+		return sessionManagementAbstractFactory;
 	}
 }

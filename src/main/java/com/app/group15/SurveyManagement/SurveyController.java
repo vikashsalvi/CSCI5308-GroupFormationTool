@@ -8,6 +8,7 @@ import com.app.group15.CourseManagement.CourseAbstractDao;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.QuestionManager.Question;
 import com.app.group15.UserManagement.SessionManagement.IAuthorizationService;
+import com.app.group15.UserManagement.SessionManagement.ISessionManagementAbstractFactory;
 import com.app.group15.UserManagement.SessionManagement.ISessionService;
 import com.app.group15.UserManagement.User;
 import com.app.group15.Utility.GroupFormationToolLogger;
@@ -26,9 +27,11 @@ import java.util.logging.Level;
 @Controller
 public class SurveyController {
 
-    private IAuthorizationService authorizationService = ServiceConfig.getInstance().getAuthorizationService();
-    private CourseAbstractDao courseDao = AppConfig.getInstance().getCourseDao();
-    private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
+	private ISessionManagementAbstractFactory sessionManagementAbstractFactory=AppConfig.getInstance().getSessionManagementAbstractFactory();
+
+    private IAuthorizationService authorizationService = sessionManagementAbstractFactory.getAuthorizationService();
+	private ISessionService sessionService = sessionManagementAbstractFactory.getSessionService();
+	private CourseAbstractDao courseDao = AppConfig.getInstance().getCourseDao();
     private ISurveyService surveyService = ServiceConfig.getInstance().getSurveyService();
 
     @RequestMapping(value = "/instructor/survey", method = RequestMethod.GET)

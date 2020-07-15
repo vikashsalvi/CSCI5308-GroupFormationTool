@@ -3,6 +3,8 @@ package com.app.group15.UserManagement.SessionManagement;
 import com.app.group15.Config.AppConfig;
 import com.app.group15.ExceptionHandler.AllowedRolesNotSetException;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+import com.app.group15.UserManagement.UserAbstractDao;
+import com.app.group15.UserManagement.UserRoleAbstractDao;
 import com.app.group15.UserManagement.UserRoleDao;
 import com.app.group15.Utility.GroupFormationToolLogger;
 import com.app.group15.Utility.ServiceUtility;
@@ -15,10 +17,11 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 
-public class AuthorizationService implements IAuthorizationService {
+public class AuthorizationService implements IAuthorizationService, IAuthorizationServiceInjector {
 
     private Set<String> allowedRoles = new HashSet<>();
     private String invalidInput = "Invalid input";
+    UserRoleAbstractDao userRoleDao;
 
     @Override
     public Set<String> getAllowedRoles() {
@@ -51,4 +54,14 @@ public class AuthorizationService implements IAuthorizationService {
         intersection.retainAll(roles);
         return intersection.size() > 0;
     }
+
+	@Override
+	public void injectUserRoleDao(UserRoleAbstractDao userRoleDao) {
+		if (ServiceUtility.isNotNull(userRoleDao)){
+			this.userRoleDao=userRoleDao;
+		} else {
+			GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
+		}
+	}
+
 }

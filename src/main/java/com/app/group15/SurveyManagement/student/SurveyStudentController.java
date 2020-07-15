@@ -1,10 +1,12 @@
 package com.app.group15.SurveyManagement.student;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.Config.ServiceConfig;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.SurveyManagement.ISurveyService;
 import com.app.group15.SurveyManagement.Survey;
 import com.app.group15.UserManagement.SessionManagement.IAuthorizationService;
+import com.app.group15.UserManagement.SessionManagement.ISessionManagementAbstractFactory;
 import com.app.group15.UserManagement.SessionManagement.ISessionService;
 import com.app.group15.UserManagement.User;
 import com.app.group15.Utility.GroupFormationToolLogger;
@@ -22,8 +24,10 @@ import java.util.logging.Level;
 @Controller
 public class SurveyStudentController {
 
-    private IAuthorizationService authorizationService = ServiceConfig.getInstance().getAuthorizationService();
-    private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
+	private ISessionManagementAbstractFactory sessionManagementAbstractFactory= AppConfig.getInstance().getSessionManagementAbstractFactory();
+
+    private IAuthorizationService authorizationService = sessionManagementAbstractFactory.getAuthorizationService();
+    private ISessionService sessionService = sessionManagementAbstractFactory.getSessionService();
     private ISurveyStudentService surveyStudentService = ServiceConfig.getInstance().getSurveyStudentService();
     private ISurveyService surveyService = ServiceConfig.getInstance().getSurveyService();
 

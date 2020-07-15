@@ -4,6 +4,7 @@ import com.app.group15.Config.AppConfig;
 import com.app.group15.Config.ServiceConfig;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.UserManagement.SessionManagement.IAuthorizationService;
+import com.app.group15.UserManagement.SessionManagement.ISessionManagementAbstractFactory;
 import com.app.group15.UserManagement.SessionManagement.ISessionService;
 import com.app.group15.Utility.GroupFormationToolLogger;
 import com.app.group15.UserManagement.User;
@@ -24,11 +25,13 @@ import java.util.logging.Level;
 
 @Controller
 public class QuestionController {
-	
+
 	IQuestionManagerAbstractFactory questionManagerAbstractFactory=AppConfig.getInstance().getQuestionManagerAbstractFactory();
-    IQuestionManagerService questionManagerService = questionManagerAbstractFactory.getQuestionManagerService();
-    private IAuthorizationService authorizationService = ServiceConfig.getInstance().getAuthorizationService();
-    private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
+	ISessionManagementAbstractFactory sessionManagementAbstractFactory=AppConfig.getInstance().getSessionManagementAbstractFactory();
+
+	IQuestionManagerService questionManagerService = questionManagerAbstractFactory.getQuestionManagerService();
+    private IAuthorizationService authorizationService = sessionManagementAbstractFactory.getAuthorizationService();
+    private ISessionService sessionService = sessionManagementAbstractFactory.getSessionService();
     private IQuestionChoiceMapperService questionChoiceMapperService = questionManagerAbstractFactory.getQuestionChoiceMapperService();
 
 
