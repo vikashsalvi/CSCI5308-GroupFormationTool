@@ -14,15 +14,15 @@ import java.util.stream.Collectors;
 
 import com.sun.mail.util.QEncoderStream;
 
-public class MatrixGroupFormationAlgorithm implements IGroupFormationAlgorithm {
+public class MatrixGroupFormationAlgorithm extends GroupFormationAlgorithm {
 
 	private ArrayList<Integer> studentsAdded = new ArrayList<>();
 	private HashMap<Integer, ArrayList<Object>> studentResponseMaintainerMap = new HashMap<>();
 	private HashMap<Integer, Integer> studentIdArrayIndexMap = new HashMap<>();
-	private ArrayList<ArrayList> studentGroupsFormed = new ArrayList();
+	private ArrayList<ArrayList<Integer>> studentGroupsFormed = new ArrayList();
 
 	@Override
-	public ArrayList<ArrayList> formGroups(ArrayList<StudentResponseMaintainer> studentResponseList, int groupSize,
+	public ArrayList<ArrayList<Integer>> formGroups(ArrayList<StudentResponseMaintainer> studentResponseList, int groupSize,
 			HashMap<Integer, String> questionCriteria) {
 
 		while (studentResponseList.size() > 0) {

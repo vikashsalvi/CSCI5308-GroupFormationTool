@@ -15,6 +15,8 @@ import com.app.group15.QuestionManager.QuestionChoiceMapperServiceInjector;
 import com.app.group15.QuestionManager.QuestionManagerServiceInjector;
 import com.app.group15.SurveyManagement.ISurveyService;
 import com.app.group15.SurveyManagement.SurveyServiceInjector;
+import com.app.group15.SurveyManagement.student.ISurveyStudentService;
+import com.app.group15.SurveyManagement.student.SurveyStudentInjectorService;
 import com.app.group15.UserManagement.ForgetPassword.ForgetPasswordServiceInjector;
 import com.app.group15.UserManagement.ForgetPassword.IForgetPasswordService;
 import com.app.group15.UserManagement.IUserService;
@@ -46,6 +48,7 @@ public class ServiceConfig {
     private IQuestionChoiceMapperService questionChoiceMapperService;
     private IForgetPasswordService forgetPasswordService;
     private ISurveyService surveyService;
+    private ISurveyStudentService surveyStudentService;
 
     private ServiceConfig() {
         assignTaService = new AssignTaServiceInjector().getAssignTaService();
@@ -60,6 +63,7 @@ public class ServiceConfig {
         questionChoiceMapperService = new QuestionChoiceMapperServiceInjector().getQuestionChoiceMapperService();
         forgetPasswordService = new ForgetPasswordServiceInjector().getForgetPasswordService();
         surveyService = new SurveyServiceInjector().getSurveyService();
+        surveyStudentService = new SurveyStudentInjectorService().getSurveyStudentService();
     }
 
     public static ServiceConfig getInstance() {
@@ -124,6 +128,10 @@ public class ServiceConfig {
 
     public ISurveyService getSurveyService() {
         return surveyService;
+    }
+
+    public ISurveyStudentService getSurveyStudentService() {
+        return surveyStudentService;
     }
 
 }

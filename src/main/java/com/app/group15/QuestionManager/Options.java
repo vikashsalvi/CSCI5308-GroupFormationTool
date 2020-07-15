@@ -4,6 +4,25 @@ public class Options {
 
     private String option;
     private String value;
+    public boolean isSelected;
+    private int id;
+    private int index;
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
 
     public String getOption() {
         return option;
@@ -21,12 +40,21 @@ public class Options {
         this.value = value;
     }
 
-    @Override
-    public String toString() {
-        return "OptionValue{" +
-                "option='" + option + '\'' +
-                ", value='" + value + '\'' +
-                '}';
+    public int getId() {
+        return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Options{" +
+                "option='" + option + '\'' +
+                ", value='" + value + '\'' +
+                ", id=" + id +
+                '}';
+    }
 }
