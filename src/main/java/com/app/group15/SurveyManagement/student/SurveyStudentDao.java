@@ -174,7 +174,7 @@ public class SurveyStudentDao extends SurveyStudentAbstractDao {
                 }
             }
             return count;
-        }catch (SQLException | AwsSecretsManagerException e) {
+        } catch (SQLException | AwsSecretsManagerException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
             throw e;
         } finally {
@@ -182,29 +182,34 @@ public class SurveyStudentDao extends SurveyStudentAbstractDao {
             invokeStoredProcedure.closeConnection();
         }
     }
-        
 
-	@Override
-	public List<StudentResponseNumeric> getNumericStudentResponsesOfASurvey(int surveyId)
-			throws SQLException, AwsSecretsManagerException {
-		InvokeStoredProcedure invokeStoredProcedure = null;
-		List<StudentResponseNumeric> responseList = new ArrayList<>();
+
+    @Override
+    public List<StudentResponseNumeric> getNumericStudentResponsesOfASurvey(int surveyId)
+            throws SQLException, AwsSecretsManagerException {
+        InvokeStoredProcedure invokeStoredProcedure = null;
+        List<StudentResponseNumeric> responseList = new ArrayList<>();
 
         try {
             invokeStoredProcedure = new InvokeStoredProcedure("spGetStudentNumericResponsesOfSurvey(?)");
             invokeStoredProcedure.setParameter(1, surveyId);
             ResultSet results = invokeStoredProcedure.executeWithResults();
-            
+
             if (results != null) {
                 while (results.next()) {
-                	StudentResponseNumeric response=new StudentResponseNumeric();
-                	response.setNumericResponse(results.getInt("numeric_response"));
-                	response.setQuestionId(results.getInt("question_id"));
-                	response.setStudentId(results.getInt("student_id"));
-                	response.setSurveyId(results.getInt("survey_id"));
-                	response.setId(results.getInt("id"));
-                	responseList.add(response);
-                    
+                    StudentResponseNumeric response = new StudentResponseNumeric();
+                    response.setNumericResponse(results.getInt("numeric_response"));
+                    response.setQuestionId(results.getInt("question_id"));
+                    response.setStudentId(results.getInt("student_id"));
+                    response.setSurveyId(results.getInt("survey_id"));
+                    response.setId(results.getInt("id"));
+                    Question question = new Question();
+                    question.setQuestionText(results.getString("question_text"));
+                    question.setQuestionTitle(results.getString("title"));
+                    question.setQuestionInstructorId(results.getInt("instructor_id"));
+                    question.setQuestionId(results.getInt("question_id"));
+                    response.setQuestion(question);
+                    responseList.add(response);
                 }
             }
             return responseList;
@@ -215,29 +220,37 @@ public class SurveyStudentDao extends SurveyStudentAbstractDao {
             assert invokeStoredProcedure != null;
             invokeStoredProcedure.closeConnection();
         }
-	}
+    }
 
-	@Override
-	public List<StudentResponseChoice> getChoiceStudentResponsesOfASurvey(int surveyId)
-			throws SQLException, AwsSecretsManagerException {
-		InvokeStoredProcedure invokeStoredProcedure = null;
-		List<StudentResponseChoice> responseList = new ArrayList<>();
+    @Override
+    public List<StudentResponseChoice> getChoiceStudentResponsesOfASurvey(int surveyId)
+            throws SQLException, AwsSecretsManagerException {
+        InvokeStoredProcedure invokeStoredProcedure = null;
+        List<StudentResponseChoice> responseList = new ArrayList<>();
 
         try {
             invokeStoredProcedure = new InvokeStoredProcedure("spGetStudentChoiceResponsesOfSurvey(?)");
             invokeStoredProcedure.setParameter(1, surveyId);
             ResultSet results = invokeStoredProcedure.executeWithResults();
-            
+
             if (results != null) {
                 while (results.next()) {
-                	StudentResponseChoice response=new StudentResponseChoice();
-                	response.setChoiceId(results.getInt("choice_id"));
-                	response.setQuestionId(results.getInt("question_id"));
-                	response.setStudentId(results.getInt("student_id"));
-                	response.setSurveyId(results.getInt("survey_id"));
-                	response.setId(results.getInt("id"));
-                	responseList.add(response);
-                    
+                    StudentResponseChoice response = new StudentResponseChoice();
+                    response.setChoiceId(results.getInt("choice_id"));
+                    response.setChoiceText(getChoiceValue(results.getInt("choice_id")));
+                    response.setQuestionId(results.getInt("question_id"));
+                    response.setStudentId(results.getInt("student_id"));
+                    response.setSurveyId(results.getInt("survey_id"));
+                    response.setId(results.getInt("id"));
+                    Question question = new Question();
+                    question.setQuestionText(results.getString("question_text"));
+                    question.setQuestionTitle(results.getString("title"));
+                    question.setQuestionInstructorId(results.getInt("instructor_id"));
+                    question.setQuestionId(results.getInt("question_id"));
+                    response.setQuestion(question);
+                    responseList.add(response);
+
+
                 }
             }
             return responseList;
@@ -253,29 +266,59 @@ public class SurveyStudentDao extends SurveyStudentAbstractDao {
 
     }
 
-	
 
-	@Override
-	public List<StudentResponseText> getTextStudentResponsesOfASurvey(int surveyId)
-			throws SQLException, AwsSecretsManagerException {
-		InvokeStoredProcedure invokeStoredProcedure = null;
-		List<StudentResponseText> responseList = new ArrayList<>();
+    @Override
+    public String getChoiceValue(int choiceId) throws SQLException, AwsSecretsManagerException {
+        InvokeStoredProcedure invokeStoredProcedure = null;
+        String choice = null;
+        try {
+            invokeStoredProcedure = new InvokeStoredProcedure("spGetChoiceValue(?)");
+            invokeStoredProcedure.setParameter(1, choiceId);
+            ResultSet results = invokeStoredProcedure.executeWithResults();
+
+            if (results != null) {
+                while (results.next()) {
+                    choice = results.getString("choice");
+                }
+            }
+            return choice;
+        } catch (SQLException | AwsSecretsManagerException e) {
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
+        } finally {
+            assert invokeStoredProcedure != null;
+            invokeStoredProcedure.closeConnection();
+        }
+
+
+    }
+
+    @Override
+    public List<StudentResponseText> getTextStudentResponsesOfASurvey(int surveyId)
+            throws SQLException, AwsSecretsManagerException {
+        InvokeStoredProcedure invokeStoredProcedure = null;
+        List<StudentResponseText> responseList = new ArrayList<>();
 
         try {
             invokeStoredProcedure = new InvokeStoredProcedure("spGetStudentTextResponsesOfSurvey(?)");
             invokeStoredProcedure.setParameter(1, surveyId);
             ResultSet results = invokeStoredProcedure.executeWithResults();
-            
+
             if (results != null) {
                 while (results.next()) {
-                	StudentResponseText response=new StudentResponseText();
-                	response.setTextResponse(results.getString("text"));
-                	response.setQuestionId(results.getInt("question_id"));
-                	response.setStudentId(results.getInt("student_id"));
-                	response.setSurveyId(results.getInt("survey_id"));
-                	response.setId(results.getInt("id"));
-                	responseList.add(response);
-                    
+                    StudentResponseText response = new StudentResponseText();
+                    response.setTextResponse(results.getString("text"));
+                    response.setQuestionId(results.getInt("question_id"));
+                    response.setStudentId(results.getInt("student_id"));
+                    response.setSurveyId(results.getInt("survey_id"));
+                    response.setId(results.getInt("id"));
+                    Question question = new Question();
+                    question.setQuestionText(results.getString("question_text"));
+                    question.setQuestionTitle(results.getString("title"));
+                    question.setQuestionInstructorId(results.getInt("instructor_id"));
+                    question.setQuestionId(results.getInt("question_id"));
+                    response.setQuestion(question);
+                    responseList.add(response);
                 }
             }
             return responseList;
@@ -286,8 +329,8 @@ public class SurveyStudentDao extends SurveyStudentAbstractDao {
             assert invokeStoredProcedure != null;
             invokeStoredProcedure.closeConnection();
         }
-	}
-
-
+    }
 
 }
+
+

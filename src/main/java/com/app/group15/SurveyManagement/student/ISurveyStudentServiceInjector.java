@@ -7,4 +7,6 @@ public interface ISurveyStudentServiceInjector {
     void injectSurveyStudentDao(SurveyStudentAbstractDao surveyStudentAbstractDao);
 
     void injectSurveyDao(SurveyAbstractDao surveyAbstractDao);
+    
+
 }

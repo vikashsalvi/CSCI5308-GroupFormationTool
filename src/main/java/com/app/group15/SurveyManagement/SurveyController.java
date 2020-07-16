@@ -209,38 +209,81 @@ public class SurveyController {
         }
     }
 
-	@RequestMapping(value = "/instructor/survey/unPublish",method = RequestMethod.POST)
-	public ModelAndView unPublishSurvey(HttpServletRequest request,
-									  @RequestParam(value = "courseId", required = true) int courseId){
-		authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
-		ModelAndView modelAndView;
-		try {
-			if (sessionService.isUserSignedIn(request)) {
-				if (authorizationService.isAuthorized(request)) {
-					try {
-						surveyService.unPublishSurvey(courseId);
-						GroupFormationToolLogger.log(Level.FINEST, String.format("Survey of course with course id %d published!", courseId));
-					} catch (Exception e) {
-						GroupFormationToolLogger.log(Level.INFO, "Exception while adding question to survey", e);
-					}
-					modelAndView = new ModelAndView(String.format("redirect:/instructor/survey?courseId=%d",courseId));
-					return modelAndView;
-				} else {
-					modelAndView = new ModelAndView("redirect:/login");
-				}
-			} else {
-				modelAndView = new ModelAndView("redirect:/login");
-			}
-			return modelAndView;
-		} catch (SQLException e) {
-			GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
-			modelAndView = new ModelAndView("dbError");
-			return modelAndView;
-		} catch (AwsSecretsManagerException e) {
-			GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
-			modelAndView = new ModelAndView("awsError");
-			return modelAndView;
-		}
-	}
+    @RequestMapping(value = "/instructor/survey/unPublish", method = RequestMethod.POST)
+    public ModelAndView unPublishSurvey(HttpServletRequest request,
+                                        @RequestParam(value = "courseId", required = true) int courseId) {
+        authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
+        ModelAndView modelAndView;
+        try {
+            if (sessionService.isUserSignedIn(request)) {
+                if (authorizationService.isAuthorized(request)) {
+                    try {
+                        surveyService.unPublishSurvey(courseId);
+                        GroupFormationToolLogger.log(Level.FINEST, String.format("Survey of course with course id %d published!", courseId));
+                    } catch (Exception e) {
+                        GroupFormationToolLogger.log(Level.INFO, "Exception while adding question to survey", e);
+                    }
+                    modelAndView = new ModelAndView(String.format("redirect:/instructor/survey?courseId=%d", courseId));
+                    return modelAndView;
+                } else {
+                    modelAndView = new ModelAndView("redirect:/login");
+                }
+            } else {
+                modelAndView = new ModelAndView("redirect:/login");
+            }
+            return modelAndView;
+        } catch (SQLException e) {
+            GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+            modelAndView = new ModelAndView("dbError");
+            return modelAndView;
+        } catch (AwsSecretsManagerException e) {
+            GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+            modelAndView = new ModelAndView("awsError");
+            return modelAndView;
+        }
+    }
+
+    @RequestMapping(value = "/instructor/surveyResponse", method = RequestMethod.GET)
+    public ModelAndView surveyResponse(HttpServletRequest request,
+                                       @RequestParam(value = "courseId", required = true) String courseId,
+                                       @RequestParam(value = "show", required = false) String showField) {
+        //authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
+
+        List<SurveyUserResponse> surveyUserResponses;
+        ModelAndView modelAndView;
+        Survey survey;
+        boolean showLt = false, showGt = false;
+        try {
+            if (sessionService.isUserSignedIn(request)) {
+                if (authorizationService.isAuthorized(request)) {
+                    User user = sessionService.getSessionUser(request);
+                    surveyUserResponses = surveyService.getSurveyResponse(courseId);
+                    survey = surveyService.getSurveyByCourseId(Integer.parseInt(courseId));
+                    modelAndView = new ModelAndView();
+                    modelAndView.setViewName("instructor/survey-response");
+                    modelAndView.addObject("surveyUserResponses", surveyUserResponses);
+                    modelAndView.addObject("courseId", courseId);
+                    modelAndView.addObject("user", user);
+                    modelAndView.addObject("showLt", showLt);
+                    modelAndView.addObject("showGt", showGt);
+                    return modelAndView;
+                } else {
+                    modelAndView = new ModelAndView("redirect:/login");
+                }
+            } else {
+                modelAndView = new ModelAndView("redirect:/login");
+            }
+            return modelAndView;
+        } catch (SQLException e) {
+            GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+            modelAndView = new ModelAndView("dbError");
+            return modelAndView;
+        } catch (AwsSecretsManagerException e) {
+            GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+            modelAndView = new ModelAndView("awsError");
+            return modelAndView;
+        }
+    }
+
 
 }
