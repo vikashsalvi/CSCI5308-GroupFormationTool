@@ -72,6 +72,11 @@ public class SurveyStudentDaoMock extends SurveyStudentAbstractDao {
     }
 
     @Override
+    public String getChoiceValue(int choiceId) throws SQLException, AwsSecretsManagerException {
+        return null;
+    }
+
+    @Override
     public List<StudentResponseText> getTextStudentResponsesOfASurvey(int surveyId) throws SQLException, AwsSecretsManagerException {
         return null;
     }
