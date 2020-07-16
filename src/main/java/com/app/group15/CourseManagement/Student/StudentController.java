@@ -28,7 +28,7 @@ public class StudentController {
     private IAuthorizationService authorizationService = ServiceConfig.getInstance().getAuthorizationService();
     private ISurveyStudentService surveyStudentService = surveyManagementAbstractFactory.getSurveyStudentService();
     private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
-    private ICourseService courseService = ServiceConfig.getInstance().getCourseService();
+    private ICourseService courseService = AppConfig.getInstance().getCourseManagementAbstractFactory().getCourseService();
 
     @RequestMapping(value = "/student/home", method = RequestMethod.GET)
     public ModelAndView studentHome(HttpServletRequest request) {

@@ -4,6 +4,7 @@ import com.app.group15.Config.AppConfig;
 import com.app.group15.Config.ServiceConfig;
 import com.app.group15.CourseManagement.Course;
 import com.app.group15.CourseManagement.CourseAbstractDao;
+import com.app.group15.CourseManagement.ICourseManagementAbstractFactory;
 import com.app.group15.CourseManagement.ICourseService;
 import com.app.group15.ExceptionHandler.AllowedRolesNotSetException;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
@@ -21,19 +22,22 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 
 @Controller
 public class InstructorController {
+
+
+    private ICourseManagementAbstractFactory courseManagementAbstractFactory = AppConfig.getInstance().getCourseManagementAbstractFactory();
+    private ICourseInstructorAbstractFactory courseInstructorAbstractFactory = AppConfig.getInstance().getCourseInstructorAbstractFactory();
     private IAuthorizationService authorizationService = ServiceConfig.getInstance().getAuthorizationService();
-    private CourseAbstractDao courseDao = AppConfig.getInstance().getCourseDao();
+    private CourseAbstractDao courseDao = courseManagementAbstractFactory.getCourseDao();
     private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
-    private ICourseService courseService = ServiceConfig.getInstance().getCourseService();
-    private IInstructorService instructorService = ServiceConfig.getInstance().getInstructorService();
-    private IAssignTAService assignTaService = ServiceConfig.getInstance().getAssignTaService();
+    private ICourseService courseService = courseManagementAbstractFactory.getCourseService();
+    private IInstructorService instructorService = courseInstructorAbstractFactory.getInstructorService();
+    private IAssignTAService assignTaService = courseInstructorAbstractFactory.getAssignTAService();
     private IUserService userService = ServiceConfig.getInstance().getUserService();
 
     @RequestMapping(value = "/instructor/home", method = RequestMethod.GET)
@@ -41,8 +45,8 @@ public class InstructorController {
         authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
         ModelAndView modelAndView;
         try {
-        if (sessionService.isUserSignedIn(request)) {
-            if (authorizationService.isAuthorized(request)) {
+            if (sessionService.isUserSignedIn(request)) {
+                if (authorizationService.isAuthorized(request)) {
 
                 User userEntity = sessionService.getSessionUser(request);
                 List<Course> courseEntities = instructorService.getCourseOfInstructor((userEntity.getId()));

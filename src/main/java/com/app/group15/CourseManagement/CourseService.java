@@ -1,8 +1,10 @@
 package com.app.group15.CourseManagement;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.CourseManagement.Instructor.CourseInstructorMapperAbstractDao;
 import com.app.group15.CourseManagement.Student.CourseStudentMapperAbstractDao;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+import com.app.group15.Persistence.Persistence;
 import com.app.group15.UserManagement.User;
 import com.app.group15.Utility.GroupFormationToolLogger;
 import com.app.group15.Utility.ServiceUtility;
@@ -13,6 +15,8 @@ import java.util.List;
 import java.util.logging.Level;
 
 public class CourseService implements ICourseService, ICourseServiceInjector {
+
+    private ICourseManagementAbstractFactory courseManagementAbstractFactory = AppConfig.getInstance().getCourseManagementAbstractFactory();
     private CourseAbstractDao courseDao;
     private CourseInstructorMapperAbstractDao courseInstructorMapperDao;
     private CourseStudentMapperAbstractDao courseStudentMapperDao;
@@ -74,7 +78,7 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
     @Override
     public int addCourse(String courseName) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isNotNull(courseName)) {
-            Course course = new Course();
+            Course course = (Course) courseManagementAbstractFactory.getCourseModel();
             course.setName(courseName);
             int courseId = courseDao.save(course);
             return courseId;
@@ -165,7 +169,7 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
     }
 
     @Override
-    public boolean validateCourseID(int courseId) throws SQLException ,AwsSecretsManagerException{
+    public boolean validateCourseID(int courseId) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isValidInt(courseId)) {
             return courseDao.get(courseId) != null;
         } else {
@@ -173,5 +177,11 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
             return false;
         }
     }
+
+    @Override
+    public Persistence get(int courseId) throws SQLException, AwsSecretsManagerException {
+        return courseDao.get(courseId);
+    }
+
 
 }
