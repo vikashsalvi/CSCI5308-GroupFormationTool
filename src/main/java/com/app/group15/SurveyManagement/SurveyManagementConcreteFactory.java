@@ -54,6 +54,11 @@ public class SurveyManagementConcreteFactory implements ISurveyManagementAbstrac
     }
 
     @Override
+    public SurveyUserResponse getSurveyUserResponse() {
+        return new SurveyUserResponse();
+    }
+
+    @Override
     public SurveyQuestionMapperAbstractDao getSurveyQuestionMapperDao() {
         return new SurveyQuestionMapperDao();
     }

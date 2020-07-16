@@ -19,6 +19,8 @@ public interface ISurveyManagementAbstractFactory {
 
     public SurveyResponse getSurveyResponseModel();
 
+    public SurveyUserResponse getSurveyUserResponse();
+
     public SurveyQuestionMapperAbstractDao getSurveyQuestionMapperDao();
 
     public SurveyAbstractDao getSurveyDao();

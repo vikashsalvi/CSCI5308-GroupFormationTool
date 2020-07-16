@@ -202,13 +202,20 @@ public class SurveyStudentDao extends SurveyStudentAbstractDao {
 
             if (results != null) {
                 while (results.next()) {
-                    StudentResponseNumeric response = (StudentResponseNumeric) surveyManagementAbstractFactory.getStudentResponseChoiceModel();
+                    StudentResponseNumeric response = (StudentResponseNumeric) surveyManagementAbstractFactory.getStudentResponseNumericModel();
                     response.setNumericResponse(results.getInt("numeric_response"));
                     response.setQuestionId(results.getInt("question_id"));
                     response.setStudentId(results.getInt("student_id"));
                     response.setSurveyId(results.getInt("survey_id"));
                     response.setId(results.getInt("id"));
+                    Question question = (Question) questionManagerAbstractFactory.getQuestionModel();
+                    question.setQuestionText(results.getString("question_text"));
+                    question.setQuestionTitle(results.getString("title"));
+                    question.setQuestionInstructorId(results.getInt("instructor_id"));
+                    question.setQuestionId(results.getInt("question_id"));
+                    response.setQuestion(question);
                     responseList.add(response);
+
 
                 }
             }
@@ -237,12 +244,18 @@ public class SurveyStudentDao extends SurveyStudentAbstractDao {
                 while (results.next()) {
                     StudentResponseChoice response = (StudentResponseChoice) surveyManagementAbstractFactory.getStudentResponseChoiceModel();
                     response.setChoiceId(results.getInt("choice_id"));
+                    response.setChoiceText(getChoiceValue(results.getInt("choice_id")));
                     response.setQuestionId(results.getInt("question_id"));
                     response.setStudentId(results.getInt("student_id"));
                     response.setSurveyId(results.getInt("survey_id"));
                     response.setId(results.getInt("id"));
+                    Question question = (Question) questionManagerAbstractFactory.getQuestionModel();
+                    question.setQuestionText(results.getString("question_text"));
+                    question.setQuestionTitle(results.getString("title"));
+                    question.setQuestionInstructorId(results.getInt("instructor_id"));
+                    question.setQuestionId(results.getInt("question_id"));
+                    response.setQuestion(question);
                     responseList.add(response);
-
                 }
             }
             return responseList;
@@ -254,7 +267,29 @@ public class SurveyStudentDao extends SurveyStudentAbstractDao {
             assert invokeStoredProcedure != null;
             invokeStoredProcedure.closeConnection();
         }
+    }
 
+    @Override
+    public String getChoiceValue(int choiceId) throws SQLException, AwsSecretsManagerException {
+        InvokeStoredProcedure invokeStoredProcedure = null;
+        String choice = null;
+        try {
+            invokeStoredProcedure = new InvokeStoredProcedure("spGetChoiceValue(?)");
+            invokeStoredProcedure.setParameter(1, choiceId);
+            ResultSet results = invokeStoredProcedure.executeWithResults();
+            if (results != null) {
+                while (results.next()) {
+                    choice = results.getString("choice");
+                }
+            }
+            return choice;
+        } catch (SQLException | AwsSecretsManagerException e) {
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
+        } finally {
+            assert invokeStoredProcedure != null;
+            invokeStoredProcedure.closeConnection();
+        }
 
     }
 
@@ -264,12 +299,10 @@ public class SurveyStudentDao extends SurveyStudentAbstractDao {
             throws SQLException, AwsSecretsManagerException {
         InvokeStoredProcedure invokeStoredProcedure = null;
         List<StudentResponseText> responseList = new ArrayList<>();
-
         try {
             invokeStoredProcedure = new InvokeStoredProcedure("spGetStudentTextResponsesOfSurvey(?)");
             invokeStoredProcedure.setParameter(1, surveyId);
             ResultSet results = invokeStoredProcedure.executeWithResults();
-
             if (results != null) {
                 while (results.next()) {
                     StudentResponseText response = (StudentResponseText) surveyManagementAbstractFactory.getStudentResponseTextModel();
@@ -278,8 +311,13 @@ public class SurveyStudentDao extends SurveyStudentAbstractDao {
                     response.setStudentId(results.getInt("student_id"));
                     response.setSurveyId(results.getInt("survey_id"));
                     response.setId(results.getInt("id"));
+                    Question question = (Question) questionManagerAbstractFactory.getQuestionModel();
+                    question.setQuestionText(results.getString("question_text"));
+                    question.setQuestionTitle(results.getString("title"));
+                    question.setQuestionInstructorId(results.getInt("instructor_id"));
+                    question.setQuestionId(results.getInt("question_id"));
+                    response.setQuestion(question);
                     responseList.add(response);
-
                 }
             }
             return responseList;

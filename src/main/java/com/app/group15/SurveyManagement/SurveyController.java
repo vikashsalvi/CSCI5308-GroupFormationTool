@@ -243,4 +243,46 @@ public class SurveyController {
         }
     }
 
+    @RequestMapping(value = "/instructor/surveyResponse", method = RequestMethod.GET)
+    public ModelAndView surveyResponse(HttpServletRequest request,
+                                       @RequestParam(value = "courseId", required = true) String courseId,
+                                       @RequestParam(value = "show", required = false) String showField) {
+
+        List<SurveyUserResponse> surveyUserResponses;
+        ModelAndView modelAndView;
+        Survey survey;
+        boolean showLt = false, showGt = false;
+        try {
+            if (sessionService.isUserSignedIn(request)) {
+                if (authorizationService.isAuthorized(request)) {
+                    User user = sessionService.getSessionUser(request);
+                    surveyUserResponses = surveyService.getSurveyResponse(courseId);
+                    survey = surveyService.getSurveyByCourseId(Integer.parseInt(courseId));
+                    modelAndView = new ModelAndView();
+                    modelAndView.setViewName("instructor/survey-response");
+                    modelAndView.addObject("surveyUserResponses", surveyUserResponses);
+                    modelAndView.addObject("courseId", courseId);
+                    modelAndView.addObject("user", user);
+                    modelAndView.addObject("showLt", showLt);
+                    modelAndView.addObject("showGt", showGt);
+                    return modelAndView;
+                } else {
+                    modelAndView = new ModelAndView("redirect:/login");
+                }
+            } else {
+                modelAndView = new ModelAndView("redirect:/login");
+            }
+            return modelAndView;
+        } catch (SQLException e) {
+            GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+            modelAndView = new ModelAndView("dbError");
+            return modelAndView;
+        } catch (AwsSecretsManagerException e) {
+            GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+            modelAndView = new ModelAndView("awsError");
+            return modelAndView;
+        }
+    }
+
+
 }
