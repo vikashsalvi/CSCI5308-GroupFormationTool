@@ -1,6 +1,7 @@
 package com.app.group15.CourseManagement;
 
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+import com.app.group15.Persistence.Persistence;
 import com.app.group15.UserManagement.User;
 
 import java.sql.SQLException;
@@ -24,10 +25,12 @@ public interface ICourseService {
 
     boolean isUserCourseAdmin(int courseId, int id) throws SQLException, AwsSecretsManagerException;
 
-    List<Course> getStudentCourses(int id) throws SQLException,AwsSecretsManagerException;
+    List<Course> getStudentCourses(int id) throws SQLException, AwsSecretsManagerException;
 
     Course getStudentCourseAsTa(int id) throws AwsSecretsManagerException, SQLException;
 
-    boolean validateCourseID(int courseId) throws SQLException,AwsSecretsManagerException;
+    boolean validateCourseID(int courseId) throws SQLException, AwsSecretsManagerException;
+
+    Persistence get(int courseId) throws SQLException, AwsSecretsManagerException;
 
 }
