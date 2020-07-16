@@ -52,7 +52,7 @@ public class AdminController {
                     return modelAndViewResponse;
                 } else {
                     modelAndViewResponse = new ModelAndView("redirect:/login");
-                    GroupFormationToolLogger.log(Level.INFO, " Redirecting to /login endpoint ");
+                    GroupFormationToolLogger.log(Level.INFO, "Unauthorized! Logging user out");
                 }
             } else {
                 modelAndViewResponse = new ModelAndView("redirect:/login");

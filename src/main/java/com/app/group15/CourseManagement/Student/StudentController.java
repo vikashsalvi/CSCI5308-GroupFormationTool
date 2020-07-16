@@ -55,17 +55,19 @@ public class StudentController {
                     modelAndViewResponse.addObject("courseAsTaInstructor", courseAsTaInstructor);
                 } else {
                     modelAndViewResponse = new ModelAndView("redirect:/login");
+                    GroupFormationToolLogger.log(Level.INFO, "Unauthorized! Logging user out.");
                 }
             } else {
                 modelAndViewResponse = new ModelAndView("redirect:/login");
+                GroupFormationToolLogger.log(Level.INFO, "No user logged in");
             }
             return modelAndViewResponse;
         } catch (SQLException e) {
-            GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+            GroupFormationToolLogger.log(Level.SEVERE, " Redirecting to /dbError endpoint ");
             modelAndViewResponse = new ModelAndView("dbError");
             return modelAndViewResponse;
         } catch (AwsSecretsManagerException e) {
-            GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+            GroupFormationToolLogger.log(Level.SEVERE, " Redirecting to /awsError endpoint ");
             modelAndViewResponse = new ModelAndView("awsError");
             return modelAndViewResponse;
         }
@@ -89,21 +91,24 @@ public class StudentController {
                         modelAndViewResponse.addObject("courseInstructor", courseInstructor);
                         modelAndViewResponse.addObject("user", user);
                     } else {
-                        modelAndViewResponse = new ModelAndView("redirect:/login");
+                        modelAndViewResponse = new ModelAndView("redirect:/student/home");
+                        GroupFormationToolLogger.log(Level.SEVERE, "Course Error");
                     }
                 } else {
                     modelAndViewResponse = new ModelAndView("redirect:/login");
+                    GroupFormationToolLogger.log(Level.INFO, "Unauthorized! Logging user out.");
                 }
             } else {
                 modelAndViewResponse = new ModelAndView("redirect:/login");
+                GroupFormationToolLogger.log(Level.INFO, "No user logged in");
             }
             return modelAndViewResponse;
         } catch (SQLException e) {
-            GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+            GroupFormationToolLogger.log(Level.SEVERE, " Redirecting to /dbError endpoint ");
             modelAndViewResponse = new ModelAndView("dbError");
             return modelAndViewResponse;
         } catch (AwsSecretsManagerException e) {
-            GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+            GroupFormationToolLogger.log(Level.SEVERE, " Redirecting to /awsError endpoint ");
             modelAndViewResponse = new ModelAndView("awsError");
             return modelAndViewResponse;
         }

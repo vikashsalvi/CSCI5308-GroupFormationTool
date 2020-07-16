@@ -24,10 +24,8 @@ import static com.app.group15.Utility.DatabaseQueriesUtility.*;
 public class CourseDao extends CourseAbstractDao
         implements ICourseInstructorMapperInjector, ICourseStudentMapperDaoInjector {
 
-
     private CourseInstructorMapperAbstractDao courseInstructorMapperDao;
     private CourseStudentMapperAbstractDao courseStudentMapperDao;
-
 
     @Override
     public Course get(int id) throws SQLException, AwsSecretsManagerException {
@@ -38,14 +36,11 @@ public class CourseDao extends CourseAbstractDao
             statement.setInt(1, id);
             try (ResultSet result = statement.executeQuery()) {
                 while (result.next()) {
-
                     course.setId(result.getInt("id"));
                     course.setName(result.getString("name"));
-
                 }
             }
         } catch (SQLException e) {
-
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
             throw e;
         }
@@ -67,7 +62,6 @@ public class CourseDao extends CourseAbstractDao
             }
 
         } catch (SQLException e) {
-
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
             throw e;
         }
@@ -87,10 +81,9 @@ public class CourseDao extends CourseAbstractDao
                 statement.executeUpdate();
                 connection.commit();
                 try (ResultSet result = statement.getGeneratedKeys()) {
-
                     if (result.first()) {
-
                         courseId = result.getInt(1);
+                        GroupFormationToolLogger.log(Level.SEVERE, "Course :" + courseId + " is Saved");
                     }
                 }
             } catch (SQLException e) {
@@ -100,7 +93,6 @@ public class CourseDao extends CourseAbstractDao
                     GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
                     throw e;
                 }
-
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
                 throw e;
             }
@@ -124,6 +116,7 @@ public class CourseDao extends CourseAbstractDao
                 statement.setInt(2, id);
                 statement.executeUpdate();
                 connection.commit();
+                GroupFormationToolLogger.log(Level.SEVERE, "Course :" + id + " is updated");
             } catch (SQLException e) {
                 try {
                     connection.rollback();
@@ -153,6 +146,7 @@ public class CourseDao extends CourseAbstractDao
                 statement.setInt(1, id);
                 statement.executeUpdate();
                 connection.commit();
+                GroupFormationToolLogger.log(Level.SEVERE, "Course :" + id + " is deleted");
             } catch (SQLException e) {
                 try {
                     connection.rollback();
@@ -160,11 +154,9 @@ public class CourseDao extends CourseAbstractDao
                     GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
                     throw e;
                 }
-
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
                 throw e;
             }
-
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
             throw e;
