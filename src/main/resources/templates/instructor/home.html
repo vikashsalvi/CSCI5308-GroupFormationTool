@@ -137,6 +137,13 @@
                                             <td>
                                                 Import Students
                                             </td>
+                                            <td>
+                                                Survey
+                                            </td>
+                                            <td>
+                                                View response
+                                            </td>
+
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -164,6 +171,17 @@
                                                     class="fa fa-file-import"></i>&nbsp;Import
                                                 Students</a>
                                             </td>
+                                            <td>
+                                                <a class="btn btn-outline-primary"
+                                                   th:href='${"/instructor/survey?courseId="+course.getId()}'>
+                                                    <i class="fa fa-file-import"></i>&nbsp;Manage Survey</a>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-outline-primary"
+                                                   th:href='${"/instructor/surveyResponse?courseId="+course.getId()}'>
+                                                    <i class="fa fa-file-import"></i>&nbsp;View Response</a>
+                                            </td>
+
 
                                         </tr>
                                         </tbody>

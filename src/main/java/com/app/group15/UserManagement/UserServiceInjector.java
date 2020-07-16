@@ -7,7 +7,7 @@ public class UserServiceInjector {
     public UserServiceInjector() {
         userService = new UserService();
         userService.injectUserDao(new UserDaoInjectorService().getUserDao());
-        userService.injectUserRoleDao(new UserRoleDao());
+        userService.injectUserRoleDao(new UserRoleDaoInjectorService().getUserRoleDao());
     }
 
     public UserService getUserService() {

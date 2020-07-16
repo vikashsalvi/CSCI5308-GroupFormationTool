@@ -1,7 +1,9 @@
 package com.app.group15.NotificationManagement;
 
-public interface INotifier {
-    boolean sendMessage(String email, String subject, String message);
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 
-    boolean setCredentials();
+public interface INotifier {
+    boolean sendMessage(String email, String subject, String message) throws AwsSecretsManagerException;
+
+    boolean setCredentials() throws AwsSecretsManagerException;
 }

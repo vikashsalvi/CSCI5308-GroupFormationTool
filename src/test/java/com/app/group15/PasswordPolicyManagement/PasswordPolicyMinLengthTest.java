@@ -2,21 +2,23 @@ package com.app.group15.PasswordPolicyManagement;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+
+import java.sql.SQLException;
 
 class PasswordPolicyMinLengthTest {
+	
+	private IPasswordPolicyValidator passwordPolicyValidator;
 
     @Test
-    void isPasswordValid() {
-        PasswordPolicyMinLengthMock passwordPolicyMinLength = new PasswordPolicyMinLengthMock();
-
-        String length7 = "AAAAAAA";
-        String length8 = "AAAAAAAA";
-        String length9 = "AAAAAAAAA";
-
-        assertFalse(passwordPolicyMinLength.isPasswordValid(length7));
-        assertTrue(passwordPolicyMinLength.isPasswordValid(length8));
-        assertTrue(passwordPolicyMinLength.isPasswordValid(length9));
+    void isPasswordValid() throws SQLException, AwsSecretsManagerException {
+    	 PasswordPolicyMinLength policy=new PasswordPolicyMinLength();
+     	policy.injectPasswordPolicyAbstractDao(new PasswordPolicyDaoMock());
+     	passwordPolicyValidator=policy;
+     	assertEquals(passwordPolicyValidator.isPasswordValid("123"),false);
+     	assertEquals(passwordPolicyValidator.isPasswordValid("12355667"),true);
     }
 }

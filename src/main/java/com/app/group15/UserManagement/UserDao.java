@@ -1,5 +1,8 @@
 package com.app.group15.UserManagement;
 
+import com.app.group15.Config.AppConfig;
+import com.app.group15.ExceptionHandler.AllowedRolesNotSetException;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.DatabaseManager;
 import com.app.group15.Persistence.IDao;
 import com.app.group15.Persistence.Persistence;
@@ -10,19 +13,17 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
+import static com.app.group15.Utility.DatabaseQueriesUtility.*;
+
 @SuppressWarnings("rawtypes")
 public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
 
     private UserRoleAbstractDao userRoleDao;
 
-    public UserDao() {
-
-    }
-
     @Override
-    public User get(int id) {
-        String query = "SELECT * FROM table_users WHERE id=?";
-        User user = new User();
+    public User get(int id) throws SQLException, AwsSecretsManagerException {
+        String query = GET_A_USER;
+        User user = (User) AppConfig.getInstance().getUserManagementAbstractFactory().getUserModel();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
@@ -33,24 +34,23 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
                     user.setFirstName(result.getString("first_name"));
                     user.setLastName(result.getString("last_name"));
                     user.setId(id);
-
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return user;
     }
 
     @Override
-    public User getUserByBannerId(String bannerId) {
-        String query = "SELECT * FROM table_users WHERE banner_id=?";
-        User user = new User();
+    public User getUserByBannerId(String bannerId) throws SQLException, AwsSecretsManagerException {
+        String query = GET_USER_BY_BANNER_ID;
+        User user = (User) AppConfig.getInstance().getUserManagementAbstractFactory().getUserModel();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, bannerId);
             try (ResultSet result = statement.executeQuery()) {
-                System.out.println(result);
                 while (result.next()) {
                     user.setBannerId(result.getString("banner_id"));
                     user.setEmail(result.getString("email"));
@@ -60,21 +60,22 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
                     user.setPassword(result.getString("password"));
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return user;
     }
 
     @Override
-    public ArrayList<User> getAll() {
-        String query = "SELECT * FROM table_users";
+    public ArrayList<User> getAll() throws SQLException, AwsSecretsManagerException {
+        String query = GET_ALL_USERS;
         ArrayList<User> usersList = new ArrayList<>();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query);
              ResultSet result = statement.executeQuery()) {
             while (result.next()) {
-                User user = new User();
+                User user = (User) AppConfig.getInstance().getUserManagementAbstractFactory().getUserModel();
                 user.setBannerId(result.getString("banner_id"));
                 user.setEmail(result.getString("email"));
                 user.setFirstName(result.getString("first_name"));
@@ -83,15 +84,16 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
                 usersList.add(user);
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return usersList;
     }
 
     @Override
-    public int saveUser(User user, String role) {
-        String query = "INSERT INTO table_users(first_name,last_name,email, banner_id,password) " + "VALUES(?,?,?,?,?)";
+    public int saveUser(User user, String role) throws AllowedRolesNotSetException, AwsSecretsManagerException, SQLException {
+        String query = SAVE_USER;
         int userId = 0;
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -112,27 +114,29 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
                 }
                 userRoleDao.addRole(userId, role);
 
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 try {
                     connection.rollback();
                 } catch (SQLException e1) {
                     GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
                 }
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                throw e;
             }
 
         } catch (SQLException e) {
 
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return userId;
 
     }
 
     @Override
-    public void update(Persistence user, int id) {
+    public void update(Persistence user, int id) throws SQLException, AwsSecretsManagerException {
         User userEntity = (User) user;
-        String query = "UPDATE table_users SET first_name=?,last_name=?,email=? WHERE id=?";
+        String query = UPDATE_USER;
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             connection.setAutoCommit(false);
@@ -142,15 +146,16 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
             statement.setInt(4, id);
             statement.executeUpdate();
             connection.commit();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
     }
 
     @Override
-    public void updateUserRole(int userId, String role) {
-        String query = "UPDATE table_user_role_mapper SET role_id=? WHERE user_id=?";
+    public void updateUserRole(int userId, String role) throws SQLException, AwsSecretsManagerException {
+        String query = UPDATE_USER_ROLE;
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 connection.setAutoCommit(false);
@@ -169,13 +174,14 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
             }
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
     }
 
     @Override
-    public String getUserPassword(int userId) {
-        String query = "SELECT password from table_users  WHERE id=?";
+    public String getUserPassword(int userId) throws SQLException, AwsSecretsManagerException {
+        String query = GET_PASSWORD_OF_USER;
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, userId);
@@ -184,8 +190,9 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
                 return result.getString("password");
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return null;
 
@@ -202,9 +209,9 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
     }
 
     @Override
-    public User getUserByEmailId(String emailId) {
-        String query = "SELECT * FROM table_users WHERE email like ?";
-        User user = new User();
+    public User getUserByEmailId(String emailId) throws SQLException, AwsSecretsManagerException {
+        String query = GET_USER_BY_EMAIL;
+        User user = (User) AppConfig.getInstance().getUserManagementAbstractFactory().getUserModel();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, emailId);
@@ -217,8 +224,9 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
                     user.setId(result.getInt("id"));
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return user;
     }

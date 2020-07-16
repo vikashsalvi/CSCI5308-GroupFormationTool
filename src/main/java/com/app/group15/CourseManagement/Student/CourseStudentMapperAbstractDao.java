@@ -1,8 +1,10 @@
 package com.app.group15.CourseManagement.Student;
 
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.IDao;
 import com.app.group15.Persistence.Persistence;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,12 +30,12 @@ public abstract class CourseStudentMapperAbstractDao<T> implements IDao {
         return null;
     }
 
-    public abstract int addStudentToACourse(int courseId, int studentId);
+    public abstract int addStudentToACourse(int courseId, int studentId) throws SQLException, AwsSecretsManagerException;
 
-    public abstract void deletByCourseId(int courseId);
+    public abstract void deletByCourseId(int courseId) throws SQLException, AwsSecretsManagerException;
 
     @Override
-    public abstract List<T> getAll();
+    public abstract List<T> getAll() throws SQLException, AwsSecretsManagerException;
 
-    public abstract ArrayList<Integer> getCourseIdsOfAStudent(int studentId);
+    public abstract ArrayList<Integer> getCourseIdsOfAStudent(int studentId) throws SQLException, AwsSecretsManagerException;
 }

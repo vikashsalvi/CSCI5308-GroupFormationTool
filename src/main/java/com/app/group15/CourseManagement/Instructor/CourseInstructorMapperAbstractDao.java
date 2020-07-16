@@ -1,36 +1,38 @@
 package com.app.group15.CourseManagement.Instructor;
 
 import com.app.group15.CourseManagement.Course;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.IDao;
 import com.app.group15.Persistence.Persistence;
 import com.app.group15.UserManagement.User;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public abstract class CourseInstructorMapperAbstractDao<T> implements IDao {
 
-    public abstract User getCourseInstructor(int id);
+    public abstract User getCourseInstructor(int id) throws SQLException, AwsSecretsManagerException;
 
-    public abstract List<Course> getCourseByInstructor(int id);
+    public abstract List<Course> getCourseByInstructor(int id) throws SQLException, AwsSecretsManagerException;
 
-    public abstract List<Course> getCoursesByInstructor(int taId);
+    public abstract List<Course> getCoursesByInstructor(int taId) throws AwsSecretsManagerException, SQLException;
 
-    public abstract Course getCourseByTa(int id);
+    public abstract Course getCourseByTa(int id) throws AwsSecretsManagerException, SQLException;
 
-    public abstract void deleteByCourseId(int courseId);
+    public abstract void deleteByCourseId(int courseId) throws SQLException, AwsSecretsManagerException;
 
-    protected abstract boolean doesCourseIdExistInThisMapper(int courseId);
+    protected abstract boolean doesCourseIdExistInThisMapper(int courseId) throws SQLException, AwsSecretsManagerException;
 
-    protected abstract void addInstructorForCourseWithTa(int courseId, int instructorId);
+    protected abstract void addInstructorForCourseWithTa(int courseId, int instructorId) throws SQLException, AwsSecretsManagerException;
 
-    protected abstract void addTaForCourseWithInstructor(int courseId, int taId);
+    protected abstract void addTaForCourseWithInstructor(int courseId, int taId) throws SQLException, AwsSecretsManagerException;
 
-    public abstract void addInstructorToACourse(int courseId, int instructorId);
+    public abstract void addInstructorToACourse(int courseId, int instructorId) throws SQLException, AwsSecretsManagerException;
 
-    public abstract void addTaToACourse(int courseId, int taId);
+    public abstract void addTaToACourse(int courseId, int taId) throws SQLException, AwsSecretsManagerException;
 
     @Override
-    public abstract List getAll();
+    public abstract List getAll() throws SQLException, AwsSecretsManagerException;
 
     @Override
     public int save(Persistence t) {
@@ -50,7 +52,7 @@ public abstract class CourseInstructorMapperAbstractDao<T> implements IDao {
         return null;
     }
 
-    public abstract User getCourseTA(int userId);
+    public abstract User getCourseTA(int userId) throws SQLException, AwsSecretsManagerException;
 
 
 }

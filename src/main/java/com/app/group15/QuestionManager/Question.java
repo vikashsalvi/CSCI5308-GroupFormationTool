@@ -14,6 +14,7 @@ public class Question extends Persistence {
     private String questionText;
     private String questionAddedDate;
     private List<Options> options;
+    private int surveyId;
 
     public Question() {
         options = new ArrayList<>();
@@ -79,6 +80,13 @@ public class Question extends Persistence {
         this.questionAddedDate = questionAddedDate;
     }
 
+    public int getSurveyId() {
+        return surveyId;
+    }
+
+    public void setSurveyId(int surveyId) {
+        this.surveyId = surveyId;
+    }
 
     @Override
     public String toString() {
