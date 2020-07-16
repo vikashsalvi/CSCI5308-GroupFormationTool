@@ -61,7 +61,36 @@ class SurveyServiceTest {
 
     @Test
     void addQuestionToSurvey() throws SQLException, AwsSecretsManagerException {
-        Survey survey = surveyService.getSurveyByCourseId(1);
-        assertNotNull(survey);
+        int result = surveyService.addQuestionToSurvey(15, 1, "SIMILAR", 1);
+        assertEquals(result, 1);
+    }
+
+    @Test
+    void deleteSurveyQuestion() throws SQLException, AwsSecretsManagerException {
+        surveyService.deleteSurveyQuestion(1, 1);
+    }
+
+    @Test
+    void publishSurvey() throws SQLException, AwsSecretsManagerException {
+        Survey survey = surveyDaoMock.getSurveyByCourseID(15);
+        surveyDaoMock.publishSurvey(survey);
+    }
+
+    @Test
+    void unPublishSurvey() throws SQLException, AwsSecretsManagerException {
+        Survey survey = surveyDaoMock.getSurveyByCourseID(15);
+        surveyDaoMock.unPublishSurvey(survey);
+    }
+
+    @Test
+    void injectSurveyDao() {
+    }
+
+    @Test
+    void injectSurveyQuestionMapperDao() {
+    }
+
+    @Test
+    void injectQuestionManagerDao() {
     }
 }
