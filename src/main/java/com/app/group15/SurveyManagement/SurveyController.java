@@ -2,9 +2,9 @@ package com.app.group15.SurveyManagement;
 
 
 import com.app.group15.Config.AppConfig;
-import com.app.group15.Config.ServiceConfig;
 import com.app.group15.CourseManagement.Course;
 import com.app.group15.CourseManagement.CourseAbstractDao;
+import com.app.group15.CourseManagement.ICourseManagementAbstractFactory;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.QuestionManager.Question;
 import com.app.group15.UserManagement.SessionManagement.IAuthorizationService;
@@ -28,9 +28,10 @@ import java.util.logging.Level;
 public class SurveyController {
 
     private ISurveyManagementAbstractFactory surveyManagementAbstractFactory = AppConfig.getInstance().getSurveyManagementAbstractFactory();
-    private ISessionManagementAbstractFactory sessionManagementAbstractFactory=AppConfig.getInstance().getSessionManagementAbstractFactory();
-    private IAuthorizationService authorizationService = ServiceConfig.getInstance().getAuthorizationService();
-    private CourseAbstractDao courseDao = AppConfig.getInstance().getCourseDao();
+    private ISessionManagementAbstractFactory sessionManagementAbstractFactory = AppConfig.getInstance().getSessionManagementAbstractFactory();
+    private IAuthorizationService authorizationService = sessionManagementAbstractFactory.getAuthorizationService();
+    private ICourseManagementAbstractFactory courseManagementAbstractFactory = AppConfig.getInstance().getCourseManagementAbstractFactory();
+    private CourseAbstractDao courseDao = courseManagementAbstractFactory.getCourseDao();
     private ISessionService sessionService = sessionManagementAbstractFactory.getSessionService();
     private ISurveyService surveyService = surveyManagementAbstractFactory.getSurveyService();
 
@@ -247,26 +248,20 @@ public class SurveyController {
 
     @RequestMapping(value = "/instructor/surveyResponse", method = RequestMethod.GET)
     public ModelAndView surveyResponse(HttpServletRequest request,
-                                       @RequestParam(value = "courseId", required = true) String courseId,
-                                       @RequestParam(value = "show", required = false) String showField) {
-
+                                       @RequestParam(value = "courseId", required = true) String courseId) {
+        authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
         List<SurveyUserResponse> surveyUserResponses;
         ModelAndView modelAndView;
-        Survey survey;
-        boolean showLt = false, showGt = false;
         try {
             if (sessionService.isUserSignedIn(request)) {
                 if (authorizationService.isAuthorized(request)) {
                     User user = sessionService.getSessionUser(request);
                     surveyUserResponses = surveyService.getSurveyResponse(courseId);
-                    survey = surveyService.getSurveyByCourseId(Integer.parseInt(courseId));
                     modelAndView = new ModelAndView();
                     modelAndView.setViewName("instructor/survey-response");
                     modelAndView.addObject("surveyUserResponses", surveyUserResponses);
                     modelAndView.addObject("courseId", courseId);
                     modelAndView.addObject("user", user);
-                    modelAndView.addObject("showLt", showLt);
-                    modelAndView.addObject("showGt", showGt);
                     return modelAndView;
                 } else {
                     modelAndView = new ModelAndView("redirect:/login");
@@ -285,6 +280,4 @@ public class SurveyController {
             return modelAndView;
         }
     }
-
-
 }

@@ -64,28 +64,4 @@ class SurveyServiceTest {
         Survey survey = surveyService.getSurveyByCourseId(1);
         assertNotNull(survey);
     }
-
-    @Test
-    void deleteSurveyQuestion() {
-    }
-
-    @Test
-    void publishSurvey() {
-    }
-
-    @Test
-    void unPublishSurvey() {
-    }
-
-    @Test
-    void injectSurveyDao() {
-    }
-
-    @Test
-    void injectSurveyQuestionMapperDao() {
-    }
-
-    @Test
-    void injectQuestionManagerDao() {
-    }
 }

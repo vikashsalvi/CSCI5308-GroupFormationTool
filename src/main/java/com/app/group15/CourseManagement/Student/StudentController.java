@@ -25,8 +25,8 @@ import java.util.logging.Level;
 
 @Controller
 public class StudentController {
-    ISurveyManagementAbstractFactory surveyManagementAbstractFactory = AppConfig.getInstance().getSurveyManagementAbstractFactory();
-    ISessionManagementAbstractFactory sessionManagementAbstractFactory=AppConfig.getInstance().getSessionManagementAbstractFactory();
+    private ISurveyManagementAbstractFactory surveyManagementAbstractFactory = AppConfig.getInstance().getSurveyManagementAbstractFactory();
+    private ISessionManagementAbstractFactory sessionManagementAbstractFactory = AppConfig.getInstance().getSessionManagementAbstractFactory();
     private IAuthorizationService authorizationService = ServiceConfig.getInstance().getAuthorizationService();
     private ISurveyStudentService surveyStudentService = surveyManagementAbstractFactory.getSurveyStudentService();
     private ISessionService sessionService = sessionManagementAbstractFactory.getSessionService();

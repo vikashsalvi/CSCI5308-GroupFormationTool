@@ -1,11 +1,13 @@
 package com.app.group15.Config;
 
-import com.app.group15.CourseManagement.CourseAbstractDao;
-import com.app.group15.CourseManagement.CourseDaoInjectorService;
 import com.app.group15.CourseManagement.CourseManagementConcreteFactory;
 import com.app.group15.CourseManagement.ICourseManagementAbstractFactory;
-import com.app.group15.CourseManagement.Instructor.*;
-import com.app.group15.CourseManagement.Student.*;
+import com.app.group15.CourseManagement.Instructor.CourseInstructorConcreteFactory;
+import com.app.group15.CourseManagement.Instructor.CourseInstructorMapperDaoInjectorService;
+import com.app.group15.CourseManagement.Instructor.ICourseInstructorAbstractFactory;
+import com.app.group15.CourseManagement.Student.CourseStudentConcreteFactory;
+import com.app.group15.CourseManagement.Student.CourseStudentMapperDaoInjectorService;
+import com.app.group15.CourseManagement.Student.ICourseStudentAbstractFactory;
 import com.app.group15.GroupFormationManagement.GroupFormationAlgorithmConcreteFactory;
 import com.app.group15.GroupFormationManagement.IGroupFormationAlgorithmAbstractFactory;
 import com.app.group15.NotificationManagement.EmailNotifierImpl;
@@ -15,16 +17,15 @@ import com.app.group15.QuestionManager.IQuestionManagerAbstractFactory;
 import com.app.group15.QuestionManager.QuestionManagerConcreteFactory;
 import com.app.group15.SurveyManagement.ISurveyManagementAbstractFactory;
 import com.app.group15.SurveyManagement.SurveyManagementConcreteFactory;
-import com.app.group15.UserManagement.*;
 import com.app.group15.UserManagement.ForgetPassword.ForgetPasswordConcreteFactory;
 import com.app.group15.UserManagement.ForgetPassword.IForgetPasswordAbstractFactory;
+import com.app.group15.UserManagement.*;
 import com.app.group15.UserManagement.LoginManagement.ILoginManagementAbstractFactory;
 import com.app.group15.UserManagement.LoginManagement.LoginManagementConcreteFactory;
 import com.app.group15.UserManagement.SessionManagement.ISessionManagementAbstractFactory;
 import com.app.group15.UserManagement.SessionManagement.SessionManagementConcreteFactory;
 import com.app.group15.UserManagement.SignupManagement.ISignupManagementAbstractFactory;
 import com.app.group15.UserManagement.SignupManagement.SignupManagementConcreteFactory;
-import com.app.group15.UserManagement.SignupManagement.SignupService;
 import com.app.group15.Utility.GroupFormationToolLogger;
 
 import java.io.FileInputStream;
@@ -42,10 +43,7 @@ public class AppConfig {
     private CourseStudentMapperDaoInjectorService courseStudentMapperDaoInjectorService;
     private CourseInstructorMapperDaoInjectorService courseInstructorMapperDaoInjectorService;
     private UserRoleDaoInjectorService userRoleDaoInjectorService;
-    private CourseStudentMapperAbstractDao courseStudentMapperDao;
-    private CourseInstructorMapperAbstractDao courseInstructorMapperDao;
     private UserAbstractDao userDao;
-    private CourseAbstractDao courseDao;
 
 
     private ICourseManagementAbstractFactory courseManagementAbstractFactory;
@@ -81,11 +79,7 @@ public class AppConfig {
         courseInstructorMapperDaoInjectorService = new CourseInstructorMapperDaoInjectorService();
         courseStudentMapperDaoInjectorService = new CourseStudentMapperDaoInjectorService();
         userRoleDaoInjectorService = new UserRoleDaoInjectorService();
-        courseStudentMapperDao = new CourseStudentMapperDao();
-        courseInstructorMapperDao = new CourseInstructorMapperDao();
         userDao = new UserDaoInjectorService().getUserDao();
-
-        courseDao = new CourseDaoInjectorService().getCourseDao();
 
         courseManagementAbstractFactory = CourseManagementConcreteFactory.getInstance();
         courseInstructorAbstractFactory = CourseInstructorConcreteFactory.getInstance();
@@ -121,24 +115,12 @@ public class AppConfig {
         return singletonAppConfig;
     }
 
-    public CourseAbstractDao getCourseDao() {
-        return courseDao;
-    }
-
     public UserAbstractDao getUserDao() {
         return userDao;
     }
 
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
-    }
-
-    public CourseInstructorMapperAbstractDao getCourseInstructorMapperDao() {
-        return courseInstructorMapperDao;
-    }
-
-    public void setCourseInstructorMapperDao(CourseInstructorMapperDao courseInstructorMapperDao) {
-        this.courseInstructorMapperDao = courseInstructorMapperDao;
     }
 
     public EmailNotifierImpl getEmailNotifier() {
@@ -190,15 +172,6 @@ public class AppConfig {
     public void setUserRoleDaoInjectorService(UserRoleDaoInjectorService userRoleDaoInjectorService) {
         this.userRoleDaoInjectorService = userRoleDaoInjectorService;
     }
-
-    public CourseStudentMapperAbstractDao getCourseStudentMapperDao() {
-        return courseStudentMapperDao;
-    }
-
-    public void setCourseStudentMapperDao(CourseStudentMapperDao courseStudentMapperDao) {
-        this.courseStudentMapperDao = courseStudentMapperDao;
-    }
-
 
     public IQuestionManagerAbstractFactory getQuestionManagerAbstractFactory() {
         return questionManagerAbstractFactory;

@@ -136,6 +136,116 @@ public class SurveyService implements ISurveyService, ISurveyServiceInjector {
         List<SurveyUserResponse> surveyUserResponses = new ArrayList<>();
         List<SurveyUserResponse> tmpSurveyUserResponses = new ArrayList<>();
 
+        getNumericResponse(numericResponse, surveyUserResponses, tmpSurveyUserResponses);
+        surveyUserResponses.addAll(tmpSurveyUserResponses);
+        tmpSurveyUserResponses = new ArrayList<>();
+        getTextResponse(textResponse, surveyUserResponses, tmpSurveyUserResponses);
+        surveyUserResponses.addAll(tmpSurveyUserResponses);
+        tmpSurveyUserResponses = new ArrayList<>();
+        getChoiceResponse(choiceResponse, surveyUserResponses, tmpSurveyUserResponses);
+        List<SurveyUserResponse> finalSurveyResponse = new ArrayList<>();
+        for (SurveyUserResponse response : surveyUserResponses) {
+            if (finalSurveyResponse.size() > 0) {
+                boolean f = false;
+                for (int i = 0; i < finalSurveyResponse.size(); i++) {
+                    if (finalSurveyResponse.get(i).getUser().getId() != response.getUser().getId()) {
+                        f = true;
+                    } else {
+                        f = false;
+                        break;
+                    }
+                }
+                if (f) {
+                    finalSurveyResponse.add(response);
+                }
+            } else {
+                finalSurveyResponse.add(response);
+            }
+        }
+
+        return finalSurveyResponse;
+    }
+
+    private void getChoiceResponse(List<StudentResponseChoice> choiceResponse, List<SurveyUserResponse> surveyUserResponses, List<SurveyUserResponse> tmpSurveyUserResponses) throws SQLException, AwsSecretsManagerException {
+        for (StudentResponseChoice response : choiceResponse) {
+            User user = surveyDao.getUser(response.getStudentId());
+
+            SurveyResponse surveyResponse = surveyManagementAbstractFactory.getSurveyResponseModel();
+            surveyResponse.setChoiceId(String.valueOf(response.getChoiceId()));
+            surveyResponse.setQuestionTypeId(3);
+            surveyResponse.setChoiceText(response.getChoiceText());
+            surveyResponse.setQuestionTitle(response.getQuestion().getQuestionTitle());
+            surveyResponse.setQuestionInstructorId(response.getQuestion().getQuestionInstructorId());
+            surveyResponse.setQuestionText(response.getQuestion().getQuestionText());
+            surveyResponse.setQuestionId(response.getQuestionId());
+            if (surveyUserResponses.size() == 0) {
+                SurveyUserResponse surveyUserResponse = surveyManagementAbstractFactory.getSurveyUserResponse();
+                surveyUserResponse.setUser(user);
+                List<SurveyResponse> surveyResponseList = new ArrayList<>();
+                surveyResponseList.add(surveyResponse);
+                surveyUserResponse.setSurveyResponseList(surveyResponseList);
+                surveyUserResponses.add(surveyUserResponse);
+            } else {
+                for (SurveyUserResponse surveyUserResponse : surveyUserResponses) {
+                    if (surveyUserResponse.getUser().getId() == user.getId()) {
+                        List<SurveyResponse> surveyResponseList = surveyUserResponse.getSurveyResponseList();
+                        surveyResponseList.add(surveyResponse);
+                        surveyUserResponse.setSurveyResponseList(surveyResponseList);
+                    } else {
+                        SurveyUserResponse surveyUserRespons = surveyManagementAbstractFactory.getSurveyUserResponse();
+                        surveyUserRespons.setUser(user);
+                        List<SurveyResponse> surveyResponseList = new ArrayList<>();
+                        surveyResponseList.add(surveyResponse);
+                        surveyUserRespons.setSurveyResponseList(surveyResponseList);
+                        tmpSurveyUserResponses.add(surveyUserRespons);
+                    }
+                }
+            }
+
+        }
+    }
+
+    private void getTextResponse(List<StudentResponseText> textResponse, List<SurveyUserResponse> surveyUserResponses, List<SurveyUserResponse> tmpSurveyUserResponses) throws SQLException, AwsSecretsManagerException {
+        for (StudentResponseText response : textResponse) {
+            User user = surveyDao.getUser(response.getStudentId());
+
+            SurveyResponse surveyResponse = surveyManagementAbstractFactory.getSurveyResponseModel();
+            surveyResponse.setTextResponse(response.getTextResponse());
+            surveyResponse.setQuestionTypeId(4);
+            surveyResponse.setQuestionTitle(response.getQuestion().getQuestionTitle());
+            surveyResponse.setQuestionInstructorId(response.getQuestion().getQuestionInstructorId());
+            surveyResponse.setQuestionText(response.getQuestion().getQuestionText());
+            surveyResponse.setQuestionId(response.getQuestionId());
+
+            if (surveyUserResponses.size() == 0) {
+                SurveyUserResponse surveyUserResponse = surveyManagementAbstractFactory.getSurveyUserResponse();
+                surveyUserResponse.setUser(user);
+                List<SurveyResponse> surveyResponseList = new ArrayList<>();
+                surveyResponseList.add(surveyResponse);
+                surveyUserResponse.setSurveyResponseList(surveyResponseList);
+                surveyUserResponses.add(surveyUserResponse);
+            } else {
+                for (SurveyUserResponse surveyUserResponse : surveyUserResponses) {
+                    if (surveyUserResponse.getUser().getId() == user.getId()) {
+                        List<SurveyResponse> surveyResponseList = surveyUserResponse.getSurveyResponseList();
+                        surveyResponseList.add(surveyResponse);
+                        surveyUserResponse.setSurveyResponseList(surveyResponseList);
+                    } else {
+                        SurveyUserResponse surveyUserRespons = surveyManagementAbstractFactory.getSurveyUserResponse();
+                        surveyUserRespons.setUser(user);
+                        List<SurveyResponse> surveyResponseList = new ArrayList<>();
+                        surveyResponseList.add(surveyResponse);
+                        surveyUserRespons.setSurveyResponseList(surveyResponseList);
+                        tmpSurveyUserResponses.add(surveyUserRespons);
+                    }
+                }
+            }
+
+
+        }
+    }
+
+    private void getNumericResponse(List<StudentResponseNumeric> numericResponse, List<SurveyUserResponse> surveyUserResponses, List<SurveyUserResponse> tmpSurveyUserResponses) throws SQLException, AwsSecretsManagerException {
         for (StudentResponseNumeric response : numericResponse) {
             User user = surveyDao.getUser(response.getStudentId());
 
@@ -176,104 +286,6 @@ public class SurveyService implements ISurveyService, ISurveyServiceInjector {
                 }
             }
         }
-        surveyUserResponses.addAll(tmpSurveyUserResponses);
-        tmpSurveyUserResponses = new ArrayList<>();
-        for (StudentResponseText response : textResponse) {
-            User user = surveyDao.getUser(response.getStudentId());
-
-            SurveyResponse surveyResponse = surveyManagementAbstractFactory.getSurveyResponseModel();
-            surveyResponse.setTextResponse(response.getTextResponse());
-            surveyResponse.setQuestionTypeId(4);
-            surveyResponse.setQuestionTitle(response.getQuestion().getQuestionTitle());
-            surveyResponse.setQuestionInstructorId(response.getQuestion().getQuestionInstructorId());
-            surveyResponse.setQuestionText(response.getQuestion().getQuestionText());
-            surveyResponse.setQuestionId(response.getQuestionId());
-
-            if (surveyUserResponses.size() == 0) {
-                SurveyUserResponse surveyUserResponse = surveyManagementAbstractFactory.getSurveyUserResponse();
-                surveyUserResponse.setUser(user);
-                List<SurveyResponse> surveyResponseList = new ArrayList<>();
-                surveyResponseList.add(surveyResponse);
-                surveyUserResponse.setSurveyResponseList(surveyResponseList);
-                surveyUserResponses.add(surveyUserResponse);
-            } else {
-                for (SurveyUserResponse surveyUserResponse : surveyUserResponses) {
-                    if (surveyUserResponse.getUser().getId() == user.getId()) {
-                        List<SurveyResponse> surveyResponseList = surveyUserResponse.getSurveyResponseList();
-                        surveyResponseList.add(surveyResponse);
-                        surveyUserResponse.setSurveyResponseList(surveyResponseList);
-                    } else {
-                        SurveyUserResponse surveyUserRespons = surveyManagementAbstractFactory.getSurveyUserResponse();
-                        surveyUserRespons.setUser(user);
-                        List<SurveyResponse> surveyResponseList = new ArrayList<>();
-                        surveyResponseList.add(surveyResponse);
-                        surveyUserRespons.setSurveyResponseList(surveyResponseList);
-                        tmpSurveyUserResponses.add(surveyUserRespons);
-                    }
-                }
-            }
-
-
-        }
-        surveyUserResponses.addAll(tmpSurveyUserResponses);
-        tmpSurveyUserResponses = new ArrayList<>();
-        for (StudentResponseChoice response : choiceResponse) {
-            User user = surveyDao.getUser(response.getStudentId());
-
-            SurveyResponse surveyResponse = surveyManagementAbstractFactory.getSurveyResponseModel();
-            surveyResponse.setChoiceId(String.valueOf(response.getChoiceId()));
-            surveyResponse.setQuestionTypeId(3);
-            surveyResponse.setChoiceText(response.getChoiceText());
-            surveyResponse.setQuestionTitle(response.getQuestion().getQuestionTitle());
-            surveyResponse.setQuestionInstructorId(response.getQuestion().getQuestionInstructorId());
-            surveyResponse.setQuestionText(response.getQuestion().getQuestionText());
-            surveyResponse.setQuestionId(response.getQuestionId());
-            if (surveyUserResponses.size() == 0) {
-                SurveyUserResponse surveyUserResponse = surveyManagementAbstractFactory.getSurveyUserResponse();
-                surveyUserResponse.setUser(user);
-                List<SurveyResponse> surveyResponseList = new ArrayList<>();
-                surveyResponseList.add(surveyResponse);
-                surveyUserResponse.setSurveyResponseList(surveyResponseList);
-                surveyUserResponses.add(surveyUserResponse);
-            } else {
-                for (SurveyUserResponse surveyUserResponse : surveyUserResponses) {
-                    if (surveyUserResponse.getUser().getId() == user.getId()) {
-                        List<SurveyResponse> surveyResponseList = surveyUserResponse.getSurveyResponseList();
-                        surveyResponseList.add(surveyResponse);
-                        surveyUserResponse.setSurveyResponseList(surveyResponseList);
-                    } else {
-                        SurveyUserResponse surveyUserRespons = surveyManagementAbstractFactory.getSurveyUserResponse();
-                        surveyUserRespons.setUser(user);
-                        List<SurveyResponse> surveyResponseList = new ArrayList<>();
-                        surveyResponseList.add(surveyResponse);
-                        surveyUserRespons.setSurveyResponseList(surveyResponseList);
-                        tmpSurveyUserResponses.add(surveyUserRespons);
-                    }
-                }
-            }
-
-        }
-        List<SurveyUserResponse> finalSurveyResponse = new ArrayList<>();
-        for (SurveyUserResponse response : surveyUserResponses) {
-            if (finalSurveyResponse.size() > 0) {
-                boolean f = false;
-                for (int i = 0; i < finalSurveyResponse.size(); i++) {
-                    if (finalSurveyResponse.get(i).getUser().getId() != response.getUser().getId()) {
-                        f = true;
-                    } else {
-                        f = false;
-                        break;
-                    }
-                }
-                if (f) {
-                    finalSurveyResponse.add(response);
-                }
-            } else {
-                finalSurveyResponse.add(response);
-            }
-        }
-
-        return finalSurveyResponse;
     }
 
 
