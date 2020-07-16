@@ -18,7 +18,7 @@ import static com.app.group15.Utility.DatabaseQueriesUtility.*;
 @SuppressWarnings("rawtypes")
 public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao {
 
-	@Override
+    @Override
     public ArrayList<CourseInstructorMapper> getAll() throws SQLException, AwsSecretsManagerException {
         String query = SELECT_ALL_COURSE_INSTRUCTOR_MAPPER;
         ArrayList<CourseInstructorMapper> allList = new ArrayList<CourseInstructorMapper>();
@@ -35,7 +35,6 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
             }
 
         } catch (SQLException e) {
-
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
             throw e;
         }
@@ -59,7 +58,6 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
 
             }
         } catch (SQLException e) {
-
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
             throw e;
         }
@@ -76,11 +74,9 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
             statement.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
-
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
             throw e;
         }
-
     }
 
     @Override
@@ -100,7 +96,6 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
             throw e;
         }
         return false;
-
     }
 
     @Override
@@ -154,7 +149,6 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
             throw e;
         }
-
     }
 
     @Override
@@ -182,14 +176,11 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
                     GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
                     throw e;
                 }
-
             }
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
             throw e;
         }
-
-
     }
 
     @Override
@@ -206,7 +197,6 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
                     statement.setInt(1, courseId);
                     statement.setInt(2, taId);
                     statement.executeUpdate();
-
                     connection.commit();
                 } catch (SQLException e) {
                     try {

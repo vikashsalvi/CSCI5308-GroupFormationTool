@@ -30,13 +30,13 @@ public class AssignTAService implements IAssignTAService, IAssignTaServiceInject
     @Override
     public boolean performTAUpdate(String bannerId, int courseId) throws SQLException, AllowedRolesNotSetException, AwsSecretsManagerException {
         if (ServiceUtility.isNotNull(bannerId) && ServiceUtility.isValidInt(courseId)) {
-
             User userEntity = userDao.getUserByBannerId(bannerId);
-
             if (userService.validateBannerID(bannerId) && courseService.validateCourseID(courseId)) {
                 if (instructorService.validateUserToAddAsTa(userEntity, courseId)) {
                     instructorService.addOrUpdateStudentRole(userEntity, "TA");
+                    GroupFormationToolLogger.log(Level.FINEST, "Student " + userEntity.getFirstName() + ", now has TA role");
                     courseInstructorMapperDao.addTaToACourse(courseId, userEntity.getId());
+                    GroupFormationToolLogger.log(Level.FINEST, "Student added as TA to CourseID :" + courseId);
                     return true;
                 } else {
                     return false;
@@ -45,7 +45,7 @@ public class AssignTAService implements IAssignTAService, IAssignTaServiceInject
                 return false;
             }
         } else {
-            GroupFormationToolLogger.log(Level.SEVERE, "Invalid input");
+            GroupFormationToolLogger.log(Level.SEVERE, "Invalid BannerID or CourseID");
         }
         return false;
     }
@@ -67,8 +67,6 @@ public class AssignTAService implements IAssignTAService, IAssignTaServiceInject
         } else {
             GroupFormationToolLogger.log(Level.SEVERE, "CourseDao injection issue in AssignTAService");
         }
-
-
     }
 
     @Override

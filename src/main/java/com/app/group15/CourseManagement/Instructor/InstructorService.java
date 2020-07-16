@@ -50,22 +50,22 @@ public class InstructorService implements IInstructorService, IInstructorService
             User userEntity = courseInstructorMapperDao.getCourseTA(userId);
             return userEntity;
         } else {
-            GroupFormationToolLogger.log(Level.SEVERE, "Invalid input");
+            GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
         }
         return null;
     }
 
     @Override
-    public List<User> getAllCourseTA(List<Course> courseEntities)throws SQLException, AwsSecretsManagerException {
+    public List<User> getAllCourseTA(List<Course> courseEntities) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isNotNull(courseEntities)) {
             List<User> userEntitiesTa = new ArrayList<>();
             courseEntities.forEach(courseEntity -> {
-				try {
-					userEntitiesTa.add(getCourseTA(courseEntity.getId()));
-				} catch (SQLException | AwsSecretsManagerException e) {
-					 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
-				}
-			});
+                try {
+                    userEntitiesTa.add(getCourseTA(courseEntity.getId()));
+                } catch (SQLException | AwsSecretsManagerException e) {
+                    GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                }
+            });
             return userEntitiesTa;
         } else {
             GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
