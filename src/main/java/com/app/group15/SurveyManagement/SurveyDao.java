@@ -96,7 +96,6 @@ public class SurveyDao extends SurveyAbstractDao implements ISurveyQuestionMappe
             invokeStoredProcedure = new InvokeStoredProcedure("spSaveSurvey(?,?)");
             invokeStoredProcedure.setParameter(1, survey.getCourseId());
             invokeStoredProcedure.registerOutputParameterLong(2);
-
             invokeStoredProcedure.execute();
             insertedSurveyId = invokeStoredProcedure.getOutputParameter(2);
 
@@ -180,7 +179,6 @@ public class SurveyDao extends SurveyAbstractDao implements ISurveyQuestionMappe
             invokeStoredProcedure.setParameter(2, surveyId);
             invokeStoredProcedure.setParameter(3, numericResponse);
             invokeStoredProcedure.setParameter(4, userId);
-
             invokeStoredProcedure.execute();
 
         } catch (SQLException | AwsSecretsManagerException e) {
@@ -203,9 +201,7 @@ public class SurveyDao extends SurveyAbstractDao implements ISurveyQuestionMappe
             invokeStoredProcedure.setParameter(2, surveyId);
             invokeStoredProcedure.setParameter(3, textResponse);
             invokeStoredProcedure.setParameter(4, userId);
-
             invokeStoredProcedure.execute();
-            // insertedSurveyId = invokeStoredProcedure.getOutputParameter(2);
 
         } catch (SQLException | AwsSecretsManagerException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);

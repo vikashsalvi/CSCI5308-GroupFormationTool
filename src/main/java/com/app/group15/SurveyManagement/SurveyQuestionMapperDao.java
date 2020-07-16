@@ -16,7 +16,6 @@ import java.util.logging.Level;
 
 public class SurveyQuestionMapperDao extends SurveyQuestionMapperAbstractDao {
 
-    private ISurveyManagementAbstractFactory surveyManagementAbstractFactory = AppConfig.getInstance().getSurveyManagementAbstractFactory();
     private IQuestionManagerAbstractFactory questionManagerAbstractFactory = AppConfig.getInstance().getQuestionManagerAbstractFactory();
 
     @Override
