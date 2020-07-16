@@ -15,10 +15,16 @@ import com.app.group15.QuestionManager.IQuestionManagerAbstractFactory;
 import com.app.group15.QuestionManager.QuestionManagerConcreteFactory;
 import com.app.group15.SurveyManagement.ISurveyManagementAbstractFactory;
 import com.app.group15.SurveyManagement.SurveyManagementConcreteFactory;
-import com.app.group15.UserManagement.UserAbstractDao;
-import com.app.group15.UserManagement.UserDao;
-import com.app.group15.UserManagement.UserDaoInjectorService;
-import com.app.group15.UserManagement.UserRoleDaoInjectorService;
+import com.app.group15.UserManagement.*;
+import com.app.group15.UserManagement.ForgetPassword.ForgetPasswordConcreteFactory;
+import com.app.group15.UserManagement.ForgetPassword.IForgetPasswordAbstractFactory;
+import com.app.group15.UserManagement.LoginManagement.ILoginManagementAbstractFactory;
+import com.app.group15.UserManagement.LoginManagement.LoginManagementConcreteFactory;
+import com.app.group15.UserManagement.SessionManagement.ISessionManagementAbstractFactory;
+import com.app.group15.UserManagement.SessionManagement.SessionManagementConcreteFactory;
+import com.app.group15.UserManagement.SignupManagement.ISignupManagementAbstractFactory;
+import com.app.group15.UserManagement.SignupManagement.SignupManagementConcreteFactory;
+import com.app.group15.UserManagement.SignupManagement.SignupService;
 import com.app.group15.Utility.GroupFormationToolLogger;
 
 import java.io.FileInputStream;
@@ -52,6 +58,11 @@ public class AppConfig {
     private IGroupFormationAlgorithmAbstractFactory groupAlgorithmAbstractFactory;
     private ISurveyManagementAbstractFactory surveyManagementAbstractFactory;
     private IPasswordPolicyAbstractFactory passwordPolicyAbstractFactory;
+    private IUserManagementAbstractFactory userManagementAbstractFactory;
+    private IForgetPasswordAbstractFactory forgetPasswordAbstractFactory;
+    private ILoginManagementAbstractFactory loginManagementAbstractFactory;
+    private ISessionManagementAbstractFactory sessionManagementAbstractFactory;
+    private ISignupManagementAbstractFactory signupManagementAbstractFactory;
 
 
     private AppConfig() {
@@ -84,6 +95,11 @@ public class AppConfig {
         groupAlgorithmAbstractFactory = GroupFormationAlgorithmConcreteFactory.getInstance();
         surveyManagementAbstractFactory = SurveyManagementConcreteFactory.getInstance();
         passwordPolicyAbstractFactory = PasswordPolicyConcreteFactory.getInstance();
+        userManagementAbstractFactory=UserManagementConcreteFactory.getInstance();
+        forgetPasswordAbstractFactory= ForgetPasswordConcreteFactory.getInstance();
+        loginManagementAbstractFactory= LoginManagementConcreteFactory.getInstance();
+        sessionManagementAbstractFactory= SessionManagementConcreteFactory.getInstance();
+        signupManagementAbstractFactory= SignupManagementConcreteFactory.getInstance();
     }
 
     public static AppConfig getSingletonAppConfig() {
@@ -212,4 +228,24 @@ public class AppConfig {
     public ICourseStudentAbstractFactory getCourseStudentAbstractFactory() {
         return courseStudentAbstractFactory;
     }
+
+	public IUserManagementAbstractFactory getUserManagementAbstractFactory() {
+		return userManagementAbstractFactory;
+	}
+
+	public IForgetPasswordAbstractFactory getForgetPasswordAbstractFactory() {
+		return forgetPasswordAbstractFactory;
+	}
+
+	public ILoginManagementAbstractFactory getLoginManagementAbstractFactory() {
+		return loginManagementAbstractFactory;
+	}
+
+	public ISessionManagementAbstractFactory getSessionManagementAbstractFactory() {
+		return sessionManagementAbstractFactory;
+	}
+
+	public ISignupManagementAbstractFactory getSignupManagementAbstractFactory() {
+		return signupManagementAbstractFactory;
+	}
 }

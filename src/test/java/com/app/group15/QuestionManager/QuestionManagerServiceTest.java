@@ -1,7 +1,9 @@
 package com.app.group15.QuestionManager;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.Config.ServiceConfigForTest;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+import com.app.group15.UserManagement.IUserManagementAbstractFactory;
 import com.app.group15.UserManagement.User;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +17,7 @@ public class QuestionManagerServiceTest {
 
     private QuestionManagerDaoMock questionManagerDaoMock = new QuestionManagerDaoMock();
     private IQuestionManagerService questionManagerService = ServiceConfigForTest.getInstance().getQuestionManagerService();
-
+	private IUserManagementAbstractFactory userManagementAbstractFactory=AppConfig.getInstance().getUserManagementAbstractFactory();
 
     @Test
     public void getQuestionTypeTest() throws SQLException, AwsSecretsManagerException {
@@ -61,7 +63,7 @@ public class QuestionManagerServiceTest {
     @Test
     public void insertQuestionTest() throws SQLException, AwsSecretsManagerException {
         Question qst = questionManagerDaoMock.formQuestion();
-        User user = new User();
+        User user = (User) userManagementAbstractFactory.getUserModel();
         user.setId(1);
         Question insertedQuestion = questionManagerDaoMock.insertQuestion(qst, user);
         assertNotEquals(questionManagerService.insertQuestion(qst, user), true);

@@ -23,8 +23,9 @@ import java.util.logging.Level;
 public class SignupController {
 
     private IPasswordPolicyAbstractFactory passwordPolicyAbstractFactory = AppConfig.getInstance().getPasswordPolicyAbstractFactory();
-    private ISignupService signupService = ServiceConfig.getInstance().getSignUpService();
-    private IPasswordPolicyService passwordPolicyService;
+	private ISignupManagementAbstractFactory signupManagementAbstractFactory= AppConfig.getInstance().getSignupManagementAbstractFactory();
+	private ISignupService signupService = signupManagementAbstractFactory.getSignupService();
+	private IPasswordPolicyService passwordPolicyService;
 
     @RequestMapping(value = "/signup", method = RequestMethod.GET)
     public ModelAndView signup() {

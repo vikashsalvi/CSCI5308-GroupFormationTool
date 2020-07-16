@@ -1,5 +1,6 @@
 package com.app.group15.UserManagement;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.ExceptionHandler.AllowedRolesNotSetException;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.DatabaseManager;
@@ -19,14 +20,14 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
 
     private UserRoleAbstractDao userRoleDao;
 
-    public UserDao() {
+	public UserDao() {
 
     }
 
     @Override
     public User get(int id) throws SQLException, AwsSecretsManagerException {
         String query = GET_A_USER;
-        User user = new User();
+        User user = (User) AppConfig.getInstance().getUserManagementAbstractFactory().getUserModel();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
@@ -50,7 +51,7 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
     @Override
     public User getUserByBannerId(String bannerId) throws SQLException, AwsSecretsManagerException {
         String query = GET_USER_BY_BANNER_ID;
-        User user = new User();
+        User user = (User) AppConfig.getInstance().getUserManagementAbstractFactory().getUserModel();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, bannerId);
@@ -79,7 +80,7 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
              PreparedStatement statement = connection.prepareStatement(query);
              ResultSet result = statement.executeQuery()) {
             while (result.next()) {
-                User user = new User();
+                User user = (User) AppConfig.getInstance().getUserManagementAbstractFactory().getUserModel();
                 user.setBannerId(result.getString("banner_id"));
                 user.setEmail(result.getString("email"));
                 user.setFirstName(result.getString("first_name"));
@@ -215,7 +216,7 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
     @Override
     public User getUserByEmailId(String emailId) throws SQLException, AwsSecretsManagerException {
         String query = GET_USER_BY_EMAIL;
-        User user = new User();
+        User user = (User) AppConfig.getInstance().getUserManagementAbstractFactory().getUserModel();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, emailId);

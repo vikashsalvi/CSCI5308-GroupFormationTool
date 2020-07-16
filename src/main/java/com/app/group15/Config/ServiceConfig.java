@@ -26,23 +26,12 @@ public class ServiceConfig {
     private IAssignTAService assignTaService;
     private ICourseService courseService;
     private IInstructorService instructorService;
-    private ILoginService loginService;
-    private ISessionService sessionService;
-    private ISignupService signUpService;
-    private IUserService userService;
-    private IForgetPasswordService forgetPasswordService;
 
     private ServiceConfig() {
         assignTaService = new AssignTaServiceInjector().getAssignTaService();
         courseService = new CourseServiceInjector().getCourseService();
         instructorService = new InstructorServiceInjector().getInstructorService();
-        loginService = new LoginServiceInjector().getLoginService();
-        sessionService = new SessionService();
-        signUpService = new SignUpServiceInjector().getSignUpService();
-        userService = new UserServiceInjector().getUserService();
         authorizationService = new AuthorizationService();
-
-        forgetPasswordService = new ForgetPasswordServiceInjector().getForgetPasswordService();
     }
 
     public static ServiceConfig getInstance() {
@@ -71,25 +60,4 @@ public class ServiceConfig {
     public IInstructorService getInstructorService() {
         return instructorService;
     }
-
-    public ILoginService getLoginService() {
-        return loginService;
-    }
-
-    public ISessionService getSessionService() {
-        return sessionService;
-    }
-
-    public ISignupService getSignUpService() {
-        return signUpService;
-    }
-
-    public IUserService getUserService() {
-        return userService;
-    }
-
-    public IForgetPasswordService getForgetPasswordService() {
-        return forgetPasswordService;
-    }
-
 }

@@ -7,6 +7,7 @@ import com.app.group15.SurveyManagement.ISurveyManagementAbstractFactory;
 import com.app.group15.SurveyManagement.ISurveyService;
 import com.app.group15.SurveyManagement.Survey;
 import com.app.group15.UserManagement.SessionManagement.IAuthorizationService;
+import com.app.group15.UserManagement.SessionManagement.ISessionManagementAbstractFactory;
 import com.app.group15.UserManagement.SessionManagement.ISessionService;
 import com.app.group15.UserManagement.User;
 import com.app.group15.Utility.GroupFormationToolLogger;
@@ -25,9 +26,9 @@ import java.util.logging.Level;
 public class SurveyStudentController {
 
     private ISurveyManagementAbstractFactory surveyManagementAbstractFactory = AppConfig.getInstance().getSurveyManagementAbstractFactory();
-
-    private IAuthorizationService authorizationService = ServiceConfig.getInstance().getAuthorizationService();
-    private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
+	private ISessionManagementAbstractFactory sessionManagementAbstractFactory=AppConfig.getInstance().getSessionManagementAbstractFactory();
+    private IAuthorizationService authorizationService = sessionManagementAbstractFactory.getAuthorizationService();
+    private ISessionService sessionService = sessionManagementAbstractFactory.getSessionService();
     private ISurveyStudentService surveyStudentService = surveyManagementAbstractFactory.getSurveyStudentService();
     private ISurveyService surveyService = surveyManagementAbstractFactory.getSurveyService();
 

@@ -8,6 +8,7 @@ import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.SurveyManagement.ISurveyManagementAbstractFactory;
 import com.app.group15.SurveyManagement.student.ISurveyStudentService;
 import com.app.group15.UserManagement.SessionManagement.IAuthorizationService;
+import com.app.group15.UserManagement.SessionManagement.ISessionManagementAbstractFactory;
 import com.app.group15.UserManagement.SessionManagement.ISessionService;
 import com.app.group15.UserManagement.User;
 import com.app.group15.Utility.GroupFormationToolLogger;
@@ -25,9 +26,10 @@ import java.util.logging.Level;
 @Controller
 public class StudentController {
     ISurveyManagementAbstractFactory surveyManagementAbstractFactory = AppConfig.getInstance().getSurveyManagementAbstractFactory();
+    ISessionManagementAbstractFactory sessionManagementAbstractFactory=AppConfig.getInstance().getSessionManagementAbstractFactory();
     private IAuthorizationService authorizationService = ServiceConfig.getInstance().getAuthorizationService();
     private ISurveyStudentService surveyStudentService = surveyManagementAbstractFactory.getSurveyStudentService();
-    private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
+    private ISessionService sessionService = sessionManagementAbstractFactory.getSessionService();
     private ICourseService courseService = AppConfig.getInstance().getCourseManagementAbstractFactory().getCourseService();
 
     @RequestMapping(value = "/student/home", method = RequestMethod.GET)

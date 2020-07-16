@@ -8,8 +8,10 @@ import com.app.group15.CourseManagement.ICourseManagementAbstractFactory;
 import com.app.group15.CourseManagement.ICourseService;
 import com.app.group15.ExceptionHandler.AllowedRolesNotSetException;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+import com.app.group15.UserManagement.IUserManagementAbstractFactory;
 import com.app.group15.UserManagement.IUserService;
 import com.app.group15.UserManagement.SessionManagement.IAuthorizationService;
+import com.app.group15.UserManagement.SessionManagement.ISessionManagementAbstractFactory;
 import com.app.group15.UserManagement.SessionManagement.ISessionService;
 import com.app.group15.UserManagement.User;
 import com.app.group15.Utility.GroupFormationToolLogger;
@@ -32,13 +34,16 @@ public class InstructorController {
 
     private ICourseManagementAbstractFactory courseManagementAbstractFactory = AppConfig.getInstance().getCourseManagementAbstractFactory();
     private ICourseInstructorAbstractFactory courseInstructorAbstractFactory = AppConfig.getInstance().getCourseInstructorAbstractFactory();
-    private IAuthorizationService authorizationService = ServiceConfig.getInstance().getAuthorizationService();
+	private ISessionManagementAbstractFactory sessionManagementAbstractFactory=AppConfig.getInstance().getSessionManagementAbstractFactory();
+	private IUserManagementAbstractFactory userManagementAbstractFactory=AppConfig.getInstance().getUserManagementAbstractFactory();
+
+	private IAuthorizationService authorizationService = sessionManagementAbstractFactory.getAuthorizationService();
     private CourseAbstractDao courseDao = courseManagementAbstractFactory.getCourseDao();
-    private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
+	private ISessionService sessionService = sessionManagementAbstractFactory.getSessionService();
     private ICourseService courseService = courseManagementAbstractFactory.getCourseService();
     private IInstructorService instructorService = courseInstructorAbstractFactory.getInstructorService();
     private IAssignTAService assignTaService = courseInstructorAbstractFactory.getAssignTAService();
-    private IUserService userService = ServiceConfig.getInstance().getUserService();
+	private IUserService userService = userManagementAbstractFactory.getUserService();
 
     @RequestMapping(value = "/instructor/home", method = RequestMethod.GET)
     public ModelAndView adminHome(HttpServletRequest request) {

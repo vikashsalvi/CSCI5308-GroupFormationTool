@@ -4,8 +4,10 @@ import com.app.group15.Config.AppConfig;
 import com.app.group15.Config.ServiceConfig;
 import com.app.group15.ExceptionHandler.AllowedRolesNotSetException;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+import com.app.group15.UserManagement.IUserManagementAbstractFactory;
 import com.app.group15.UserManagement.IUserService;
 import com.app.group15.UserManagement.SessionManagement.IAuthorizationService;
+import com.app.group15.UserManagement.SessionManagement.ISessionManagementAbstractFactory;
 import com.app.group15.UserManagement.SessionManagement.ISessionService;
 import com.app.group15.UserManagement.User;
 import com.app.group15.Utility.GroupFormationToolLogger;
@@ -24,10 +26,14 @@ import java.util.logging.Level;
 public class AdminController {
 
 	private ICourseManagementAbstractFactory courseManagementAbstractFactory = AppConfig.getInstance().getCourseManagementAbstractFactory();
-	private IAuthorizationService authorizationService = ServiceConfig.getInstance().getAuthorizationService();
-	private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
 	private ICourseService courseService = courseManagementAbstractFactory.getCourseService();
-	private IUserService userService = ServiceConfig.getInstance().getUserService();
+
+	private ISessionManagementAbstractFactory sessionManagementAbstractFactory= AppConfig.getInstance().getSessionManagementAbstractFactory();
+	private IUserManagementAbstractFactory userManagementAbstractFactory= AppConfig.getInstance().getUserManagementAbstractFactory();
+	private IAuthorizationService authorizationService = sessionManagementAbstractFactory.getAuthorizationService();
+	private ISessionService sessionService = sessionManagementAbstractFactory.getSessionService();
+	private IUserService userService = userManagementAbstractFactory.getUserService();
+
 
 	@RequestMapping(value = "/admin/home", method = RequestMethod.GET)
 	public ModelAndView adminHome(HttpServletRequest request) {

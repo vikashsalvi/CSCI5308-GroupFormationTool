@@ -17,8 +17,8 @@ import java.util.List;
 public class SurveyStudentService implements ISurveyStudentService, ISurveyStudentServiceInjector {
 
     private ISurveyManagementAbstractFactory surveyManagementAbstractFactory = AppConfig.getInstance().getSurveyManagementAbstractFactory();
-    private SurveyStudentAbstractDao surveyStudentDao;
-    private SurveyAbstractDao surveyDao;
+    private SurveyStudentAbstractDao surveyStudentDao=surveyManagementAbstractFactory.getSurveyStudentDao();
+    private SurveyAbstractDao surveyDao=surveyManagementAbstractFactory.getSurveyDao();
 
     @Override
     public boolean submitResponse(User user, SurveyFormResponse surveyFormResponse) throws SQLException, AwsSecretsManagerException {

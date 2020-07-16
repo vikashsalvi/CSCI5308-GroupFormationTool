@@ -1,5 +1,6 @@
 package com.app.group15.UserManagement;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.ExceptionHandler.AllowedRolesNotSetException;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.Persistence;
@@ -8,9 +9,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class UserDaoMock extends UserAbstractDao {
-
+	private IUserManagementAbstractFactory userManagementAbstractFactory=AppConfig.getInstance().getUserManagementAbstractFactory();
     public User getUserByBannerIdMock(String bannerId) {
-        User user = new User();
+        User user = (User) userManagementAbstractFactory.getUserModel();
         if (bannerId.equals("B00843468")) {
             user.setFirstName("Daksh");
             user.setLastName("Patel");
@@ -30,7 +31,7 @@ public class UserDaoMock extends UserAbstractDao {
 
 	@Override
 	public User getUserByBannerId(String bannerId) throws SQLException, AwsSecretsManagerException {
-        User user = new User();
+        User user = (User) userManagementAbstractFactory.getUserModel();
         if (bannerId.equals("B00843468")) {
             user.setFirstName("Daksh");
             user.setLastName("Patel");
@@ -47,7 +48,7 @@ public class UserDaoMock extends UserAbstractDao {
 	@Override
 	public ArrayList getAll() throws SQLException, AwsSecretsManagerException {
         ArrayList<User> userList = new ArrayList<>();
-        User user1 = new User();
+        User user1 = (User) userManagementAbstractFactory.getUserModel();
         user1.setFirstName("Daksh");
         user1.setLastName("Patel");
         user1.setEmail("daksh.patel@dal.ca");
@@ -88,4 +89,5 @@ public class UserDaoMock extends UserAbstractDao {
     public User getUserByEmailId(String emailId) throws SQLException, AwsSecretsManagerException {
         return null;
     }
+
 }
