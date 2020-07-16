@@ -1,5 +1,6 @@
 package com.app.group15.CourseManagement.Student;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.Config.ServiceConfig;
 import com.app.group15.CourseManagement.Course;
 import com.app.group15.CourseManagement.ICourseService;
@@ -22,10 +23,11 @@ import java.util.logging.Level;
 
 @Controller
 public class StudentController {
+
     private IAuthorizationService authorizationService = ServiceConfig.getInstance().getAuthorizationService();
     private ISurveyStudentService surveyStudentService = ServiceConfig.getInstance().getSurveyStudentService();
     private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
-    private ICourseService courseService = ServiceConfig.getInstance().getCourseService();
+    private ICourseService courseService = AppConfig.getInstance().getCourseManagementAbstractFactory().getCourseService();
 
     @RequestMapping(value = "/student/home", method = RequestMethod.GET)
     public ModelAndView studentHome(HttpServletRequest request) {

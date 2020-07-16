@@ -1,5 +1,6 @@
 package com.app.group15.CourseManagement;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.Config.ServiceConfig;
 import com.app.group15.ExceptionHandler.AllowedRolesNotSetException;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
@@ -15,16 +16,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 
 @Controller
 public class AdminController {
+
+	private ICourseManagementAbstractFactory courseManagementAbstractFactory = AppConfig.getInstance().getCourseManagementAbstractFactory();
 	private IAuthorizationService authorizationService = ServiceConfig.getInstance().getAuthorizationService();
 	private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
-	private ICourseService courseService = ServiceConfig.getInstance().getCourseService();
+	private ICourseService courseService = courseManagementAbstractFactory.getCourseService();
 	private IUserService userService = ServiceConfig.getInstance().getUserService();
 
 	@RequestMapping(value = "/admin/home", method = RequestMethod.GET)
@@ -33,7 +35,7 @@ public class AdminController {
 		ModelAndView modelAndViewResponse;
 		try {
 
-			authorizationService.setAllowedRoles(new String[] { "ADMIN" });
+			authorizationService.setAllowedRoles(new String[]{"ADMIN"});
 			if (sessionService.isUserSignedIn(request)) {
 				if (authorizationService.isAuthorized(request)) {
 					User user = sessionService.getSessionUser(request);

@@ -14,6 +14,8 @@ import static com.app.group15.Utility.DatabaseQueriesUtility.*;
 
 @SuppressWarnings("rawtypes")
 public class CourseStudentMapperDao extends CourseStudentMapperAbstractDao {
+
+
     @Override
     public int addStudentToACourse(int courseId, int studentId) throws SQLException, AwsSecretsManagerException {
         String query = ADD_STUDENT_TO_COURSE;

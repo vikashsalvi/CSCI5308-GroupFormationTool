@@ -2,12 +2,10 @@ package com.app.group15.Config;
 
 import com.app.group15.CourseManagement.CourseAbstractDao;
 import com.app.group15.CourseManagement.CourseDaoInjectorService;
-import com.app.group15.CourseManagement.Instructor.CourseInstructorMapperAbstractDao;
-import com.app.group15.CourseManagement.Instructor.CourseInstructorMapperDao;
-import com.app.group15.CourseManagement.Instructor.CourseInstructorMapperDaoInjectorService;
-import com.app.group15.CourseManagement.Student.CourseStudentMapperAbstractDao;
-import com.app.group15.CourseManagement.Student.CourseStudentMapperDao;
-import com.app.group15.CourseManagement.Student.CourseStudentMapperDaoInjectorService;
+import com.app.group15.CourseManagement.CourseManagementConcreteFactory;
+import com.app.group15.CourseManagement.ICourseManagementAbstractFactory;
+import com.app.group15.CourseManagement.Instructor.*;
+import com.app.group15.CourseManagement.Student.*;
 import com.app.group15.GroupFormationManagement.GroupFormationAlgorithmConcreteFactory;
 import com.app.group15.GroupFormationManagement.IGroupFormationAlgorithmAbstractFactory;
 import com.app.group15.NotificationManagement.EmailNotifierImpl;
@@ -16,9 +14,7 @@ import com.app.group15.PasswordPolicyManagement.PasswordPolicyDao;
 import com.app.group15.PasswordPolicyManagement.UserPasswordHistoryAbstractDao;
 import com.app.group15.PasswordPolicyManagement.UserPasswordHistoryDao;
 import com.app.group15.QuestionManager.IQuestionManagerAbstractFactory;
-import com.app.group15.QuestionManager.QuestionManagerAbstractDao;
 import com.app.group15.QuestionManager.QuestionManagerConcreteFactory;
-import com.app.group15.QuestionManager.QuestionManagerDao;
 import com.app.group15.SurveyManagement.SurveyAbstractDao;
 import com.app.group15.SurveyManagement.SurveyDaoInjectorService;
 import com.app.group15.SurveyManagement.SurveyQuestionMapperAbstractDao;
@@ -50,23 +46,26 @@ public class AppConfig {
     private CourseAbstractDao courseDao;
     private PasswordPolicyAbstractDao passwordPolicyDao;
     private UserPasswordHistoryAbstractDao userPasswordHistoryDao;
-   
+
     private SurveyAbstractDao surveyDao;
     private SurveyQuestionMapperAbstractDao surveyQuestionMapperDao;
-    
+
     // Abstract Factory
     private IQuestionManagerAbstractFactory questionManagerAbstractFactory;
     private IGroupFormationAlgorithmAbstractFactory groupAlgorithmAbstractFactory;
+    private ICourseManagementAbstractFactory courseManagementAbstractFactory;
+    private ICourseInstructorAbstractFactory courseInstructorAbstractFactory;
+    private ICourseStudentAbstractFactory courseStudentAbstractFactory;
 
-	public SurveyAbstractDao getSurveyDao() {
-		return surveyDao;
-	}
+    public SurveyAbstractDao getSurveyDao() {
+        return surveyDao;
+    }
 
-	public SurveyQuestionMapperAbstractDao getSurveyQuestionMapperDao() {
-		return surveyQuestionMapperDao;
-	}
+    public SurveyQuestionMapperAbstractDao getSurveyQuestionMapperDao() {
+        return surveyQuestionMapperDao;
+    }
 
-	private AppConfig() {
+    private AppConfig() {
 
         properties = new Properties();
         String propertyFilePath = "src/main/resources/application.properties";
@@ -89,13 +88,16 @@ public class AppConfig {
         courseDao = new CourseDaoInjectorService().getCourseDao();
         passwordPolicyDao = new PasswordPolicyDao();
         userPasswordHistoryDao = new UserPasswordHistoryDao();
-    
 
-        surveyDao=new SurveyDaoInjectorService().getSurveyDao();
-        surveyQuestionMapperDao=new SurveyQuestionMapperDao();
-       //ABSTRACT FACTORY 
-        questionManagerAbstractFactory=QuestionManagerConcreteFactory.getInstance();
-        groupAlgorithmAbstractFactory=GroupFormationAlgorithmConcreteFactory.getInstance();
+
+        surveyDao = new SurveyDaoInjectorService().getSurveyDao();
+        surveyQuestionMapperDao = new SurveyQuestionMapperDao();
+        //ABSTRACT FACTORY
+        questionManagerAbstractFactory = QuestionManagerConcreteFactory.getInstance();
+        groupAlgorithmAbstractFactory = GroupFormationAlgorithmConcreteFactory.getInstance();
+        courseManagementAbstractFactory = CourseManagementConcreteFactory.getInstance();
+        courseInstructorAbstractFactory = CourseInstructorConcreteFactory.getInstance();
+        courseStudentAbstractFactory = CourseStudentConcreteFactory.getInstance();
     }
 
     public static AppConfig getSingletonAppConfig() {
@@ -203,17 +205,36 @@ public class AppConfig {
         return userPasswordHistoryDao;
     }
 
-    
 
-	public IQuestionManagerAbstractFactory getQuestionManagerAbstractFactory() {
-		return questionManagerAbstractFactory;
-	}
+    public IQuestionManagerAbstractFactory getQuestionManagerAbstractFactory() {
+        return questionManagerAbstractFactory;
+    }
 
-	public IGroupFormationAlgorithmAbstractFactory getGroupAlgorithmAbstractFactory() {
-		return groupAlgorithmAbstractFactory;
-	}
-	
-	
-    
-    
+    public IGroupFormationAlgorithmAbstractFactory getGroupAlgorithmAbstractFactory() {
+        return groupAlgorithmAbstractFactory;
+    }
+
+    public ICourseManagementAbstractFactory getCourseManagementAbstractFactory() {
+        return courseManagementAbstractFactory;
+    }
+
+    public void setCourseManagementAbstractFactory(ICourseManagementAbstractFactory courseManagementAbstractFactory) {
+        this.courseManagementAbstractFactory = courseManagementAbstractFactory;
+    }
+
+    public ICourseInstructorAbstractFactory getCourseInstructorAbstractFactory() {
+        return courseInstructorAbstractFactory;
+    }
+
+    public void setCourseInstructorAbstractFactory(ICourseInstructorAbstractFactory courseInstructorAbstractFactory) {
+        this.courseInstructorAbstractFactory = courseInstructorAbstractFactory;
+    }
+
+    public ICourseStudentAbstractFactory getCourseStudentAbstractFactory() {
+        return courseStudentAbstractFactory;
+    }
+
+    public void setCourseStudentAbstractFactory(ICourseStudentAbstractFactory courseStudentAbstractFactory) {
+        this.courseStudentAbstractFactory = courseStudentAbstractFactory;
+    }
 }
