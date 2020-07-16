@@ -1,5 +1,7 @@
 package com.app.group15.Persistence;
 
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+import com.app.group15.Utility.GroupFormationToolLogger;
 import com.mysql.cj.jdbc.MysqlDataSource;
 
 import java.util.logging.Level;
@@ -17,15 +19,18 @@ public class DatabaseManager {
 
     }
 
-    private static void getDetails() {
+    private static void getDetails() throws AwsSecretsManagerException {
+    	
         DatabaseDetails databaseDetails = AwsSecretsManagerUtility.getDatabaseDetails();
         URL = "jdbc:mysql://" + databaseDetails.getHost() + ":" + databaseDetails.getPort() + "/"
                 + databaseDetails.getDbName() + "?useSSL=false&serverTimezone=UTC";
         PSWD = databaseDetails.getPassword();
         USER_NAME = databaseDetails.getUserName();
+    	
+        
     }
 
-    public static MysqlDataSource getDataSource() {
+    public static MysqlDataSource getDataSource() throws AwsSecretsManagerException {
 
         try {
 
@@ -37,8 +42,9 @@ public class DatabaseManager {
                 dataSource.setUser(USER_NAME);
             }
 
-        } catch (Exception e) {
+        } catch (AwsSecretsManagerException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
         return dataSource;

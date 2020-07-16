@@ -2,24 +2,25 @@ package com.app.group15.PasswordPolicyManagement;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+
+import java.sql.SQLException;
 
 class PasswordPolicyMinSpecialCharTest {
+	
+	private IPasswordPolicyValidator passwordPolicyValidator;
 
     @Test
-    void isPasswordValid() {
-        PasswordPolicyMinSpecialCharMock passwordPolicyMinSpecialChar = new PasswordPolicyMinSpecialCharMock();
-
-        String specialChar0 = "ababab";
-        String specialChar1 = "@ababab";
-        String specialChar2 = "@#ababab";
-        String specialChar3 = "@#%ababab";
-
-        assertFalse(passwordPolicyMinSpecialChar.isPasswordValid(specialChar0));
-        assertFalse(passwordPolicyMinSpecialChar.isPasswordValid(specialChar1));
-        assertTrue(passwordPolicyMinSpecialChar.isPasswordValid(specialChar2));
-        assertTrue(passwordPolicyMinSpecialChar.isPasswordValid(specialChar3));
+    void isPasswordValid() throws SQLException, AwsSecretsManagerException {
+    	PasswordPolicyMinSpecialChar policy=new PasswordPolicyMinSpecialChar();
+     	policy.injectPasswordPolicyAbstractDao(new PasswordPolicyDaoMock());
+     	passwordPolicyValidator=policy;
+     	assertEquals(passwordPolicyValidator.isPasswordValid("uTTTTTTT"),false);
+     	assertEquals(passwordPolicyValidator.isPasswordValid("uuuu###"),true);
+        
 
     }
 

@@ -1,79 +1,98 @@
 package com.app.group15.CourseManagement.Instructor;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.CourseManagement.Course;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+import com.app.group15.UserManagement.IUserManagementAbstractFactory;
 import com.app.group15.UserManagement.User;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
-public class CourseInstructorMapperDaoMock {
+public class CourseInstructorMapperDaoMock extends CourseInstructorMapperAbstractDao{
 
-    CourseInstructorMapper courseInstructorMapperEntity = new CourseInstructorMapper();
+    private CourseInstructorMapper courseInstructorMapperEntity = new CourseInstructorMapper();
+    private IUserManagementAbstractFactory userManagementAbstractFactory=AppConfig.getInstance().getUserManagementAbstractFactory();
 
-    public CourseInstructorMapper getCourseInstructorMapperEntity(int courseId) {
-        if (courseId == 6) {
-            courseInstructorMapperEntity.setCourseId(6);
-            courseInstructorMapperEntity.setInstructorId(17);
-            courseInstructorMapperEntity.setTaId(0);
-        }
+	@Override
+	public User getCourseInstructor(int id) throws SQLException, AwsSecretsManagerException {
+		User user=(User) userManagementAbstractFactory.getUserModel();
+		user.setId(id);
+		return user;
+	}
 
-        return courseInstructorMapperEntity;
-    }
+	@Override
+	public List getCourseByInstructor(int id) throws SQLException, AwsSecretsManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    public boolean setTA(int courseId) {
-        if (courseId == 6) {
-            courseInstructorMapperEntity.setTaId(11);
-            return true;
-        } else {
-            return false;
-        }
-    }
+	@Override
+	public List getCoursesByInstructor(int taId) throws AwsSecretsManagerException, SQLException {
+		List<Course> courseList=new ArrayList();
+		Course course=new Course();
+		course.setId(1);
+		courseList.add(course);
+		return courseList;
+	}
 
-    public CourseInstructorMapper addOrUpdateInstructor(int id) {
-        CourseInstructorMapper courseInstructorMapper = new CourseInstructorMapper();
-        courseInstructorMapper.setInstructorId(id);
-        courseInstructorMapper.setCourseId(1);
-        return courseInstructorMapper;
-    }
+	@Override
+	public Course getCourseByTa(int id) throws AwsSecretsManagerException, SQLException {
+		Course course=new Course();
+		course.setId(1);
+		return course;
+	}
 
-    public ArrayList<Course> getCoursesOfInstructorMock(int instructorId) {
-        Course c1 = new Course();
-        c1.setId(1);
-        c1.setName("CSCI5410");
-        Course c2 = new Course();
-        c2.setId(2);
-        c2.setName("CSCI5411");
-        if (instructorId == 10) {
-            ArrayList<Course> courses = new ArrayList<>();
-            courses.add(c1);
-            courses.add(c2);
-            return courses;
-        }
-        return null;
-    }
+	@Override
+	public void deleteByCourseId(int courseId) throws SQLException, AwsSecretsManagerException {
+		// TODO Auto-generated method stub
 
-    public User getCourseTAMock(int courseId) {
-        if (courseId == 10) {
-            User user = new User();
-            user.setBannerId("B00838074");
-            user.setEmail("vikash.salvi@dal.ca");
-            user.setFirstName("Vikash");
-            user.setLastName("Salvi");
-            user.setPassword("ABCD");
-            user.setId(1);
-            return user;
-        }
-        return null;
-    }
+	}
 
-    public ArrayList<User> getAllCourseTa(ArrayList<Course> courses) {
+	@Override
+	protected boolean doesCourseIdExistInThisMapper(int courseId) throws SQLException, AwsSecretsManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
-        ArrayList<User> userList = new ArrayList<>();
-        courses.forEach(course -> {
-            User u1 = new User();
-            u1.setId(course.getId());
-            userList.add(u1);
-        });
-        return userList;
-    }
+	@Override
+	protected void addInstructorForCourseWithTa(int courseId, int instructorId)
+			throws SQLException, AwsSecretsManagerException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected void addTaForCourseWithInstructor(int courseId, int taId)
+			throws SQLException, AwsSecretsManagerException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void addInstructorToACourse(int courseId, int instructorId) throws SQLException, AwsSecretsManagerException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void addTaToACourse(int courseId, int taId) throws SQLException, AwsSecretsManagerException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public List getAll() throws SQLException, AwsSecretsManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public User getCourseTA(int userId) throws SQLException, AwsSecretsManagerException {
+		User user=(User) userManagementAbstractFactory.getUserModel();
+		user.setId(1);
+		return user;
+	}
 
 }

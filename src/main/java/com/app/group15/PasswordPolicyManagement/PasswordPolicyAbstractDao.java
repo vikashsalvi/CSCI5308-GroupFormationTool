@@ -1,8 +1,10 @@
 package com.app.group15.PasswordPolicyManagement;
 
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.IDao;
 import com.app.group15.Persistence.Persistence;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public abstract class PasswordPolicyAbstractDao<T> implements IDao {
@@ -13,7 +15,7 @@ public abstract class PasswordPolicyAbstractDao<T> implements IDao {
     }
 
     @Override
-    public abstract List<PasswordPolicy> getAll();
+    public abstract List<PasswordPolicy> getAll() throws SQLException, AwsSecretsManagerException;
 
     @Override
     public int save(Persistence persistence) {
@@ -31,6 +33,6 @@ public abstract class PasswordPolicyAbstractDao<T> implements IDao {
     }
 
 
-    public abstract List<PasswordPolicy> getActivePasswordPolicy();
+    public abstract List<PasswordPolicy> getActivePasswordPolicy() throws SQLException, AwsSecretsManagerException;
 
 }

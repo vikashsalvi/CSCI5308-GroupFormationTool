@@ -1,55 +1,55 @@
 package com.app.group15.CourseManagement.Instructor;
 
+import com.app.group15.Config.ServiceConfigForTest;
 import com.app.group15.CourseManagement.Course;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.UserManagement.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class InstructorServiceTest {
-    CourseInstructorMapperDaoMock courseInstructorMapperDaoMock = new CourseInstructorMapperDaoMock();
+    
+    private IInstructorService instructorService=ServiceConfigForTest.getInstance().getInstructorService();
 
     @Test
-    public void getCourseOfInstructorTest() {
-        ArrayList<Course> coursesOfInstructorMock = courseInstructorMapperDaoMock.getCoursesOfInstructorMock(10);
-        assertEquals(coursesOfInstructorMock.get(0).getId(), 1);
-        assertEquals(coursesOfInstructorMock.get(1).getId(), 2);
-        assertNotEquals(coursesOfInstructorMock.get(1).getId(), 3);
+    public void getCourseOfInstructorTest() throws AwsSecretsManagerException, SQLException {
+        assertTrue(instructorService.getCourseOfInstructor(1).size()>0);
     }
 
     @Test
-    public void getCourseTATest() {
-        int courseId = 10;
-        User userEntity = courseInstructorMapperDaoMock.getCourseTAMock(courseId);
-        assertEquals(userEntity.getId(), 1);
-        assertNotNull(userEntity);
+    public void getCourseTATest() throws SQLException, AwsSecretsManagerException {
+        assertTrue(instructorService.getCourseTA(1).getId()==1);
     }
 
     @Test
-    public void getAllCourseTATest() {
-        Course c1 = new Course();
-        c1.setName("CSCI5401");
-        c1.setId(1);
-        Course c2 = new Course();
-        c2.setName("CSCI5402");
-        c2.setId(2);
-        Course c3 = new Course();
-        c3.setName("CSCI5403");
-        c3.setId(3);
-        ArrayList<Course> arrayList = new ArrayList<>();
-        arrayList.add(c1);
-        arrayList.add(c2);
-        arrayList.add(c3);
+    public void getAllCourseTATest() throws SQLException, AwsSecretsManagerException {
+        List<Course> courseList=new ArrayList();
+        Course course=new Course();
+        courseList.add(course);
+        assertTrue(instructorService.getAllCourseTA(courseList).size()>0);
 
-        ArrayList<User> allCourseTa = courseInstructorMapperDaoMock.getAllCourseTa(arrayList);
-        assertEquals(allCourseTa.get(0).getId(), 1);
-        assertEquals(allCourseTa.get(1).getId(), 2);
-        assertEquals(allCourseTa.get(2).getId(), 3);
-        assertNotEquals(allCourseTa.get(1), 3);
-
+    }
+    
+    @Test
+    public void validateUserToAddAsTaTest() throws SQLException, AwsSecretsManagerException {
+    	
+    	assertEquals(instructorService.validateUserToAddAsTa(new User(), 2),true);
+    }
+    
+    @Test
+    public void checkInstructorPermissionTest() throws AwsSecretsManagerException, SQLException {
+    	assertEquals(instructorService.checkInstructorPermission(1, 1),true);
+    }
+    
+    @Test
+    public void validateUserToAddAsStudentTest() throws SQLException, AwsSecretsManagerException {
+    	assertEquals(instructorService.validateUserToAddAsTa(new User(), 2),true);
     }
 }

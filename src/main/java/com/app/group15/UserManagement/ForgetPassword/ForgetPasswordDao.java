@@ -1,5 +1,6 @@
 package com.app.group15.UserManagement.ForgetPassword;
 
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.PasswordPolicyManagement.UserPasswordHistory;
 import com.app.group15.PasswordPolicyManagement.UserPasswordHistoryAbstractDao;
 import com.app.group15.Persistence.DatabaseManager;
@@ -12,14 +13,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
+import static com.app.group15.Utility.DatabaseQueriesUtility.*;
+
 public class ForgetPasswordDao extends ForgetPasswordAbstractDao implements IForgetPasswordDaoInjector {
 
     private UserPasswordHistoryAbstractDao passwordHistoryDao;
 
     @Override
-    public boolean checkIfTokenAlreadyExists(int id) {
+    public boolean checkIfTokenAlreadyExists(int id) throws SQLException, AwsSecretsManagerException {
         boolean exist = false;
-        String query = "SELECT id FROM table_forgot_password_tokens WHERE id=?";
+        String query = CHECK_IF_TOKEN_EXISTS;
 
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -31,15 +34,16 @@ public class ForgetPasswordDao extends ForgetPasswordAbstractDao implements IFor
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return exist;
     }
 
     @Override
-    public boolean deleteForgotPasswordToken(int id) {
-        String query = "delete from table_forgot_password_tokens where id=?";
+    public boolean deleteForgotPasswordToken(int id) throws SQLException, AwsSecretsManagerException {
+        String query = DELETE_TOKEN;
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 connection.setAutoCommit(false);
@@ -57,14 +61,14 @@ public class ForgetPasswordDao extends ForgetPasswordAbstractDao implements IFor
             }
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
         return false;
     }
 
-    public boolean insertForgotPasswordToken(int id, String token) {
-        String query = "INSERT INTO table_forgot_password_tokens(id,token,token_generation_date_time) "
-                + "VALUES(?,?,?)";
+    public boolean insertForgotPasswordToken(int id, String token) throws SQLException, AwsSecretsManagerException {
+        String query = INSERT_TOKEN;
         java.util.Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String currentDateTime = sdf.format(date);
@@ -87,14 +91,15 @@ public class ForgetPasswordDao extends ForgetPasswordAbstractDao implements IFor
 
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return true;
 
     }
 
     @Override
-    public Map<String, String> getUserFromToken(String token) {
-        String query = "SELECT * FROM table_forgot_password_tokens WHERE token like ?";
+    public Map<String, String> getUserFromToken(String token) throws SQLException, AwsSecretsManagerException {
+        String query = GET_USER_FROM_TOKEN;
         HashMap<String, String> row = new HashMap<>();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -105,17 +110,18 @@ public class ForgetPasswordDao extends ForgetPasswordAbstractDao implements IFor
                     row.put("id", String.valueOf(result.getInt("id")));
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return row;
     }
 
 
     @Override
-    public boolean updateUserPassword(int userId, String password) {
+    public boolean updateUserPassword(int userId, String password) throws SQLException, AwsSecretsManagerException {
         String currentPassword = getUserPassword(userId);
-        String query = "UPDATE table_users SET password=? WHERE id=?";
+        String query = UPDATE_PASSWORD;
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 connection.setAutoCommit(false);
@@ -125,11 +131,12 @@ public class ForgetPasswordDao extends ForgetPasswordAbstractDao implements IFor
                 connection.commit();
                 passwordHistoryDao.savePasswordHistory(createPasswordHistory(currentPassword, userId));
                 return true;
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 try {
                     connection.rollback();
                 } catch (SQLException e1) {
                     GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                    throw e;
                 }
 
             }
@@ -140,8 +147,8 @@ public class ForgetPasswordDao extends ForgetPasswordAbstractDao implements IFor
 
     }
 
-    private String getUserPassword(int userId) {
-        String query = "SELECT password from table_users  WHERE id=?";
+    private String getUserPassword(int userId) throws SQLException, AwsSecretsManagerException {
+        String query = GET_USER_PASSWORD;
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, userId);
@@ -150,8 +157,9 @@ public class ForgetPasswordDao extends ForgetPasswordAbstractDao implements IFor
                 return result.getString("password");
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return null;
 

@@ -1,8 +1,11 @@
 package com.app.group15.UserManagement.SessionManagement;
 
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.UserManagement.*;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.sql.SQLException;
 import java.util.Set;
 
 public class SessionService implements ISessionService {
@@ -11,7 +14,7 @@ public class SessionService implements ISessionService {
         return sessionBannerId != null;
     }
 
-    public User getSessionUser(HttpServletRequest request) {
+    public User getSessionUser(HttpServletRequest request) throws SQLException, AwsSecretsManagerException {
         UserDao userDao = new UserDaoInjectorService().getUserDao();
         String sessionBannerId = (String) request.getSession().getAttribute("BANNER_ID_SESSION");
         return userDao.getUserByBannerId(sessionBannerId);
@@ -25,7 +28,7 @@ public class SessionService implements ISessionService {
         request.getSession().setAttribute(name, value);
     }
 
-    public String getUserHome(HttpServletRequest request) {
+    public String getUserHome(HttpServletRequest request) throws SQLException, AwsSecretsManagerException {
         String sessionBannerId = (String) request.getSession().getAttribute("BANNER_ID_SESSION");
         UserRoleDao userRoleDao = new UserRoleDaoInjectorService().getUserRoleDao();
         Set<String> roles = userRoleDao.getRolesByBannerId(sessionBannerId);

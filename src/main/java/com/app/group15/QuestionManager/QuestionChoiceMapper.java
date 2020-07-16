@@ -2,7 +2,9 @@ package com.app.group15.QuestionManager;
 
 import java.util.List;
 
-public class QuestionChoiceMapper {
+import com.app.group15.Persistence.Persistence;
+
+public class QuestionChoiceMapper extends Persistence{
 
     private int id;
     private int questionId;

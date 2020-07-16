@@ -1,6 +1,8 @@
 package com.app.group15.UserManagement;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.ExceptionHandler.AllowedRolesNotSetException;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.DatabaseManager;
 import com.app.group15.Utility.GroupFormationToolLogger;
 
@@ -13,18 +15,16 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 
+import static com.app.group15.Utility.DatabaseQueriesUtility.*;
+
 
 @SuppressWarnings("rawtypes")
 public class UserRoleDao extends UserRoleAbstractDao {
 
-    public UserRoleDao() {
-
-    }
-
-    @Override
-    public UserRoles get(int id) {
-        String query = "SELECT * FROM table_user_roles WHERE id=?";
-        UserRoles roleEntity = new UserRoles();
+	@Override
+    public UserRoles get(int id) throws SQLException, AwsSecretsManagerException {
+        String query = GET_USER_ROLE;
+        UserRoles roleEntity = (UserRoles) AppConfig.getInstance().getUserManagementAbstractFactory().getUserRoleModel();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
@@ -37,8 +37,9 @@ public class UserRoleDao extends UserRoleAbstractDao {
                 }
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
         return roleEntity;
@@ -46,8 +47,8 @@ public class UserRoleDao extends UserRoleAbstractDao {
     }
 
     @Override
-    public int getRoleId(String role) {
-        String query = "SELECT * FROM table_user_roles WHERE role=?";
+    public int getRoleId(String role) throws SQLException, AwsSecretsManagerException {
+        String query = GET_ROLE_ID;
         int roleId = 0;
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -60,18 +61,17 @@ public class UserRoleDao extends UserRoleAbstractDao {
                 }
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
         return roleId;
 
     }
 
     @Override
-    public Set<String> getRolesByBannerId(String bannerId) {
-        String query = "SELECT role FROM table_users tu\n" +
-                "JOIN table_user_role_mapper trm ON tu.id=trm.user_id\n" +
-                "JOIN table_user_roles tr ON trm.role_id=tr.id\n" + "WHERE tu.banner_id=?";
+    public Set<String> getRolesByBannerId(String bannerId) throws SQLException, AwsSecretsManagerException {
+        String query = GET_ROLES_BY_BANNER_ID;
         Set<String> roles = new HashSet<String>();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -82,9 +82,10 @@ public class UserRoleDao extends UserRoleAbstractDao {
                     roles.add(role);
                 }
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
 
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
         return roles;
@@ -92,8 +93,8 @@ public class UserRoleDao extends UserRoleAbstractDao {
     }
 
     @Override
-    public void addRole(int userId, String role) {
-        String query = "INSERT INTO table_user_role_mapper(user_id,role_id) VALUES(?,?)";
+    public void addRole(int userId, String role) throws SQLException, AllowedRolesNotSetException, AwsSecretsManagerException {
+        String query =ADD_ROLE;
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 connection.setAutoCommit(false);
@@ -104,24 +105,27 @@ public class UserRoleDao extends UserRoleAbstractDao {
                 statement.setInt(2, getRoleId(role));
                 statement.executeUpdate();
                 connection.commit();
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 try {
                     connection.rollback();
                 } catch (SQLException e1) {
                     GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                    throw e;
                 }
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                throw e;
             }
 
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
     }
 
     @Override
-    public void updateRole(int userId, String role) {
-        String query = "UPDATE table_user_role_mapper SET role_id=? WHERE user_id=?";
+    public void updateRole(int userId, String role) throws AllowedRolesNotSetException, SQLException, AwsSecretsManagerException {
+        String query = UPDATE_ROLE;
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 connection.setAutoCommit(false);
@@ -132,39 +136,43 @@ public class UserRoleDao extends UserRoleAbstractDao {
                 statement.setInt(2, userId);
                 statement.executeUpdate();
                 connection.commit();
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 try {
                     connection.rollback();
                 } catch (SQLException e1) {
                     GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                    throw e;
                 }
                 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                throw e;
             }
 
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
     }
 
     @Override
-    public ArrayList<UserRoles> getAll() {
-        String query = "SELECT * FROM table_user_roles";
+    public ArrayList<UserRoles> getAll() throws SQLException, AwsSecretsManagerException {
+        String query = GET_ROLES;
         ArrayList<UserRoles> userRolesList = new ArrayList<UserRoles>();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query);
              ResultSet result = statement.executeQuery()) {
 
             while (result.next()) {
-                UserRoles role = new UserRoles();
+                UserRoles role = (UserRoles) AppConfig.getInstance().getUserManagementAbstractFactory().getUserRoleModel();
                 role.setId(result.getInt("id"));
                 role.setRole(result.getString("role"));
                 userRolesList.add(role);
 
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
 
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
 
         return userRolesList;

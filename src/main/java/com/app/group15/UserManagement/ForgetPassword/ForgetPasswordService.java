@@ -1,6 +1,7 @@
 package com.app.group15.UserManagement.ForgetPassword;
 
 import com.app.group15.Config.AppConfig;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.UserManagement.User;
 import com.app.group15.UserManagement.UserDao;
 import com.app.group15.Utility.GroupFormationToolLogger;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,7 +25,7 @@ public class ForgetPasswordService implements IForgetPasswordService, IForgetPas
     private String invalidInput = "Invalid invalid";
 
     @Override
-    public void generateToken(String bannerId, HttpServletRequest request) {
+    public void generateToken(String bannerId, HttpServletRequest request) throws SQLException, UnsupportedEncodingException, AwsSecretsManagerException {
 
         try {
             if (ServiceUtility.isNotNull(bannerId) && ServiceUtility.isNotNull(request)) {
@@ -49,11 +51,13 @@ public class ForgetPasswordService implements IForgetPasswordService, IForgetPas
             }
         } catch (UnsupportedEncodingException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         }
+       
     }
 
     @Override
-    public boolean verifyToken(String token) {
+    public boolean verifyToken(String token) throws  SQLException, ParseException, AwsSecretsManagerException {
 
         if (ServiceUtility.isNotNull(token)) {
             if (ServiceUtility.isNotNull(token)) {
@@ -72,7 +76,9 @@ public class ForgetPasswordService implements IForgetPasswordService, IForgetPas
                     validated = true;
                 } catch (ParseException e) {
                     GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                    throw e;
                 }
+ 
 
                 return validated;
 
@@ -87,7 +93,7 @@ public class ForgetPasswordService implements IForgetPasswordService, IForgetPas
     }
 
     @Override
-    public boolean deleteForgotPasswordToken(int id) {
+    public boolean deleteForgotPasswordToken(int id) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isValidInt(id)) {
             boolean deleted = forgetPasswordDao.deleteForgotPasswordToken(id);
             return deleted;
@@ -98,7 +104,7 @@ public class ForgetPasswordService implements IForgetPasswordService, IForgetPas
     }
 
     @Override
-    public Map<String, String> getUserFromToken(String token) {
+    public Map<String, String> getUserFromToken(String token) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isNotNull(token)) {
             Map<String, String> user = forgetPasswordDao.getUserFromToken(token);
             return user;
@@ -111,7 +117,7 @@ public class ForgetPasswordService implements IForgetPasswordService, IForgetPas
     }
 
     @Override
-    public boolean updateUserPassword(int id, String newPassword) {
+    public boolean updateUserPassword(int id, String newPassword) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isNotNull(newPassword)) {
             boolean updated = forgetPasswordDao.updateUserPassword(id, newPassword);
             return updated;

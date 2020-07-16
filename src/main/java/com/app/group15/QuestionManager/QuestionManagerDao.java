@@ -1,23 +1,27 @@
 package com.app.group15.QuestionManager;
 
+import com.app.group15.Config.AppConfig;
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.InvokeStoredProcedure;
 import com.app.group15.Utility.GroupFormationToolLogger;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
 public class QuestionManagerDao extends QuestionManagerAbstractDao {
 
+	IQuestionManagerAbstractFactory questionManagerAbstractFactory=AppConfig.getInstance().getQuestionManagerAbstractFactory();
     @Override
-    public Question get(int id) {
+    public Question get(int id) throws SQLException, AwsSecretsManagerException {
         InvokeStoredProcedure invokeStoredProcedure = null;
         try {
             invokeStoredProcedure = new InvokeStoredProcedure("spFindQuestion(?)");
             invokeStoredProcedure.setParameter(1, id);
             ResultSet results = invokeStoredProcedure.executeWithResults();
-            Question question = new Question();
+            Question question = (Question) questionManagerAbstractFactory.getQuestionModel();
             if (results != null) {
                 while (results.next()) {
                     question.setQuestionId(results.getInt("id"));
@@ -28,18 +32,18 @@ public class QuestionManagerDao extends QuestionManagerAbstractDao {
                 }
             }
             return question;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         } finally {
             assert invokeStoredProcedure != null;
             invokeStoredProcedure.closeConnection();
         }
-        return null;
     }
 
 
     @Override
-    public List<Question> getAllQuestionsOfInstructor(int instructorId) {
+    public List<Question> getAllQuestionsOfInstructor(int instructorId) throws SQLException, AwsSecretsManagerException {
         InvokeStoredProcedure invokeStoredProcedure = null;
         try {
             invokeStoredProcedure = new InvokeStoredProcedure("spFindAllInstructorQuestions(?)");
@@ -48,7 +52,7 @@ public class QuestionManagerDao extends QuestionManagerAbstractDao {
             List<Question> questionList = new ArrayList<>();
             if (results != null) {
                 while (results.next()) {
-                    Question question = new Question();
+                    Question question = (Question) questionManagerAbstractFactory.getQuestionModel();
                     question.setQuestionId(results.getInt("id"));
                     question.setQuestionTitle(results.getString("title"));
                     question.setQuestionTypeId(results.getInt("type_id"));
@@ -58,17 +62,18 @@ public class QuestionManagerDao extends QuestionManagerAbstractDao {
                 }
             }
             return questionList;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         } finally {
             assert invokeStoredProcedure != null;
             invokeStoredProcedure.closeConnection();
         }
-        return null;
+       
     }
 
     @Override
-    public List<QuestionType> getAllQuestionTypes() {
+    public List<QuestionType> getAllQuestionTypes() throws SQLException, AwsSecretsManagerException {
 
         InvokeStoredProcedure invokeStoredProcedure = null;
         try {
@@ -84,17 +89,18 @@ public class QuestionManagerDao extends QuestionManagerAbstractDao {
                 }
             }
             return questionTypeList;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         } finally {
             assert invokeStoredProcedure != null;
             invokeStoredProcedure.closeConnection();
         }
-        return null;
+        
     }
 
     @Override
-    public int saveQuestion(Question question) {
+    public int saveQuestion(Question question) throws SQLException, AwsSecretsManagerException {
 
         InvokeStoredProcedure invokeStoredProcedure = null;
         int insertedQuestionId = -1;
@@ -110,8 +116,9 @@ public class QuestionManagerDao extends QuestionManagerAbstractDao {
             invokeStoredProcedure.execute();
             insertedQuestionId = invokeStoredProcedure.getOutputParameter(6);
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         } finally {
             assert invokeStoredProcedure != null;
             invokeStoredProcedure.closeConnection();
@@ -120,7 +127,7 @@ public class QuestionManagerDao extends QuestionManagerAbstractDao {
     }
 
     @Override
-    public int saveOption(Options options) {
+    public int saveOption(Options options) throws SQLException, AwsSecretsManagerException {
         InvokeStoredProcedure invokeStoredProcedure = null;
         int insertedChoiceId = -1;
         try {
@@ -132,8 +139,9 @@ public class QuestionManagerDao extends QuestionManagerAbstractDao {
             invokeStoredProcedure.execute();
             insertedChoiceId = invokeStoredProcedure.getOutputParameter(3);
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         } finally {
             assert invokeStoredProcedure != null;
             invokeStoredProcedure.closeConnection();
@@ -144,7 +152,7 @@ public class QuestionManagerDao extends QuestionManagerAbstractDao {
     }
 
     @Override
-    public List<Options> getOptions(int questionId) {
+    public List<Options> getOptions(int questionId) throws SQLException, AwsSecretsManagerException {
         InvokeStoredProcedure invokeStoredProcedure = null;
         try {
             invokeStoredProcedure = new InvokeStoredProcedure("spFindQuestionChoices(?)");
@@ -153,24 +161,25 @@ public class QuestionManagerDao extends QuestionManagerAbstractDao {
             List<Options> optionsList = new ArrayList<>();
             if (results != null) {
                 while (results.next()) {
-                    Options options = new Options();
+                    Options options = (Options) questionManagerAbstractFactory.getOptionsModel();
                     options.setOption(results.getString("stored_as"));
                     options.setValue(results.getString("choice"));
                     optionsList.add(options);
                 }
             }
             return optionsList;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         } finally {
             assert invokeStoredProcedure != null;
             invokeStoredProcedure.closeConnection();
         }
-        return null;
+        
     }
 
     @Override
-    public void saveQuestionOptionMapping(int insertedQuestionId, Integer insertedChoiceId) {
+    public void saveQuestionOptionMapping(int insertedQuestionId, Integer insertedChoiceId) throws SQLException, AwsSecretsManagerException {
         InvokeStoredProcedure invokeStoredProcedure = null;
         try {
             invokeStoredProcedure = new InvokeStoredProcedure("spMapQuestionChoice(?,?)");
@@ -179,8 +188,9 @@ public class QuestionManagerDao extends QuestionManagerAbstractDao {
             invokeStoredProcedure.setParameter(2, insertedChoiceId);
 
             invokeStoredProcedure.execute();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            throw e;
         } finally {
             assert invokeStoredProcedure != null;
             invokeStoredProcedure.closeConnection();
