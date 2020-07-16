@@ -2,12 +2,10 @@ package com.app.group15.Config;
 
 import com.app.group15.CourseManagement.CourseAbstractDao;
 import com.app.group15.CourseManagement.CourseDaoInjectorService;
-import com.app.group15.CourseManagement.Instructor.CourseInstructorMapperAbstractDao;
-import com.app.group15.CourseManagement.Instructor.CourseInstructorMapperDao;
-import com.app.group15.CourseManagement.Instructor.CourseInstructorMapperDaoInjectorService;
-import com.app.group15.CourseManagement.Student.CourseStudentMapperAbstractDao;
-import com.app.group15.CourseManagement.Student.CourseStudentMapperDao;
-import com.app.group15.CourseManagement.Student.CourseStudentMapperDaoInjectorService;
+import com.app.group15.CourseManagement.CourseManagementConcreteFactory;
+import com.app.group15.CourseManagement.ICourseManagementAbstractFactory;
+import com.app.group15.CourseManagement.Instructor.*;
+import com.app.group15.CourseManagement.Student.*;
 import com.app.group15.GroupFormationManagement.GroupFormationAlgorithmConcreteFactory;
 import com.app.group15.GroupFormationManagement.IGroupFormationAlgorithmAbstractFactory;
 import com.app.group15.NotificationManagement.EmailNotifierImpl;
@@ -44,6 +42,11 @@ public class AppConfig {
     private CourseAbstractDao courseDao;
 
 
+    private ICourseManagementAbstractFactory courseManagementAbstractFactory;
+    private ICourseInstructorAbstractFactory courseInstructorAbstractFactory;
+    private ICourseStudentAbstractFactory courseStudentAbstractFactory;
+
+
     // Abstract Factory
     private IQuestionManagerAbstractFactory questionManagerAbstractFactory;
     private IGroupFormationAlgorithmAbstractFactory groupAlgorithmAbstractFactory;
@@ -73,6 +76,9 @@ public class AppConfig {
 
         courseDao = new CourseDaoInjectorService().getCourseDao();
 
+        courseManagementAbstractFactory = CourseManagementConcreteFactory.getInstance();
+        courseInstructorAbstractFactory = CourseInstructorConcreteFactory.getInstance();
+        courseStudentAbstractFactory = CourseStudentConcreteFactory.getInstance();
         //ABSTRACT FACTORY
         questionManagerAbstractFactory = QuestionManagerConcreteFactory.getInstance();
         groupAlgorithmAbstractFactory = GroupFormationAlgorithmConcreteFactory.getInstance();
@@ -192,6 +198,18 @@ public class AppConfig {
 
     public IPasswordPolicyAbstractFactory getPasswordPolicyAbstractFactory() {
         return passwordPolicyAbstractFactory;
-        
+
+    }
+
+    public ICourseManagementAbstractFactory getCourseManagementAbstractFactory() {
+        return courseManagementAbstractFactory;
+    }
+
+    public ICourseInstructorAbstractFactory getCourseInstructorAbstractFactory() {
+        return courseInstructorAbstractFactory;
+    }
+
+    public ICourseStudentAbstractFactory getCourseStudentAbstractFactory() {
+        return courseStudentAbstractFactory;
     }
 }

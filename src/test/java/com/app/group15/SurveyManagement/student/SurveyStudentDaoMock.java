@@ -76,6 +76,11 @@ public class SurveyStudentDaoMock extends SurveyStudentAbstractDao {
         return null;
     }
 
+    @Override
+    public String getChoiceValue(int choiceId) throws SQLException, AwsSecretsManagerException {
+        return null;
+    }
+
     public SurveyFormResponse getSurveyFrom() {
         SurveyFormResponse surveyFormResponse = new SurveyFormResponse();
         surveyFormResponse.setSurveyId(1);
