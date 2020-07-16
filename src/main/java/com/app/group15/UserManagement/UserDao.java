@@ -20,10 +20,6 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
 
     private UserRoleAbstractDao userRoleDao;
 
-	public UserDao() {
-
-    }
-
     @Override
     public User get(int id) throws SQLException, AwsSecretsManagerException {
         String query = GET_A_USER;
@@ -38,7 +34,6 @@ public class UserDao extends UserAbstractDao implements IUserRoleDaoInjector {
                     user.setFirstName(result.getString("first_name"));
                     user.setLastName(result.getString("last_name"));
                     user.setId(id);
-
                 }
             }
         } catch (SQLException e) {

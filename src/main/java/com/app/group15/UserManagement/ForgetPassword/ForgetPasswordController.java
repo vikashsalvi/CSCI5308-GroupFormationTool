@@ -33,28 +33,29 @@ public class ForgetPasswordController {
 
     @RequestMapping(value = "/forgetPassword", method = RequestMethod.GET)
     public ModelAndView returnModel() {
-        ModelAndView modelAndViewResponse = new ModelAndView();
-        modelAndViewResponse.addObject("sent", false);
-        modelAndViewResponse.setViewName("forgetPassword");
-        return modelAndViewResponse;
-    }
+		GroupFormationToolLogger.log(Level.INFO, "GET request on /forgetPassword");
+		ModelAndView modelAndViewResponse = new ModelAndView();
+		modelAndViewResponse.addObject("sent", false);
+		modelAndViewResponse.setViewName("forgetPassword");
+		return modelAndViewResponse;
+	}
 
     @RequestMapping(value = "/forgetPassword", method = RequestMethod.POST)
     public ModelAndView getUserAndGenerateToken(@RequestParam(required = true, value = "bannerId") String bannerId,
                                                 HttpServletRequest request) throws UnsupportedEncodingException {
+		GroupFormationToolLogger.log(Level.INFO, "POST request on /forgetPassword");
+		ModelAndView modelAndViewResponse = new ModelAndView();
+		try {
+			if (ServiceUtility.isNotNull(bannerId) && ServiceUtility.isNotNull(request)) {
+				forgetPasswordService.generateToken(bannerId, request);
 
-        ModelAndView modelAndViewResponse = new ModelAndView();
-        try {
-            if (ServiceUtility.isNotNull(bannerId) && ServiceUtility.isNotNull(request)) {
-                forgetPasswordService.generateToken(bannerId, request);
-
-                modelAndViewResponse.setViewName("forgetPassword");
-                modelAndViewResponse.addObject("sent", true);
-                modelAndViewResponse.addObject("completed", false);
-                modelAndViewResponse.addObject("bannerId_error", "Please enter BannerId");
-
-                return modelAndViewResponse;
-            } else {
+				modelAndViewResponse.setViewName("forgetPassword");
+				modelAndViewResponse.addObject("sent", true);
+				modelAndViewResponse.addObject("completed", false);
+				modelAndViewResponse.addObject("bannerId_error", "Please enter BannerId");
+				GroupFormationToolLogger.log(Level.INFO, "Banner ID error");
+				return modelAndViewResponse;
+			} else {
                 GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
                 return null;
             }
