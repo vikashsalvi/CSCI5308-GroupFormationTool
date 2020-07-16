@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-public class PasswordPolicyHistoryConstraint implements IPasswordPolicyValidator,IUserPasswordHistoryAbstractDaoInjector {
+public class PasswordPolicyHistoryConstraint implements IPasswordPolicyValidator, IUserPasswordHistoryAbstractDaoInjector {
 
     private UserPasswordHistoryAbstractDao passwordHistoryDao;
-    private UserAbstractDao userDao ;
+    private UserAbstractDao userDao;
     private int userId;
 
     public int getUserId() {
@@ -45,16 +45,14 @@ public class PasswordPolicyHistoryConstraint implements IPasswordPolicyValidator
         return false;
     }
 
-	@Override
-	public void injectUserPasswordHistoryAbstractDao(UserPasswordHistoryAbstractDao passwordHistoryDao) {
-		this.passwordHistoryDao=passwordHistoryDao;
-		
-	}
+    @Override
+    public void injectUserPasswordHistoryAbstractDao(UserPasswordHistoryAbstractDao passwordHistoryDao) {
+        this.passwordHistoryDao = passwordHistoryDao;
+    }
 
-	@Override
-	public void injectUserDao(UserAbstractDao userDao) {
-		this.userDao=userDao;
-		
-	}
+    @Override
+    public void injectUserDao(UserAbstractDao userDao) {
+        this.userDao = userDao;
+    }
 
 }

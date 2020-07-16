@@ -1,5 +1,6 @@
 package com.app.group15.PasswordPolicyManagement;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.InvokeStoredProcedure;
 import com.app.group15.Utility.GroupFormationToolLogger;
@@ -12,6 +13,7 @@ import java.util.logging.Level;
 
 public class PasswordPolicyDao extends PasswordPolicyAbstractDao {
 
+    IPasswordPolicyAbstractFactory passwordPolicyAbstractFactory = AppConfig.getInstance().getPasswordPolicyAbstractFactory();
 
     @Override
     public List<PasswordPolicy> getAll() throws SQLException, AwsSecretsManagerException {
@@ -23,7 +25,7 @@ public class PasswordPolicyDao extends PasswordPolicyAbstractDao {
             List<PasswordPolicy> listOfPolicy = new ArrayList<>();
             if (results != null) {
                 while (results.next()) {
-                    PasswordPolicy policy = new PasswordPolicy();
+                    PasswordPolicy policy = (PasswordPolicy) passwordPolicyAbstractFactory.getPasswordPolicyModel();
                     policy.setPolicyId(results.getInt("id"));
                     policy.setPolicyName(results.getString("policy_name"));
                     policy.setPolicyDescription(results.getString("policy_desc"));
@@ -39,7 +41,7 @@ public class PasswordPolicyDao extends PasswordPolicyAbstractDao {
         } finally {
             invokeStoredProcedure.closeConnection();
         }
-        
+
     }
 
     @Override
@@ -52,7 +54,7 @@ public class PasswordPolicyDao extends PasswordPolicyAbstractDao {
             List<PasswordPolicy> listOfPolicy = new ArrayList<>();
             if (results != null) {
                 while (results.next()) {
-                    PasswordPolicy policy = new PasswordPolicy();
+                    PasswordPolicy policy = (PasswordPolicy) passwordPolicyAbstractFactory.getPasswordPolicyModel();
                     policy.setPolicyId(results.getInt("id"));
                     policy.setPolicyName(results.getString("policy_name"));
                     policy.setPolicyDescription(results.getString("policy_desc"));
@@ -68,7 +70,7 @@ public class PasswordPolicyDao extends PasswordPolicyAbstractDao {
         } finally {
             invokeStoredProcedure.closeConnection();
         }
-     
+
     }
 
 }

@@ -15,6 +15,7 @@ public class SurveyResponse {
     public String questionText;
     public String questionAddedDate;
     public List<Options> options;
+    public String choiceText;
 
 
     public String getQuestionTitle() {
@@ -95,6 +96,14 @@ public class SurveyResponse {
 
     public void setTextResponse(String textResponse) {
         this.textResponse = textResponse;
+    }
+
+    public String getChoiceText() {
+        return choiceText;
+    }
+
+    public void setChoiceText(String choiceText) {
+        this.choiceText = choiceText;
     }
 
 

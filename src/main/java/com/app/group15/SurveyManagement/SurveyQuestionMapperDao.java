@@ -1,7 +1,9 @@
 package com.app.group15.SurveyManagement;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.InvokeStoredProcedure;
+import com.app.group15.QuestionManager.IQuestionManagerAbstractFactory;
 import com.app.group15.QuestionManager.Options;
 import com.app.group15.QuestionManager.Question;
 import com.app.group15.Utility.GroupFormationToolLogger;
@@ -13,6 +15,9 @@ import java.util.List;
 import java.util.logging.Level;
 
 public class SurveyQuestionMapperDao extends SurveyQuestionMapperAbstractDao {
+
+    private ISurveyManagementAbstractFactory surveyManagementAbstractFactory = AppConfig.getInstance().getSurveyManagementAbstractFactory();
+    private IQuestionManagerAbstractFactory questionManagerAbstractFactory = AppConfig.getInstance().getQuestionManagerAbstractFactory();
 
     @Override
     public int getHighestOrderValue(int surveyId) throws SQLException, AwsSecretsManagerException {
@@ -77,7 +82,7 @@ public class SurveyQuestionMapperDao extends SurveyQuestionMapperAbstractDao {
             List<Question> questionList = new ArrayList<>();
             if (results != null) {
                 while (results.next()) {
-                    Question question = new Question();
+                    Question question = (Question) questionManagerAbstractFactory.getQuestionModel();
                     question.setId(results.getInt("id"));
                     question.setQuestionTitle(results.getString("title"));
                     question.setQuestionTypeId(results.getInt("type_id"));
@@ -125,7 +130,7 @@ public class SurveyQuestionMapperDao extends SurveyQuestionMapperAbstractDao {
             List<Question> questionList = new ArrayList<>();
             if (results != null) {
                 while (results.next()) {
-                    Question question = new Question();
+                    Question question = (Question) questionManagerAbstractFactory.getQuestionModel();
                     question.setId(results.getInt("id"));
                     question.setQuestionTitle(results.getString("title"));
                     question.setQuestionTypeId(results.getInt("type_id"));
@@ -145,7 +150,7 @@ public class SurveyQuestionMapperDao extends SurveyQuestionMapperAbstractDao {
         }
     }
 
-    public List<Question> 	getSurveyQuestionByCourseID(int courseID) throws SQLException, AwsSecretsManagerException {
+    public List<Question> getSurveyQuestionByCourseID(int courseID) throws SQLException, AwsSecretsManagerException {
         InvokeStoredProcedure invokeStoredProcedure = null;
 
         try {
@@ -155,7 +160,7 @@ public class SurveyQuestionMapperDao extends SurveyQuestionMapperAbstractDao {
             List<Question> questionList = new ArrayList<>();
             if (results != null) {
                 while (results.next()) {
-                    Question question = new Question();
+                    Question question = (Question) questionManagerAbstractFactory.getQuestionModel();
                     question.setId(results.getInt("id"));
                     question.setQuestionTitle(results.getString("title"));
                     question.setQuestionTypeId(results.getInt("type_id"));
@@ -175,18 +180,18 @@ public class SurveyQuestionMapperDao extends SurveyQuestionMapperAbstractDao {
         }
     }
 
-	@Override
-	public List<Question> getRemainingQuestionsForSurvey(int courseId, int instructorId) throws AwsSecretsManagerException, SQLException {
-		InvokeStoredProcedure invokeStoredProcedure = null;
-		try {
-			invokeStoredProcedure = new InvokeStoredProcedure("spGetRemainingQuestionForSurvey(?,?)");
-			invokeStoredProcedure.setParameter(1, courseId);
-			invokeStoredProcedure.setParameter(2, instructorId);
-			ResultSet results = invokeStoredProcedure.executeWithResults();
-			List<Question> Questions = new ArrayList<>();
-			if (results != null) {
-				while (results.next()) {
-					Question question = new Question();
+    @Override
+    public List<Question> getRemainingQuestionsForSurvey(int courseId, int instructorId) throws AwsSecretsManagerException, SQLException {
+        InvokeStoredProcedure invokeStoredProcedure = null;
+        try {
+            invokeStoredProcedure = new InvokeStoredProcedure("spGetRemainingQuestionForSurvey(?,?)");
+            invokeStoredProcedure.setParameter(1, courseId);
+            invokeStoredProcedure.setParameter(2, instructorId);
+            ResultSet results = invokeStoredProcedure.executeWithResults();
+            List<Question> Questions = new ArrayList<>();
+            if (results != null) {
+                while (results.next()) {
+                    Question question = (Question) questionManagerAbstractFactory.getQuestionModel();
                     question.setQuestionId(results.getInt("id"));
                     question.setId(results.getInt("id"));
                     question.setQuestionTitle(results.getString("title"));
@@ -218,7 +223,7 @@ public class SurveyQuestionMapperDao extends SurveyQuestionMapperAbstractDao {
             if (results != null) {
                 while (results.next()) {
 
-                    Options options = new Options();
+                    Options options = (Options) questionManagerAbstractFactory.getOptionsModel();
                     options.setId(results.getInt("choice_id"));
                     options.setOption(results.getString("choice"));
                     options.setValue(results.getString("stored_as"));
