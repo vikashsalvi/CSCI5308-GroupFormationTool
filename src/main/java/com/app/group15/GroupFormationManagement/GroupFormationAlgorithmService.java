@@ -26,7 +26,6 @@ public class GroupFormationAlgorithmService implements IGroupFormationAlgorithmS
     public int getSurveyIdForACourse(int courseId) throws SQLException, AwsSecretsManagerException {
         surveyId = surveyService.getSurveyIdOfACourse(courseId);
         return surveyId;
-
     }
 
     private List<Integer> getQuestionOrder(int surveyId) throws SQLException, AwsSecretsManagerException {
@@ -35,10 +34,7 @@ public class GroupFormationAlgorithmService implements IGroupFormationAlgorithmS
 
         for (int i = 0; i < list.size(); i++) {
             questionOrder.add(list.get(i).getQuestionId());
-
         }
-
-
         return questionOrder;
     }
     
@@ -63,13 +59,9 @@ public class GroupFormationAlgorithmService implements IGroupFormationAlgorithmS
         HashMap<Integer, String> questionCriteriaMap = new HashMap<>();
 
         for (int i = 0; i < list.size(); i++) {
-            questionCriteriaMap.put(list.get(i).getQuestionOrder(),
-                    surveyService.getRuleFromId(list.get(i).getRuleId()));
-			
+            questionCriteriaMap.put(list.get(i).getQuestionOrder(), surveyService.getRuleFromId(list.get(i).getRuleId()));
         }
-
         return questionCriteriaMap;
-
     }
 
     @Override
@@ -82,7 +74,6 @@ public class GroupFormationAlgorithmService implements IGroupFormationAlgorithmS
         List<StudentResponseText> textResponseList = surveyStudentService.getTextStudentResponsesForASurvey(surveyId);
 
         return arrangeStudentResponsesByQuestionOrder(choiceResponseList, numericResponseList, textResponseList);
-
     }
 
     private ArrayList<StudentResponseMaintainer> arrangeStudentResponsesByQuestionOrder(List<StudentResponseChoice> choiceResponseList,
@@ -125,7 +116,6 @@ public class GroupFormationAlgorithmService implements IGroupFormationAlgorithmS
             entry.setValue(arrangeResponsesOfAStudentByQuestionOrder(entry.getValue()));
         }
 
-
         for (Entry<Integer, List<StudentResponse>> entry : studentResponseMap.entrySet()) {
             List<StudentResponse> orderedResponseList = entry.getValue();
             for (int i = 0; i < orderedResponseList.size(); i++) {
@@ -161,20 +151,14 @@ public class GroupFormationAlgorithmService implements IGroupFormationAlgorithmS
                     } else {
                         studentResponsesAsObject.add(obj.getChoiceId());
                     }
-
-
                 }
-
             }
             StudentResponseMaintainer responseMaintainer = new StudentResponseMaintainer();
             responseMaintainer.setResponseList(studentResponsesAsObject);
             responseMaintainer.setStudentId(entry.getKey());
             finalStudentResponses.add(responseMaintainer);
         }
-
-
         return finalStudentResponses;
-
     }
 
     private void setCumulativeValueForMCQMultiSelect(int questionId, List<StudentResponse> orderedResponseList) {
@@ -230,29 +214,23 @@ public class GroupFormationAlgorithmService implements IGroupFormationAlgorithmS
                 obj.setQuestionOrder(questionOrderList.indexOf(obj.getQuestionId()) + 1);
             }
         }
-
         Collections.sort(responseList);
-
         return responseList;
-
     }
 
     @Override
     public void injectSurveyService(ISurveyService surveyService) {
         this.surveyService = surveyService;
-
     }
 
     @Override
     public void injectSurveyStudentService(ISurveyStudentService surveyStudentService) {
         this.surveyStudentService = surveyStudentService;
-
     }
 
     @Override
     public void injectQuestionService(IQuestionManagerService questionService) {
         this.questionService = questionService;
-
     }
 
 }
