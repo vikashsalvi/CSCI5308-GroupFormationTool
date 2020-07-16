@@ -36,7 +36,7 @@ public class SurveyController {
     public ModelAndView manageSurveyGET(HttpServletRequest request,
                                         @RequestParam(value = "courseId", required = true) String courseId,
                                         @RequestParam(value = "show", required = false) String showField) {
-        authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
+        authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR", "TA"});
         ArrayList<Question> allQuestionsOfInstructor = null;
         List<Question> questionList = new ArrayList<>();
         ModelAndView modelAndView;
@@ -103,7 +103,7 @@ public class SurveyController {
                                      @RequestParam(value = "rule", required = true) String rule,
                                      @RequestParam(value = "ruleValue", required = false) String ruleVal
     ) {
-        authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
+        authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR", "TA"});
         ModelAndView modelAndView;
         try {
             if (sessionService.isUserSignedIn(request)) {
@@ -144,7 +144,7 @@ public class SurveyController {
     public ModelAndView deleteQuestion(HttpServletRequest request,
                                        @RequestParam(value = "courseId", required = true) int courseId,
                                        @RequestParam(value = "questionId", required = true) int questionId) {
-        authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
+        authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR", "TA"});
         ModelAndView modelAndView;
         try {
             if (sessionService.isUserSignedIn(request)) {
@@ -178,7 +178,7 @@ public class SurveyController {
     @RequestMapping(value = "/instructor/survey/publish", method = RequestMethod.POST)
     public ModelAndView publishSurvey(HttpServletRequest request,
                                       @RequestParam(value = "courseId", required = true) int courseId) {
-        authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
+        authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR", "TA"});
         ModelAndView modelAndView;
         try {
             if (sessionService.isUserSignedIn(request)) {
@@ -212,7 +212,7 @@ public class SurveyController {
     @RequestMapping(value = "/instructor/survey/unPublish", method = RequestMethod.POST)
     public ModelAndView unPublishSurvey(HttpServletRequest request,
                                         @RequestParam(value = "courseId", required = true) int courseId) {
-        authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR"});
+        authorizationService.setAllowedRoles(new String[]{"INSTRUCTOR", "TA"});
         ModelAndView modelAndView;
         try {
             if (sessionService.isUserSignedIn(request)) {

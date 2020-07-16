@@ -167,16 +167,19 @@
                                         <thead class="thead-dark">
                                         <tr>
                                             <th>
-                                                Course id
+                                                Course ID
                                             </th>
                                             <th>
-                                                Course name
+                                                Course Name
                                             </th>
                                             <th>
                                                 Course Instructor
                                             </th>
                                             <th>
-                                                Manage course
+                                                Manage Course
+                                            </th>
+                                            <th>
+                                                Manage Survey
                                             </th>
                                         </tr>
                                         </thead>
@@ -190,6 +193,11 @@
                                                    th:href='@{/instructor/importCSV(courseId=${courseAsTa.getId()})}'>
                                                     <i class="fa fa-file-import"></i>&nbsp; Import Students
                                                 </a>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-outline-primary"
+                                                   th:href='${"/instructor/survey?courseId="+courseAsTa.getId()}'>
+                                                    <i class="fa fa-file-import"></i>&nbsp;Manage Survey</a>
                                             </td>
                                         </tr>
                                         </tbody>
