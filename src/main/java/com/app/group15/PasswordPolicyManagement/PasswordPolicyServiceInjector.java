@@ -1,11 +1,11 @@
 package com.app.group15.PasswordPolicyManagement;
 
 
+import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 
 public class PasswordPolicyServiceInjector {
 

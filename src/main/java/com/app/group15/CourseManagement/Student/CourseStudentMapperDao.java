@@ -1,6 +1,7 @@
 package com.app.group15.CourseManagement.Student;
 
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.DatabaseManager;
 import com.app.group15.Utility.GroupFormationToolLogger;
@@ -14,6 +15,8 @@ import static com.app.group15.Utility.DatabaseQueriesUtility.*;
 
 @SuppressWarnings("rawtypes")
 public class CourseStudentMapperDao extends CourseStudentMapperAbstractDao {
+
+
     @Override
     public int addStudentToACourse(int courseId, int studentId) throws SQLException, AwsSecretsManagerException {
         String query = ADD_STUDENT_TO_COURSE;
@@ -74,7 +77,7 @@ public class CourseStudentMapperDao extends CourseStudentMapperAbstractDao {
              PreparedStatement statement = connection.prepareStatement(query);
              ResultSet result = statement.executeQuery()) {
             while (result.next()) {
-                CourseStudentMapper entity = new CourseStudentMapper();
+                CourseStudentMapper entity = (CourseStudentMapper) AppConfig.getInstance().getCourseStudentAbstractFactory().getCourseStudentMapperModel();
                 entity.setId(result.getInt("id"));
                 entity.setCourseId(result.getInt("course_id"));
                 entity.setStudentId(result.getInt("student_id"));

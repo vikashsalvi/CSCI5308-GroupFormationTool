@@ -1,7 +1,9 @@
 package com.app.group15.UserManagement.LoginManagement;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.Config.ServiceConfig;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+import com.app.group15.UserManagement.SessionManagement.ISessionManagementAbstractFactory;
 import com.app.group15.UserManagement.SessionManagement.ISessionService;
 import com.app.group15.Utility.GroupFormationToolLogger;
 
@@ -19,8 +21,11 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class LoginController {
 
-    private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
-    private ILoginService loginService = ServiceConfig.getInstance().getLoginService();
+	private ILoginManagementAbstractFactory loginManagementAbstractFactory= AppConfig.getInstance().getLoginManagementAbstractFactory();
+	private ISessionManagementAbstractFactory sessionManagementAbstractFactory=AppConfig.getInstance().getSessionManagementAbstractFactory();
+
+	private ISessionService sessionService = sessionManagementAbstractFactory.getSessionService();
+    private ILoginService loginService = loginManagementAbstractFactory.getLoginService();
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ModelAndView login(@RequestParam(required = false, value = "bannerId") String bannerId, @RequestParam(required = false, value = "password") String password, HttpServletRequest request) {
@@ -69,7 +74,7 @@ public class LoginController {
 			ModelAndView modelAndViewResponse = new ModelAndView("awsError");
 			return modelAndViewResponse;
 		}
-    	
+
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)

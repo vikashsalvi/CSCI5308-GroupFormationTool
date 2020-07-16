@@ -1,5 +1,6 @@
 package com.app.group15.QuestionManager;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.InvokeStoredProcedure;
 import com.app.group15.Utility.GroupFormationToolLogger;
@@ -12,6 +13,7 @@ import java.util.logging.Level;
 
 public class QuestionManagerDao extends QuestionManagerAbstractDao {
 
+	IQuestionManagerAbstractFactory questionManagerAbstractFactory=AppConfig.getInstance().getQuestionManagerAbstractFactory();
     @Override
     public Question get(int id) throws SQLException, AwsSecretsManagerException {
         InvokeStoredProcedure invokeStoredProcedure = null;
@@ -19,7 +21,7 @@ public class QuestionManagerDao extends QuestionManagerAbstractDao {
             invokeStoredProcedure = new InvokeStoredProcedure("spFindQuestion(?)");
             invokeStoredProcedure.setParameter(1, id);
             ResultSet results = invokeStoredProcedure.executeWithResults();
-            Question question = new Question();
+            Question question = (Question) questionManagerAbstractFactory.getQuestionModel();
             if (results != null) {
                 while (results.next()) {
                     question.setQuestionId(results.getInt("id"));
@@ -50,7 +52,7 @@ public class QuestionManagerDao extends QuestionManagerAbstractDao {
             List<Question> questionList = new ArrayList<>();
             if (results != null) {
                 while (results.next()) {
-                    Question question = new Question();
+                    Question question = (Question) questionManagerAbstractFactory.getQuestionModel();
                     question.setQuestionId(results.getInt("id"));
                     question.setQuestionTitle(results.getString("title"));
                     question.setQuestionTypeId(results.getInt("type_id"));
@@ -159,7 +161,7 @@ public class QuestionManagerDao extends QuestionManagerAbstractDao {
             List<Options> optionsList = new ArrayList<>();
             if (results != null) {
                 while (results.next()) {
-                    Options options = new Options();
+                    Options options = (Options) questionManagerAbstractFactory.getOptionsModel();
                     options.setOption(results.getString("stored_as"));
                     options.setValue(results.getString("choice"));
                     optionsList.add(options);

@@ -1,9 +1,10 @@
 package com.app.group15.CourseManagement;
 
 
-import com.app.group15.Config.ServiceConfig;
+import com.app.group15.Config.AppConfig;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.UserManagement.SessionManagement.IAuthorizationService;
+import com.app.group15.UserManagement.SessionManagement.ISessionManagementAbstractFactory;
 import com.app.group15.UserManagement.SessionManagement.ISessionService;
 import com.app.group15.UserManagement.User;
 import com.app.group15.Utility.GroupFormationToolLogger;
@@ -13,16 +14,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 
 @Controller
 public class GuestController {
-    private IAuthorizationService authorizationService = ServiceConfig.getInstance().getAuthorizationService();
-    private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
-    private ICourseService courseService = ServiceConfig.getInstance().getCourseService();
+	private ISessionManagementAbstractFactory sessionManagementAbstractFactory= AppConfig.getInstance().getSessionManagementAbstractFactory();
+    private IAuthorizationService authorizationService = sessionManagementAbstractFactory.getAuthorizationService();
+    private ICourseManagementAbstractFactory courseManagementAbstractFactory = AppConfig.getInstance().getCourseManagementAbstractFactory();
+    private ISessionService sessionService = sessionManagementAbstractFactory.getSessionService();
+    private ICourseService courseService = courseManagementAbstractFactory.getCourseService();
 
     @RequestMapping(value = "/user/home", method = RequestMethod.GET)
     public ModelAndView guestHome(HttpServletRequest request) {

@@ -1,5 +1,6 @@
 package com.app.group15.UserManagement;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.ExceptionHandler.AllowedRolesNotSetException;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.DatabaseManager;
@@ -20,14 +21,10 @@ import static com.app.group15.Utility.DatabaseQueriesUtility.*;
 @SuppressWarnings("rawtypes")
 public class UserRoleDao extends UserRoleAbstractDao {
 
-    public UserRoleDao() {
-
-    }
-
-    @Override
+	@Override
     public UserRoles get(int id) throws SQLException, AwsSecretsManagerException {
         String query = GET_USER_ROLE;
-        UserRoles roleEntity = new UserRoles();
+        UserRoles roleEntity = (UserRoles) AppConfig.getInstance().getUserManagementAbstractFactory().getUserRoleModel();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
@@ -166,7 +163,7 @@ public class UserRoleDao extends UserRoleAbstractDao {
              ResultSet result = statement.executeQuery()) {
 
             while (result.next()) {
-                UserRoles role = new UserRoles();
+                UserRoles role = (UserRoles) AppConfig.getInstance().getUserManagementAbstractFactory().getUserRoleModel();
                 role.setId(result.getInt("id"));
                 role.setRole(result.getString("role"));
                 userRolesList.add(role);

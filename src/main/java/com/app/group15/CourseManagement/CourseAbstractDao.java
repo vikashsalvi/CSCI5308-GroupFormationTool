@@ -23,4 +23,5 @@ public abstract class CourseAbstractDao<T> implements IDao {
 
     @Override
     public abstract void delete(int id) throws SQLException, AwsSecretsManagerException;
+
 }

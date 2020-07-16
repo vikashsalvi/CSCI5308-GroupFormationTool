@@ -1,6 +1,7 @@
 package com.app.group15.CourseManagement;
 
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.CourseManagement.Instructor.CourseInstructorMapperAbstractDao;
 import com.app.group15.CourseManagement.Instructor.CourseInstructorMapperDao;
 import com.app.group15.CourseManagement.Instructor.ICourseInstructorMapperInjector;
@@ -31,7 +32,7 @@ public class CourseDao extends CourseAbstractDao
     @Override
     public Course get(int id) throws SQLException, AwsSecretsManagerException {
         String query = GET_COURSE_FROM_ID;
-        Course course = new Course();
+        Course course = (Course) AppConfig.getInstance().getCourseManagementAbstractFactory().getCourseModel();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
@@ -59,7 +60,7 @@ public class CourseDao extends CourseAbstractDao
              PreparedStatement statement = connection.prepareStatement(query);
              ResultSet result = statement.executeQuery()) {
             while (result.next()) {
-                Course course = new Course();
+                Course course = (Course) AppConfig.getInstance().getCourseManagementAbstractFactory().getCourseModel();
                 course.setId(result.getInt("id"));
                 course.setName(result.getString("name"));
                 coursesList.add(course);

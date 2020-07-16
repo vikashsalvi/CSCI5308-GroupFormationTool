@@ -1,6 +1,8 @@
 package com.app.group15.QuestionManager;
 
-public class QuestionType {
+import com.app.group15.Persistence.Persistence;
+
+public class QuestionType extends Persistence{
 
     private int id;
     private String questionType;

@@ -1,5 +1,6 @@
 package com.app.group15.QuestionManager;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.UserManagement.User;
 import com.app.group15.Utility.GroupFormationToolLogger;
@@ -16,6 +17,7 @@ import java.util.logging.Level;
 public class QuestionManagerService implements IQuestionManagerServiceInjector, IQuestionManagerService {
 
     private QuestionManagerAbstractDao questionManagerDao;
+    IQuestionManagerAbstractFactory questionManagerAbstractFactory=AppConfig.getInstance().getQuestionManagerAbstractFactory();
 
     @Override
     public void injectQuestionManagerInjectorService(QuestionManagerAbstractDao questionManagerDao) {
@@ -35,12 +37,12 @@ public class QuestionManagerService implements IQuestionManagerServiceInjector, 
 
     @Override
     public Question formQuestion(String questionTitle, String questionText, int selectedOption) {
-        Question question = new Question();
+        Question question = (Question) questionManagerAbstractFactory.getQuestionModel();
         question.setQuestionTitle(questionTitle);
         question.setQuestionText(questionText);
         question.setQuestionTypeId(selectedOption);
         if (selectedOption == 2 || selectedOption == 3) {
-            question.addOptions(new Options());
+            question.addOptions((Options)questionManagerAbstractFactory.getOptionsModel());
         }
         return question;
     }

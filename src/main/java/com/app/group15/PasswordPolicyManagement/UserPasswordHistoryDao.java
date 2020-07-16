@@ -1,5 +1,6 @@
 package com.app.group15.PasswordPolicyManagement;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.InvokeStoredProcedure;
 import com.app.group15.Utility.GroupFormationToolLogger;
@@ -12,6 +13,8 @@ import java.util.logging.Level;
 
 public class UserPasswordHistoryDao extends UserPasswordHistoryAbstractDao {
 
+    IPasswordPolicyAbstractFactory passwordPolicyAbstractFactory = AppConfig.getInstance().getPasswordPolicyAbstractFactory();
+
     @Override
     public List getPasswordHistory(int userId) throws SQLException, AwsSecretsManagerException {
         InvokeStoredProcedure invokeStoredProcedure = null;
@@ -22,7 +25,7 @@ public class UserPasswordHistoryDao extends UserPasswordHistoryAbstractDao {
             List<UserPasswordHistory> passwordHistoryList = new ArrayList<>();
             if (results != null) {
                 while (results.next()) {
-                    UserPasswordHistory passwordHistory = new UserPasswordHistory();
+                    UserPasswordHistory passwordHistory = (UserPasswordHistory) passwordPolicyAbstractFactory.getUserPasswordHistoryModel();
                     passwordHistory.setHistoryPassword(results.getString("password"));
                     passwordHistory.setUserId(results.getInt("user_id"));
                     passwordHistoryList.add(passwordHistory);
@@ -36,7 +39,7 @@ public class UserPasswordHistoryDao extends UserPasswordHistoryAbstractDao {
         } finally {
             invokeStoredProcedure.closeConnection();
         }
-       
+
 
     }
 

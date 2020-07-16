@@ -67,25 +67,6 @@
                                   th:text='${user.getFirstName() + " " + user.getLastName()}'></span>
                             <i class="fa fa-user-circle"></i>
                         </a>
-                        <!-- Dropdown - User Information -->
-                        <!--
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                 aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="#">
-                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Profile
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Settings
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/logout" data-toggle="modal" data-target="#logoutModal">
-                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                Logout
-                            </a>
-                        </div>
-                        -->
                     </li>
                 </ul>
             </nav>
@@ -167,16 +148,19 @@
                                         <thead class="thead-dark">
                                         <tr>
                                             <th>
-                                                Course id
+                                                Course ID
                                             </th>
                                             <th>
-                                                Course name
+                                                Course Name
                                             </th>
                                             <th>
                                                 Course Instructor
                                             </th>
                                             <th>
-                                                Manage course
+                                                Manage Course
+                                            </th>
+                                            <th>
+                                                Manage Survey
                                             </th>
                                         </tr>
                                         </thead>
@@ -190,6 +174,11 @@
                                                    th:href='@{/instructor/importCSV(courseId=${courseAsTa.getId()})}'>
                                                     <i class="fa fa-file-import"></i>&nbsp; Import Students
                                                 </a>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-outline-primary"
+                                                   th:href='${"/instructor/survey?courseId="+courseAsTa.getId()}'>
+                                                    <i class="fa fa-file-import"></i>&nbsp;Manage Survey</a>
                                             </td>
                                         </tr>
                                         </tbody>

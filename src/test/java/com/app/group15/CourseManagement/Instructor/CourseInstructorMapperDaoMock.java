@@ -1,7 +1,9 @@
 package com.app.group15.CourseManagement.Instructor;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.CourseManagement.Course;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+import com.app.group15.UserManagement.IUserManagementAbstractFactory;
 import com.app.group15.UserManagement.User;
 
 import java.sql.SQLException;
@@ -10,13 +12,12 @@ import java.util.List;
 
 public class CourseInstructorMapperDaoMock extends CourseInstructorMapperAbstractDao{
 
-    CourseInstructorMapper courseInstructorMapperEntity = new CourseInstructorMapper();
-
-   
+    private CourseInstructorMapper courseInstructorMapperEntity = new CourseInstructorMapper();
+    private IUserManagementAbstractFactory userManagementAbstractFactory=AppConfig.getInstance().getUserManagementAbstractFactory();
 
 	@Override
 	public User getCourseInstructor(int id) throws SQLException, AwsSecretsManagerException {
-		User user=new User();
+		User user=(User) userManagementAbstractFactory.getUserModel();
 		user.setId(id);
 		return user;
 	}
@@ -46,7 +47,7 @@ public class CourseInstructorMapperDaoMock extends CourseInstructorMapperAbstrac
 	@Override
 	public void deleteByCourseId(int courseId) throws SQLException, AwsSecretsManagerException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -59,26 +60,26 @@ public class CourseInstructorMapperDaoMock extends CourseInstructorMapperAbstrac
 	protected void addInstructorForCourseWithTa(int courseId, int instructorId)
 			throws SQLException, AwsSecretsManagerException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	protected void addTaForCourseWithInstructor(int courseId, int taId)
 			throws SQLException, AwsSecretsManagerException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void addInstructorToACourse(int courseId, int instructorId) throws SQLException, AwsSecretsManagerException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void addTaToACourse(int courseId, int taId) throws SQLException, AwsSecretsManagerException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -89,7 +90,7 @@ public class CourseInstructorMapperDaoMock extends CourseInstructorMapperAbstrac
 
 	@Override
 	public User getCourseTA(int userId) throws SQLException, AwsSecretsManagerException {
-		User user=new User();
+		User user=(User) userManagementAbstractFactory.getUserModel();
 		user.setId(1);
 		return user;
 	}

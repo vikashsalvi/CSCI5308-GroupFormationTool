@@ -1,6 +1,7 @@
 package com.app.group15.CourseManagement.Instructor;
 
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.CourseManagement.Course;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
 import com.app.group15.Persistence.DatabaseManager;
@@ -17,8 +18,7 @@ import static com.app.group15.Utility.DatabaseQueriesUtility.*;
 @SuppressWarnings("rawtypes")
 public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao {
 
-
-    @Override
+	@Override
     public ArrayList<CourseInstructorMapper> getAll() throws SQLException, AwsSecretsManagerException {
         String query = SELECT_ALL_COURSE_INSTRUCTOR_MAPPER;
         ArrayList<CourseInstructorMapper> allList = new ArrayList<CourseInstructorMapper>();
@@ -26,7 +26,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
              PreparedStatement statement = connection.prepareStatement(query);
              ResultSet result = statement.executeQuery()) {
             while (result.next()) {
-                CourseInstructorMapper entity = new CourseInstructorMapper();
+                CourseInstructorMapper entity = (CourseInstructorMapper) AppConfig.getInstance().getCourseInstructorAbstractFactory().getCourseInstructorMapperModel();
                 entity.setId(result.getInt("id"));
                 entity.setCourseId(result.getInt("course_id"));
                 entity.setInstructorId(result.getInt("instructor_id"));
@@ -45,7 +45,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
     @Override
     public User getCourseInstructor(int id) throws SQLException, AwsSecretsManagerException {
         String query = GET_COURSE_INSTRUCTOR;
-        User userEntity = new User();
+        User userEntity = (User) AppConfig.getInstance().getUserManagementAbstractFactory().getUserModel();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
@@ -231,7 +231,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
     @Override
     public Course getCourseByTa(int taId) throws AwsSecretsManagerException, SQLException {
         String query = GET_COURSE_BY_TA;
-        Course course = new Course();
+        Course course = (Course) AppConfig.getInstance().getCourseManagementAbstractFactory().getCourseModel();
 
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
 
@@ -265,7 +265,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
                 statement.setInt(1, id);
                 try (ResultSet result = statement.executeQuery()) {
                     while (result.next()) {
-                        Course courseEntity = new Course();
+                        Course courseEntity = (Course) AppConfig.getInstance().getCourseManagementAbstractFactory().getCourseModel();
                         courseEntity.setId(result.getInt("course_id"));
                         courseEntity.setName(result.getString("name"));
                         arrayListCourse.add(courseEntity);
@@ -285,7 +285,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
     @Override
     public User getCourseTA(int id) throws SQLException, AwsSecretsManagerException {
         String query = GET_COURSE_TA;
-        User userEntity = new User();
+        User userEntity = (User) AppConfig.getInstance().getUserManagementAbstractFactory().getUserModel();
 
         try (Connection connection = DatabaseManager.getDataSource().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -319,7 +319,7 @@ public class CourseInstructorMapperDao extends CourseInstructorMapperAbstractDao
                 statement.setInt(1, id);
                 try (ResultSet result = statement.executeQuery()) {
                     while (result.next()) {
-                        Course courseEntity = new Course();
+                        Course courseEntity = (Course) AppConfig.getInstance().getCourseManagementAbstractFactory().getCourseModel();
                         courseEntity.setId(result.getInt("course_id"));
                         courseEntity.setName(result.getString("name"));
                         arrayListCourse.add(courseEntity);

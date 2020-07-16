@@ -1,10 +1,13 @@
 package com.app.group15.SurveyManagement.student;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.Config.ServiceConfig;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+import com.app.group15.SurveyManagement.ISurveyManagementAbstractFactory;
 import com.app.group15.SurveyManagement.ISurveyService;
 import com.app.group15.SurveyManagement.Survey;
 import com.app.group15.UserManagement.SessionManagement.IAuthorizationService;
+import com.app.group15.UserManagement.SessionManagement.ISessionManagementAbstractFactory;
 import com.app.group15.UserManagement.SessionManagement.ISessionService;
 import com.app.group15.UserManagement.User;
 import com.app.group15.Utility.GroupFormationToolLogger;
@@ -22,10 +25,12 @@ import java.util.logging.Level;
 @Controller
 public class SurveyStudentController {
 
-    private IAuthorizationService authorizationService = ServiceConfig.getInstance().getAuthorizationService();
-    private ISessionService sessionService = ServiceConfig.getInstance().getSessionService();
-    private ISurveyStudentService surveyStudentService = ServiceConfig.getInstance().getSurveyStudentService();
-    private ISurveyService surveyService = ServiceConfig.getInstance().getSurveyService();
+    private ISurveyManagementAbstractFactory surveyManagementAbstractFactory = AppConfig.getInstance().getSurveyManagementAbstractFactory();
+	private ISessionManagementAbstractFactory sessionManagementAbstractFactory=AppConfig.getInstance().getSessionManagementAbstractFactory();
+    private IAuthorizationService authorizationService = sessionManagementAbstractFactory.getAuthorizationService();
+    private ISessionService sessionService = sessionManagementAbstractFactory.getSessionService();
+    private ISurveyStudentService surveyStudentService = surveyManagementAbstractFactory.getSurveyStudentService();
+    private ISurveyService surveyService = surveyManagementAbstractFactory.getSurveyService();
 
     @RequestMapping(value = "/student/survey", method = RequestMethod.GET)
     public ModelAndView getSurveyPage(HttpServletRequest request,
@@ -35,15 +40,15 @@ public class SurveyStudentController {
         try {
             if (sessionService.isUserSignedIn(request)) {
                 if (authorizationService.isAuthorized(request)) {
-                        User user = sessionService.getSessionUser(request);
-                        Survey survey = surveyService.getSurveyByCourseId(courseId);
-                        modelAndView = new ModelAndView();
-                        modelAndView.addObject("user", user);
-                        modelAndView.addObject("survey", survey);
-                        SurveyFormResponse surveyFormResponse = surveyStudentService.getSurveyQuestionWithOptions(courseId);
-                        modelAndView.addObject("SurveyFromResponse", surveyFormResponse);
-                        modelAndView.setViewName("student/survey");
-                        return modelAndView;
+                    User user = sessionService.getSessionUser(request);
+                    Survey survey = surveyService.getSurveyByCourseId(courseId);
+                    modelAndView = new ModelAndView();
+                    modelAndView.addObject("user", user);
+                    modelAndView.addObject("survey", survey);
+                    SurveyFormResponse surveyFormResponse = surveyStudentService.getSurveyQuestionWithOptions(courseId);
+                    modelAndView.addObject("SurveyFromResponse", surveyFormResponse);
+                    modelAndView.setViewName("student/survey");
+                    return modelAndView;
                 } else {
                     modelAndView = new ModelAndView("redirect:/login");
                 }
@@ -74,13 +79,13 @@ public class SurveyStudentController {
         try {
             if (sessionService.isUserSignedIn(request)) {
                 if (authorizationService.isAuthorized(request)) {
-                        modelAndView = new ModelAndView();
-                        User user = sessionService.getSessionUser(request);
-                        surveyStudentService.submitResponse(user, surveyFormResponse);
-                        modelAndView.addObject("user", user);
-                        modelAndView.addObject("SurveyFromResponse", surveyFormResponse);
-                        modelAndView.setViewName("student/surveySaved");
-                        return modelAndView;
+                    modelAndView = new ModelAndView();
+                    User user = sessionService.getSessionUser(request);
+                    surveyStudentService.submitResponse(user, surveyFormResponse);
+                    modelAndView.addObject("user", user);
+                    modelAndView.addObject("SurveyFromResponse", surveyFormResponse);
+                    modelAndView.setViewName("student/surveySaved");
+                    return modelAndView;
                 } else {
                     modelAndView = new ModelAndView("redirect:/login");
                 }
