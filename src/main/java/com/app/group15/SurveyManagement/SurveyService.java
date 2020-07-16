@@ -6,10 +6,12 @@ import com.app.group15.QuestionManager.Question;
 import com.app.group15.QuestionManager.QuestionManagerAbstractDao;
 import com.app.group15.SurveyManagement.student.*;
 import com.app.group15.UserManagement.User;
+import com.app.group15.Utility.GroupFormationToolLogger;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 public class SurveyService implements ISurveyService, ISurveyServiceInjector {
 
@@ -94,9 +96,11 @@ public class SurveyService implements ISurveyService, ISurveyServiceInjector {
         this.surveyQuestionMapperDao = surveyQuestionDao;
         try {
             surveyDao.getSurveyByCourseID(1).getId();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+            e.printStackTrace();
         } catch (AwsSecretsManagerException e) {
+            GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
             e.printStackTrace();
         }
     }
@@ -272,8 +276,6 @@ public class SurveyService implements ISurveyService, ISurveyServiceInjector {
                         List<SurveyResponse> surveyResponseList = surveyUserResponse.getSurveyResponseList();
                         surveyResponseList.add(surveyResponse);
                         surveyUserResponse.setSurveyResponseList(surveyResponseList);
-                        //surveyUserResponses.remove(surveyUserResponse);
-                        //surveyUserResponses.add(surveyUserResponse);
 
                     } else {
                         SurveyUserResponse surveyUserRespons = new SurveyUserResponse();

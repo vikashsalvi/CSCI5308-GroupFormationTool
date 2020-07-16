@@ -50,22 +50,22 @@ public class InstructorService implements IInstructorService, IInstructorService
             User userEntity = courseInstructorMapperDao.getCourseTA(userId);
             return userEntity;
         } else {
-            GroupFormationToolLogger.log(Level.SEVERE, "Invalid input");
+            GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
         }
         return null;
     }
 
     @Override
-    public List<User> getAllCourseTA(List<Course> courseEntities)throws SQLException, AwsSecretsManagerException {
+    public List<User> getAllCourseTA(List<Course> courseEntities) throws SQLException, AwsSecretsManagerException {
         if (ServiceUtility.isNotNull(courseEntities)) {
             List<User> userEntitiesTa = new ArrayList<>();
             courseEntities.forEach(courseEntity -> {
-				try {
-					userEntitiesTa.add(getCourseTA(courseEntity.getId()));
-				} catch (SQLException | AwsSecretsManagerException e) {
-					 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
-				}
-			});
+                try {
+                    userEntitiesTa.add(getCourseTA(courseEntity.getId()));
+                } catch (SQLException | AwsSecretsManagerException e) {
+                    GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                }
+            });
             return userEntitiesTa;
         } else {
             GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
@@ -90,10 +90,10 @@ public class InstructorService implements IInstructorService, IInstructorService
     public void addOrUpdateStudentRole(User user, String role) throws SQLException, AllowedRolesNotSetException, AwsSecretsManagerException {
         if (ServiceUtility.isNotNull(user) && ServiceUtility.isNotNull(role)) {
             Set<String> userRoles = userRoleDao.getRolesByBannerId(user.getBannerId());
-            if (!userRoles.contains(role)) {
-                userRoleDao.addRole(user.getId(), role);
-            } else {
+            if (userRoles.contains(role)) {
                 GroupFormationToolLogger.log(Level.INFO, String.format("User with banner id %s is already a student", user.getBannerId()));
+            } else {
+                userRoleDao.addRole(user.getId(), role);
             }
         } else {
             GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
@@ -231,14 +231,14 @@ public class InstructorService implements IInstructorService, IInstructorService
         if (validateUserToAddAsStudent(user)) {
             ArrayList<Integer> courseIdsOfAStudent = courseStudentMapperDao.getCourseIdsOfAStudent(user.getId());
             GroupFormationToolLogger.log(Level.INFO, "Checking if student is already enrolled");
-            if (!courseIdsOfAStudent.contains(courseId)) {
+            if (courseIdsOfAStudent.contains(courseId)) {
+                GroupFormationToolLogger.log(Level.INFO, String.format("%s is already registered to the course id %d", user.getFirstName(), courseId));
+            } else {
                 GroupFormationToolLogger.log(Level.INFO, String.format("%s not enrolled!", user.getBannerId()));
                 int courseStudentMapperId = courseStudentMapperDao.addStudentToACourse(courseId, user.getId());
                 GroupFormationToolLogger.log(Level.INFO, String.format("%d is CourseStudentMapperId for %s!", courseStudentMapperId, user.getBannerId()));
                 addOrUpdateStudentRole(user, "STUDENT");
                 AppConfig.getInstance().getEmailNotifier().sendMessage(email, emailSubject, emailBody);
-            } else {
-                GroupFormationToolLogger.log(Level.INFO, String.format("%s is already registered to the course id %d", user.getFirstName(), courseId));
             }
         } else {
             GroupFormationToolLogger.log(Level.INFO, String.format("%s is an Instructor", user.getFirstName()));

@@ -20,7 +20,7 @@ import java.util.logging.Level;
 
 @Controller
 public class GuestController {
-	private ISessionManagementAbstractFactory sessionManagementAbstractFactory= AppConfig.getInstance().getSessionManagementAbstractFactory();
+    private ISessionManagementAbstractFactory sessionManagementAbstractFactory = AppConfig.getInstance().getSessionManagementAbstractFactory();
     private IAuthorizationService authorizationService = sessionManagementAbstractFactory.getAuthorizationService();
     private ICourseManagementAbstractFactory courseManagementAbstractFactory = AppConfig.getInstance().getCourseManagementAbstractFactory();
     private ISessionService sessionService = sessionManagementAbstractFactory.getSessionService();
@@ -31,34 +31,32 @@ public class GuestController {
         authorizationService.setAllowedRoles(new String[]{"GUEST"});
         ModelAndView modelAndView;
         try {
-        if (sessionService.isUserSignedIn(request)) {
-            if (authorizationService.isAuthorized(request)) {
-                User user = sessionService.getSessionUser(request);
-                List<Course> courses = courseService.getCoursesList();
-                modelAndView = new ModelAndView();
-                modelAndView.setViewName("home");
-                modelAndView.addObject("user", user);
-                modelAndView.addObject("courses", courses);
-                return modelAndView;
+            if (sessionService.isUserSignedIn(request)) {
+                if (authorizationService.isAuthorized(request)) {
+                    User user = sessionService.getSessionUser(request);
+                    List<Course> courses = courseService.getCoursesList();
+                    modelAndView = new ModelAndView();
+                    modelAndView.setViewName("home");
+                    modelAndView.addObject("user", user);
+                    modelAndView.addObject("courses", courses);
+                    return modelAndView;
+                } else {
+                    GroupFormationToolLogger.log(Level.INFO, "Unauthorized! Logging user out. Sending user to /login");
+                    modelAndView = new ModelAndView("redirect:/login");
+                }
             } else {
-                GroupFormationToolLogger.log(Level.INFO, "----------------Unauthorized access for /user/home !!!----------------");
+                GroupFormationToolLogger.log(Level.INFO, "No user Logged in, sending user to /login");
                 modelAndView = new ModelAndView("redirect:/login");
             }
-        } else {
-            GroupFormationToolLogger.log(Level.INFO, "--------------------------------User not logged in !!!----------------");
-            modelAndView = new ModelAndView("redirect:/login");
+            return modelAndView;
+        } catch (SQLException e) {
+            GroupFormationToolLogger.log(Level.SEVERE, " Redirecting to /dbError endpoint ");
+            modelAndView = new ModelAndView("dbError");
+            return modelAndView;
+        } catch (AwsSecretsManagerException e) {
+            GroupFormationToolLogger.log(Level.SEVERE, " Redirecting to /awsError endpoint ");
+            modelAndView = new ModelAndView("awsError");
+            return modelAndView;
         }
-        return modelAndView;
-        }
-        catch(SQLException e) {
-        	GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
-        	modelAndView = new ModelAndView("dbError");
-        	return modelAndView;
-        }
-        catch (AwsSecretsManagerException e) {
-			GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
-			modelAndView = new ModelAndView("awsError");
-			return modelAndView;
-		}
     }
 }

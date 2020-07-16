@@ -28,13 +28,11 @@ public class CourseStudentMapperDao extends CourseStudentMapperAbstractDao {
                 statement.setInt(2, studentId);
                 statement.executeUpdate();
                 try (ResultSet result = statement.getGeneratedKeys()) {
-
                     if (result.first()) {
-
                         courseStudentMapperId = result.getInt(1);
+                        GroupFormationToolLogger.log(Level.FINEST, "Student:" + studentId + "Added to Course :" + courseId);
                     }
                 }
-
                 connection.commit();
             } catch (SQLException e) {
                 try {
@@ -63,6 +61,7 @@ public class CourseStudentMapperDao extends CourseStudentMapperAbstractDao {
             statement.setInt(1, courseId);
             statement.executeUpdate();
             connection.commit();
+            GroupFormationToolLogger.log(Level.FINEST, "Course Deleted :" + courseId);
         } catch (SQLException e) {
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
             throw e;
@@ -71,7 +70,7 @@ public class CourseStudentMapperDao extends CourseStudentMapperAbstractDao {
 
     @Override
     public ArrayList<CourseStudentMapper> getAll() throws SQLException, AwsSecretsManagerException {
-        String query =SELECT_ALL_FROM_COURSE_STUDENT_MAPPER;
+        String query = SELECT_ALL_FROM_COURSE_STUDENT_MAPPER;
         ArrayList<CourseStudentMapper> allList = new ArrayList<CourseStudentMapper>();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query);
@@ -81,12 +80,9 @@ public class CourseStudentMapperDao extends CourseStudentMapperAbstractDao {
                 entity.setId(result.getInt("id"));
                 entity.setCourseId(result.getInt("course_id"));
                 entity.setStudentId(result.getInt("student_id"));
-
                 allList.add(entity);
             }
-
         } catch (SQLException e) {
-
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
             throw e;
         }
@@ -95,25 +91,21 @@ public class CourseStudentMapperDao extends CourseStudentMapperAbstractDao {
 
     @Override
     public ArrayList<Integer> getCourseIdsOfAStudent(int studentId) throws SQLException, AwsSecretsManagerException {
-        String query =GET_COURSE_ID_OF_STUDENT;
+        String query = GET_COURSE_ID_OF_STUDENT;
         ArrayList<Integer> courseIds = new ArrayList<Integer>();
         try (Connection connection = DatabaseManager.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, studentId);
             try (ResultSet result = statement.executeQuery()) {
                 while (result.next()) {
-
                     courseIds.add(Integer.valueOf(result.getInt("course_id")));
-
                 }
             }
         } catch (SQLException e) {
-
             GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
             throw e;
         }
         return courseIds;
-
     }
 
 

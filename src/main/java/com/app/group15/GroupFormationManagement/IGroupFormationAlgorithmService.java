@@ -13,4 +13,5 @@ public interface IGroupFormationAlgorithmService {
 			throws SQLException, AwsSecretsManagerException;
 	public ArrayList<StudentResponseMaintainer> getStudentResponsesSortedInQuestionOrder(int surveyId)
 			throws SQLException, AwsSecretsManagerException;
+	public ArrayList<Integer> getQuestionOrderNumbers(int surveyId) throws SQLException, AwsSecretsManagerException;
 }

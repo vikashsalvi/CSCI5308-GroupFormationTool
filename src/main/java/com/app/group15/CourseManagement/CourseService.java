@@ -53,12 +53,12 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
         if (ServiceUtility.isNotNull(courses)) {
             List<User> userInstructors = new ArrayList<>();
             courses.forEach(course -> {
-				try {
-					userInstructors.add(getCourseInstructor(course.getId()));
-				} catch (SQLException | AwsSecretsManagerException e) {
-					 GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
-				}
-			});
+                try {
+                    userInstructors.add(getCourseInstructor(course.getId()));
+                } catch (SQLException | AwsSecretsManagerException e) {
+                    GroupFormationToolLogger.log(Level.SEVERE, e.getMessage(), e);
+                }
+            });
             return userInstructors;
         } else {
             GroupFormationToolLogger.log(Level.SEVERE, invalidInput);
@@ -118,7 +118,6 @@ public class CourseService implements ICourseService, ICourseServiceInjector {
         if (ServiceUtility.isValidInt(studentId)) {
             ArrayList<Integer> courseIdsOfAStudent = courseStudentMapperDao.getCourseIdsOfAStudent(studentId);
             ArrayList<Course> courses = new ArrayList<>();
-
             for (Integer courseId : courseIdsOfAStudent) {
                 courses.add(getCourseDetails(courseId));
             }

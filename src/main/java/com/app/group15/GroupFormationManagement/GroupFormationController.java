@@ -24,7 +24,7 @@ import java.util.logging.Level;
 
 @Controller
 public class GroupFormationController {
-    
+
     private IGroupFormationAlgorithmAbstractFactory groupAbstractFactory = AppConfig.getInstance().getGroupAlgorithmAbstractFactory();
     private ISessionManagementAbstractFactory sessionManagementAbstractFactory = AppConfig.getInstance().getSessionManagementAbstractFactory();
     private ICourseManagementAbstractFactory courseManagementAbstractFactory = AppConfig.getInstance().getCourseManagementAbstractFactory();
@@ -53,20 +53,23 @@ public class GroupFormationController {
                     modelAndView.addObject("courseEntity", courseEntity);
                     modelAndView.addObject("listOfTeams", listOfTeams);
                     modelAndView.setViewName("instructor/groups");
+                    GroupFormationToolLogger.log(Level.INFO, "Generating groups of " + size + " for Course :" + courseId);
                     return modelAndView;
                 } else {
                     modelAndView = new ModelAndView("redirect:/login");
+                    GroupFormationToolLogger.log(Level.INFO, "Unauthorized! Logging user out");
                 }
             } else {
                 modelAndView = new ModelAndView("redirect:/login");
+                GroupFormationToolLogger.log(Level.INFO, "No user  logged in");
             }
             return modelAndView;
         } catch (SQLException e) {
-            GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+            GroupFormationToolLogger.log(Level.SEVERE, " Redirecting to /dbError endpoint ");
             modelAndView = new ModelAndView("dbError");
             return modelAndView;
         } catch (AwsSecretsManagerException e) {
-            GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+            GroupFormationToolLogger.log(Level.SEVERE, " Redirecting to /awsError endpoint ");
             modelAndView = new ModelAndView("awsError");
             return modelAndView;
         }
