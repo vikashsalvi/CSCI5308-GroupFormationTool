@@ -7,7 +7,7 @@ public class UserManagementConcreteFactory implements IUserManagementAbstractFac
 	private static IUserManagementAbstractFactory userManagementConcreteFactory;
 
 	public static IUserManagementAbstractFactory getInstance() {
-		if (null == UserManagementConcreteFactory.getUniqueInstance()) {
+		if (null== UserManagementConcreteFactory.getUniqueInstance()) {
 			userManagementConcreteFactory = new UserManagementConcreteFactory();
 		}
 		return UserManagementConcreteFactory.userManagementConcreteFactory;
