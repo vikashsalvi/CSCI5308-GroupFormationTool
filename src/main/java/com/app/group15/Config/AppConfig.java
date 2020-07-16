@@ -192,5 +192,6 @@ public class AppConfig {
 
     public IPasswordPolicyAbstractFactory getPasswordPolicyAbstractFactory() {
         return passwordPolicyAbstractFactory;
+        
     }
 }
