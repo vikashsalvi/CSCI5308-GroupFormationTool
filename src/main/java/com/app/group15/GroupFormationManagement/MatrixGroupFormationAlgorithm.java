@@ -209,7 +209,7 @@ public class MatrixGroupFormationAlgorithm extends GroupFormationAlgorithm {
 			for (int otherStudentIndex = studentIndex + 1; otherStudentIndex < studentResponseList
 					.size(); otherStudentIndex++) {
 				for (int questionIndex = 0; questionIndex < studentResponseList.get(0).size(); questionIndex++) {
-					if (questionCriteria.get(questionIndex + 1).equals("SIMILAR")) {
+					if (questionCriteria.get(super.questionOrderNumbers.get(questionIndex)).equals("SIMILAR")) {
 						if (studentResponseList.get(studentIndex).get(questionIndex)
 								.equals(studentResponseList.get(otherStudentIndex).get(questionIndex))) {
 							similarityMatrix[studentIndex][otherStudentIndex] = similarityMatrix[studentIndex][otherStudentIndex]

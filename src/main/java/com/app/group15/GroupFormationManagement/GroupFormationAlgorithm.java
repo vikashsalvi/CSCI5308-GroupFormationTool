@@ -11,11 +11,13 @@ public abstract class GroupFormationAlgorithm {
 	
 	private IGroupFormationAlgorithmAbstractFactory algorithmAbstractFactory=AppConfig.getInstance().getGroupAlgorithmAbstractFactory();
 	private IGroupFormationAlgorithmService groupFormationService = algorithmAbstractFactory.getGroupFormationAlgorithmService();	
+	protected ArrayList<Integer> questionOrderNumbers=new ArrayList<>();
 	
 	public final ArrayList<ArrayList<Integer>> template(int courseId,int groupSize) throws SQLException, AwsSecretsManagerException {
 		int surveyId=getSurveyIdForACourse(courseId);
 		HashMap<Integer, String> questionCriteria=getQuestionCriteriaOfSurveyInOrder(surveyId);
 		ArrayList<StudentResponseMaintainer> studentResponses=getStudentResponsesSortedInQuestionOrder(surveyId);
+		this.questionOrderNumbers=groupFormationService.getQuestionOrderNumbers(surveyId);
 		return formGroups(studentResponses, groupSize, questionCriteria);
 	}
 

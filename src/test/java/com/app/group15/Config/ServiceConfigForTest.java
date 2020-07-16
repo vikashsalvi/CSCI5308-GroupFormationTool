@@ -6,6 +6,8 @@ import com.app.group15.CourseManagement.Instructor.AssignTaServiceInjectorForTes
 import com.app.group15.CourseManagement.Instructor.IAssignTAService;
 import com.app.group15.CourseManagement.Instructor.IInstructorService;
 import com.app.group15.CourseManagement.Instructor.InstructorServiceInjectorForTest;
+import com.app.group15.GroupFormationManagement.GroupFormationAlgorithm;
+import com.app.group15.GroupFormationManagement.MatrixGroupFormationAlgorithm;
 import com.app.group15.QuestionManager.IQuestionChoiceMapperService;
 import com.app.group15.QuestionManager.IQuestionManagerService;
 import com.app.group15.QuestionManager.QuestionChoiceMapperServiceInjectorForTest;
@@ -34,6 +36,7 @@ public class ServiceConfigForTest {
 	private ISignupService signupService;
 	private ISurveyService surveyService;
 	private ISurveyStudentService surveyStudentService;
+	private GroupFormationAlgorithm algorithm;
 
 	private ServiceConfigForTest() {
 		courseService = new CourseServiceInjectorForTest().getCourseService();
@@ -46,7 +49,7 @@ public class ServiceConfigForTest {
 		signupService = new SignUpServiceInjectorForTest().getSignUpService();
 		surveyService = new SurveyServiceInjectorForTest().getSurveyService();
 		surveyStudentService = new SurveyStudentInjectorServiceTest().getSurveyStudentService();
-
+		algorithm=new MatrixGroupFormationAlgorithm();
 	}
 
 	public static ServiceConfigForTest getInstance() {
@@ -99,6 +102,12 @@ public class ServiceConfigForTest {
 	public ISurveyService getSurveyService() {
 		return surveyService;
 	}
+
+	public GroupFormationAlgorithm getAlgorithm() {
+		return algorithm;
+	}
+	
+	
 
 
 }

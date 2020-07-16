@@ -41,6 +41,20 @@ public class GroupFormationAlgorithmService implements IGroupFormationAlgorithmS
 
         return questionOrder;
     }
+    
+    public ArrayList<Integer> getQuestionOrderNumbers(int surveyId) throws SQLException, AwsSecretsManagerException{
+		ArrayList<SurveyQuestionMapper> list = surveyService.getQuestionsOfASurveySortedByOrder(surveyId);
+		ArrayList<Integer> questionOrderNumber=new ArrayList();
+		
+		for (int i = 0; i < list.size(); i++) {
+			questionOrderNumber.add(list.get(i).getQuestionOrder());
+			
+		}
+		
+
+		return questionOrderNumber;
+	}
+
 
     @Override
     public HashMap<Integer, String> getQuestionCriteriaOfSurveyInOrder(int surveyId)
