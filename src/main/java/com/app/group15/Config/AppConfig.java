@@ -30,6 +30,8 @@ import com.app.group15.UserManagement.LoginManagement.ILoginManagementAbstractFa
 import com.app.group15.UserManagement.LoginManagement.LoginManagementConcreteFactory;
 import com.app.group15.UserManagement.SessionManagement.ISessionManagementAbstractFactory;
 import com.app.group15.UserManagement.SessionManagement.SessionManagementConcreteFactory;
+import com.app.group15.UserManagement.SignupManagement.ISignupManagementAbstractFactory;
+import com.app.group15.UserManagement.SignupManagement.SignupManagementConcreteFactory;
 import com.app.group15.UserManagement.UserManagementConcreteFactory;
 import com.app.group15.UserManagement.UserRoleDaoInjectorService;
 
@@ -42,30 +44,31 @@ import java.util.logging.Level;
 
 public class AppConfig {
 
-    private static AppConfig singletonAppConfig = null;
+	private static AppConfig singletonAppConfig = null;
 
-    private EmailNotifierImpl emailNotifier;
-    private GroupFormationToolLogger groupFormationToolLogger;
-    private Properties properties;
-    private CourseStudentMapperDaoInjectorService courseStudentMapperDaoInjectorService;
-    private CourseInstructorMapperDaoInjectorService courseInstructorMapperDaoInjectorService;
-    private UserRoleDaoInjectorService userRoleDaoInjectorService;
-    private CourseStudentMapperAbstractDao courseStudentMapperDao;
-    private CourseInstructorMapperAbstractDao courseInstructorMapperDao;
-    private CourseAbstractDao courseDao;
-    private PasswordPolicyAbstractDao passwordPolicyDao;
-    private UserPasswordHistoryAbstractDao userPasswordHistoryDao;
+	private EmailNotifierImpl emailNotifier;
+	private GroupFormationToolLogger groupFormationToolLogger;
+	private Properties properties;
+	private CourseStudentMapperDaoInjectorService courseStudentMapperDaoInjectorService;
+	private CourseInstructorMapperDaoInjectorService courseInstructorMapperDaoInjectorService;
+	private UserRoleDaoInjectorService userRoleDaoInjectorService;
+	private CourseStudentMapperAbstractDao courseStudentMapperDao;
+	private CourseInstructorMapperAbstractDao courseInstructorMapperDao;
+	private CourseAbstractDao courseDao;
+	private PasswordPolicyAbstractDao passwordPolicyDao;
+	private UserPasswordHistoryAbstractDao userPasswordHistoryDao;
 
-    private SurveyAbstractDao surveyDao;
-    private SurveyQuestionMapperAbstractDao surveyQuestionMapperDao;
+	private SurveyAbstractDao surveyDao;
+	private SurveyQuestionMapperAbstractDao surveyQuestionMapperDao;
 
-    // Abstract Factory
-    private IQuestionManagerAbstractFactory questionManagerAbstractFactory;
-    private IGroupFormationAlgorithmAbstractFactory groupAlgorithmAbstractFactory;
-    private IUserManagementAbstractFactory userManagementAbstractFactory;
-    private IForgetPasswordAbstractFactory forgetPasswordAbstractFactory;
-    private ILoginManagementAbstractFactory loginManagementAbstractFactory;
-    private ISessionManagementAbstractFactory sessionManagementAbstractFactory;
+	// Abstract Factory
+	private IQuestionManagerAbstractFactory questionManagerAbstractFactory;
+	private IGroupFormationAlgorithmAbstractFactory groupAlgorithmAbstractFactory;
+	private IUserManagementAbstractFactory userManagementAbstractFactory;
+	private IForgetPasswordAbstractFactory forgetPasswordAbstractFactory;
+	private ILoginManagementAbstractFactory loginManagementAbstractFactory;
+	private ISessionManagementAbstractFactory sessionManagementAbstractFactory;
+	private ISignupManagementAbstractFactory signupManagementAbstractFactory;
 
 	public SurveyAbstractDao getSurveyDao() {
 		return surveyDao;
@@ -77,137 +80,138 @@ public class AppConfig {
 
 	private AppConfig() {
 
-        properties = new Properties();
-        String propertyFilePath = "src/main/resources/application.properties";
-        try (FileInputStream in = new FileInputStream(propertyFilePath)) {
-            properties.load(in);
-        } catch (IOException ex) {
-            GroupFormationToolLogger.log(Level.SEVERE, ex.getMessage(), ex);
-        }
+		properties = new Properties();
+		String propertyFilePath = "src/main/resources/application.properties";
+		try (FileInputStream in = new FileInputStream(propertyFilePath)) {
+			properties.load(in);
+		} catch (IOException ex) {
+			GroupFormationToolLogger.log(Level.SEVERE, ex.getMessage(), ex);
+		}
 
-        emailNotifier = new EmailNotifierImpl();
-        groupFormationToolLogger = new GroupFormationToolLogger();
+		emailNotifier = new EmailNotifierImpl();
+		groupFormationToolLogger = new GroupFormationToolLogger();
 
-        courseInstructorMapperDaoInjectorService = new CourseInstructorMapperDaoInjectorService();
-        courseStudentMapperDaoInjectorService = new CourseStudentMapperDaoInjectorService();
-        userRoleDaoInjectorService = new UserRoleDaoInjectorService();
-        courseStudentMapperDao = new CourseStudentMapperDao();
-        courseInstructorMapperDao = new CourseInstructorMapperDao();
+		courseInstructorMapperDaoInjectorService = new CourseInstructorMapperDaoInjectorService();
+		courseStudentMapperDaoInjectorService = new CourseStudentMapperDaoInjectorService();
+		userRoleDaoInjectorService = new UserRoleDaoInjectorService();
+		courseStudentMapperDao = new CourseStudentMapperDao();
+		courseInstructorMapperDao = new CourseInstructorMapperDao();
 
-        courseDao = new CourseDaoInjectorService().getCourseDao();
-        passwordPolicyDao = new PasswordPolicyDao();
-        userPasswordHistoryDao = new UserPasswordHistoryDao();
-
-
-        surveyDao=new SurveyDaoInjectorService().getSurveyDao();
-        surveyQuestionMapperDao=new SurveyQuestionMapperDao();
-       //ABSTRACT FACTORY
-        questionManagerAbstractFactory=QuestionManagerConcreteFactory.getInstance();
-        groupAlgorithmAbstractFactory=GroupFormationAlgorithmConcreteFactory.getInstance();
-        userManagementAbstractFactory= UserManagementConcreteFactory.getInstance();
-        forgetPasswordAbstractFactory= ForgetPasswordConcreteFactory.getInstance();
-        loginManagementAbstractFactory= LoginManagementConcreteFactory.getInstance();
-        sessionManagementAbstractFactory= SessionManagementConcreteFactory.getInstance();
-    }
-
-    public static AppConfig getSingletonAppConfig() {
-        return singletonAppConfig;
-    }
-
-    public static void setSingletonAppConfig(AppConfig singletonAppConfig) {
-        AppConfig.singletonAppConfig = singletonAppConfig;
-    }
-
-    public static AppConfig getInstance() {
-        if (null == AppConfig.getUniqueInstance()) {
-            singletonAppConfig = new AppConfig();
-        }
-        return AppConfig.singletonAppConfig;
-    }
-
-    private static AppConfig getUniqueInstance() {
-        return singletonAppConfig;
-    }
-
-    public CourseAbstractDao getCourseDao() {
-        return courseDao;
-    }
+		courseDao = new CourseDaoInjectorService().getCourseDao();
+		passwordPolicyDao = new PasswordPolicyDao();
+		userPasswordHistoryDao = new UserPasswordHistoryDao();
 
 
-    public CourseInstructorMapperAbstractDao getCourseInstructorMapperDao() {
-        return courseInstructorMapperDao;
-    }
+		surveyDao = new SurveyDaoInjectorService().getSurveyDao();
+		surveyQuestionMapperDao = new SurveyQuestionMapperDao();
+		//ABSTRACT FACTORY
+		questionManagerAbstractFactory = QuestionManagerConcreteFactory.getInstance();
+		groupAlgorithmAbstractFactory = GroupFormationAlgorithmConcreteFactory.getInstance();
+		userManagementAbstractFactory = UserManagementConcreteFactory.getInstance();
+		forgetPasswordAbstractFactory = ForgetPasswordConcreteFactory.getInstance();
+		loginManagementAbstractFactory = LoginManagementConcreteFactory.getInstance();
+		sessionManagementAbstractFactory = SessionManagementConcreteFactory.getInstance();
+		signupManagementAbstractFactory = SignupManagementConcreteFactory.getInstance();
+	}
 
-    public void setCourseInstructorMapperDao(CourseInstructorMapperDao courseInstructorMapperDao) {
-        this.courseInstructorMapperDao = courseInstructorMapperDao;
-    }
+	public static AppConfig getSingletonAppConfig() {
+		return singletonAppConfig;
+	}
 
-    public EmailNotifierImpl getEmailNotifier() {
-        return emailNotifier;
-    }
+	public static void setSingletonAppConfig(AppConfig singletonAppConfig) {
+		AppConfig.singletonAppConfig = singletonAppConfig;
+	}
 
-    public void setEmailNotifier(EmailNotifierImpl emailNotifier) {
-        this.emailNotifier = emailNotifier;
-    }
+	public static AppConfig getInstance() {
+		if (null == AppConfig.getUniqueInstance()) {
+			singletonAppConfig = new AppConfig();
+		}
+		return AppConfig.singletonAppConfig;
+	}
 
-    public GroupFormationToolLogger getGroupFormationToolLogger() {
-        return groupFormationToolLogger;
-    }
 
-    public void setGroupFormationToolLogger(GroupFormationToolLogger groupFormationToolLogger) {
-        this.groupFormationToolLogger = groupFormationToolLogger;
-    }
+	private static AppConfig getUniqueInstance() {
+		return singletonAppConfig;
+	}
 
-    public CourseStudentMapperDaoInjectorService getCourseStudentMapperDaoInjectorService() {
-        return courseStudentMapperDaoInjectorService;
-    }
+	public CourseAbstractDao getCourseDao() {
+		return courseDao;
+	}
 
-    public void setCourseStudentMapperDaoInjectorService(
-            CourseStudentMapperDaoInjectorService courseStudentMapperDaoInjectorService) {
-        this.courseStudentMapperDaoInjectorService = courseStudentMapperDaoInjectorService;
-    }
 
-    public Properties getProperties() {
-        return properties;
-    }
+	public CourseInstructorMapperAbstractDao getCourseInstructorMapperDao() {
+		return courseInstructorMapperDao;
+	}
 
-    public void setProperties(Properties properties) {
-        this.properties = properties;
-    }
+	public void setCourseInstructorMapperDao(CourseInstructorMapperDao courseInstructorMapperDao) {
+		this.courseInstructorMapperDao = courseInstructorMapperDao;
+	}
 
-    public CourseInstructorMapperDaoInjectorService getCourseInstructorMapperDaoInjectorService() {
-        return courseInstructorMapperDaoInjectorService;
-    }
+	public EmailNotifierImpl getEmailNotifier() {
+		return emailNotifier;
+	}
 
-    public void setCourseInstructorMapperDaoInjectorService(
-            CourseInstructorMapperDaoInjectorService courseInstructorMapperDaoInjectorService) {
-        this.courseInstructorMapperDaoInjectorService = courseInstructorMapperDaoInjectorService;
-    }
+	public void setEmailNotifier(EmailNotifierImpl emailNotifier) {
+		this.emailNotifier = emailNotifier;
+	}
 
-    public UserRoleDaoInjectorService getUserRoleDaoInjectorService() {
-        return userRoleDaoInjectorService;
-    }
+	public GroupFormationToolLogger getGroupFormationToolLogger() {
+		return groupFormationToolLogger;
+	}
 
-    public void setUserRoleDaoInjectorService(UserRoleDaoInjectorService userRoleDaoInjectorService) {
-        this.userRoleDaoInjectorService = userRoleDaoInjectorService;
-    }
+	public void setGroupFormationToolLogger(GroupFormationToolLogger groupFormationToolLogger) {
+		this.groupFormationToolLogger = groupFormationToolLogger;
+	}
 
-    public CourseStudentMapperAbstractDao getCourseStudentMapperDao() {
-        return courseStudentMapperDao;
-    }
+	public CourseStudentMapperDaoInjectorService getCourseStudentMapperDaoInjectorService() {
+		return courseStudentMapperDaoInjectorService;
+	}
 
-    public void setCourseStudentMapperDao(CourseStudentMapperDao courseStudentMapperDao) {
-        this.courseStudentMapperDao = courseStudentMapperDao;
-    }
+	public void setCourseStudentMapperDaoInjectorService(
+			CourseStudentMapperDaoInjectorService courseStudentMapperDaoInjectorService) {
+		this.courseStudentMapperDaoInjectorService = courseStudentMapperDaoInjectorService;
+	}
 
-    public PasswordPolicyAbstractDao getPasswordPolicyDao() {
-        return passwordPolicyDao;
-    }
+	public Properties getProperties() {
+		return properties;
+	}
 
-    public UserPasswordHistoryAbstractDao getUserPasswordHistoryDao() {
-        return userPasswordHistoryDao;
-    }
+	public void setProperties(Properties properties) {
+		this.properties = properties;
+	}
 
+	public CourseInstructorMapperDaoInjectorService getCourseInstructorMapperDaoInjectorService() {
+		return courseInstructorMapperDaoInjectorService;
+	}
+
+	public void setCourseInstructorMapperDaoInjectorService(
+			CourseInstructorMapperDaoInjectorService courseInstructorMapperDaoInjectorService) {
+		this.courseInstructorMapperDaoInjectorService = courseInstructorMapperDaoInjectorService;
+	}
+
+	public UserRoleDaoInjectorService getUserRoleDaoInjectorService() {
+		return userRoleDaoInjectorService;
+	}
+
+	public void setUserRoleDaoInjectorService(UserRoleDaoInjectorService userRoleDaoInjectorService) {
+		this.userRoleDaoInjectorService = userRoleDaoInjectorService;
+	}
+
+	public CourseStudentMapperAbstractDao getCourseStudentMapperDao() {
+		return courseStudentMapperDao;
+	}
+
+	public void setCourseStudentMapperDao(CourseStudentMapperDao courseStudentMapperDao) {
+		this.courseStudentMapperDao = courseStudentMapperDao;
+	}
+
+	public PasswordPolicyAbstractDao getPasswordPolicyDao() {
+		return passwordPolicyDao;
+	}
+
+	public UserPasswordHistoryAbstractDao getUserPasswordHistoryDao() {
+		return userPasswordHistoryDao;
+	}
 
 
 	public IQuestionManagerAbstractFactory getQuestionManagerAbstractFactory() {
@@ -232,5 +236,9 @@ public class AppConfig {
 
 	public ISessionManagementAbstractFactory getSessionManagementAbstractFactory() {
 		return sessionManagementAbstractFactory;
+	}
+
+	public ISignupManagementAbstractFactory getSignupManagementAbstractFactory() {
+		return signupManagementAbstractFactory;
 	}
 }

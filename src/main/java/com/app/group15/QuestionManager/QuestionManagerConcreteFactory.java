@@ -1,6 +1,5 @@
 package com.app.group15.QuestionManager;
 
-import com.app.group15.Config.AppConfig;
 import com.app.group15.Persistence.Persistence;
 
 public class QuestionManagerConcreteFactory implements IQuestionManagerAbstractFactory {
@@ -50,13 +49,13 @@ public class QuestionManagerConcreteFactory implements IQuestionManagerAbstractF
 
 	@Override
 	public Persistence getOptionsModel() {
-		
+
 		return new Options();
 	}
 
 	@Override
 	public Persistence getQuestionTypeModel() {
-		
+
 		return new QuestionType();
 	}
 

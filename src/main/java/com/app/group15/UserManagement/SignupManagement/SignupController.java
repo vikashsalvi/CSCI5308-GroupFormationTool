@@ -1,5 +1,6 @@
 package com.app.group15.UserManagement.SignupManagement;
 
+import com.app.group15.Config.AppConfig;
 import com.app.group15.Config.ServiceConfig;
 import com.app.group15.ExceptionHandler.AllowedRolesNotSetException;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
@@ -20,8 +21,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class SignupController {
-
-	private ISignupService signupService = ServiceConfig.getInstance().getSignUpService();
+	private ISignupManagementAbstractFactory signupManagementAbstractFactory= AppConfig.getInstance().getSignupManagementAbstractFactory();
+	private ISignupService signupService = signupManagementAbstractFactory.getSignupService();
 	private IPasswordPolicyService passwordPolicyService;
 
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)

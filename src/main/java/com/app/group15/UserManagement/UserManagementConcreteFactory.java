@@ -1,15 +1,14 @@
 package com.app.group15.UserManagement;
 
-import com.app.group15.Config.AppConfig;
 import com.app.group15.Persistence.Persistence;
 
-public class UserManagementConcreteFactory implements IUserManagementAbstractFactory{
+public class UserManagementConcreteFactory implements IUserManagementAbstractFactory {
 
 	private static IUserManagementAbstractFactory userManagementConcreteFactory;
 
-	public static IUserManagementAbstractFactory getInstance(){
-		if (null==UserManagementConcreteFactory.getUniqueInstance()){
-			userManagementConcreteFactory=new UserManagementConcreteFactory();
+	public static IUserManagementAbstractFactory getInstance() {
+		if (null == UserManagementConcreteFactory.getUniqueInstance()) {
+			userManagementConcreteFactory = new UserManagementConcreteFactory();
 		}
 		return UserManagementConcreteFactory.userManagementConcreteFactory;
 	}
@@ -35,12 +34,12 @@ public class UserManagementConcreteFactory implements IUserManagementAbstractFac
 
 	@Override
 	public UserAbstractDao getUserDao() {
-		return new UserDao();
+		return new UserDaoInjectorService().getUserDao();
 	}
 
 	@Override
 	public UserRoleAbstractDao getUserRoleDao() {
-		return new UserRoleDao();
+		return new UserRoleDaoInjectorService().getUserRoleDao();
 	}
 
 	@Override

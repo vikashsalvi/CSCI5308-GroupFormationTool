@@ -13,7 +13,6 @@ import com.app.group15.SurveyManagement.ISurveyService;
 import com.app.group15.SurveyManagement.SurveyServiceInjector;
 import com.app.group15.SurveyManagement.student.ISurveyStudentService;
 import com.app.group15.SurveyManagement.student.SurveyStudentInjectorService;
-import com.app.group15.UserManagement.SignupManagement.ISignupService;
 import com.app.group15.UserManagement.SignupManagement.SignUpServiceInjector;
 import java.sql.SQLException;
 
@@ -23,7 +22,6 @@ public class ServiceConfig {
     private IAssignTAService assignTaService;
     private ICourseService courseService;
     private IInstructorService instructorService;
-    private ISignupService signUpService;
     private IPasswordPolicyService passwordPolicyService;
     private ISurveyService surveyService;
     private ISurveyStudentService surveyStudentService;
@@ -32,7 +30,6 @@ public class ServiceConfig {
         assignTaService = new AssignTaServiceInjector().getAssignTaService();
         courseService = new CourseServiceInjector().getCourseService();
         instructorService = new InstructorServiceInjector().getInstructorService();
-        signUpService = new SignUpServiceInjector().getSignUpService();
 
         surveyService = new SurveyServiceInjector().getSurveyService();
         surveyStudentService = new SurveyStudentInjectorService().getSurveyStudentService();
@@ -59,10 +56,6 @@ public class ServiceConfig {
 
     public IInstructorService getInstructorService() {
         return instructorService;
-    }
-
-    public ISignupService getSignUpService() {
-        return signUpService;
     }
 
     public IPasswordPolicyService getPasswordPolicy() throws SQLException, AwsSecretsManagerException {
