@@ -7,6 +7,8 @@ import com.app.group15.CourseManagement.Instructor.IAssignTAService;
 import com.app.group15.CourseManagement.Instructor.IInstructorService;
 import com.app.group15.CourseManagement.Instructor.InstructorServiceInjector;
 import com.app.group15.ExceptionHandler.AwsSecretsManagerException;
+import com.app.group15.GroupFormationManagement.GroupFormationServiceInjector;
+import com.app.group15.GroupFormationManagement.IGroupFormationService;
 import com.app.group15.PasswordPolicyManagement.IPasswordPolicyService;
 import com.app.group15.PasswordPolicyManagement.PasswordPolicyServiceInjector;
 import com.app.group15.QuestionManager.IQuestionChoiceMapperService;
@@ -50,6 +52,9 @@ public class ServiceConfig {
     private ISurveyService surveyService;
     private ISurveyStudentService surveyStudentService;
 
+    private IGroupFormationService groupFormationService;
+
+
     private ServiceConfig() {
         assignTaService = new AssignTaServiceInjector().getAssignTaService();
         courseService = new CourseServiceInjector().getCourseService();
@@ -64,6 +69,7 @@ public class ServiceConfig {
         forgetPasswordService = new ForgetPasswordServiceInjector().getForgetPasswordService();
         surveyService = new SurveyServiceInjector().getSurveyService();
         surveyStudentService = new SurveyStudentInjectorService().getSurveyStudentService();
+        groupFormationService = new GroupFormationServiceInjector().getGroupFormationService();
     }
 
     public static ServiceConfig getInstance() {
@@ -134,4 +140,8 @@ public class ServiceConfig {
         return surveyStudentService;
     }
 
+    public IGroupFormationService getGroupFormationService() {
+        return groupFormationService;
+    }
 }
+
