@@ -118,17 +118,6 @@
                             </div>
                         </div>
 
-                        <!--<div th:if="*{surveyResponse[__${op.index}__].questionTypeId}==3">
-                            <label>Select answer :
-                                <div th:each="op : *{surveyResponse[__${op.index}__].getOptions()}">
-                                    <input type="checkbox"
-                                           th:value="${op.getId()}"
-                                           th:field="*{surveyResponse[__${op.index}__].choiceId}">
-                                    <label th:text="${op.option}"></label>
-                                </div>
-                            </label>
-                        </div>
--->
                         <div th:if="*{surveyResponse[__${op.index}__].questionTypeId}==4">
                             <textarea cols="50" id="freeText" rows="4"
                                       required
