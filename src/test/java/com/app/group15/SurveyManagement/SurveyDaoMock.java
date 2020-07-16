@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-class SurveyDaoMock extends SurveyAbstractDao {
+public class SurveyDaoMock extends SurveyAbstractDao {
 
     @Override
     public Survey getSurvey(int id) throws SQLException, AwsSecretsManagerException {
@@ -60,7 +60,7 @@ class SurveyDaoMock extends SurveyAbstractDao {
 
     @Override
     public void saveNumericResponse(int surveyResponseQuestionId, int id, int questionId, int surveyId) throws SQLException, AwsSecretsManagerException {
-        
+
     }
 
     @Override
