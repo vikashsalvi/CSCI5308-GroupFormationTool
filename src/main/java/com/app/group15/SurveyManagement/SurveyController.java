@@ -51,12 +51,14 @@ public class SurveyController {
                     User user = sessionService.getSessionUser(request);
                     try {
                         allQuestionsOfInstructor = (ArrayList<Question>) surveyService.getRemainingQuestionsForSurvey(Integer.parseInt(courseId), user.getId());
+                        GroupFormationToolLogger.log(Level.INFO, "Successfully got the remaining question list of survey");
                     } catch (Exception e) {
                         GroupFormationToolLogger.log(Level.INFO, "Exception while all questions of instructor", e);
                     }
                     Course courseEntity = (Course) courseDao.get(Integer.parseInt(courseId));
                     try {
                         questionList = surveyService.getSurveyQuestionByCourseID(courseEntity.getId());
+                        GroupFormationToolLogger.log(Level.INFO, "Successfully got the question list of course ");
                     } catch (Exception e) {
                         GroupFormationToolLogger.log(Level.INFO, "Exception while getting Questions", e);
                     }
@@ -83,9 +85,11 @@ public class SurveyController {
                     return modelAndView;
                 } else {
                     modelAndView = new ModelAndView("redirect:/login");
+                    GroupFormationToolLogger.log(Level.INFO, "Unauthorized! Logging out user");
                 }
             } else {
                 modelAndView = new ModelAndView("redirect:/login");
+                GroupFormationToolLogger.log(Level.INFO, "No user logged in");
             }
             return modelAndView;
         } catch (SQLException e) {
@@ -127,17 +131,19 @@ public class SurveyController {
                     return modelAndView;
                 } else {
                     modelAndView = new ModelAndView("redirect:/login");
+                    GroupFormationToolLogger.log(Level.INFO, "Unauthorized! Logging out user");
                 }
             } else {
                 modelAndView = new ModelAndView("redirect:/login");
+                GroupFormationToolLogger.log(Level.INFO, "No user logged in");
             }
             return modelAndView;
         } catch (SQLException e) {
-            GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+            GroupFormationToolLogger.log(Level.WARNING, " Redirecting to /dbError endpoint", e);
             modelAndView = new ModelAndView("dbError");
             return modelAndView;
         } catch (AwsSecretsManagerException e) {
-            GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+            GroupFormationToolLogger.log(Level.WARNING, " Redirecting to /awsError endpoint", e);
             modelAndView = new ModelAndView("awsError");
             return modelAndView;
         }
@@ -162,17 +168,19 @@ public class SurveyController {
                     return modelAndView;
                 } else {
                     modelAndView = new ModelAndView("redirect:/login");
+                    GroupFormationToolLogger.log(Level.INFO, "Unauthorized! Logging out user");
                 }
             } else {
                 modelAndView = new ModelAndView("redirect:/login");
+                GroupFormationToolLogger.log(Level.INFO, "No user logged in");
             }
             return modelAndView;
         } catch (SQLException e) {
-            GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+            GroupFormationToolLogger.log(Level.WARNING, " Redirecting to /dbError endpoint ", e);
             modelAndView = new ModelAndView("dbError");
             return modelAndView;
         } catch (AwsSecretsManagerException e) {
-            GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+            GroupFormationToolLogger.log(Level.WARNING, " Redirecting to /awsError endpoint ", e);
             modelAndView = new ModelAndView("awsError");
             return modelAndView;
         }
@@ -196,17 +204,19 @@ public class SurveyController {
                     return modelAndView;
                 } else {
                     modelAndView = new ModelAndView("redirect:/login");
+                    GroupFormationToolLogger.log(Level.INFO, "Unauthorized! Logging out user");
                 }
             } else {
                 modelAndView = new ModelAndView("redirect:/login");
+                GroupFormationToolLogger.log(Level.INFO, "No user logged in");
             }
             return modelAndView;
         } catch (SQLException e) {
-            GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+            GroupFormationToolLogger.log(Level.WARNING, " Redirecting to /dbError endpoint ", e);
             modelAndView = new ModelAndView("dbError");
             return modelAndView;
         } catch (AwsSecretsManagerException e) {
-            GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+            GroupFormationToolLogger.log(Level.WARNING, " Redirecting to /awsError endpoint ", e);
             modelAndView = new ModelAndView("awsError");
             return modelAndView;
         }
@@ -230,17 +240,19 @@ public class SurveyController {
                     return modelAndView;
                 } else {
                     modelAndView = new ModelAndView("redirect:/login");
+                    GroupFormationToolLogger.log(Level.INFO, "Unauthorized! Logging out user");
                 }
             } else {
+                GroupFormationToolLogger.log(Level.INFO, "No user logged in");
                 modelAndView = new ModelAndView("redirect:/login");
             }
             return modelAndView;
         } catch (SQLException e) {
-            GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+            GroupFormationToolLogger.log(Level.SEVERE, " Redirecting to /dbError endpoint ", e);
             modelAndView = new ModelAndView("dbError");
             return modelAndView;
         } catch (AwsSecretsManagerException e) {
-            GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+            GroupFormationToolLogger.log(Level.SEVERE, " Redirecting to /awsError endpoint ", e);
             modelAndView = new ModelAndView("awsError");
             return modelAndView;
         }
@@ -265,17 +277,19 @@ public class SurveyController {
                     return modelAndView;
                 } else {
                     modelAndView = new ModelAndView("redirect:/login");
+                    GroupFormationToolLogger.log(Level.INFO, "Unauthorized! Logging out user");
                 }
             } else {
                 modelAndView = new ModelAndView("redirect:/login");
+                GroupFormationToolLogger.log(Level.INFO, "No user logged in");
             }
             return modelAndView;
         } catch (SQLException e) {
-            GroupFormationToolLogger.log(Level.INFO, " Redirecting to /dbError endpoint ");
+            GroupFormationToolLogger.log(Level.SEVERE, " Redirecting to /dbError endpoint ");
             modelAndView = new ModelAndView("dbError");
             return modelAndView;
         } catch (AwsSecretsManagerException e) {
-            GroupFormationToolLogger.log(Level.INFO, " Redirecting to /awsError endpoint ");
+            GroupFormationToolLogger.log(Level.SEVERE, " Redirecting to /awsError endpoint ");
             modelAndView = new ModelAndView("awsError");
             return modelAndView;
         }
